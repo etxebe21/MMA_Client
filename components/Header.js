@@ -9,11 +9,12 @@ const Container = styled.View`
     align-items: center;
     flex-direction: row;
     justify-content: space-between; 
+    background: #913595;
     `
 
 
 const Text = styled.Text `
-    color: #3a86e9;
+    color: #4c2882;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
@@ -27,7 +28,7 @@ const Button = styled.TouchableOpacity`
     height: 42px;
     border-radius: 21px;
     margin-left: 16px;
-    background: #EEEEEE;
+    background: #913595;
     align-items: center;
     justify-content: center;
 `
@@ -35,8 +36,7 @@ const Button = styled.TouchableOpacity`
 const Header = () => {
     return(
         <Container>
-            <Text> La Hermandad </Text>
-          
+            <Text> LA HERMANDAD </Text> 
         </Container>
     )
 }

@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './components/Header';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
@@ -13,26 +14,23 @@ const App =  () => {
 
   return(
     <>
-  
-   
+
       <Header/>  
   
     <NavigationContainer>
       <Tab.Navigator
           screenOptions={({ route}) => ({
             swipeEnabled: true,
-            tabBarActiveTintColor: '#3a86e9',
-            tabBarInactiveTintColor: '#9F9F9F',
+            tabBarActiveTintColor: '#4c2882',
+            tabBarInactiveTintColor: '#913595',
             tabBarShowLabel: false,
             tabBarShowIcon: true,
           tabBarIcon: ({focused, color,}) => {
-        
-            if(route.name === 'Home');
+            if(route.name === 'Home') iconName = 'home'
           
-            else if(route.name === 'CreatePotions');
-            else if(route.name === 'Profile') ;
-           
-        
+          else if(route.name === 'CreatePotions') iconName = 'account-group'
+          else if(route.name === 'Profile') iconName = 'account-circle-outline'
+          return <Icon name = {iconName} size={26} color={color} />
             },
         })}
       >
