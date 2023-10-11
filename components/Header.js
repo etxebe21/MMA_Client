@@ -9,7 +9,7 @@ const Container = styled.View`
     align-items: center;
     flex-direction: row;
     justify-content: space-between; 
-    background: #913595;
+    background: #C8A2C8;
     `
 
 
@@ -28,7 +28,7 @@ const Button = styled.TouchableOpacity`
     height: 42px;
     border-radius: 21px;
     margin-left: 16px;
-    background: #913595;
+    background: #C8A2C8;
     align-items: center;
     justify-content: center;
 `

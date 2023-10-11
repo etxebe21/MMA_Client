@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components/native";
 
-
+const View = styled.View`
+    flex: 1;
+    background: #C8A2C8;
+`
 
 const Text = styled.Text `
     bottom: -100px;
@@ -18,11 +21,11 @@ const CreatePotions = () => {
     return(
         
         
-           
+        <View>
                 
              <Text> CREATE POTIONS </Text>
                 
-        
+        </View>
        
     )
 }

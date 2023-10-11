@@ -21,15 +21,18 @@ const App =  () => {
       <Tab.Navigator
           screenOptions={({ route}) => ({
             swipeEnabled: true,
+            tabBarStyle: { backgroundColor:'#C8A2C8'}, 
+            tabBarIndicatorStyle: {backgroundColor: "#ffffff",},
             tabBarActiveTintColor: '#4c2882',
             tabBarInactiveTintColor: '#913595',
             tabBarShowLabel: false,
             tabBarShowIcon: true,
           tabBarIcon: ({focused, color,}) => {
+            let iconName;
             if(route.name === 'Home') iconName = 'home'
           
-          else if(route.name === 'CreatePotions') iconName = 'account-group'
-          else if(route.name === 'Profile') iconName = 'account-circle-outline'
+          else if(route.name === 'CreatePotions') iconName = 'create'
+          else if(route.name === 'Profile') iconName = 'people'
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
