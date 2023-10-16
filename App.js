@@ -22,7 +22,7 @@ const App =  () => {
           screenOptions={({ route}) => ({
             swipeEnabled: true,
             tabBarStyle: { backgroundColor:'#C8A2C8'}, 
-            tabBarIndicatorStyle: {backgroundColor: "#ffffff",},
+            tabBarIndicatorStyle: {backgroundColor: "#4c2882",},
             tabBarActiveTintColor: '#4c2882',
             tabBarInactiveTintColor: '#913595',
             tabBarShowLabel: false,
