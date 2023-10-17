@@ -8,6 +8,7 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
+import Login from './screens/Login';
 
 
 const App =  () => {
@@ -17,7 +18,10 @@ const App =  () => {
     <>
 
     <Splash/>
-      <Header/>  
+
+    <Login/>
+    
+      {/* <Header/>  
   
     <NavigationContainer>
       <Tab.Navigator
@@ -43,7 +47,7 @@ const App =  () => {
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Profile" component={Profile} />
       </Tab.Navigator>
-    </NavigationContainer>
+    </NavigationContainer> */}
     </>
   );
 };
