@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
+import Splash from './components/Splash';
 
 
 const App =  () => {
@@ -15,6 +16,7 @@ const App =  () => {
   return(
     <>
 
+    <Splash/>
       <Header/>  
   
     <NavigationContainer>
