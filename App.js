@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import { View, Modal, StyleSheet } from 'react-native';
 import { NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -10,6 +10,8 @@ import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const App =  () => {
@@ -17,17 +19,48 @@ const App =  () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
 
+  useEffect(() => {
+    // Cargar el estado de autenticación desde AsyncStorage cuando la aplicación se inicia
+    const loadAuthenticationStatus = async () => {
+      try {
+        const storedAuthenticationStatus = await AsyncStorage.getItem('isAuthenticated');
+        if (storedAuthenticationStatus) {
+          setIsAuthenticated(JSON.parse(storedAuthenticationStatus));
+        }
+      } catch (error) {
+        console.error('Error cargando el estado de autenticación:', error);
+      }
+    };
+
+    loadAuthenticationStatus();
+  }, []); // El array vacío asegura que esta operación se ejecute solo una vez
+
+  useEffect(() => {
+    if (isLoginModalVisible) {
+      
+      const timeoutId = setTimeout(() => {
+        setLoginModalVisible(false);
+      }, 5000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoginModalVisible]);
+
+
+
   const handleLogin = () => {
     // Aquí debes realizar la lógica de autenticación
     // Si la autenticación es exitosa, establece isAuthenticated en true y cierra el modal
     setIsAuthenticated(true);
+    AsyncStorage.setItem('isAuthenticated', JSON.stringify(true));
     setLoginModalVisible(false);
   };
 
   return(
     
-    //<Splash/>
+    
 <View style = {{ flex: 1}}>
+<Splash/>
     <Modal
         animationType="slide"
         transparent={false}
@@ -40,7 +73,7 @@ const App =  () => {
           <Login onLogin={handleLogin} />
         </View>
       </Modal>
-      {isAuthenticated && (
+      {/* {isAuthenticated && ( */}
    
         <>
       <Header/>  
@@ -71,7 +104,7 @@ const App =  () => {
       </Tab.Navigator>
     </NavigationContainer>
     </>
-      )}
+      {/* )} */}
       </View>
   );
   
