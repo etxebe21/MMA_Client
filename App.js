@@ -20,19 +20,31 @@ const App =  () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
 
   useEffect(() => {
-    // Cargar el estado de autenticación desde AsyncStorage cuando la aplicación se inicia
-    const loadAuthenticationStatus = async () => {
+
+    const storeData = async (value) => {
+       value = {name : "name"}
       try {
-        const storedAuthenticationStatus = await AsyncStorage.getItem('isAuthenticated');
-        if (storedAuthenticationStatus) {
-          setIsAuthenticated(JSON.parse(storedAuthenticationStatus));
-        }
-      } catch (error) {
-        console.error('Error cargando el estado de autenticación:', error);
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('my-key', jsonValue);
+      } catch (e) {
+        // saving error
       }
+      console.log('Done.')
     };
 
-    loadAuthenticationStatus();
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('my-key');
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+      } catch (e) {
+        // error reading value
+      }
+      console.log('Done.')
+    };
+
+
+    storeData();
+    getData();
   }, []); // El array vacío asegura que esta operación se ejecute solo una vez
 
   useEffect(() => {
@@ -52,7 +64,7 @@ const App =  () => {
     // Aquí debes realizar la lógica de autenticación
     // Si la autenticación es exitosa, establece isAuthenticated en true y cierra el modal
     setIsAuthenticated(true);
-    AsyncStorage.setItem('isAuthenticated', JSON.stringify(true));
+    AsyncStorage.setItem('my-key', JSON.stringify(true));
     setLoginModalVisible(false);
   };
 
