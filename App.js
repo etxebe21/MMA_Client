@@ -35,6 +35,19 @@ const App =  () => {
     loadAuthenticationStatus();
   }, []); // El array vacío asegura que esta operación se ejecute solo una vez
 
+  useEffect(() => {
+    if (isLoginModalVisible) {
+      
+      const timeoutId = setTimeout(() => {
+        setLoginModalVisible(false);
+      }, 5000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoginModalVisible]);
+
+
+
   const handleLogin = () => {
     // Aquí debes realizar la lógica de autenticación
     // Si la autenticación es exitosa, establece isAuthenticated en true y cierra el modal
@@ -45,8 +58,9 @@ const App =  () => {
 
   return(
     
-    //<Splash/>
+    
 <View style = {{ flex: 1}}>
+<Splash/>
     <Modal
         animationType="slide"
         transparent={false}
@@ -59,7 +73,7 @@ const App =  () => {
           <Login onLogin={handleLogin} />
         </View>
       </Modal>
-      {isAuthenticated && (
+      {/* {isAuthenticated && ( */}
    
         <>
       <Header/>  
@@ -90,7 +104,7 @@ const App =  () => {
       </Tab.Navigator>
     </NavigationContainer>
     </>
-      )}
+      {/* )} */}
       </View>
   );
   
