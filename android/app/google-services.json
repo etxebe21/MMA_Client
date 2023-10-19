@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:769950438406:android:d3e9b16350cb4075e91f87",
+        "mobilesdk_app_id": "1:769950438406:android:7a8be342ce290445e91f87",
         "android_client_info": {
           "package_name": "com.lahermandad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "769950438406-v9eg0i3s6u2a63eraid8aoiraddadqrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lahermandad",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCE9rFAeN34rZmzuBG43Uvx2EXeKu1cjc8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "769950438406-usnej8r1ufor70gp2h5aep590068si6d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.lahermandad"
+              }
+            }
+          ]
         }
       }
     }

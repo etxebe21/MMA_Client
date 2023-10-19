@@ -47,16 +47,16 @@ const App =  () => {
     getData();
   }, []); // El array vacío asegura que esta operación se ejecute solo una vez
 
-  useEffect(() => {
-    if (isLoginModalVisible) {
+  // useEffect(() => {
+  //   if (isLoginModalVisible) {
       
-      const timeoutId = setTimeout(() => {
-        setLoginModalVisible(false);
-      }, 5000);
+  //     const timeoutId = setTimeout(() => {
+  //       setLoginModalVisible(false);
+  //     }, 5000);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isLoginModalVisible]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isLoginModalVisible]);
 
 
 
