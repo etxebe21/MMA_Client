@@ -1,11 +1,10 @@
 
-
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator } from "react-native";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-
+import axios from "axios";
 const View = styled.View`
     flex: 1;
     background: #C8A2C8;
@@ -44,26 +43,26 @@ const Login = () => {
     });
 
     async function onGoogleButtonPress() {
-        setIsLoading(true); // Cambiar a true al iniciar la acción
+        setIsLoading(true);
         try {
-            // Check if your device supports Google Play
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-            // Get the users ID token
             const { idToken } = await GoogleSignin.signIn();
-            // Create a Google credential with the token
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-            // Sign-in the user with the credential
-            await auth().signInWithCredential(googleCredential);
-            // Realiza acciones después de iniciar sesión si es necesario
+            
+            // Realiza una solicitud al servidor enviando el idToken
+            const response = await axios.post('/verificar-token', { idToken });
+    
+            // El servidor debe responder con el resultado de la verificación
+            console.log('Resultado de la verificación:', response.data);
+    
             console.log('Iniciado sesión con Google!');
         } catch (error) {
             // Manejar errores aquí
             console.error(error);
         } finally {
-            setIsLoading(false); // Cambiar a false cuando la acción esté completa
+            setIsLoading(false);
         }
     }
-
+    
     return (
         <View>
             <Text>LOGIN</Text>
@@ -72,6 +71,6 @@ const Login = () => {
             </StyledButton>
         </View>
     );
-};
+}
 
 export default Login;
