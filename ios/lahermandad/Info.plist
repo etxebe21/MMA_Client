@@ -20,6 +20,41 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLName</key>
+			<string>urlGoogle</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>Thread</string>
+				<string>1:</string>
+				<string>"Your</string>
+				<string>app</string>
+				<string>is</string>
+				<string>missing</string>
+				<string>support</string>
+				<string>for</string>
+				<string>the</string>
+				<string>following</string>
+				<string>URL</string>
+				<string>schemes:</string>
+				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d"</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>GoogleURL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
