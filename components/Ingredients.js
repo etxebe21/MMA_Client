@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 const View = styled.View`
     flex: 1;
-    bottom: -30px;
-    width: 30%;
-    height: 300px;
+    bottom: 0px;
+    width: 120px;
+    height: 80px;
     align-self: center;
-    background: #C8A2C8;
+    background: #4c2882;
 `
 
 const Text = styled.Text `
-    bottom: -10px;
-    color: #4c2882;
+    bottom: -50px;
+    color: #CCCCCC;
     font-size: 20px;
     font-weight: bold;
     letter-spacing: -0.3px;
@@ -70,7 +71,7 @@ const IngredientesScreen = () => {
     if (ingredientesSeleccionados.length === 2) {
       // Crea la poción combinando los efectos de los ingredientes seleccionados
       const poción = {
-        nombre: "Poción combinada",
+        nombre: "Poción ÉPICA",
         efectos: [
           ...ingredientesSeleccionados[0].efectos,
           ...ingredientesSeleccionados[1].efectos,
@@ -81,26 +82,27 @@ const IngredientesScreen = () => {
   };
 
   return (
-    <View>
+    
+    <ScrollView>
       {ingredientes.map((ingrediente) => (
         <TouchableOpacity
           key={ingrediente.id}
           onPress={() => seleccionarIngrediente(ingrediente)}
-          style={{ marginVertical: 10, padding: 10, backgroundColor: "#f0f0f0" }}
+          style={{ marginVertical: 20, padding: 15,  width: 150 }}
         >
           <View>
-            <Image source={ingrediente.imagen} style={{ width: 10, height: 10 }} />
+            {/* <Image source={ingrediente.imagen} style={{ width: 10, height: 10 }} /> */}
             <Text>{ingrediente.nombre}</Text>
-            {ingrediente.efectos.map((efecto, index) => (
+            {/* {ingrediente.efectos.map((efecto, index) => (
               <Text key={index}>{efecto}</Text>
-            ))}
+            ))} */}
           </View>
         </TouchableOpacity>
       ))}
 
       {ingredientesSeleccionados.length === 2 && !pocionCreada && (
-        <TouchableOpacity onPress={crearPocion} style={{ marginVertical: 30 }}>
-          <Text style={{ fontSize: 20, color: "green" }}>Crear Poción</Text>
+        <TouchableOpacity onPress={crearPocion} style={{ marginVertical: 10 }}>
+          <Text style={{ fontSize: 25, color: "#4c2882" }}>Crear Poción</Text>
         </TouchableOpacity>
       )}
 
@@ -114,7 +116,8 @@ const IngredientesScreen = () => {
           ))}
         </View>
       )}
-    </View>
+      </ScrollView>
+    
   );
 };
 
