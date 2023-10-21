@@ -4,67 +4,67 @@ import styled from "styled-components/native";
 
 
 const ingredientes = [
-    {
-      id: 1,
-      nombre: "Ingrediente 1",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
-      efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
-    },
-    {
-      id: 2,
-      nombre: "Ingrediente 2",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
+  {
+    id: 1,
+    nombre: "Elf Essence",
+    imagen: require("../assets/elfo.jpg"),
+    efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
+  },
+  {
+    id: 2,
+    nombre: "Dragon Scales",
+    imagen: require("../assets/escamas.jpg"),
+    efectos: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
+  },
+  {
+    id: 3,
+    nombre: "Mandrake Root",
+    imagen: require("../assets/mandra.jpg"),
+    efectos: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
+  },
+  {
+    id: 4,
+    nombre: "Fairy Dust",
+    imagen: require("../assets/hada.jpg"),
+    efectos: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
+  },
+  {
+    id: 5,
+    nombre: "Witch's Blood",
+    imagen: require("../assets/sangre.jpg"),
+    efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
+  },
+  {
+    id: 6,
+    nombre: "Salamander Eye",
+    imagen: require("../assets/ojo.jpg"),
+    efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
+  },
+  {
+      id: 7,
+      nombre: "Phoenix Flower",
+      imagen: require("../assets/fenix.jpg"),
       efectos: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
     },
     {
-      id: 3,
-      nombre: "Ingrediente 3",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
+      id: 8,
+      nombre: "Yeti Frost",
+      imagen: require("../assets/yeti.jpg"),
       efectos: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
     },
     {
-      id: 4,
-      nombre: "Ingrediente 4",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
+      id: 9,
+      nombre: "Griffin Feather",
+      imagen: require("../assets/grifo.jpg"),
       efectos: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
     },
     {
-      id: 5,
-      nombre: "Ingrediente 5",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
-      efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
-    },
-    {
-      id: 6,
-      nombre: "Ingrediente 1",
-    //   imagen: require("./ruta/a/la/imagen1.png"),
+      id: 10,
+      nombre: "Unicorn Tears",
+      imagen: require("../assets/lagrimas.jpg"),
       efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
     },
-    {
-        id: 7,
-        nombre: "Ingrediente 2",
-      //   imagen: require("./ruta/a/la/imagen1.png"),
-        efectos: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
-      },
-      {
-        id: 8,
-        nombre: "Ingrediente 3",
-      //   imagen: require("./ruta/a/la/imagen1.png"),
-        efectos: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
-      },
-      {
-        id: 9,
-        nombre: "Ingrediente 4",
-      //   imagen: require("./ruta/a/la/imagen1.png"),
-        efectos: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
-      },
-      {
-        id: 10,
-        nombre: "Ingrediente 5",
-      //   imagen: require("./ruta/a/la/imagen1.png"),
-        efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
-      },
-    
+  
   ];
   
 const IngredientesScreen = () => {
@@ -141,7 +141,7 @@ const IngredientesScreen = () => {
           onPress={() => seleccionarIngrediente(ingrediente)}
         >
           <IngredientView>
-            {/* <Image source={ingrediente.imagen} style={{ width: 10, height: 10 }} /> */}
+            <Image source={ingrediente.imagen}/>
             <Text>{ingrediente.nombre}</Text>
           </IngredientView>
         </IngredientButton>
@@ -178,18 +178,25 @@ const IngredientView = styled.View`
     flex: 1;
     bottom: 0px;
     width: 150px;
-    height: 80px;
+    height: 100px;
     align-self: center;
     background: #4c2882;
     border-radius: 60px; 
 `
 const Text = styled.Text `
-    bottom: -25px;
+    bottom: -6px;
     color: #CCCCCC;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;    
+`
+const Image = styled.Image`
+  width: 50px;
+  height: 50px; 
+  border-radius: 25px;
+  align-self: center;
+  top: 7px;
 `
 const IngredientButton = styled.TouchableOpacity`
   marginVertical: 12px;
