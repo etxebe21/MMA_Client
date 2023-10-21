@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Image, TouchableOpacity } from "react-native";
+import React, { useState, useRef } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
@@ -71,10 +70,29 @@ const ingredientes = [
 const IngredientesScreen = () => {
   const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState([]);
   const [pocionCreada, setPocionCreada] = useState(null);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const scrollViewRef = useRef(null);
+
+  const disableScroll = () => {
+    setScrollEnabled(false);
+  };
+
+  const enableScroll = () => {
+    setScrollEnabled(true);
+  };
 
   const seleccionarIngrediente = (ingrediente) => {
     if (ingredientesSeleccionados.length < 2) {
       setIngredientesSeleccionados([...ingredientesSeleccionados, ingrediente]);
+
+      if (ingredientesSeleccionados.length === 1) {
+        disableScroll();
+        
+        // Desplazar hacia abajo automáticamente cuando se seleccionan dos ingredientes
+        setTimeout(() => {
+          scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
+        }, 100); // Puedes ajustar el tiempo según sea necesario
+      }
     }
   };
 
@@ -112,7 +130,10 @@ const IngredientesScreen = () => {
 
   return (
     
-    <ScrollView>
+    <ScrollView
+    ref={scrollViewRef}
+    contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
+    scrollEnabled={scrollEnabled}>
 
       {ingredientes.map((ingrediente) => (
         <IngredientButton
@@ -122,15 +143,12 @@ const IngredientesScreen = () => {
           <IngredientView>
             {/* <Image source={ingrediente.imagen} style={{ width: 10, height: 10 }} /> */}
             <Text>{ingrediente.nombre}</Text>
-            {/* {ingrediente.efectos.map((efecto, index) => (
-              <Text key={index}>{efecto}</Text>
-            ))} */}
           </IngredientView>
         </IngredientButton>
       ))}
       
       {ingredientesSeleccionados.length === 2 && !pocionCreada && (
-        <CreatePotionButton onPress={crearPocion}>
+        <CreatePotionButton onPress={() => { crearPocion()}}>
           <PotionButtonText>Create Potion</PotionButtonText>
         </CreatePotionButton>
       )}
@@ -147,7 +165,7 @@ const IngredientesScreen = () => {
           {pocionCreada.efectos.map((efecto, index) => (
             <Text key={index}>{efecto}</Text>
           ))}
-          <ReturnButton onPress={returnIngredients}>
+          <ReturnButton onPress={() => { returnIngredients(); enableScroll(); }}>
             <ButtonText>RETURN</ButtonText>
           </ReturnButton>
         </PotionView>
