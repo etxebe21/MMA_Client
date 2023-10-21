@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import IngredientesScreen from "../components/Ingredients";
 import { ImageBackground, StyleSheet } from 'react-native'
 
 const bgImage = '../assets/wallpaper_potionCreation3.png';
@@ -39,7 +40,7 @@ const CreatePotions = () => {
             <ImageBackground source={require(bgImage)} style={styles.container}>
                     
                     <Text> CREATE POTIONS </Text>
-
+                    <IngredientesScreen></IngredientesScreen>
             </ImageBackground>
         </View>
     )
