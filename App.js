@@ -21,7 +21,7 @@ const App =  () => {
 
   useEffect(() => {
     const storeData = async (value) => {
-      // value = { name: "name" };
+      value = { name: "name" };
       try {
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem('my-key', jsonValue);
