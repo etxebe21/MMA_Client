@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import IngredientesScreen from "../components/Ingredients";
 
 const View = styled.View`
     flex: 1;
@@ -7,7 +8,7 @@ const View = styled.View`
 `
 
 const Text = styled.Text `
-    bottom: -100px;
+    bottom: -10px;
     color: #4c2882;
     font-size: 25px;
     font-weight: bold;
@@ -24,6 +25,7 @@ const CreatePotions = () => {
         <View>
                 
              <Text> CREATE POTIONS </Text>
+             <IngredientesScreen></IngredientesScreen>
                 
         </View>
        
