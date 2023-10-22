@@ -88,7 +88,7 @@ const IngredientesScreen = () => {
       if (ingredientesSeleccionados.length === 1) {
         disableScroll();
         
-        // Desplazar hacia abajo automáticamente cuando se seleccionan dos ingredientes
+        // Desplazar hacia el inicio automáticamente cuando se seleccionan dos ingredientes
         setTimeout(() => {
           scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
         }, 100); // Puedes ajustar el tiempo según sea necesario
@@ -141,25 +141,25 @@ const IngredientesScreen = () => {
           onPress={() => seleccionarIngrediente(ingrediente)}
         >
           <IngredientView>
-            <Image source={ingrediente.imagen}/>
-            <Text>{ingrediente.nombre}</Text>
+            <IngredientImage source={ingrediente.imagen}/>
+            <IngredientText>{ingrediente.nombre}</IngredientText>
           </IngredientView>
         </IngredientButton>
       ))}
       
       {ingredientesSeleccionados.length === 2 && !pocionCreada && (
+        <>
         <CreatePotionButton onPress={() => { crearPocion()}}>
           <PotionButtonText>Create Potion</PotionButtonText>
         </CreatePotionButton>
-      )}
-
-      {ingredientesSeleccionados.length === 2 && !pocionCreada && (
+      
         <SelectedIngredientsEffects ingredientesSeleccionados={ingredientesSeleccionados} />
+        </>
       )}
 
       {pocionCreada && (
         <PotionView >
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginTop:-10  }}>CREATED POTION:</Text>
+          <Text style={{ fontSize: 24, fontWeight: "bold", marginTop:15  }}>CREATED POTION:</Text>
           <Text style={{ fontSize: 20, marginTop:15 }}>{pocionCreada.nombre}</Text>
           <Text style={{ fontSize: 17, marginTop: 30 }}>Efects:</Text>
           {pocionCreada.efectos.map((efecto, index) => (
@@ -183,7 +183,7 @@ const IngredientView = styled.View`
     background: #4c2882;
     border-radius: 60px; 
 `
-const Text = styled.Text `
+const IngredientText = styled.Text `
     bottom: -6px;
     color: #CCCCCC;
     font-size: 19px;
@@ -191,7 +191,7 @@ const Text = styled.Text `
     letter-spacing: -0.3px;
     align-self: center;    
 `
-const Image = styled.Image`
+const IngredientImage = styled.Image`
   width: 50px;
   height: 50px; 
   border-radius: 25px;
@@ -262,4 +262,12 @@ const IngredientEffect = styled.Text`
   align-self: center;
   color: #CCCCCC;
 `
+const Text = styled.Text `
+    bottom: -6px;
+    color: #CCCCCC;
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center; 
+  `
 export default IngredientesScreen;

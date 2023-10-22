@@ -12,8 +12,8 @@ const View = styled.View`
 `
 
 const Text = styled.Text `
-    bottom: 350;
-    color: #4c2882;
+    bottom: -8px;
+    color: #C8A2C8;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
@@ -37,10 +37,9 @@ const CreatePotions = () => {
     return(
         
         < View>
-            <ImageBackground source={require(bgImage)} style={styles.container}>
-                    
-                    <Text> CREATE POTIONS </Text>
-                    <IngredientesScreen></IngredientesScreen>
+            <ImageBackground source={require(bgImage)} style={styles.container}>             
+                <Text> CREATE POTIONS </Text>
+                <IngredientesScreen></IngredientesScreen>
             </ImageBackground>
         </View>
     )
