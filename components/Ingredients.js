@@ -132,6 +132,7 @@ const IngredientesScreen = () => {
     
     <ScrollView
     ref={scrollViewRef}
+    style={{ flex: 1, width: '100%' }}
     contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
     scrollEnabled={scrollEnabled}>
 
@@ -173,6 +174,7 @@ const IngredientesScreen = () => {
       </ScrollView> 
   );
 };
+
 
 const IngredientView = styled.View`
     flex: 1;

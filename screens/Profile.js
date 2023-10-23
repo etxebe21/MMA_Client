@@ -9,7 +9,7 @@ const View = styled.View`
 const Text = styled.Text `
     bottom: -28px;
     color: #4c2882;
-    font-size: 25px;
+    font-size: 24px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;  
@@ -25,7 +25,7 @@ const CaracText = styled.Text `
 const ViewText = styled.Text `
     bottom: -18px;
     color: #4c2882;
-    font-size: 25px;
+    font-size: 26px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;  
