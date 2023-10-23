@@ -3,7 +3,7 @@ import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 
-const ingredientes = [
+const ingredients = [
   {
     id: 1,
     nombre: "Elf Essence",
@@ -68,8 +68,8 @@ const ingredientes = [
   ];
   
 const IngredientesScreen = () => {
-  const [ingredientesSeleccionados, setIngredientesSeleccionados] = useState([]);
-  const [pocionCreada, setPocionCreada] = useState(null);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [createdPotion, setCreatedPotion] = useState(null);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const scrollViewRef = useRef(null);
 
@@ -81,11 +81,11 @@ const IngredientesScreen = () => {
     setScrollEnabled(true);
   };
 
-  const seleccionarIngrediente = (ingrediente) => {
-    if (ingredientesSeleccionados.length < 2) {
-      setIngredientesSeleccionados([...ingredientesSeleccionados, ingrediente]);
+  const selectIngredient= (ingredient) => {
+    if (selectedIngredients.length < 2) {
+      setSelectedIngredients([...selectedIngredients, ingredient]);
 
-      if (ingredientesSeleccionados.length === 1) {
+      if (selectedIngredients.length === 1) {
         disableScroll();
         
         // Desplazar hacia el inicio automáticamente cuando se seleccionan dos ingredientes
@@ -96,33 +96,33 @@ const IngredientesScreen = () => {
     }
   };
 
-  const crearPocion = () => {
+  const createPotion = () => {
     // Verifica que se hayan seleccionado exactamente 2 ingredientes
-    if (ingredientesSeleccionados.length === 2) {
+    if (selectedIngredients.length === 2) {
       // Crea la poción combinando los efectos de los ingredientes seleccionados
       const poción = {
         nombre: 'EPIC POTION',
         efectos: [
-          ...ingredientesSeleccionados[0].efectos,
-          ...ingredientesSeleccionados[1].efectos,
+          ...selectedIngredients[0].efectos,
+          ...selectedIngredients[1].efectos,
         ],
       };
-      setPocionCreada(poción);
+      setCreatedPotion(poción);
     }
   };
 
   const returnIngredients = () => {
     // Limpiar los ingredientes seleccionados y la poción creada
-    setIngredientesSeleccionados([]);
-    setPocionCreada(null);
+    setSelectedIngredients([]);
+    setCreatedPotion(null);
   };
 
   const SelectedIngredientsEffects = ({ ingredientesSeleccionados }) => {
     return (
       <SelectedIngredientsContainer>
         <SelectedIngredientsTitle>Ingredients Effects:</SelectedIngredientsTitle>
-        {ingredientesSeleccionados.map((ingrediente, index) => (
-          <IngredientEffect key={index}>{ingrediente.nombre} Effects: {ingrediente.efectos.join(", ")}</IngredientEffect>
+        {selectedIngredients.map((ingredient, index) => (
+          <IngredientEffect key={index}>{ingredient.nombre} Effects: {ingredient.efectos.join(", ")}</IngredientEffect>
         ))}
       </SelectedIngredientsContainer>
     );
@@ -135,34 +135,34 @@ const IngredientesScreen = () => {
     contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
     scrollEnabled={scrollEnabled}>
 
-      {ingredientes.map((ingrediente) => (
+      {ingredients.map((ingredient) => (
         <IngredientButton
-          key={ingrediente.id}
-          onPress={() => seleccionarIngrediente(ingrediente)}
+          key={ingredient.id}
+          onPress={() => selectIngredient(ingredient)}
         >
           <IngredientView>
-            <IngredientImage source={ingrediente.imagen}/>
-            <IngredientText>{ingrediente.nombre}</IngredientText>
+            <IngredientImage source={ingredient.imagen}/>
+            <IngredientText>{ingredient.nombre}</IngredientText>
           </IngredientView>
         </IngredientButton>
       ))}
       
-      {ingredientesSeleccionados.length === 2 && !pocionCreada && (
+      {selectedIngredients.length === 2 && !createdPotion && (
         <>
-        <CreatePotionButton onPress={() => { crearPocion()}}>
+        <CreatePotionButton onPress={() => { createPotion()}}>
           <PotionButtonText>Create Potion</PotionButtonText>
         </CreatePotionButton>
       
-        <SelectedIngredientsEffects ingredientesSeleccionados={ingredientesSeleccionados} />
+        <SelectedIngredientsEffects selectedIngredients={selectedIngredients} />
         </>
       )}
 
-      {pocionCreada && (
+      {createdPotion && (
         <PotionView >
           <Text style={{ fontSize: 24, fontWeight: "bold", marginTop:15  }}>CREATED POTION:</Text>
-          <Text style={{ fontSize: 20, marginTop:15 }}>{pocionCreada.nombre}</Text>
+          <Text style={{ fontSize: 20, marginTop:15 }}>{createdPotion.nombre}</Text>
           <Text style={{ fontSize: 17, marginTop: 30 }}>Efects:</Text>
-          {pocionCreada.efectos.map((efecto, index) => (
+          {createdPotion.efectos.map((efecto, index) => (
             <Text key={index}>{efecto}</Text>
           ))}
           <ReturnButton onPress={() => { returnIngredients(); enableScroll(); }}>
