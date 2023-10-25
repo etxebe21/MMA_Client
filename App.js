@@ -20,43 +20,43 @@ const App =  () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
 
   useEffect(() => {
+
     const storeData = async (value) => {
-      value = { name: "name" };
+       value = {name : "name"}
       try {
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem('my-key', jsonValue);
-        console.log('Data stored successfully.');
       } catch (e) {
-        console.error('Error storing data:', e);
+        // saving error
       }
+      console.log('Done.')
     };
-  
+
     const getData = async () => {
       try {
         const jsonValue = await AsyncStorage.getItem('my-key');
-        console.log('Data retrieved successfully:', JSON.parse(jsonValue));
         return jsonValue != null ? JSON.parse(jsonValue) : null;
       } catch (e) {
-        console.error('Error retrieving data:', e);
-        return null;
+        // error reading value
       }
+      console.log('Done.')
     };
-  
+
+
     storeData();
     getData();
-  }, []);
-  // El array vacío asegura que esta operación se ejecute solo una vez
+  }, []); // El array vacío asegura que esta operación se ejecute solo una vez
 
-  useEffect(() => {
-    if (isLoginModalVisible) {
+  // useEffect(() => {
+  //   if (isLoginModalVisible) {
       
-      const timeoutId = setTimeout(() => {
-        setLoginModalVisible(false);
-      }, 5000);
+  //     const timeoutId = setTimeout(() => {
+  //       setLoginModalVisible(false);
+  //     }, 5000);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isLoginModalVisible]);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isLoginModalVisible]);
 
 
 
@@ -78,7 +78,7 @@ const App =  () => {
         transparent={false}
         visible={isLoginModalVisible}
         onRequestClose={() => {
-          setLoginModalVisible(false);
+          setLoginModalVisible(false); 
         }}
       >
        <View style={styles.modalContainer}>
@@ -86,7 +86,7 @@ const App =  () => {
         </View>
       </Modal>
       {/* {isAuthenticated && ( */}
-   
+        
         <>
       <Header/>  
   
