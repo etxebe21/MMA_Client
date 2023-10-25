@@ -67,34 +67,12 @@ const Login = () => {
             const checkToken = idTokenResult.token;
             console.log("CHEEECK TOKEEEN");
             console.log(checkToken);
-            axios.interceptors.response.use(
-                (response) => response,
-                (error) => {
-                  if (error.response) {
-                    // Error en la respuesta
-                    console.error('Error en la respuesta Axios:', error.response.status, error.response.data);
-                  } else if (error.request) {
-                    // Error en la solicitud
-                    console.error('Error en la solicitud Axios:', error.request);
-                  } else {
-                    // Error general
-                    console.error('Error general en Axios:', error.message);
-                  }
-                  return Promise.reject(error);
-                }
-              );    
-            const url = 'http://localhost:3000/api/users/verify-token';
-            const response = await axios.post(url, {checkToken});
-            if (response.value === true)
-            {
-                console.log('Iniciado sesión con Google!');
-            }
-            else{
-                console.log('NO se ha podido iniciar sesion');
-            }
+            const url = 'http://192.168.1.170:3000/api/users/verify-token';
+            const response = await axios.post(url, {idToken:checkToken});
+            console.log('Iniciado sesión con Google!');
             // El servidor debe responder con el resultado de la verificación
-            // console.log('Resultado de la verificación:', response.data);
-    
+            console.log('Resultado de la verificación:', response.data);
+            
         } catch (error) {
             // Manejar errores aquí
             console.error(error);
