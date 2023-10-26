@@ -29,7 +29,7 @@ const App =  () => {
       } catch (e) {
         // saving error
       }
-      console.log('Done.')
+      console.log('Done store.')
     };
 
     const getData = async () => {
@@ -39,7 +39,7 @@ const App =  () => {
       } catch (e) {
         // error reading value
       }
-      console.log('Done.')
+      console.log('Done get.')
     };
 
 
@@ -85,7 +85,7 @@ const App =  () => {
           <Login onLogin={handleLogin} />
         </View>
       </Modal>
-      {/* {isAuthenticated && ( */}
+      {isAuthenticated && (
         
         <>
       <Header/>  
@@ -116,7 +116,7 @@ const App =  () => {
       </Tab.Navigator>
     </NavigationContainer>
     </>
-      {/* )} */}
+      )}
       </View>
   );
   
