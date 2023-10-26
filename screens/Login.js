@@ -43,7 +43,6 @@ const Login = () => {
     });
 
     async function onGoogleButtonPress() {
-        setIsLoading(true);
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
@@ -65,10 +64,13 @@ const Login = () => {
             const idTokenResult = await auth().currentUser.getIdTokenResult();
             console.log(idTokenResult);
             const checkToken = idTokenResult.token;
+
             console.log("CHEEECK TOKEEEN");
             console.log(checkToken);
-            const url = 'http://192.168.1.170:3000/api/users/verify-token';
+            //const url = 'http://192.168.1.170:3000/api/users/verify-token';
+            const url = 'http://192.168.1.169:3000/api/users/verify-token';
             const response = await axios.post(url, {idToken:checkToken});
+            
             console.log('Iniciado sesión con Google!');
             // El servidor debe responder con el resultado de la verificación
             console.log('Resultado de la verificación:', response.data);
