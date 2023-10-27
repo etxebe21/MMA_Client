@@ -13,6 +13,7 @@ import Login from './screens/Login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 
+
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
