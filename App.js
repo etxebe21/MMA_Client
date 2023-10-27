@@ -42,11 +42,9 @@ const App =  () => {
       console.log('Done get.')
     };
 
-
     storeData();
     getData();
   }, []); // El array vacío asegura que esta operación se ejecute solo una vez
-
 
   // useEffect(() => {
   //   if (isLoginModalVisible) {
@@ -58,8 +56,6 @@ const App =  () => {
   //     return () => clearTimeout(timeoutId);
   //   }
   // }, [isLoginModalVisible]);
-
-
 
   const handleLogin = () => {
     // Aquí debes realizar la lógica de autenticación

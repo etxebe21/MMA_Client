@@ -52,7 +52,7 @@ const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
             console.log('Usuario:', user);
-            setUser(user);
+            
             handleSuccessfulLogin();
         } catch (error) {
             // Manejar errores aquí
