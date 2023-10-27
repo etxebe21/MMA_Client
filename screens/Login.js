@@ -5,44 +5,18 @@ import { ActivityIndicator } from "react-native";
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
-const View = styled.View`
-    flex: 1;
-    background: #C8A2C8;
-`;
 
-const Text = styled.Text`
-    bottom: -100px;
-    color: #4c2882;
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;
-`;
 
-const StyledButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: -500px;
-    width: 50%;
-    height: 55px;
-    border-radius: 60px;
-    align-self: center;
-`;
-
-const ButtonText = styled.Text`
-    color: white;
-    font-size: 20px;
-    text-align: center;
-`;
-
-const Login = () => {
+const Login = ({ onLogin, setLoginModalVisible }) => {
     const [isLoading, setIsLoading] = useState(false);
+    
 
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
     });
 
     async function onGoogleButtonPress() {
+        setIsLoading(true);
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
@@ -76,7 +50,7 @@ const Login = () => {
             console.log('Iniciado sesión con Google!');
             // El servidor debe responder con el resultado de la verificación
             console.log('Resultado de la verificación:', response.data);
-            
+            handleSuccessfulLogin();
         } catch (error) {
             // Manejar errores aquí
             console.error(error);
@@ -85,6 +59,11 @@ const Login = () => {
         }
     }
     
+    const handleSuccessfulLogin = () => {
+        // Lógica de inicio de sesión exitosa aquí
+        onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
+        setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso
+      };
     return (
         <View>
             <Text>LOGIN</Text>
@@ -94,5 +73,35 @@ const Login = () => {
         </View>
     );
 }
+const View = styled.View`
+    flex: 1;
+    background: #C8A2C8;
+`;
+
+const Text = styled.Text`
+    bottom: -100px;
+    color: #4c2882;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center;
+`;
+
+const StyledButton = styled.TouchableOpacity`
+    background-color: #4c2882;
+    padding: 10px 20px;
+    bottom: -500px;
+    width: 50%;
+    height: 55px;
+    border-radius: 60px;
+    align-self: center;
+`;
+
+const ButtonText = styled.Text`
+    color: white;
+    font-size: 20px;
+    text-align: center;
+`;
+
 
 export default Login;

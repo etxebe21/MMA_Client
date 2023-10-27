@@ -11,8 +11,7 @@ import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import '@react-native-firebase/auth';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -47,6 +46,7 @@ const App =  () => {
     getData();
   }, []); // El array vacío asegura que esta operación se ejecute solo una vez
 
+
   // useEffect(() => {
   //   if (isLoginModalVisible) {
       
@@ -69,10 +69,10 @@ const App =  () => {
   };
 
   return(
-    
-    
+     
 <View style = {{ flex: 1}}>
 <Splash/>
+  {!isAuthenticated && (
     <Modal
         animationType="slide"
         transparent={false}
@@ -82,11 +82,11 @@ const App =  () => {
         }}
       >
        <View style={styles.modalContainer}>
-          <Login onLogin={handleLogin} />
+       <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
         </View>
       </Modal>
-      {isAuthenticated && (
-        
+    )}
+    {isAuthenticated && ( 
         <>
       <Header/>  
   
