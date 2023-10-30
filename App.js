@@ -57,13 +57,23 @@ const App =  () => {
   //   }
   // }, [isLoginModalVisible]);
 
-  const handleLogin = () => {
-    // Aquí debes realizar la lógica de autenticación
-    // Si la autenticación es exitosa, establece isAuthenticated en true y cierra el modal
+  const handleLogin = async (email, role) => {
+    // Realiza la lógica de autenticación
+
     setIsAuthenticated(true);
     AsyncStorage.setItem('my-key', JSON.stringify(true));
-    setLoginModalVisible(false);
-  };
+    //setEmail(email);
+    //setRole(role);
+
+    // Guarda el email y el role en AsyncStorage
+    try {
+        // await AsyncStorage.setItem('userEmail', email);
+        // await AsyncStorage.setItem('userRole', role);
+        setLoginModalVisible(false);
+    } catch (error) {
+        console.error('Error al guardar el email y el role en AsyncStorage:', error);
+    }
+};
 
   return(
      
