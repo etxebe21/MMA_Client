@@ -2,18 +2,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
 
 
-const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
+const Login = ({ onLogin, setLoginModalVisible}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
     
 
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
+        requestProfile: true,
     });
 
     async function onGoogleButtonPress() {
@@ -26,14 +28,11 @@ const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
 
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             // Sign-in the user with the credential
-
             console.log("PASO 2 credenciales google")
             console.log(googleCredential);
 
-
             console.log("PASO 3 credenciales");
-                await auth().signInWithCredential(googleCredential);
-            
+            await auth().signInWithCredential(googleCredential);
 
             console.log("PASO 4 autenticar usuario actual");
             const idTokenResult = await auth().currentUser.getIdTokenResult();
@@ -43,8 +42,8 @@ const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
             console.log("CHEEECK TOKEEEN");
             console.log(checkToken);
             //const url = 'http://192.168.1.170:3000/api/users/verify-token';
-            const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
-            //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
+            //const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
+            const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
             
             const response = await axios.post(url, {idToken:checkToken});
             const {validToken, user }= response.data;
@@ -52,8 +51,25 @@ const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
             console.log('Usuario:', user);
-            
-            handleSuccessfulLogin();
+            const email = user.email;
+            console.log(email);
+            const role = user.role;
+            console.log(role);
+
+            // Guarda el correo electrónico en AsyncStorage
+            await AsyncStorage.setItem('userEmail', email)
+            .then(() => {
+            console.log('Correo electrónico guardado en AsyncStorage:', email);
+            })
+            .catch(error => {
+            console.error('Error al guardar el correo electrónico en AsyncStorage:', error);
+            });
+            await AsyncStorage.setItem('userRole', role)
+            .then(() => {
+            console.log('Crole guardado en AsyncStorage:', role);
+            })
+                handleSuccessfulLogin();
+           
         } catch (error) {
             // Manejar errores aquí
             console.error(error);
@@ -62,11 +78,11 @@ const Login = ({ onLogin, setLoginModalVisible, navigation}) => {
         }
     }
     
-    const handleSuccessfulLogin = () => {
-        // Lógica de inicio de sesión exitosa aquí
+    const handleSuccessfulLogin = () => {  
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
-        setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso   
-    };
+        setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
+      };
+
     return (
         <View>
             <Text>LOGIN</Text>
