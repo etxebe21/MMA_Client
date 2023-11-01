@@ -21,59 +21,29 @@ const App =  () => {
 
   useEffect(() => {
 
-    const storeData = async (value) => {
-       value = {name : "name"}
-      try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem('my-key', jsonValue);
-      } catch (e) {
-        // saving error
-      }
-      console.log('Done store.')
-    };
-
     const getData = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem('my-key');
+        const email = await AsyncStorage.getItem('userEmail');
+        console.log(email); 
+        const role = await AsyncStorage.getItem('userRole');
+        console.log(role);
         return jsonValue != null ? JSON.parse(jsonValue) : null;
+        
       } catch (e) {
         // error reading value
       }
       console.log('Done get.')
     };
 
-    storeData();
-    getData();
-  }, []); // El array vacío asegura que esta operación se ejecute solo una vez
+  getData();
+  }, []); 
 
-  // useEffect(() => {
-  //   if (isLoginModalVisible) {
-      
-  //     const timeoutId = setTimeout(() => {
-  //       setLoginModalVisible(false);
-  //     }, 5000);
 
-  //     return () => clearTimeout(timeoutId);
-  //   }
-  // }, [isLoginModalVisible]);
-
-  const handleLogin = async (email, role) => {
+  const handleLogin = async () => {
     // Realiza la lógica de autenticación
-
     setIsAuthenticated(true);
-    AsyncStorage.setItem('my-key', JSON.stringify(true));
-    //setEmail(email);
-    //setRole(role);
-
-    // Guarda el email y el role en AsyncStorage
-    try {
-        // await AsyncStorage.setItem('userEmail', email);
-        // await AsyncStorage.setItem('userRole', role);
-        setLoginModalVisible(false);
-    } catch (error) {
-        console.error('Error al guardar el email y el role en AsyncStorage:', error);
-    }
-};
+    setLoginModalVisible(false);
+  };
 
   return(
      
