@@ -7,7 +7,7 @@ const ScanQr = () => {
     
     <View>
         <ViewText>SCAN QR</ViewText>
-        <QrView></QrView>
+        <ScanQrView></ScanQrView>
     </View>
     )
 }
@@ -25,7 +25,7 @@ const Text = styled.Text `
     letter-spacing: -0.3px;
     align-self: center;  
 `
-const QrView = styled.View`
+const ScanQrView = styled.View`
     bottom: -50px;
     width: 350px;
     height: 420px;

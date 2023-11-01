@@ -15,6 +15,7 @@ import Qr from './screens/Qr';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
+import Torreon from './screens/Torreon';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -86,6 +87,7 @@ const App =  () => {
           else if(route.name === 'Qr') iconName = 'dataset'
           else if(route.name === 'ScanQr') iconName = 'fullscreen'
           else if(route.name === 'CreatePotions') iconName = 'create'
+          else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Profile') iconName = 'people'
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -96,6 +98,7 @@ const App =  () => {
       <Tab.Screen name = "Qr" component={Qr} />
       <Tab.Screen name = "ScanQr" component={ScanQr} />
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
+      <Tab.Screen name = "Torreon" component={Torreon} />
       <Tab.Screen name = "Profile" component={Profile} />
       </Tab.Navigator>
     </NavigationContainer>
