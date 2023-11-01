@@ -10,9 +10,9 @@ import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
+import Qr from './screens/Qr';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
-
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -81,13 +81,16 @@ const App =  () => {
             let iconName;
             if(route.name === 'Home') iconName = 'home'
           
+          else if(route.name === 'Qr') iconName = 'dataset'
           else if(route.name === 'CreatePotions') iconName = 'create'
           else if(route.name === 'Profile') iconName = 'people'
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
       >
+      
       <Tab.Screen name = "Home" component={Home} />
+      <Tab.Screen name = "Qr" component={Qr} />
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Profile" component={Profile} />
       </Tab.Navigator>
