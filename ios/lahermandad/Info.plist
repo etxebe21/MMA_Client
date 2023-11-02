@@ -2,6 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MaterialCommunityIcons</string>
+		<string>AntDesign</string>
+		<string>Entypo</string>
+		<string>Evillcons</string>
+		<string>FontAwesome5_Brands</string>
+		<string>FontAwesome5_Regular</string>
+		<string>FontAwesome5_Solid</string>
+		<string>FontAwesome6_Brands</string>
+		<string>FontAwesome6_Regular</string>
+		<string>FontAwesome5_Solid</string>
+		<string>Fontisto</string>
+		<string>Foundation</string>
+		<string>Ionicons</string>
+		<string>MaterialIcons</string>
+		<string>Octicons</string>
+		<string>SimpleLineIcons</string>
+		<string>Zocial</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -31,7 +51,7 @@
 			<array>
 				<string>Thread</string>
 				<string>1:</string>
-				<string>"Your</string>
+				<string>&quot;Your</string>
 				<string>app</string>
 				<string>is</string>
 				<string>missing</string>
@@ -41,7 +61,7 @@
 				<string>following</string>
 				<string>URL</string>
 				<string>schemes:</string>
-				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d"</string>
+				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d&quot;</string>
 			</array>
 		</dict>
 		<dict>
