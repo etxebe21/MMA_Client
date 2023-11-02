@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const ScanQr = () => {
    
@@ -7,7 +8,24 @@ const ScanQr = () => {
     
     <View>
         <ViewText>SCAN QR</ViewText>
-        <ScanQrView></ScanQrView>
+        <ScanQrView>
+        <QRCodeScanner
+        onRead={this.onSuccess}
+        flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+      />
+        </ScanQrView>
     </View>
     )
 }
