@@ -41,10 +41,12 @@ const Login = ({ onLogin, setLoginModalVisible}) => {
 
             console.log("CHEEECK TOKEEEN");
             console.log(checkToken);
+            
             //const url = 'http://192.168.1.170:3000/api/users/verify-token';
             //const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
-            const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
-            
+            //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
+            const url = 'http://192.168.1.154:3000/api/users/verify-token'; //MIKEL-CLASE
+
             const response = await axios.post(url, {idToken:checkToken});
             const {validToken, user }= response.data;
             console.log('Iniciado sesión con Google!');
