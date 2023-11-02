@@ -48,7 +48,6 @@ const Login = ({ onLogin, setLoginModalVisible}) => {
             //const url = 'http://192.168.1.154:3000/api/users/verify-token'; //MIKEL-CLASE
 
             const url = 'https://mmaproject-production.fly.dev/api/users/verify-token'; //ETXEBE-CLASE
-            //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
             
             const response = await axios.post(url, {idToken:checkToken});
             const {validToken, user }= response.data;
