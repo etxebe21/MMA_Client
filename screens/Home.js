@@ -47,7 +47,7 @@ const Home = () => {
                 <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
 
-            {!isAuthenticated && (
+            {/* {!isAuthenticated && (
                 <Modal
                     animationType="slide"
                     transparent={false}
@@ -60,7 +60,7 @@ const Home = () => {
                 <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
                     </View>
                 </Modal>
-                )}
+                )} */}
         </View>
         
     )
