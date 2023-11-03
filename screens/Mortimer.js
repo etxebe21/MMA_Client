@@ -1,21 +1,42 @@
 import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-import Login from "./Login";
 import { Modal , StyleSheet} from "react-native";
-
+import axios from "axios";
 
 const Mortimer = () => {
-   
-    
-
-    return(
-        <View>
-            <Text>ACÓLITOS</Text> 
-        </View>  
-    )
-}
+    const [users, setUsers] = useState([]);
+  
+    useEffect(() => {
+      async function getUsersFromDatabase() {
+        try {
+          const url = 'https://mmaproject-app.fly.dev/api/users';
+          const response = await axios.get(url);
+          const users = response.data; 
+          setUsers(users);
+          console.log('Usuarios:', users);
+          const email = users.email;
+          console.log(email);
+        } catch (error) {
+          console.error('Error al obtener usuarios:', error);
+        }
+      }
+  
+      getUsersFromDatabase();
+    }, []); 
+  
+    return (
+        <View style={styles.container}>
+        <Text>ACÓLITOS</Text>
+        {Array.isArray(users) && users.length > 0 ? (
+          users.map((user) => (
+            <Text key={user.picture}>{user.username}</Text> // Ajusta esto según las propiedades de tu objeto de usuario
+          ))
+        ) : (
+          <Text>No hay usuarios disponibles.</Text>
+        )}
+      </View>
+    );
+  };
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -38,19 +59,4 @@ const Text = styled.Text `
     letter-spacing: -0.3px;
     align-self: center;  
 `
-const SignOutButton = styled.TouchableOpacity`
-    background-color: #FF0000;
-    padding: 10px 20px;
-    bottom: -400px;
-    width: 50%;
-    height: 55px;
-    border-radius: 60px;
-    align-self: center;
-`;
-const ButtonText = styled.Text`
-    color: white;
-    font-size: 20px;
-    text-align: center;
-`;
-
 export default Mortimer;
