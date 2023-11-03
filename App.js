@@ -87,9 +87,9 @@ const App =  () => {
             let iconName;
             if(route.name === 'Home') iconName = 'home'
           
-          else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'dataset';
-          else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'fullscreen';
-          else if(route.name === 'CreatePotions') iconName = 'create'
+          else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
+          else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
+          else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Profile') iconName = 'people'
           return <Icon name = {iconName} size={26} color={color} />
