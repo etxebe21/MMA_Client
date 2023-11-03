@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
+import Mortimer from './screens/Mortimer';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -89,15 +90,17 @@ const App =  () => {
           
           else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
           else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
+          else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
-          else if(route.name === 'Profile') iconName = 'people'
+          else if(route.name === 'Profile') iconName = 'person'
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
       >
       
-      <Tab.Screen name = "Home" component={Home} />
+      {role!= 'MORTIMER' && <Tab.Screen name = "Home" component={Home} />}
+      {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
