@@ -7,7 +7,7 @@ const ScanQr = () => {
     
     <View>
         <ViewText>SCAN QR</ViewText>
-        <ScanQrView></ScanQrView>
+        
     </View>
     )
 }
