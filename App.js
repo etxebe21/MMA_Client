@@ -89,6 +89,7 @@ const App =  () => {
           else if(route.name === 'CreatePotions') iconName = 'create'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Profile') iconName = 'people'
+          else if(route.name === 'readQR') iconName = 'qr-code-2'
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
@@ -100,6 +101,7 @@ const App =  () => {
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
       <Tab.Screen name = "Profile" component={Profile} />
+      <Tab.Screen name = "readQR" component={ScanQr} />
       </Tab.Navigator>
     </NavigationContainer>
     </>
