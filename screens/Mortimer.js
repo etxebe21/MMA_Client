@@ -4,46 +4,51 @@ import { Modal , StyleSheet,Image} from "react-native";
 import axios from "axios";
 
 const Mortimer = () => {
-    const [users, setUsers] = useState([]);
-  
-    useEffect(() => {
-      async function getUsersFromDatabase() {
-        try {
-          const url = 'https://mmaproject-app.fly.dev/api/users';
-          
-          const response = await axios.get(url);
-          const users = response.data.data;
-          setUsers(users);
-          console.log('Usuarios:', users);
-          console.log(users[2].email);
-        } catch (error) {
-          console.error('Error al obtener usuarios:', error);
-        }
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    async function getUsersFromDatabase() {
+      try {
+        const url = 'https://mmaproject-app.fly.dev/api/users';
+        
+        const response = await axios.get(url);
+        const users = response.data.data;
+        setUsers(users);
+        console.log('Usuarios:', users);
+        console.log(users[2].email);
+      } catch (error) {
+        console.error('Error al obtener usuarios:', error);
       }
+    }
+
+    getUsersFromDatabase();
+  }, []);
+
+ 
+  return (
+    <View style={styles.container}>
+      <Text>ACÓLITOS</Text>
+      {users.map((data) => (
+        <UserContainer key={data.picture}>
+          <AvatarContainer>
+            <Avatar source={{ uri: data.picture }} />
+            <StatusIndicator isInsideTower={data.insideTower} />
+          </AvatarContainer>
+          <NameText>{data.username}</NameText>
+        </UserContainer>
+      ))}
+    </View>
+  );
+};
   
-      getUsersFromDatabase();
-    }, []);
-  
-    return (
-      <View style={styles.container}>
-        <Text>ACÓLITOS</Text>
-        {users.map((data) => (
-          <UserContainer key={data.picture}>
-            <Avatar source={{ uri: data.picture }}/>
-            <NameText>{data.username}</NameText>
-          </UserContainer>
-        ))}
-      </View>
-    );
-  };
-  
-const UserContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  height: 100px;
+const StatusIndicator = styled.View`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  margin-left: -15px;
+  bottom: -20px;
+  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
-  bottom: -40px;
-  backgroundColor: #D9A9C9;
 `;
 
 const styles = StyleSheet.create({
@@ -84,4 +89,18 @@ const Avatar = styled.Image`
   border: #4c2882;
   borderWidth: 3px;
 `
+const AvatarContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const UserContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  height: 100px;
+  border: #4c2882;
+  bottom: -40px;
+  background-color: #d9a9c9;
+`;
+
 export default Mortimer;
