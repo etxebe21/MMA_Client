@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { Modal , StyleSheet,Image} from "react-native";
 import axios from "axios";
 
-
 const Mortimer = () => {
     const [users, setUsers] = useState([]);
   
@@ -13,7 +12,6 @@ const Mortimer = () => {
           const url = 'https://mmaproject-app.fly.dev/api/users';
           
           const response = await axios.get(url);
-          //console.log(response.data);
           const users = response.data.data;
           setUsers(users);
           console.log('Usuarios:', users);
@@ -42,6 +40,10 @@ const Mortimer = () => {
 const UserContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  height: 100px;
+  border: #4c2882;
+  bottom: -40px;
+  backgroundColor: #D9A9C9;
 `;
 
 const styles = StyleSheet.create({
@@ -54,31 +56,32 @@ const styles = StyleSheet.create({
   });
   
 const View = styled.View`
-    flex: 1;
-    background: #C8A2C8;
+  flex: 1;
+  background: #C8A2C8;
 `
 const Text = styled.Text `
-    bottom: -30px;
-    color: #4c2882;
-    font-size: 25px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
+  bottom: -17px;
+  color: #4c2882;
+  font-size: 25px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
 `
 const NameText = styled.Text `
-    bottom: -60px;
-    margin-left: 22px;
-    color: #4c2882;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
+  margin-left: 15px;
+  color: #4c2882;
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
 `
 const Avatar = styled.Image`
-  width: 50px;
-  height: 50px;
-  top:60px;
+  width: 70px;
+  height: 70px;
   margin-left: 10px;
   padding:1px;
+  border-radius: 35px;
+  border: #4c2882;
+  borderWidth: 3px;
 `
 export default Mortimer;
