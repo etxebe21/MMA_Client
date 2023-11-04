@@ -2,6 +2,7 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { Modal , StyleSheet,Image} from "react-native";
 import axios from "axios";
+import { ScrollView } from "react-native";
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
@@ -26,7 +27,9 @@ const Mortimer = () => {
   const acolitos = users.filter(user => user.role === "ACÓLITO");
  
   return (
+    
     <View style={styles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}> 
       <Text>ACÓLITOS</Text>
       {acolitos.map((data) => (
         <UserContainer key={data.picture}>
@@ -37,19 +40,11 @@ const Mortimer = () => {
           <NameText>{data.username}</NameText>
         </UserContainer>
       ))}
+      </ScrollView>
     </View>
+    
   );
 };
-  
-const StatusIndicator = styled.View`
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  margin-left: -15px;
-  bottom: -20px;
-  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
-  border: #4c2882;
-`;
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -92,8 +87,7 @@ const Avatar = styled.Image`
 const AvatarContainer = styled.View`
   flex-direction: row;
   align-items: center;
-`;
-
+`
 const UserContainer = styled.View`
   flex-direction: row;
   align-items: center;
@@ -101,6 +95,15 @@ const UserContainer = styled.View`
   border: #4c2882;
   bottom: -40px;
   background-color: #d9a9c9;
-`;
+`
+const StatusIndicator = styled.View`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  margin-left: -15px;
+  bottom: -20px;
+  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
+  border: #4c2882;
+`
 
 export default Mortimer;
