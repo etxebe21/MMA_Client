@@ -29,7 +29,7 @@ const Mortimer = () => {
   return (
     
     <View style={styles.container}>
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}> 
+    <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }} > 
       <Text>ACÓLITOS</Text>
       {acolitos.map((data) => (
         <UserContainer key={data.picture}>
