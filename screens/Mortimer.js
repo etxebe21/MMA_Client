@@ -15,7 +15,6 @@ const Mortimer = () => {
         const users = response.data.data;
         setUsers(users);
         console.log('Usuarios:', users);
-        console.log(users[2].email);
       } catch (error) {
         console.error('Error al obtener usuarios:', error);
       }
@@ -24,11 +23,12 @@ const Mortimer = () => {
     getUsersFromDatabase();
   }, []);
 
+  const acolitos = users.filter(user => user.role === "ACÓLITO");
  
   return (
     <View style={styles.container}>
       <Text>ACÓLITOS</Text>
-      {users.map((data) => (
+      {acolitos.map((data) => (
         <UserContainer key={data.picture}>
           <AvatarContainer>
             <Avatar source={{ uri: data.picture }} />
