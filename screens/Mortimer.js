@@ -1,7 +1,8 @@
 import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
-import { Modal , StyleSheet} from "react-native";
+import { Modal , StyleSheet,Image} from "react-native";
 import axios from "axios";
+
 
 const Mortimer = () => {
     const [users, setUsers] = useState([]);
@@ -10,33 +11,38 @@ const Mortimer = () => {
       async function getUsersFromDatabase() {
         try {
           const url = 'https://mmaproject-app.fly.dev/api/users';
+          
           const response = await axios.get(url);
-          const users = response.data; 
+          //console.log(response.data);
+          const users = response.data.data;
           setUsers(users);
           console.log('Usuarios:', users);
-          const email = users.email;
-          console.log(email);
+          console.log(users[2].email);
         } catch (error) {
           console.error('Error al obtener usuarios:', error);
         }
       }
   
       getUsersFromDatabase();
-    }, []); 
+    }, []);
   
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
         <Text>ACÓLITOS</Text>
-        {Array.isArray(users) && users.length > 0 ? (
-          users.map((user) => (
-            <Text key={user.picture}>{user.username}</Text> // Ajusta esto según las propiedades de tu objeto de usuario
-          ))
-        ) : (
-          <Text>No hay usuarios disponibles.</Text>
-        )}
+        {users.map((data) => (
+          <UserContainer key={data.picture}>
+            <Avatar source={{ uri: data.picture }}/>
+            <NameText>{data.username}</NameText>
+          </UserContainer>
+        ))}
       </View>
     );
   };
+  
+const UserContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -52,11 +58,27 @@ const View = styled.View`
     background: #C8A2C8;
 `
 const Text = styled.Text `
-    bottom: -100px;
+    bottom: -30px;
     color: #4c2882;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;  
+`
+const NameText = styled.Text `
+    bottom: -60px;
+    margin-left: 22px;
+    color: #4c2882;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center;  
+`
+const Avatar = styled.Image`
+  width: 50px;
+  height: 50px;
+  top:60px;
+  margin-left: 10px;
+  padding:1px;
 `
 export default Mortimer;
