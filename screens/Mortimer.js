@@ -50,13 +50,30 @@ const Mortimer = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
       {selectedUser && (
-        <Modal visible={modalVisible}>
+          <Modal visible={modalVisible}>
           <ModalContent>
+          <Avatar source={{ uri: selectedUser.picture }} />
             <Text>{selectedUser.username}</Text>
             <Text>Level: {selectedUser.level}</Text>
             <Text>Hitpoints: {selectedUser.hitPoints}</Text>
-            {/* Agrega más propiedades según sea necesario */}
+            <Text>Fuerza: {selectedUser.fuerza}</Text>
+            <Text>Dinero: {selectedUser.dinero}</Text>
+            <Text>Cansancio: {selectedUser.cansancio}</Text>
+            <Text>Fuerza: {selectedUser.fuerza}</Text>
+            <Text>Resistencia: {selectedUser.resistencia}</Text>
+            <Text>Agilidad: {selectedUser.agilidad}</Text>
+            <Text>Inteligencia: {selectedUser.inteligencia}</Text>
+            <Text>Hambruna: {selectedUser.hambruna}</Text>
+            <Text>Ceguera: {selectedUser.ceguera}</Text>
+            <Text>Locura: {selectedUser.locura}</Text>
+            <Text>Miedo: {selectedUser.miedo}</Text>
+            <Text>Parálisis: {selectedUser.parálisis}</Text>
+            <Text>Psicosis: {selectedUser.psicosis}</Text>
+            <Text>Role: {selectedUser.role}</Text>
+            <Text>Torreón: {selectedUser.insideTower}</Text>
+            
             <CloseButton onPress={() => setModalVisible(false)}>
               <ButtonText>Close</ButtonText>
             </CloseButton>
@@ -83,7 +100,7 @@ const View = styled.View`
 const Text = styled.Text `
   bottom: -17px;
   color: #4c2882;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
@@ -135,7 +152,7 @@ const ModalContent = styled.View`
 const CloseButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
-    bottom: -50px;
+    bottom: -36px;
     width: 50%;
     height: 55px;
     border-radius: 60px;
