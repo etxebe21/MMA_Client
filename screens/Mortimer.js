@@ -11,8 +11,6 @@ const Mortimer = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editedUser, setEditedUser] = useState(selectedUser || {});
 
-
-
   useEffect(() => {
     async function getUsersFromDatabase() {
       try {
@@ -50,10 +48,11 @@ const Mortimer = () => {
   
   const handleEditUserConfirm = async () => {
     try {
+      console.log('usuario seleccionado',selectedUser);
       // Realiza una solicitud PUT al servidor para actualizar los datos del usuario
       const response = await axios.put(`https://mmaproject-app.fly.dev/api/users/${selectedUser._id.toString()}`, editedUser);
 
-      // Maneja la respuesta del servidor según tus necesidades
+      // Maneja la respuesta del servidor 
       console.log('Datos del usuario actualizados:', response.data);
       // Cierra el modal de edición
       closeEditModal();
@@ -115,7 +114,9 @@ const Mortimer = () => {
 
       {selectedUser && (
         <Modal visible={editModalVisible}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
           <EditModalContent>
+          <EditText>EDIT USER</EditText>
           <InputRow>
             <Label>Username</Label>
             <TextInput
@@ -177,7 +178,7 @@ const Mortimer = () => {
             />
           </InputRow>
 
-          {/* <InputRow>
+          <InputRow>
             <Label>Inteligencia:</Label>
             <TextInput
               placeholder="Inteligencia"
@@ -244,7 +245,7 @@ const Mortimer = () => {
               value={editedUser.psicosis ? "1" : "0"}
               onChangeText={(text) => setEditedUser({ ...editedUser, psicosis: text === "1" })}
             />
-          </InputRow> */}
+          </InputRow>
 
           <InputRow>
             <Label>Role:</Label>
@@ -261,6 +262,7 @@ const Mortimer = () => {
               <ButtonText>Confirmar</ButtonText>
             </ConfirmButton>
           </EditModalContent>
+          </ScrollView>
         </Modal>
       )}
     </View>
@@ -335,8 +337,9 @@ const ModalContent = styled.View`
 const CloseButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
-    bottom: -30px;
-    width: 50%;
+    bottom: -25px;
+    margin-left: -180px;
+    width: 42%;
     height: 55px;
     border-radius: 60px;
     align-self: center;
@@ -351,9 +354,10 @@ const ButtonText = styled.Text `
 const EditButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
-    bottom: -30px;
-    width: 50%;
+    bottom: 30px;
+    width: 42%;
     height: 55px;
+    margin-left: 190px;
     border-radius: 60px;
     align-self: center;
 `
@@ -366,31 +370,42 @@ const EditModalContent = styled.View`
 const TextInput = styled(RNTextInput)`
   width: 50%;
   height: 40px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #4c2882;
+  border: 2px solid #4c2882;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 17px;
   color: #4c2882;
 `;
 const ConfirmButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
-    bottom: -30px;
-    width: 50%;
+    bottom: 30px;
+    width: 42%;
     height: 55px;
+    margin-left: 180px;
     border-radius: 60px;
     align-self: center;
 `
 const InputRow = styled.View`
   flex-direction: row;
   align-items: center;
+  top: 25px;
   margin-bottom: 10px;
-`;
+`
 
 const Label = styled.Text`
   font-size: 16px;
   color: #4c2882;
   margin-right: 10px;
-`;
+`
+
+const EditText = styled.Text `
+  bottom: -10px;
+  color: #4c2882;
+  font-size: 25px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+`
 export default Mortimer;
