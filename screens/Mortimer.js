@@ -181,69 +181,55 @@ const Mortimer = () => {
           <InputRow>
             <Label>Inteligencia:</Label>
             <TextInput
-              placeholder="Inteligencia"
-              keyboardType="numeric"
               value={String(editedUser.inteligencia)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, inteligencia: parseInt(text, 10) })}
+              onChangeText={(text) => setEditedUser({ ...editedUser, inteligencia: text })}
             />
           </InputRow>
           <InputRow>
             <Label>Ceguera:</Label>
             <TextInput
-              placeholder="Ceguera"
-              keyboardType="numeric"
-              value={editedUser.ceguera ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text === "1" })}
+              value={editedUser.ceguera ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
             />
           </InputRow>
 
           <InputRow>
             <Label>Hambruna:</Label>
             <TextInput
-              placeholder="Hambruna"
-              keyboardType="numeric"
-              value={editedUser.hambruna ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, hambruna: text === "1" })}
+              value={editedUser.hambruna ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
             />
           </InputRow>
 
           <InputRow>
             <Label>Locura:</Label>
             <TextInput
-              placeholder="Locura"
-              keyboardType="numeric"
-              value={editedUser.locura ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, locura: text === "1" })}
+              value={editedUser.locura ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
             />
           </InputRow>
 
           <InputRow>
             <Label>Miedo:</Label>
             <TextInput
-              placeholder="Miedo"
-              keyboardType="numeric"
-              value={editedUser.miedo ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, miedo: text === "1" })}
+              value={editedUser.miedo ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
             />
           </InputRow>
 
           <InputRow>
             <Label>Parálisis:</Label>
             <TextInput
-              placeholder="Parálisis"
-              keyboardType="numeric"
-              value={editedUser.parálisis ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, parálisis: text === "1" })}
+              value={editedUser.parálisis ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
             />
           </InputRow>
 
           <InputRow>
             <Label>Psicosis:</Label>
             <TextInput
-              placeholder="Psicosis"
-              keyboardType="numeric"
-              value={editedUser.psicosis ? "1" : "0"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, psicosis: text === "1" })}
+              value={editedUser.psicosis ? "Sí" : "No"}
+              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
             />
           </InputRow>
 
