@@ -1,19 +1,22 @@
-import React , {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Modal , StyleSheet, TouchableOpacity, TextInput as RNTextInput} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, TextInput as RNTextInput } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Slider from '@react-native-community/slider';
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const thumb = require('../assets/yeti.jpg');
 
   useEffect(() => {
     async function getUsersFromDatabase() {
       try {
         const url = 'https://mmaproject-app.fly.dev/api/users';
-        
+
         const response = await axios.get(url);
         const users = response.data.data;
         setUsers(users);
@@ -27,28 +30,30 @@ const Mortimer = () => {
   }, []);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
- 
+
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
   };
 
-  const handleEditUser = (user) => {
-    setEditedUser(user);
-    setSelectedUser(user);
-    setEditModalVisible(true);
+  // const handleEditUser = (user) => {
+  //   setEditedUser(user);
+  //   setSelectedUser(user);
+  //   setEditModalVisible(true);
+  // };
+
+
+  const handleSliderChange = (newValue) => {
+    setSelectedUser((prevState) => ({ ...prevState, dinero: newValue }));
   };
-  
-  const closeEditModal = () => {
-    setEditModalVisible(false);
-  };
-  
+
+
   const handleEditUserConfirm = async () => {
     try {
-      console.log('id usuario seleccionado',selectedUser._id);
+      console.log('id usuario seleccionado', selectedUser._id);
 
       const updatedUserData = {
-        
+
         username: selectedUser.username,
         level: selectedUser.level,
         hitPoints: selectedUser.hitPoints,
@@ -80,7 +85,7 @@ const Mortimer = () => {
   };
 
   return (
-    
+
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <Text>ACÓLITOS</Text>
@@ -98,33 +103,36 @@ const Mortimer = () => {
       </ScrollView>
 
       {selectedUser && (
-          <Modal visible={modalVisible}>
-            <ModalContent>
-              <Avatar source={{ uri: selectedUser.picture }} style={{width: 90, height: 90, borderRadius:45}}/>
-              <Text>{selectedUser.username}</Text>
-              <Text>Level: {selectedUser.level}</Text>
-              <Text>Hitpoints: {selectedUser.hitPoints}</Text>
-              <Text>Fuerza: {selectedUser.fuerza}</Text>
-              <Text>Dinero: {selectedUser.dinero}</Text>
-              <Text>Cansancio: {selectedUser.cansancio}</Text>
-              <Text>Fuerza: {selectedUser.fuerza}</Text>
-              <Text>Resistencia: {selectedUser.resistencia}</Text>
-              <Text>Agilidad: {selectedUser.agilidad}</Text>
-              <Text>Inteligencia: {selectedUser.inteligencia}</Text>
-              <Text>Ceguera: {selectedUser.ceguera ? "Sí" : "No"}</Text>
-              <Text>Hambruna: {selectedUser.hambruna ? "Sí" : "No"}</Text>
-              <Text>Locura: {selectedUser.locura ? "Sí" : "No"}</Text>
-              <Text>Miedo: {selectedUser.miedo ? "Sí" : "No"}</Text>
-              <Text>Parálisis: {selectedUser.parálisis ? "Sí" : "No"}</Text>
-              <Text>Psicosis: {selectedUser.psicosis ? "Sí" : "No"}</Text>
-              <Text>Role: {selectedUser.role}</Text>
-              <Text>Torreón: {selectedUser.insideTower ? "Sí" : "No"}</Text>
-                    
-              <CloseButton onPress={() => setModalVisible(false)}>
-                <ButtonText>Close</ButtonText>
-              </CloseButton>
-            </ModalContent>
-          </Modal>
+        <Modal visible={modalVisible}>
+          <ModalContent>
+            <Avatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+            <Text>LEVEL: {selectedUser.level} </Text>
+            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.level} minimumValue={0} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleSliderChange}
+            />
+            <Text>{selectedUser.username}</Text>
+            <Text>Level: {selectedUser.level}</Text>
+            <Text>Hitpoints: {selectedUser.hitPoints}</Text>
+            <Text>Fuerza: {selectedUser.fuerza}</Text>
+            <Text>Dinero: {selectedUser.dinero}</Text>
+            <Text>Cansancio: {selectedUser.cansancio}</Text>
+            <Text>Fuerza: {selectedUser.fuerza}</Text>
+            <Text>Resistencia: {selectedUser.resistencia}</Text>
+            <Text>Agilidad: {selectedUser.agilidad}</Text>
+            <Text>Inteligencia: {selectedUser.inteligencia}</Text>
+            <Text>Ceguera: {selectedUser.ceguera ? "Sí" : "No"}</Text>
+            <Text>Hambruna: {selectedUser.hambruna ? "Sí" : "No"}</Text>
+            <Text>Locura: {selectedUser.locura ? "Sí" : "No"}</Text>
+            <Text>Miedo: {selectedUser.miedo ? "Sí" : "No"}</Text>
+            <Text>Parálisis: {selectedUser.parálisis ? "Sí" : "No"}</Text>
+            <Text>Psicosis: {selectedUser.psicosis ? "Sí" : "No"}</Text>
+            <Text>Role: {selectedUser.role}</Text>
+            <Text>Torreón: {selectedUser.insideTower ? "Sí" : "No"}</Text>
+
+            <CloseButton onPress={() => setModalVisible(false)}>
+              <ButtonText>Close</ButtonText>
+            </CloseButton>
+          </ModalContent>
+        </Modal>
       )}
     </View>
   );
@@ -138,12 +146,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#C8A2C8',
   },
 });
-  
+
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-const Text = styled.Text `
+const Text = styled.Text`
   bottom: -17px;
   color: #4c2882;
   font-size: 22px;
@@ -151,7 +159,7 @@ const Text = styled.Text `
   letter-spacing: -0.3px;
   align-self: center;  
 `
-const NameText = styled.Text `
+const NameText = styled.Text`
   margin-left: 15px;
   color: #4c2882;
   font-size: 19px;
@@ -205,7 +213,7 @@ const CloseButton = styled.TouchableOpacity`
     border-radius: 60px;
     align-self: center;
 `
-const ButtonText = styled.Text `
+const ButtonText = styled.Text`
   color: #FFFFFF;
   font-size: 25px;
   font-weight: bold;
@@ -222,51 +230,16 @@ const EditButton = styled.TouchableOpacity`
     border-radius: 60px;
     align-self: center;
 `
-const EditModalContent = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #d9a9c9;
-`
-const TextInput = styled(RNTextInput)`
-  width: 50%;
-  height: 40px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 2px solid #4c2882;
-  border-radius: 5px;
-  font-size: 17px;
-  color: #4c2882;
-`;
-const ConfirmButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: 30px;
-    width: 42%;
-    height: 55px;
-    margin-left: 180px;
-    border-radius: 60px;
-    align-self: center;
-`
-const InputRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  top: 25px;
-  margin-bottom: 10px;
-`
 
-const Label = styled.Text`
-  font-size: 16px;
-  color: #4c2882;
-  margin-right: 10px;
-`
 
-const EditText = styled.Text `
-  bottom: -10px;
-  color: #4c2882;
-  font-size: 25px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
-`
+// const ConfirmButton = styled.TouchableOpacity`
+//     background-color: #4c2882;
+//     padding: 10px 20px;
+//     bottom: 30px;
+//     width: 42%;
+//     height: 55px;
+//     margin-left: 180px;
+//     border-radius: 60px;
+//     align-self: center;
+// `
 export default Mortimer;
