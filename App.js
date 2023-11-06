@@ -91,7 +91,7 @@ const App =  () => {
           else if (route.name === 'ScanQr' && userRole === 'JACOB') iconName = 'fullscreen';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
-          else if(route.name === 'Parchment') iconName = '' // Esta tendra que ser tras escanear QR
+          else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
           else if(route.name === 'Profile') iconName = 'people'
           return <Icon name = {iconName} size={26} color={color} />
             },
