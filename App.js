@@ -88,13 +88,8 @@ const App =  () => {
             let iconName;
             if(route.name === 'Home') iconName = 'home'
           
-<<<<<<< HEAD
-          else if (route.name === 'Qr' && userRole === 'ACÓLITO') iconName = 'dataset';
-          else if (route.name === 'ScanQr' && userRole === 'JACOB') iconName = 'fullscreen';
-=======
           else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
           else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
->>>>>>> develop
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
