@@ -1,7 +1,7 @@
 import React, { Component,useState } from 'react';
 import styled from 'styled-components/native';
 import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
-import { AppRegistry, StyleSheet, TouchableOpacity, Linking,ActivityIndicator,Text } from 'react-native';
+import { AppRegistry, StyleSheet, TouchableOpacity, Linking,ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
@@ -11,21 +11,24 @@ const ScanQr = () => {
     const [isLoading, setIsLoading] = useState(false);
   
     const onSuccess = async (e) => {
-        setIsScanning(false);
-        setIsLoading(true);
-      
-        try {
-          const response = await axios.post('', {
-            data: e.data,
-          });
-      
-          setIsLoading(false);
-          console.log('Solicitud exitosa:', response.data);
-        } catch (error) {
-          setIsLoading(false);
-          console.error('Error en la solicitud:', error);
-        }
-      };
+      setIsScanning(false);
+      setIsLoading(true);
+  
+      try {
+        const response = await axios.post('', {
+          data: e.data,
+        });
+  
+        setIsLoading(false);
+        console.log('Solicitud exitosa:', response.data);
+  
+  
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error en la solicitud:', error);
+  
+      }
+    };
   
     return (
       <View>
@@ -33,7 +36,7 @@ const ScanQr = () => {
         {isLoading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text>Wait please...</Text>
+            <Text>Espera por favor...</Text>
           </View>
         ) : (
           isScanning && (
@@ -50,6 +53,14 @@ const View = styled.View`
   background: #C8A2C8;
 `;
 
+const Text = styled.Text `
+    bottom: -28px;
+    color: #4c2882;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center;  
+`
 const ViewText = styled.Text`
   bottom: -18px;
   color: #4c2882;
