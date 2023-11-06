@@ -22,7 +22,7 @@ const App =  () => {
   const Tab = createMaterialTopTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
-  const [userRole, setUserRole] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
 
@@ -32,7 +32,7 @@ const App =  () => {
         console.log(email); 
         const role = await AsyncStorage.getItem('userRole');
         console.log(role);
-        setUserRole(role); // Almacena el rol del usuario en el estado
+        setRole(role); // Almacena el rol del usuario en el estado
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
@@ -48,6 +48,7 @@ const App =  () => {
   const handleLogin = async () => {
     // Realiza la lógica de autenticación
     setIsAuthenticated(true);
+    setRole(role);
     setLoginModalVisible(false);
   };
 
@@ -87,8 +88,13 @@ const App =  () => {
             let iconName;
             if(route.name === 'Home') iconName = 'home'
           
+<<<<<<< HEAD
           else if (route.name === 'Qr' && userRole === 'ACÓLITO') iconName = 'dataset';
           else if (route.name === 'ScanQr' && userRole === 'JACOB') iconName = 'fullscreen';
+=======
+          else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
+          else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
+>>>>>>> develop
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
@@ -99,8 +105,8 @@ const App =  () => {
       >
       
       <Tab.Screen name = "Home" component={Home} />
-      {userRole === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
-      {userRole === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
+      {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
       <Tab.Screen name = "Parchment" component={Parchment} />

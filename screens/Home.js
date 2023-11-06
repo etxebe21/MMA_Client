@@ -10,6 +10,7 @@ const Home = () => {
     const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoginModalVisible, setLoginModalVisible] = useState(true);
+    const [role, setRole] = useState(null);
     
     useEffect(() => {
         // Configura Google Sign-In solo una vez al cargar el componente
@@ -20,7 +21,9 @@ const Home = () => {
     const handleLogin = () => {
        
         setIsAuthenticated(true);
-       
+        setUser(user);
+        console.log("user", user);
+        setRole(role);
         setLoginModalVisible(true);
       };
 
@@ -29,8 +32,11 @@ const Home = () => {
             await GoogleSignin.revokeAccess(); // Revoca el acceso de Google
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
-            setUser(null); // Actualiza el estado del usuario autenticado
+            setRole(null); // Actualiza el estado del usuario autenticado
+            setUser(null);
             console.log('Cerró sesión de Google');
+            console.log("role" ,role);
+            console.log("user", user);
             setLoginModalVisible(true);
             setIsAuthenticated(false);
 
@@ -59,26 +65,9 @@ const Home = () => {
                 )}
                 <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
-
-            {!isAuthenticated && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isLoginModalVisible}
-                    onRequestClose={() => {
-                    setLoginModalVisible(false); 
-                    }}
-                >
-                <View style={styles.modalContainer}>
-                <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                    </View>
-                </Modal>
-                )}
-        </View>
-        
+        </View>  
     )
 }
-
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -110,7 +99,6 @@ const SignOutButton = styled.TouchableOpacity`
     border-radius: 60px;
     align-self: center;
 `;
-
 const ButtonText = styled.Text`
     color: white;
     font-size: 20px;
