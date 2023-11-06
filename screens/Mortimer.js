@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, TextInput as RNTextInput } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, TextInput as RNTextInput, Switch} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -10,7 +10,17 @@ const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const thumb = require('../assets/yeti.jpg');
+  const [isCegueraEnabled, setIsCegueraEnabled] = useState();
+  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState();
+  const [isLocuraEnabled, setIsLocuraEnabled] = useState();
+  const [isMiedoEnabled, setIsMiedoEnabled] = useState();
+  const [isParalisisEnabled, setIsParalisisEnabled] = useState();
+  const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
+  const [isTorreonEnabled, setIsTorreonEnabled] = useState();
+
 
   useEffect(() => {
     async function getUsersFromDatabase() {
@@ -34,6 +44,7 @@ const Mortimer = () => {
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
+    console.log(selectedUser.ceguera);
   };
 
   // const handleEditUser = (user) => {
@@ -42,39 +53,44 @@ const Mortimer = () => {
   //   setEditModalVisible(true);
   // };
 
-
+//GESTIONADO DE MODIFICACIÓN DEL VALOR DE LOS ATRIBUTOS NÚMERICOS DEL USUARIO
+//sliders
   const handleLevelChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, level:Math.round(newValue)  }));
   };
-
   const handleHitPointsChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, hitPoints: Math.round(newValue) }));
   };
-
   const handleFuerzaChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, fuerza: Math.round(newValue) }));
   };
-
   const handleDineroChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, dinero: Math.round(newValue) }));
   };
-
   const handleCansancioChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, cansancio: Math.round(newValue) }));
   };
-
   const handleResistenciaChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, resistencia: Math.round(newValue) }));
   };
-
   const handleAgilidadChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, agilidad: Math.round(newValue) }));
   };
-
   const handleInteligenciaChange = (newValue) => {
     setSelectedUser((prevState) => ({ ...prevState, inteligencia: Math.round(newValue) }));
   };
 
+  //switches
+  
+  const toggleCeguera = () => setIsCegueraEnabled(previousState => !previousState);
+  const toggleHambruna = () => setIsHambrunaEnabled(previousState => !previousState);
+  const toggleLocura = () => setIsLocuraEnabled(previousState => !previousState);
+  const toggleMiedo = () => setIsMiedoEnabled(previousState => !previousState);
+  const toggleParalisis = () => setIsParalisisEnabled(previousState => !previousState);
+  const togglePsicosis = () => setIsPsicosisEnabled(previousState => !previousState);
+  const toggleTorreon = () => setIsTorreonEnabled(previousState => !previousState);
+  
+  
   const handleEditUserConfirm = async () => {
     try {
       console.log('id usuario seleccionado', selectedUser._id);
@@ -161,14 +177,61 @@ const Mortimer = () => {
             <Slider style={{ width: 300, height: 40 }} value = {selectedUser.inteligencia} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
             />
             
-            <Text>Ceguera: {selectedUser.ceguera ? "Sí" : "No"}</Text>
-            <Text>Hambruna: {selectedUser.hambruna ? "Sí" : "No"}</Text>
-            <Text>Locura: {selectedUser.locura ? "Sí" : "No"}</Text>
-            <Text>Miedo: {selectedUser.miedo ? "Sí" : "No"}</Text>
-            <Text>Parálisis: {selectedUser.parálisis ? "Sí" : "No"}</Text>
-            <Text>Psicosis: {selectedUser.psicosis ? "Sí" : "No"}</Text>
-            <Text>Role: {selectedUser.role}</Text>
-            <Text>Torreón: {selectedUser.insideTower ? "Sí" : "No"}</Text>
+            <Text>Ceguera: { selectedUser.ceguera }</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleCeguera}
+              value={isCegueraEnabled}
+            />
+               <Text>Hambruna: {selectedUser.hambruna}</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isHambrunaEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleHambruna}
+              value={isHambrunaEnabled}
+            />
+
+            <Text>Locura: {selectedUser.locura}</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isLocuraEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleLocura}              
+              value={isLocuraEnabled}
+            />
+            <Text>Miedo: {selectedUser.miedo}</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isMiedoEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleMiedo}
+              value={isMiedoEnabled}
+            />
+
+            <Text>Parálisis: {selectedUser.parálisis}</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isParalisisEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleParalisis}
+              value={isParalisisEnabled}
+            />
+
+            <Text>Psicosis: {selectedUser.psicosis}</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isPsicosisEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={togglePsicosis}
+              value={isPsicosisEnabled}
+            />
+
+            <Text>Torreón: {selectedUser.torreon }</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#4c2882'}}
+              thumbColor={isTorreonEnabled ? '#913595' : '#f4f3f4'}
+              onValueChange={toggleTorreon}
+              value={isTorreonEnabled}
+            />
+           
+           
 
             <CloseButton onPress={() => setModalVisible(false)}>
               <ButtonText>Close</ButtonText>
@@ -291,6 +354,9 @@ const EditButton = styled.TouchableOpacity`
     border-radius: 60px;
     align-self: center;
 `
+// const Switch = styled.TouchableOpacity`
+  
+// `
 
 
 // const ConfirmButton = styled.TouchableOpacity`
