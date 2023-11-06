@@ -1,27 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import QRCode from "react-native-qrcode-svg";
-import { ImageBackground} from 'react-native'
+import { ImageBackground, } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Qr = () => {
+    const [userEmail, setUserEmail] = useState('');
+    useEffect(() => {
+        const getUserEmailFromStorage = async () => {
+            try {
+                const storedEmail = await AsyncStorage.getItem('userEmail');
+                console.log("entra");
+                if (storedEmail) {
+                    setUserEmail(storedEmail);
+                }
+            } catch (error) {
+                console.error('Cant get email from async storage:', error);
+            }
+        };
 
-    return (
+        getUserEmailFromStorage();
+    }, []);
+    if (userEmail) {
 
-        <View>
-            <ViewText>QR</ViewText>
-            <QrView>
-                <QRCode
-                    value="mendoza no sube a oro"
-                    size={350}
-                    color="purple"
-                    backgroundColor="#BB8FCE"
-                    logo={require('../assets/newPotion.png')}
-                />
-            </QrView>
-        </View>
-    )
+        return (
+
+            <View>
+                <ViewText>QR</ViewText>
+                <QrView>
+                    <QRCode
+                        value={userEmail}
+                        size={350}
+                        color="purple"
+                        backgroundColor="#BB8FCE"
+                        logo={require('../assets/newPotion.png')}
+                    />
+                </QrView>
+            </View>
+        )
+    }
 }
+
 
 const View = styled.View`
     flex: 1;
