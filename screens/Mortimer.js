@@ -8,8 +8,6 @@ const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [editedUser, setEditedUser] = useState(selectedUser || {});
 
   useEffect(() => {
     async function getUsersFromDatabase() {
@@ -125,151 +123,8 @@ const Mortimer = () => {
               <CloseButton onPress={() => setModalVisible(false)}>
                 <ButtonText>Close</ButtonText>
               </CloseButton>
-              <EditButton onPress={() => handleEditUser(selectedUser)}>
-                <ButtonText>Editar</ButtonText>
-              </EditButton>
             </ModalContent>
           </Modal>
-      )}
-
-      {selectedUser && (
-        <Modal visible={editModalVisible}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
-          <EditModalContent>
-          <EditText>EDIT USER</EditText>
-          <InputRow>
-            <Label>Username</Label>
-            <TextInput
-              value={editedUser.username || ''} // Usa el valor actual del usuario o cadena vacía si no existe
-              onChangeText={(text) => setEditedUser({ ...editedUser, username: text })}
-            /> 
-          </InputRow>
-          <InputRow>
-            <Label>Level:</Label>
-            <TextInput
-              value={String(editedUser.level)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, level: text })}
-            />
-          </InputRow>
-          <InputRow>
-            <Label>Hitpoints:</Label>
-            <TextInput
-              value={String(editedUser.hitPoints)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, hitPoints: text})}
-            />
-          </InputRow>
-                    <InputRow>
-            <Label>Fuerza:</Label>
-            <TextInput
-              value={String(editedUser.fuerza)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, fuerza: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Dinero:</Label>
-            <TextInput
-              value={String(editedUser.dinero)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, dinero: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Cansancio:</Label>
-            <TextInput
-              value={String(editedUser.cansancio)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, cansancio: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Resistencia:</Label>
-            <TextInput
-              value={String(editedUser.resistencia)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, resistencia: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Agilidad:</Label>
-            <TextInput
-              value={String(editedUser.agilidad)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, agilidad: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Inteligencia:</Label>
-            <TextInput
-              value={String(editedUser.inteligencia)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, inteligencia: text })}
-            />
-          </InputRow>
-          <InputRow>
-            <Label>Ceguera:</Label>
-            <TextInput
-              value={editedUser.ceguera ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Hambruna:</Label>
-            <TextInput
-              value={editedUser.hambruna ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Locura:</Label>
-            <TextInput
-              value={editedUser.locura ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Miedo:</Label>
-            <TextInput
-              value={editedUser.miedo ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Parálisis:</Label>
-            <TextInput
-              value={editedUser.parálisis ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Psicosis:</Label>
-            <TextInput
-              value={editedUser.psicosis ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Role:</Label>
-            <TextInput
-              placeholder="Role"
-              value={editedUser.role}
-              onChangeText={(text) => setEditedUser({ ...editedUser, role: text })}
-            />
-          </InputRow>
-            <CloseButton onPress={closeEditModal}>
-              <ButtonText>Cancelar</ButtonText>
-            </CloseButton>
-            <ConfirmButton onPress={handleEditUserConfirm}>
-              <ButtonText>Confirmar</ButtonText>
-            </ConfirmButton>
-          </EditModalContent>
-          </ScrollView>
-        </Modal>
       )}
     </View>
   );
@@ -344,7 +199,7 @@ const CloseButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
     bottom: -25px;
-    margin-left: -180px;
+    margin-left: -10px;
     width: 42%;
     height: 55px;
     border-radius: 60px;
