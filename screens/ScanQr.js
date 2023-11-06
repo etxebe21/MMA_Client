@@ -2,7 +2,7 @@ import React, { Component,useState } from 'react';
 import styled from 'styled-components/native';
 import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
 import { AppRegistry, StyleSheet, TouchableOpacity, Linking,ActivityIndicator,Text } from 'react-native';
-
+import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 
@@ -10,23 +10,22 @@ const ScanQr = () => {
     const [isScanning, setIsScanning] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
   
-    const onSuccess = (e) => {
-      setIsScanning(false);
-      setIsLoading(true);
-  
-      axios.post('https://tu-servidor.com/tu-endpoint', {
-        data: e.data, // Pasa el código QR como datos al servidor
-      })
-      .then((response) => {
-        setIsLoading(false);
-        console.log('Solicitud exitosa:', response.data);
-  
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.error('Error en la solicitud:', error);
-      });
-    };
+    const onSuccess = async (e) => {
+        setIsScanning(false);
+        setIsLoading(true);
+      
+        try {
+          const response = await axios.post('', {
+            data: e.data,
+          });
+      
+          setIsLoading(false);
+          console.log('Solicitud exitosa:', response.data);
+        } catch (error) {
+          setIsLoading(false);
+          console.error('Error en la solicitud:', error);
+        }
+      };
   
     return (
       <View>
