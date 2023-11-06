@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, TextInput as RNTextInput, Switch} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -10,8 +10,6 @@ const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const thumb = require('../assets/yeti.jpg');
   const [isCegueraEnabled, setIsCegueraEnabled] = useState();
   const [isHambrunaEnabled, setIsHambrunaEnabled] = useState();
@@ -47,11 +45,6 @@ const Mortimer = () => {
     console.log(selectedUser.ceguera);
   };
 
-  // const handleEditUser = (user) => {
-  //   setEditedUser(user);
-  //   setSelectedUser(user);
-  //   setEditModalVisible(true);
-  // };
 
 //GESTIONADO DE MODIFICACIÓN DEL VALOR DE LOS ATRIBUTOS NÚMERICOS DEL USUARIO
 //sliders
@@ -95,33 +88,13 @@ const Mortimer = () => {
     try {
       console.log('id usuario seleccionado', selectedUser._id);
 
-      const updatedUserData = {
-
-        username: selectedUser.username,
-        level: selectedUser.level,
-        hitPoints: selectedUser.hitPoints,
-        fuerza: selectedUser.fuerza,
-        dinero: selectedUser.dinero,
-        cansancio: selectedUser.cansancio,
-        resistencia: selectedUser.resistencia,
-        agilidad: selectedUser.agilidad,
-        inteligencia: selectedUser.inteligencia,
-        ceguera: selectedUser.ceguera,
-        hambruna: selectedUser.hambruna,
-        locura: selectedUser.locura,
-        miedo: selectedUser.miedo,
-        parálisis: selectedUser.parálisis,
-        psicosis: selectedUser.psicosis,
-        role: selectedUser.role
-      };
-
       // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, updatedUserData);
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, selectedUser);
       const updatedUser = response.data;
       // Maneja la respuesta del servidor 
       console.log('Datos del usuario actualizados:', updatedUser);
       // Cierra el modal de edición
-      closeEditModal();
+      setModalVisible(false);
     } catch (error) {
       console.error('Error al actualizar los datos del usuario:', error);
     }
@@ -179,54 +152,40 @@ const Mortimer = () => {
             
             <Text>Ceguera: { selectedUser.ceguera }</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleCeguera}
               value={isCegueraEnabled}
             />
                <Text>Hambruna: {selectedUser.hambruna}</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isHambrunaEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleHambruna}
               value={isHambrunaEnabled}
             />
 
             <Text>Locura: {selectedUser.locura}</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isLocuraEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleLocura}              
               value={isLocuraEnabled}
             />
             <Text>Miedo: {selectedUser.miedo}</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isMiedoEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleMiedo}
               value={isMiedoEnabled}
             />
 
             <Text>Parálisis: {selectedUser.parálisis}</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isParalisisEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleParalisis}
               value={isParalisisEnabled}
             />
 
             <Text>Psicosis: {selectedUser.psicosis}</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isPsicosisEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={togglePsicosis}
               value={isPsicosisEnabled}
             />
 
             <Text>Torreón: {selectedUser.torreon }</Text>
             <Switch
-              trackColor={{false: '#767577', true: '#4c2882'}}
-              thumbColor={isTorreonEnabled ? '#913595' : '#f4f3f4'}
               onValueChange={toggleTorreon}
               value={isTorreonEnabled}
             />
@@ -236,6 +195,9 @@ const Mortimer = () => {
             <CloseButton onPress={() => setModalVisible(false)}>
               <ButtonText>Close</ButtonText>
             </CloseButton>
+            <ConfirmButton onPress={() => handleEditUserConfirm()}>
+              <ButtonText>Confirm</ButtonText>
+            </ConfirmButton>
           </ModalContent>
           </ScrollView>
         </Modal>
@@ -316,7 +278,7 @@ const ModalContent = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
-  height:1100px;
+  height:1200px;
 `
 const DetailAvatar = styled.Image`
   width: 90px;
@@ -331,7 +293,7 @@ const CloseButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
     bottom: -25px;
-    margin-left: -10px;
+    margin-left: -190px;
     width: 42%;
     height: 55px;
     border-radius: 60px;
@@ -344,29 +306,20 @@ const ButtonText = styled.Text`
   letter-spacing: -0.3px;
   align-self: center;  
 `
-const EditButton = styled.TouchableOpacity`
+
+export const Switch = styled.Switch.attrs(({ value }) => ({
+  trackColor: { false: '#767577', true: '#4c2882' },
+  thumbColor: value ? '#913595' : '#f4f3f4',
+}))``;
+
+const ConfirmButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
     bottom: 30px;
     width: 42%;
     height: 55px;
-    margin-left: 190px;
+    margin-left: 180px;
     border-radius: 60px;
     align-self: center;
 `
-// const Switch = styled.TouchableOpacity`
-  
-// `
-
-
-// const ConfirmButton = styled.TouchableOpacity`
-//     background-color: #4c2882;
-//     padding: 10px 20px;
-//     bottom: 30px;
-//     width: 42%;
-//     height: 55px;
-//     margin-left: 180px;
-//     border-radius: 60px;
-//     align-self: center;
-// `
 export default Mortimer;
