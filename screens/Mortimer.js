@@ -39,7 +39,6 @@ const Mortimer = () => {
     setEditedUser(user);
     setSelectedUser(user);
     setEditModalVisible(true);
-
   };
   
   const closeEditModal = () => {
@@ -48,12 +47,33 @@ const Mortimer = () => {
   
   const handleEditUserConfirm = async () => {
     try {
-      console.log('usuario seleccionado',selectedUser);
-      // Realiza una solicitud PUT al servidor para actualizar los datos del usuario
-      const response = await axios.put(`https://mmaproject-app.fly.dev/api/users/${selectedUser._id.toString()}`, editedUser);
+      console.log('id usuario seleccionado',selectedUser._id);
 
+      const updatedUserData = {
+        
+        username: selectedUser.username,
+        level: selectedUser.level,
+        hitPoints: selectedUser.hitPoints,
+        fuerza: selectedUser.fuerza,
+        dinero: selectedUser.dinero,
+        cansancio: selectedUser.cansancio,
+        resistencia: selectedUser.resistencia,
+        agilidad: selectedUser.agilidad,
+        inteligencia: selectedUser.inteligencia,
+        ceguera: selectedUser.ceguera,
+        hambruna: selectedUser.hambruna,
+        locura: selectedUser.locura,
+        miedo: selectedUser.miedo,
+        parálisis: selectedUser.parálisis,
+        psicosis: selectedUser.psicosis,
+        role: selectedUser.role
+      };
+
+      // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, updatedUserData);
+      const updatedUser = response.data;
       // Maneja la respuesta del servidor 
-      console.log('Datos del usuario actualizados:', response.data);
+      console.log('Datos del usuario actualizados:', updatedUser);
       // Cierra el modal de edición
       closeEditModal();
     } catch (error) {
