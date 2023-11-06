@@ -17,6 +17,7 @@ import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
+import Parchment from './screens/parchment';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -92,6 +93,7 @@ const App =  () => {
           else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
+          else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
           else if(route.name === 'Profile') iconName = 'person'
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           return <Icon name = {iconName} size={26} color={color} />
@@ -105,6 +107,7 @@ const App =  () => {
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
+      <Tab.Screen name = "Parchment" component={Parchment} />
       {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       </Tab.Navigator>
