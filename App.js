@@ -11,7 +11,7 @@ import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
 import Qr from './screens/Qr';
-//import ScanQr from './screens/ScanQr';
+import ProfileMortimer from './screens/ProfileMortimer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
@@ -48,7 +48,6 @@ const App =  () => {
   const handleLogin = async () => {
     // Realiza la lógica de autenticación
     setIsAuthenticated(true);
-    setRole(role);
     setLoginModalVisible(false);
   };
 
@@ -94,6 +93,7 @@ const App =  () => {
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Profile') iconName = 'person'
+          else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
@@ -105,7 +105,8 @@ const App =  () => {
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
-      <Tab.Screen name = "Profile" component={Profile} />
+      {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}
+      {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       </Tab.Navigator>
     </NavigationContainer>
     </>
