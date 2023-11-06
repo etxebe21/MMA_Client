@@ -12,7 +12,7 @@ const Qr = () => {
             <ViewText>QR</ViewText>
             <QrView>
                 <QRCode
-                    value="mendoza no sube a oro"
+                    value="www.youtube.com"
                     size={350}
                     color="purple"
                     backgroundColor="#BB8FCE"
