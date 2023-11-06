@@ -18,7 +18,6 @@ const ScanQr = () => {
             <ViewText>SCAN QR</ViewText>
             <QRCodeScanner
                 onRead={this.onSuccess}
-
             />
         </View>
     );
