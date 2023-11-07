@@ -4,7 +4,7 @@ import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Slider from '@react-native-community/slider';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -16,6 +16,10 @@ const Mortimer = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   const [updateTimer, setUpdateTimer] = useState(null);
+
+  //IMAGENES
+  const gold = require("../assets/unicorn.jpg")
+
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
@@ -171,46 +175,57 @@ const Mortimer = () => {
               <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserText>{selectedUser.username}</UserText>
 
+              <Icon name="github-alt" size={20} color="blue" />
               <Text>LEVEL: {selectedUser.level} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }} value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
               />
 
+              <Icon name="legal" size={20} color="blue" />
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.hitPoints}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
               />
 
+              <Icon name="hand-rock-o" size={20} color="blue" />
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
               />
 
+              <Icon name="money" size={20} color="blue" />
               <Text>GOLD: {selectedUser.dinero} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
               />
 
+              <Icon name="heartbeat" size={20} color="blue" />
               <Text>FATIGUE: {selectedUser.cansancio} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.cansancio}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
               />
 
+              <Icon name="bomb" size={20} color="blue" />
               <Text>RESISTENCE: {selectedUser.resistencia} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.resistencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
               />
 
+              <Icon name="motorcycle" size={20} color="blue" />
               <Text>AGILITY: {selectedUser.agilidad} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.agilidad}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
               />
 
+              <Icon name="info" size={20} color="blue" />
               <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
               <Slider style={{ width: 300, height: 40 }}value={selectedUser.inteligencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
               />
               
+              <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
+              <Text></Text>
+
               <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleCeguera}
