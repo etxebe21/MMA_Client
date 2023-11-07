@@ -1,71 +1,157 @@
-import React , {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Modal , StyleSheet, TouchableOpacity, TextInput as RNTextInput} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
+import Slider from '@react-native-community/slider';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [editedUser, setEditedUser] = useState(selectedUser || {});
-
-  useEffect(() => {
-    async function getUsersFromDatabase() {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/users';
-        
-        const response = await axios.get(url);
-        const users = response.data.data;
-        setUsers(users);
-        console.log('Usuarios:', users);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
-    }
-
-    getUsersFromDatabase();
-  }, []);
+  const [isCegueraEnabled, setIsCegueraEnabled] = useState();
+  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
+  const [isLocuraEnabled, setIsLocuraEnabled] = useState();
+  const [isMiedoEnabled, setIsMiedoEnabled] = useState();
+  const [isParalisisEnabled, setIsParalisisEnabled] = useState();
+  const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
+  const [updateTimer, setUpdateTimer] = useState(null);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
- 
+
+  const getUsersFromDatabase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/users';
+      const response = await axios.get(url);
+      const users= response.data.data;
+      setUsers(users);
+      setSelectedUser(selectedUser);
+      console.log('Usuarios:', users);
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUsersFromDatabase();
+  }, [selectedUser]); 
+
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
   };
 
-  const handleEditUser = (user) => {
-    setEditedUser(user);
-    setSelectedUser(user);
-    setEditModalVisible(true);
+  const handleSliderChange = (newValue, attribute) => {
 
+    if (updateTimer) {
+      clearTimeout(updateTimer);
+    }
+  
+    
+    const newTimer = setTimeout(() => {
+      setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
+    }, 100); 
+  
+    setUpdateTimer(newTimer);
   };
   
-  const closeEditModal = () => {
-    setEditModalVisible(false);
+//sliders
+  const handleLevelChange = (newValue) => {
+    handleSliderChange(newValue, "level");
   };
+  const handleHitPointsChange = (newValue) => {
+    handleSliderChange(newValue, "hitPoints");
+  };
+  const handleFuerzaChange = (newValue) => {
+    handleSliderChange(newValue, "fuerza");
+  };
+  const handleDineroChange = (newValue) => {
+    handleSliderChange(newValue, "dinero");
+  };
+  const handleCansancioChange = (newValue) => {
+    handleSliderChange(newValue, "cansancio");
+  };
+  const handleResistenciaChange = (newValue) => {
+    handleSliderChange(newValue, "resistencia");
+  };
+  const handleAgilidadChange = (newValue) => {
+    handleSliderChange(newValue, "agilidad");
+  };
+  const handleInteligenciaChange = (newValue) => {
+    handleSliderChange(newValue, "inteligencia");
+  };
+
+  //switches
+  const toggleCeguera = () => {
+    setIsCegueraEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      ceguera: !prevState.ceguera 
+    }));
+  };  
+  const toggleHambruna = () => {
+    setIsHambrunaEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      hambruna: !prevState.hambruna
+    }));
+  };
+  const toggleLocura = () => {
+    setIsLocuraEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      locura: !prevState.locura
+    }));
+  };
+  
+  const toggleMiedo = () => {
+    setIsMiedoEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      miedo: !prevState.miedo
+    }));
+  };
+  
+  const toggleParalisis = () => {
+    setIsParalisisEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      parálisis: !prevState.parálisis
+    }));
+  };
+  
+  const togglePsicosis = () => {
+    setIsPsicosisEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      psicosis: !prevState.psicosis
+    }));
+  };  
   
   const handleEditUserConfirm = async () => {
     try {
-      console.log('usuario seleccionado',selectedUser);
-      // Realiza una solicitud PUT al servidor para actualizar los datos del usuario
-      const response = await axios.put(`https://mmaproject-app.fly.dev/api/users/${selectedUser._id.toString()}`, editedUser);
+      console.log('id usuario seleccionado', selectedUser._id);
 
+      // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, selectedUser);
+      const updatedUser = response.data;
       // Maneja la respuesta del servidor 
-      console.log('Datos del usuario actualizados:', response.data);
+      console.log('Datos del usuario actualizados:', updatedUser);
+
+      getUsersFromDatabase();
+
       // Cierra el modal de edición
-      closeEditModal();
+      setModalVisible(false);
     } catch (error) {
       console.error('Error al actualizar los datos del usuario:', error);
     }
   };
 
   return (
-    
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
-        <Text>ACÓLITOS</Text>
+        <HeaderText>ACÓLITOS</HeaderText>
         {acolitos.map((data) => (
           <TouchableOpacity key={data.picture} onPress={() => handleUserPress(data)}>
             <UserContainer>
@@ -80,181 +166,110 @@ const Mortimer = () => {
       </ScrollView>
 
       {selectedUser && (
-          <Modal visible={modalVisible}>
+        <Modal visible={modalVisible}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <ModalContent>
-              <Avatar source={{ uri: selectedUser.picture }} style={{width: 90, height: 90, borderRadius:45}}/>
-              <Text>{selectedUser.username}</Text>
-              <Text>Level: {selectedUser.level}</Text>
-              <Text>Hitpoints: {selectedUser.hitPoints}</Text>
-              <Text>Fuerza: {selectedUser.fuerza}</Text>
-              <Text>Dinero: {selectedUser.dinero}</Text>
-              <Text>Cansancio: {selectedUser.cansancio}</Text>
-              <Text>Fuerza: {selectedUser.fuerza}</Text>
-              <Text>Resistencia: {selectedUser.resistencia}</Text>
-              <Text>Agilidad: {selectedUser.agilidad}</Text>
-              <Text>Inteligencia: {selectedUser.inteligencia}</Text>
-              <Text>Ceguera: {selectedUser.ceguera ? "Sí" : "No"}</Text>
-              <Text>Hambruna: {selectedUser.hambruna ? "Sí" : "No"}</Text>
-              <Text>Locura: {selectedUser.locura ? "Sí" : "No"}</Text>
-              <Text>Miedo: {selectedUser.miedo ? "Sí" : "No"}</Text>
-              <Text>Parálisis: {selectedUser.parálisis ? "Sí" : "No"}</Text>
-              <Text>Psicosis: {selectedUser.psicosis ? "Sí" : "No"}</Text>
-              <Text>Role: {selectedUser.role}</Text>
-              <Text>Torreón: {selectedUser.insideTower ? "Sí" : "No"}</Text>
-                    
+              <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+              <UserText>{selectedUser.username}</UserText>
+
+              <Icon name="github-alt" size={20} color="blue" />
+              <Text>LEVEL: {selectedUser.level} </Text>
+              <Slider style={{ width: 300, height: 40 }} value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
+              />
+
+              <Icon name="legal" size={20} color="blue" />
+              <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.hitPoints}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
+              />
+
+              <Icon name="hand-rock-o" size={20} color="blue" />
+              <Text>STRENGTH: {selectedUser.fuerza} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
+              />
+
+              <Icon name="money" size={20} color="blue" />
+              <Text>GOLD: {selectedUser.dinero} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
+              />
+
+              <Icon name="heartbeat" size={20} color="blue" />
+              <Text>FATIGUE: {selectedUser.cansancio} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.cansancio}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
+              />
+
+              <Icon name="bomb" size={20} color="blue" />
+              <Text>RESISTENCE: {selectedUser.resistencia} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.resistencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
+              />
+
+              <Icon name="motorcycle" size={20} color="blue" />
+              <Text>AGILITY: {selectedUser.agilidad} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.agilidad}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
+              />
+
+              <Icon name="info" size={20} color="blue" />
+              <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.inteligencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
+              />
+              
+              <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
+              <Text></Text>
+
+              <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={toggleCeguera}
+              value={selectedUser.ceguera}
+            />
+               <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={toggleHambruna}
+              value={selectedUser.hambruna}
+            />
+
+            <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={toggleLocura}              
+              value={selectedUser.locura}
+            />
+            <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={toggleMiedo}
+              value={selectedUser.miedo}
+            />
+
+            <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={toggleParalisis}
+              value={selectedUser.parálisis}
+            />
+
+            <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
+            <Switch
+              onValueChange={togglePsicosis}
+              value={selectedUser.psicosis}
+            />
+
               <CloseButton onPress={() => setModalVisible(false)}>
                 <ButtonText>Close</ButtonText>
               </CloseButton>
-              <EditButton onPress={() => handleEditUser(selectedUser)}>
-                <ButtonText>Editar</ButtonText>
-              </EditButton>
+              <ConfirmButton onPress={() => handleEditUserConfirm()}>
+                <ButtonText>Confirm</ButtonText>
+              </ConfirmButton>
             </ModalContent>
-          </Modal>
-      )}
-
-      {selectedUser && (
-        <Modal visible={editModalVisible}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
-          <EditModalContent>
-          <EditText>EDIT USER</EditText>
-          <InputRow>
-            <Label>Username</Label>
-            <TextInput
-              value={editedUser.username || ''} // Usa el valor actual del usuario o cadena vacía si no existe
-              onChangeText={(text) => setEditedUser({ ...editedUser, username: text })}
-            /> 
-          </InputRow>
-          <InputRow>
-            <Label>Level:</Label>
-            <TextInput
-              value={String(editedUser.level)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, level: text })}
-            />
-          </InputRow>
-          <InputRow>
-            <Label>Hitpoints:</Label>
-            <TextInput
-              value={String(editedUser.hitPoints)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, hitPoints: text})}
-            />
-          </InputRow>
-                    <InputRow>
-            <Label>Fuerza:</Label>
-            <TextInput
-              value={String(editedUser.fuerza)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, fuerza: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Dinero:</Label>
-            <TextInput
-              value={String(editedUser.dinero)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, dinero: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Cansancio:</Label>
-            <TextInput
-              value={String(editedUser.cansancio)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, cansancio: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Resistencia:</Label>
-            <TextInput
-              value={String(editedUser.resistencia)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, resistencia: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Agilidad:</Label>
-            <TextInput
-              value={String(editedUser.agilidad)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, agilidad: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Inteligencia:</Label>
-            <TextInput
-              value={String(editedUser.inteligencia)}
-              onChangeText={(text) => setEditedUser({ ...editedUser, inteligencia: text })}
-            />
-          </InputRow>
-          <InputRow>
-            <Label>Ceguera:</Label>
-            <TextInput
-              value={editedUser.ceguera ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Hambruna:</Label>
-            <TextInput
-              value={editedUser.hambruna ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Locura:</Label>
-            <TextInput
-              value={editedUser.locura ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text})}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Miedo:</Label>
-            <TextInput
-              value={editedUser.miedo ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Parálisis:</Label>
-            <TextInput
-              value={editedUser.parálisis ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Psicosis:</Label>
-            <TextInput
-              value={editedUser.psicosis ? "Sí" : "No"}
-              onChangeText={(text) => setEditedUser({ ...editedUser, ceguera: text })}
-            />
-          </InputRow>
-
-          <InputRow>
-            <Label>Role:</Label>
-            <TextInput
-              placeholder="Role"
-              value={editedUser.role}
-              onChangeText={(text) => setEditedUser({ ...editedUser, role: text })}
-            />
-          </InputRow>
-            <CloseButton onPress={closeEditModal}>
-              <ButtonText>Cancelar</ButtonText>
-            </CloseButton>
-            <ConfirmButton onPress={handleEditUserConfirm}>
-              <ButtonText>Confirmar</ButtonText>
-            </ConfirmButton>
-          </EditModalContent>
           </ScrollView>
         </Modal>
       )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -263,20 +278,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#C8A2C8',
   },
 });
-  
+
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-const Text = styled.Text `
-  bottom: -17px;
+const Text = styled.Text`
+  bottom: -5px;
+  color: #4c2882;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+`
+const UserText = styled.Text`
+  top: -10px;
   color: #4c2882;
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
 `
-const NameText = styled.Text `
+const NameText = styled.Text`
   margin-left: 15px;
   color: #4c2882;
   font-size: 19px;
@@ -284,12 +307,20 @@ const NameText = styled.Text `
   letter-spacing: -0.3px;
   align-self: center;  
 `
+const HeaderText = styled.Text`
+  bottom: -15px;
+  color: #4c2882;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+`
 const Avatar = styled.Image`
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   margin-left: 10px;
   padding:1px;
-  border-radius: 35px;
+  border-radius: 40px;
   border-color: #4c2882;
   border-width: 3px;
 `
@@ -319,50 +350,40 @@ const ModalContent = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
+  height:1350px;
+`
+const DetailAvatar = styled.Image`
+  width: 90px;
+  height: 90px;
+  padding:1px;
+  border-radius: 45px;
+  border-color: #4c2882;
+  border-width: 3px;
+  top: -25px;
 `
 const CloseButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
     bottom: -25px;
-    margin-left: -180px;
+    margin-left: -190px;
     width: 42%;
     height: 55px;
     border-radius: 60px;
     align-self: center;
 `
-const ButtonText = styled.Text `
+const ButtonText = styled.Text`
   color: #FFFFFF;
   font-size: 25px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
 `
-const EditButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: 30px;
-    width: 42%;
-    height: 55px;
-    margin-left: 190px;
-    border-radius: 60px;
-    align-self: center;
-`
-const EditModalContent = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #d9a9c9;
-`
-const TextInput = styled(RNTextInput)`
-  width: 50%;
-  height: 40px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 2px solid #4c2882;
-  border-radius: 5px;
-  font-size: 17px;
-  color: #4c2882;
-`;
+
+export const Switch = styled.Switch.attrs(({ value }) => ({
+  trackColor: { false: '#767577', true: '#4c2882' },
+  thumbColor: value ? '#913595' : '#f4f3f4',
+}))``;
+
 const ConfirmButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
@@ -372,26 +393,5 @@ const ConfirmButton = styled.TouchableOpacity`
     margin-left: 180px;
     border-radius: 60px;
     align-self: center;
-`
-const InputRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  top: 25px;
-  margin-bottom: 10px;
-`
-
-const Label = styled.Text`
-  font-size: 16px;
-  color: #4c2882;
-  margin-right: 10px;
-`
-
-const EditText = styled.Text `
-  bottom: -10px;
-  color: #4c2882;
-  font-size: 25px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
 `
 export default Mortimer;
