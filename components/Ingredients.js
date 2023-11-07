@@ -64,7 +64,18 @@ const ingredients = [
       imagen: require("../assets/lagrimas.jpg"),
       efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
     },
-  
+    {
+      id: 11,
+      nombre: "Raving bee",
+      imagen: require("../assets/RavingBee.png"),
+      efectos: ["cleanse_parchment"],
+    },
+    {
+      id: 12,
+      nombre: "Raving bee",
+      imagen: require("../assets/RavingBee.png"),
+      efectos: ["cleanse_parchment"],
+    },
   ];
   
 const IngredientesScreen = () => {

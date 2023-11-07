@@ -5,8 +5,7 @@ import auth from '@react-native-firebase/auth';
 import Login from "./Login";
 import { Modal , StyleSheet} from "react-native";
 
-
-const Home = () => {
+const ProfileMortimer = () => {
     const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoginModalVisible, setLoginModalVisible] = useState(true);
@@ -16,8 +15,9 @@ const Home = () => {
         // Configura Google Sign-In solo una vez al cargar el componente
         GoogleSignin.configure({
             webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
-        });
+        });      
     }, []);
+
     const handleLogin = () => {
        
         setIsAuthenticated(true);
@@ -45,10 +45,10 @@ const Home = () => {
             console.error(error);
         }
     }
-
+    
     return(
         <View>
-            <Text>HOME</Text>
+            <Text>MORTIMER</Text>
             <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
                 <Modal
                     animationType="slide"
@@ -98,11 +98,11 @@ const SignOutButton = styled.TouchableOpacity`
     height: 55px;
     border-radius: 60px;
     align-self: center;
-`;
+`
 const ButtonText = styled.Text`
     color: white;
     font-size: 20px;
     text-align: center;
-`;
+`
 
-export default Home
+export default ProfileMortimer;

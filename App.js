@@ -11,16 +11,21 @@ import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
 import Qr from './screens/Qr';
-//import ScanQr from './screens/ScanQr';
+import ProfileMortimer from './screens/ProfileMortimer';
+import Villano from './screens/Villano';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
+import Mortimer from './screens/Mortimer';
+import ProfileVillano from './screens/ProfileVillano';
+//import Parchment from './screens/parchment';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
 
@@ -31,6 +36,7 @@ const App =  () => {
         const role = await AsyncStorage.getItem('userRole');
         console.log(role);
         const id = await AsyncStorage.getItem('userID')
+        setRole(role); // Almacena el rol del usuario en el estado
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
@@ -45,6 +51,7 @@ const App =  () => {
 
   const handleLogin = async () => {
     // Realiza la lógica de autenticación
+    setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
   };
@@ -83,26 +90,34 @@ const App =  () => {
             tabBarShowIcon: true,
           tabBarIcon: ({focused, color,}) => {
             let iconName;
-            if(route.name === 'Home') iconName = 'home'
+            if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
           
-          else if(route.name === 'Qr') iconName = 'dataset'
-          else if(route.name === 'ScanQr') iconName = 'fullscreen'
-          else if(route.name === 'CreatePotions') iconName = 'create'
-          else if(route.name === 'Torreon') iconName = 'castle'
-          else if(route.name === 'Profile') iconName = 'people'
-          else if(route.name === 'readQR') iconName = 'qr-code-2'
+          else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
+          else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
+          else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
+          else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
+          else if(route.name === 'CreatePotions') iconName = 'bolt'
+          else if(route.name === 'Torreon') iconName = 'castle';
+          //else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
+          else if(route.name === 'Profile') iconName = 'person';
+          else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
+          else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
       >
       
-      <Tab.Screen name = "Home" component={Home} />
-      <Tab.Screen name = "Qr" component={Qr} />
-      <Tab.Screen name = "ScanQr" component={ScanQr} />
+      {role === 'ACÓLITO'&& <Tab.Screen name = "Home" component={Home} />}
+      {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
+      {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
+      {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
-      <Tab.Screen name = "Profile" component={Profile} />
-      <Tab.Screen name = "readQR" component={ScanQr} />
+      {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
+      {role === 'MORTIMER'  && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
+      {role === 'VILLANO'  && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} />}
       </Tab.Navigator>
     </NavigationContainer>
     </>

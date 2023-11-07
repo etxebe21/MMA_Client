@@ -2,6 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>Evillcons.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>FontAwesome6_Brands.ttf</string>
+		<string>FontAwesome6_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>¿Quieres que Nogueira sea tu marido?</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -31,7 +53,7 @@
 			<array>
 				<string>Thread</string>
 				<string>1:</string>
-				<string>"Your</string>
+				<string>&quot;Your</string>
 				<string>app</string>
 				<string>is</string>
 				<string>missing</string>
@@ -41,7 +63,7 @@
 				<string>following</string>
 				<string>URL</string>
 				<string>schemes:</string>
-				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d"</string>
+				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d&quot;</string>
 			</array>
 		</dict>
 		<dict>
