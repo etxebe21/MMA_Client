@@ -3,20 +3,14 @@ import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity, ProgressBarAndroidComponent} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
-import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
+import { StyledSlider } from "../components/Slider";
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isCegueraEnabled, setIsCegueraEnabled] = useState();
-  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
-  const [isLocuraEnabled, setIsLocuraEnabled] = useState();
-  const [isMiedoEnabled, setIsMiedoEnabled] = useState();
-  const [isParalisisEnabled, setIsParalisisEnabled] = useState();
-  const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   const [updateTimer, setUpdateTimer] = useState(null);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
@@ -48,9 +42,8 @@ const Mortimer = () => {
     if (updateTimer) {
       clearTimeout(updateTimer);
     }
-  
-    
-    const newTimer = setTimeout(() => {
+   
+  const newTimer = setTimeout(() => {
       setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
     }, 350); 
   
@@ -67,53 +60,7 @@ const Mortimer = () => {
   const handleDineroChange = (newValue) => {
     handleSliderChange(newValue, "dinero");
   };
-
-  //switches
-  const toggleCeguera = () => {
-    setIsCegueraEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      ceguera: !prevState.ceguera 
-    }));
-  };  
-  const toggleHambruna = () => {
-    setIsHambrunaEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      hambruna: !prevState.hambruna
-    }));
-  };
-  const toggleLocura = () => {
-    setIsLocuraEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      locura: !prevState.locura
-    }));
-  };
-  
-  const toggleMiedo = () => {
-    setIsMiedoEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      miedo: !prevState.miedo
-    }));
-  };
-  
-  const toggleParalisis = () => {
-    setIsParalisisEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      parálisis: !prevState.parálisis
-    }));
-  };
-  
-  const togglePsicosis = () => {
-    setIsPsicosisEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      psicosis: !prevState.psicosis
-    }));
-  };  
+ 
   
   const handleEditUserConfirm = async () => {
     try {
@@ -165,20 +112,17 @@ const Mortimer = () => {
 
               <Icon name="legal" size={20} color="blue" />
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <Slider style={{ width: 300, height: 40 }} value={selectedUser.hitPoints} minimumValue={0} maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
+              <StyledSlider value={selectedUser.hitPoints} onValueChange={handleHitPointsChange}
               />
 
               <Icon name="hand-rock-o" size={20} color="blue" />
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
+              <StyledSlider value={selectedUser.fuerza} onValueChange={handleFuerzaChange}
               />
 
               <Icon name="money" size={20} color="blue" />
               <Text>GOLD: {selectedUser.dinero} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
+              <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
               />
 
               <Icon name="github-alt" size={20} color="blue" />
@@ -200,39 +144,23 @@ const Mortimer = () => {
               <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
               <Text></Text>
 
-              <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleCeguera}
-              value={selectedUser.ceguera}
-            />
-               <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleHambruna}
-              value={selectedUser.hambruna}
-            />
+            <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
+            <Switch value={selectedUser.ceguera}/>
+
+            <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
+            <Switch value={selectedUser.hambruna}/>
 
             <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleLocura}              
-              value={selectedUser.locura}
-            />
+            <Switch value={selectedUser.locura}/>
+
             <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleMiedo}
-              value={selectedUser.miedo}
-            />
+            <Switch value={selectedUser.miedo}/>
 
             <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleParalisis}
-              value={selectedUser.parálisis}
-            />
+            <Switch value={selectedUser.parálisis}/>
 
             <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={togglePsicosis}
-              value={selectedUser.psicosis}
-            />
+            <Switch value={selectedUser.psicosis}/>
 
               <CloseButton onPress={() => setModalVisible(false)}>
                 <ButtonText>Close</ButtonText>
