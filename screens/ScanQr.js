@@ -10,21 +10,23 @@ const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSuccess = async (e) => {
+
+  const onSuccess = async (event) => {
     setIsScanning(false);
     setIsLoading(true);
-
+  
     try {
       console.log("Escaneando");
-      const response = await axios.patch('https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}', {
-        id: e.id,
-      });
-
-      console.log('Solicitud exitosa:', response.id);
+  
+      const data = event.data;
+      console.log(data);
+      // Realiza la solicitud Axios utilizando e.data como valor del campo userID
+      const response = await axios.patch('https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}', data);
+  
+      console.log('Solicitud exitosa:', response.data);
+  
       this.scanner.reactivate();
       setIsLoading(false);
-
-
     } catch (error) {
       setIsLoading(false);
       console.error('Error en la solicitud:', error);
@@ -35,7 +37,10 @@ const ScanQr = () => {
     <View>
       <Text>SCAN QR</Text>
       <QRCodeScanner
-        onRead={event => onSuccess(event)}
+        onRead={(event) => {
+          console.log("Código QR leído:", event.data); 
+          onSuccess(event.data);
+        }}
         reactivate={false}
         ref={node => {
           this.scanner = node;
