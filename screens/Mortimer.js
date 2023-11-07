@@ -17,32 +17,29 @@ const Mortimer = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   
-
-
-  useEffect(() => {
-    async function getUsersFromDatabase() {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/users';
-
-        const response = await axios.get(url);
-        const users = response.data.data;
-        setUsers(users);
-        console.log('Usuarios:', users);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
-    }
-
-    getUsersFromDatabase();
-  }, []);
-
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
-  const handleUserPress = () => {
-    setSelectedUser(selectedUser);
-    setModalVisible(true);
+  const getUsersFromDatabase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/users';
+      const response = await axios.get(url);
+      const users= response.data.data;
+      setUsers(users);
+      setSelectedUser(selectedUser);
+      console.log('Usuarios:', users);
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+    }
   };
 
+  useEffect(() => {
+    getUsersFromDatabase();
+  }, [selectedUser]); 
+
+  const handleUserPress = (user) => {
+    setSelectedUser(user);
+    setModalVisible(true);
+  };
 
 //GESTIONADO DE MODIFICACIÓN DEL VALOR DE LOS ATRIBUTOS NÚMERICOS DEL USUARIO
 //sliders
@@ -127,6 +124,9 @@ const Mortimer = () => {
       const updatedUser = response.data;
       // Maneja la respuesta del servidor 
       console.log('Datos del usuario actualizados:', updatedUser);
+
+      getUsersFromDatabase();
+
       // Cierra el modal de edición
       setModalVisible(false);
     } catch (error) {
