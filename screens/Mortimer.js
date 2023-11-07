@@ -9,14 +9,14 @@ const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const thumb = require('../assets/yeti.jpg');
   const [isCegueraEnabled, setIsCegueraEnabled] = useState();
   const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
   const [isLocuraEnabled, setIsLocuraEnabled] = useState();
   const [isMiedoEnabled, setIsMiedoEnabled] = useState();
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
-  
+  const [updateTimer, setUpdateTimer] = useState(null); // Agregado para gestionar la actualización en tiempo real
+
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
   const getUsersFromDatabase = async () => {
@@ -41,31 +41,44 @@ const Mortimer = () => {
     setModalVisible(true);
   };
 
-//GESTIONADO DE MODIFICACIÓN DEL VALOR DE LOS ATRIBUTOS NÚMERICOS DEL USUARIO
+  const handleSliderChange = (newValue, attribute) => {
+
+    if (updateTimer) {
+      clearTimeout(updateTimer);
+    }
+  
+    
+    const newTimer = setTimeout(() => {
+      setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
+    }, 100); 
+  
+    setUpdateTimer(newTimer);
+  };
+  
 //sliders
   const handleLevelChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, level:Math.round(newValue)  }));
+    handleSliderChange(newValue, "level");
   };
   const handleHitPointsChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, hitPoints: Math.round(newValue) }));
+    handleSliderChange(newValue, "hitPoints");
   };
   const handleFuerzaChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, fuerza: Math.round(newValue) }));
+    handleSliderChange(newValue, "fuerza");
   };
   const handleDineroChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, dinero: Math.round(newValue) }));
+    handleSliderChange(newValue, "dinero");
   };
   const handleCansancioChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, cansancio: Math.round(newValue) }));
+    handleSliderChange(newValue, "cansancio");
   };
   const handleResistenciaChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, resistencia: Math.round(newValue) }));
+    handleSliderChange(newValue, "resistencia");
   };
   const handleAgilidadChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, agilidad: Math.round(newValue) }));
+    handleSliderChange(newValue, "agilidad");
   };
   const handleInteligenciaChange = (newValue) => {
-    setSelectedUser((prevState) => ({ ...prevState, inteligencia: Math.round(newValue) }));
+    handleSliderChange(newValue, "inteligencia");
   };
 
   //switches
@@ -135,7 +148,6 @@ const Mortimer = () => {
   };
 
   return (
-
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <Text>ACÓLITOS</Text>
@@ -154,37 +166,52 @@ const Mortimer = () => {
 
       {selectedUser && (
         <Modal visible={modalVisible}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1}}>
-          <ModalContent>
-            <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
-            
-            <UserText>{selectedUser.username}</UserText>
-            <Text>LEVEL: {selectedUser.level} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.level} minimumValue={0} maximumValue={20} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
-            />
-             <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.hitPoints} minimumValue={0} maximumValue={50} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
-            />
-             <Text>FUERZA: {selectedUser.fuerza} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.fuerza} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
-            />
-            <Text>DINERO: {selectedUser.dinero} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.dinero} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
-            />
-            <Text>CANSANCIO: {selectedUser.cansancio} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.cansancio} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
-            />
-            <Text>RESISTENCIA: {selectedUser.resistencia} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.resistencia} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
-            />
-            <Text>AGILIDAD: {selectedUser.agilidad} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.agilidad} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
-            />
-            <Text>INTELIGENCIA: {selectedUser.inteligencia} </Text>
-            <Slider style={{ width: 300, height: 40 }} value = {selectedUser.inteligencia} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
-            />
-            
-            <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ModalContent>
+              <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+              <UserText>{selectedUser.username}</UserText>
+
+              <Text>LEVEL: {selectedUser.level} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
+              />
+
+              <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
+              />
+
+              <Text>STRENGTH: {selectedUser.fuerza} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
+              />
+
+              <Text>GOLD: {selectedUser.dinero} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
+              />
+
+              <Text>FATIGUE: {selectedUser.cansancio} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
+              />
+
+              <Text>RESISTENCE: {selectedUser.resistencia} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
+              />
+
+              <Text>AGILITY: {selectedUser.agilidad} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
+              />
+
+              <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
+              />
+              
+              <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleCeguera}
               value={selectedUser.ceguera}
@@ -217,22 +244,20 @@ const Mortimer = () => {
               onValueChange={togglePsicosis}
               value={selectedUser.psicosis}
             />
-           
-          
-            <CloseButton onPress={() => setModalVisible(false)}>
-              <ButtonText>Close</ButtonText>
-            </CloseButton>
-            <ConfirmButton onPress={() => handleEditUserConfirm()}>
-              <ButtonText>Confirm</ButtonText>
-            </ConfirmButton>
-          </ModalContent>
+
+              <CloseButton onPress={() => setModalVisible(false)}>
+                <ButtonText>Close</ButtonText>
+              </CloseButton>
+              <ConfirmButton onPress={() => handleEditUserConfirm()}>
+                <ButtonText>Confirm</ButtonText>
+              </ConfirmButton>
+            </ModalContent>
           </ScrollView>
         </Modal>
       )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
