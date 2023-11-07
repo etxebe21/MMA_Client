@@ -30,6 +30,7 @@ const App =  () => {
         console.log(email); 
         const role = await AsyncStorage.getItem('userRole');
         console.log(role);
+        const id = await AsyncStorage.getItem('userID')
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {

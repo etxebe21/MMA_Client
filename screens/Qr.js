@@ -6,23 +6,23 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Qr = () => {
-    const [userEmail, setUserEmail] = useState('');
+    const [userID, setuserID] = useState('');
     useEffect(() => {
-        const getUserEmailFromStorage = async () => {
+        const getuserIDFromStorage = async () => {
             try {
-                const storedEmail = await AsyncStorage.getItem('userEmail');
+                const storedID = await AsyncStorage.getItem('userID');
                 console.log("entra");
-                if (storedEmail) {
-                    setUserEmail(storedEmail);
+                if (storedID) {
+                    setuserID(storedID);
                 }
             } catch (error) {
                 console.error('Cant get email from async storage:', error);
             }
         };
 
-        getUserEmailFromStorage();
+        getuserIDFromStorage();
     }, []);
-    if (userEmail) {
+    if (userID) {
 
         return (
 
@@ -30,7 +30,7 @@ const Qr = () => {
                 <ViewText>QR</ViewText>
                 <QrView>
                     <QRCode
-                        value={userEmail}
+                        value={userID}
                         size={350}
                         color="purple"
                         backgroundColor="#BB8FCE"

@@ -55,6 +55,7 @@ const Login = ({ onLogin, setLoginModalVisible}) => {
             console.log(email);
             const role = user.role;
             console.log(role);
+            const id = user._id;
 
             // Guarda el correo electrónico en AsyncStorage
             await AsyncStorage.setItem('userEmail', email)
@@ -67,6 +68,11 @@ const Login = ({ onLogin, setLoginModalVisible}) => {
             await AsyncStorage.setItem('userRole', role)
             .then(() => {
             console.log('Crole guardado en AsyncStorage:', role);
+            })
+            
+            await AsyncStorage.setItem('userID', id)
+            .then(() => {
+            console.log('Crole guardado en AsyncStorage:', id);
             })
                 handleSuccessfulLogin();
            
