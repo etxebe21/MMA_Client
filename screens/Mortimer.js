@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Slider from '@react-native-community/slider';
 
 const Mortimer = () => {
@@ -12,12 +11,12 @@ const Mortimer = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const thumb = require('../assets/yeti.jpg');
   const [isCegueraEnabled, setIsCegueraEnabled] = useState();
-  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState();
+  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
   const [isLocuraEnabled, setIsLocuraEnabled] = useState();
   const [isMiedoEnabled, setIsMiedoEnabled] = useState();
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
-  const [isTorreonEnabled, setIsTorreonEnabled] = useState();
+  
 
 
   useEffect(() => {
@@ -42,7 +41,6 @@ const Mortimer = () => {
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
-    console.log(selectedUser.ceguera);
   };
 
 
@@ -74,15 +72,51 @@ const Mortimer = () => {
   };
 
   //switches
+  const toggleCeguera = () => {
+    setIsCegueraEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      ceguera: !prevState.ceguera 
+    }));
+  };  
+  const toggleHambruna = () => {
+    setIsHambrunaEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      hambruna: !prevState.hambruna
+    }));
+  };
+  const toggleLocura = () => {
+    setIsLocuraEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      locura: !prevState.locura
+    }));
+  };
   
-  const toggleCeguera = () => setIsCegueraEnabled(previousState => !previousState);
-  const toggleHambruna = () => setIsHambrunaEnabled(previousState => !previousState);
-  const toggleLocura = () => setIsLocuraEnabled(previousState => !previousState);
-  const toggleMiedo = () => setIsMiedoEnabled(previousState => !previousState);
-  const toggleParalisis = () => setIsParalisisEnabled(previousState => !previousState);
-  const togglePsicosis = () => setIsPsicosisEnabled(previousState => !previousState);
-  const toggleTorreon = () => setIsTorreonEnabled(previousState => !previousState);
+  const toggleMiedo = () => {
+    setIsMiedoEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      miedo: !prevState.miedo
+    }));
+  };
   
+  const toggleParalisis = () => {
+    setIsParalisisEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      parálisis: !prevState.parálisis
+    }));
+  };
+  
+  const togglePsicosis = () => {
+    setIsPsicosisEnabled(previousState => !previousState);
+    setSelectedUser(prevState => ({
+      ...prevState,
+      psicosis: !prevState.psicosis
+    }));
+  };  
   
   const handleEditUserConfirm = async () => {
     try {
@@ -150,48 +184,41 @@ const Mortimer = () => {
             <Slider style={{ width: 300, height: 40 }} value = {selectedUser.inteligencia} minimumValue={0} maximumValue={100} minimumTrackImage = {1}  maximumTrackImage={50}  thumbTintColor= "#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
             />
             
-            <Text>Ceguera: { selectedUser.ceguera }</Text>
+            <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleCeguera}
-              value={isCegueraEnabled}
+              value={selectedUser.ceguera}
             />
-               <Text>Hambruna: {selectedUser.hambruna}</Text>
+               <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleHambruna}
-              value={isHambrunaEnabled}
+              value={selectedUser.hambruna}
             />
 
-            <Text>Locura: {selectedUser.locura}</Text>
+            <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleLocura}              
-              value={isLocuraEnabled}
+              value={selectedUser.locura}
             />
-            <Text>Miedo: {selectedUser.miedo}</Text>
+            <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleMiedo}
-              value={isMiedoEnabled}
+              value={selectedUser.miedo}
             />
 
-            <Text>Parálisis: {selectedUser.parálisis}</Text>
+            <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleParalisis}
-              value={isParalisisEnabled}
+              value={selectedUser.parálisis}
             />
 
-            <Text>Psicosis: {selectedUser.psicosis}</Text>
+            <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={togglePsicosis}
-              value={isPsicosisEnabled}
-            />
-
-            <Text>Torreón: {selectedUser.torreon }</Text>
-            <Switch
-              onValueChange={toggleTorreon}
-              value={isTorreonEnabled}
+              value={selectedUser.psicosis}
             />
            
-           
-
+          
             <CloseButton onPress={() => setModalVisible(false)}>
               <ButtonText>Close</ButtonText>
             </CloseButton>
@@ -220,7 +247,7 @@ const View = styled.View`
   background: #C8A2C8;
 `
 const Text = styled.Text`
-  bottom: -15px;
+  bottom: -5px;
   color: #4c2882;
   font-size: 18px;
   font-weight: bold;
