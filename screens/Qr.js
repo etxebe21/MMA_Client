@@ -1,24 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
-import QRCode from "react-native-qrcode-svg";
-import { ImageBackground} from 'react-native'
-import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const Qr = () => {
 
     return (
 
         <View>
-            <ViewText>QR</ViewText>
-            <QrView>
-                <QRCode
-                    value="www.youtube.com"
-                    size={350}
-                    color="purple"
-                    backgroundColor="#BB8FCE"
-                    logo={require('../assets/newPotion.png')}
-                />
-            </QrView>
+        <Text>QR</Text>
+        <QrView></QrView>
         </View>
     )
 }
