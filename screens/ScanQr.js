@@ -19,8 +19,8 @@ const ScanQr = () => {
       const data = {
         "insideTower": true
       };
-      // console.log(event.data);
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/6548b79e233b9f5f0b42bb79`, data);
+      console.log(event);
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${event}`, data);
 
       setTimeout(() => {
         this.scanner.reactivate();
