@@ -1,27 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import QRCode from "react-native-qrcode-svg";
-import { ImageBackground} from 'react-native'
+import { ImageBackground, } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Qr = () => {
+    const [userID, setuserID] = useState('');
+    useEffect(() => {
+        const getuserIDFromStorage = async () => {
+            try {
+                const storedID = await AsyncStorage.getItem('userID');
+                console.log("entra");
+                if (storedID) {
+                    setuserID(storedID);
+                }
+            } catch (error) {
+                console.error('Cant get email from async storage:', error);
+            }
+        };
 
-    return (
+        getuserIDFromStorage();
+    }, []);
+    if (userID) {
 
-        <View>
-            <ViewText>QR</ViewText>
-            <QrView>
-                <QRCode
-                    value="www.youtube.com"
-                    size={350}
-                    color="purple"
-                    backgroundColor="#BB8FCE"
-                    logo={require('../assets/newPotion.png')}
-                />
-            </QrView>
-        </View>
-    )
+        return (
+
+            <View>
+                <ViewText>QR</ViewText>
+                <QrView>
+                    <QRCode
+                        value={userID}
+                        size={350}
+                        color="purple"
+                        backgroundColor="#BB8FCE"
+                        logo={require('../assets/newPotion.png')}
+                    />
+                </QrView>
+            </View>
+        )
+    }
 }
+
 
 const View = styled.View`
     flex: 1;

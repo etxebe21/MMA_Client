@@ -77,6 +77,7 @@ android {
     namespace "com.lahermandad"
     defaultConfig {
         applicationId "com.lahermandad"
+        missingDimensionStrategy 'react-native-camera', 'general'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

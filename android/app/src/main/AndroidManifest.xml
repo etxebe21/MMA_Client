@@ -2,6 +2,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 147a5128ab25a7e5875d7add1fad8bb42a45d13c
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"

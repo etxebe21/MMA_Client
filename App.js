@@ -34,6 +34,7 @@ const App =  () => {
         const role = await AsyncStorage.getItem('userRole');
         console.log(role);
         setRole(role); // Almacena el rol del usuario en el estado
+        const id = await AsyncStorage.getItem('userID')
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
@@ -94,7 +95,8 @@ const App =  () => {
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle'
           else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
-          else if(route.name === 'Profile') iconName = 'person'
+          else if(route.name === 'Profile') iconName = 'people'
+          else if(route.name === 'readQR') iconName = 'qr-code-2'
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -108,6 +110,7 @@ const App =  () => {
       <Tab.Screen name = "CreatePotions" component={CreatePotions} />
       <Tab.Screen name = "Torreon" component={Torreon} />
       <Tab.Screen name = "Parchment" component={Parchment} />
+      <Tab.Screen name = "readQR" component={ScanQr} />
       {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       </Tab.Navigator>
