@@ -102,6 +102,10 @@ const App =  () => {
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
+
+
+          else if(route.name === 'readQR') iconName = 'qr-code-2'
+
           return <Icon name = {iconName} size={26} color={color} />
             },
         })}
@@ -116,8 +120,14 @@ const App =  () => {
       <Tab.Screen name = "Torreon" component={Torreon} />
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-      {role === 'MORTIMER'  && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
-      {role === 'VILLANO'  && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} />}
+      {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}
+      {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
+
+      <Tab.Screen name = "readQR" component={ScanQr} />
+
+     
+   
+
       </Tab.Navigator>
     </NavigationContainer>
     </>
