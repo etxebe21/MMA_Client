@@ -7,6 +7,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
 
   const onSuccess = async (event) => {
     setIsScanning(false);
@@ -22,13 +23,19 @@ const ScanQr = () => {
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/6548b79e233b9f5f0b42bb79`, data);
 
       setTimeout(() => {
-       this.scanner.reactivate();
+        this.scanner.reactivate();
       }, 3000);
       console.log('Solicitud exitosa:', response.data);
+
+      setConfirmationMessage('Entrada al torreón confirmada'); 
+
+      setTimeout(() => {
+        setConfirmationMessage('');
+      }, 2000); // 
     } catch (error) {
       console.error('Error en la solicitud:', error);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -37,7 +44,7 @@ const ScanQr = () => {
       <Text>SCAN QR</Text>
       <QRCodeScanner
         onRead={(event) => {
-          console.log("Código QR leído:", event.data); 
+          console.log("Código QR leído:", event.data);
           onSuccess(event.data);
         }}
         reactivate={false}
@@ -51,6 +58,12 @@ const ScanQr = () => {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
           <ActivityIndicator size="large" color="#0000ff" />
           <Text>Wait please...</Text>
+        </View>
+      )}
+
+      {confirmationMessage && (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+          <Text>{confirmationMessage}</Text>
         </View>
       )}
     </View>
