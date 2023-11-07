@@ -4,6 +4,24 @@ import QRCode from "react-native-qrcode-svg";
 import { ImageBackground, } from 'react-native'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {request, PERMISSIONS} from 'react-native-permissions';
+const PERMISSION_AUTHORIZED = 'authorized';
+
+function componentDidMount() {
+    if (Platform.OS === 'ios') {
+
+      Promise.all([
+        request(PERMISSIONS.IOS.CAMERA),
+      ]).then(([cameraStatus]) => {
+        this.setState({
+          isAuthorized: cameraStatus === "granted",
+          isAuthorizationChecked: true,
+        });
+      });
+    }
+    };
+
+componentDidMount();
 
 const Qr = () => {
     const [userID, setuserID] = useState('');
