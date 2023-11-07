@@ -15,7 +15,7 @@ const Mortimer = () => {
   const [isMiedoEnabled, setIsMiedoEnabled] = useState();
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
-  const [updateTimer, setUpdateTimer] = useState(null); // Agregado para gestionar la actualización en tiempo real
+  const [updateTimer, setUpdateTimer] = useState(null);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
@@ -177,37 +177,37 @@ const Mortimer = () => {
               />
 
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.hitPoints}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
               />
 
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
               />
 
               <Text>GOLD: {selectedUser.dinero} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
               />
 
               <Text>FATIGUE: {selectedUser.cansancio} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.cansancio}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
               />
 
               <Text>RESISTENCE: {selectedUser.resistencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.resistencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
               />
 
               <Text>AGILITY: {selectedUser.agilidad} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.agilidad}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
               />
 
               <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
+              <Slider style={{ width: 300, height: 40 }}value={selectedUser.inteligencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
                 maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
               />
               
