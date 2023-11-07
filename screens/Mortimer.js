@@ -6,6 +6,7 @@ import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
+import { Alert } from "react-native";
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
@@ -74,8 +75,20 @@ const Mortimer = () => {
 
       getUsersFromDatabase();
 
-      // Cierra el modal de edición
-      setModalVisible(false);
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Usuario Actualizado",
+        "Los datos del usuario han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setModalVisible(false);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       console.error('Error al actualizar los datos del usuario:', error);
     }
