@@ -38,8 +38,8 @@ const Mortimer = () => {
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
-  const handleUserPress = (user) => {
-    setSelectedUser(user);
+  const handleUserPress = () => {
+    setSelectedUser(selectedUser);
     setModalVisible(true);
   };
 
