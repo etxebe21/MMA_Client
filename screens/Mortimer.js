@@ -5,6 +5,7 @@ import axios from "axios";
 import { ScrollView } from "react-native";
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -16,10 +17,6 @@ const Mortimer = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   const [updateTimer, setUpdateTimer] = useState(null);
-
-  //IMAGENES
-  const gold = require("../assets/unicorn.jpg")
-
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
@@ -154,7 +151,7 @@ const Mortimer = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
-        <Text>ACÓLITOS</Text>
+        <HeaderText>ACÓLITOS</HeaderText>
         {acolitos.map((data) => (
           <TouchableOpacity key={data.picture} onPress={() => handleUserPress(data)}>
             <UserContainer>
@@ -310,6 +307,14 @@ const NameText = styled.Text`
   letter-spacing: -0.3px;
   align-self: center;  
 `
+const HeaderText = styled.Text`
+  bottom: -15px;
+  color: #4c2882;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+`
 const Avatar = styled.Image`
   width: 80px;
   height: 80px;
@@ -345,7 +350,7 @@ const ModalContent = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
-  height:1200px;
+  height:1350px;
 `
 const DetailAvatar = styled.Image`
   width: 90px;
