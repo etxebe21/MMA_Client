@@ -1,35 +1,34 @@
 import React, { Component, useState } from 'react';
 import styled from 'styled-components/native';
-import { Camera, useCameraPermission, useCameraDevice } from 'react-native-vision-camera';
 import { AppRegistry, StyleSheet, TouchableOpacity, Linking, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
 
 const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const onSuccess = async (event) => {
     setIsScanning(false);
     setIsLoading(true);
-  
+
     try {
       console.log("Escaneando");
-  
-      const data = event.data;
-      console.log(data);
-      // Realiza la solicitud Axios utilizando e.data como valor del campo userID
-      const response = await axios.patch('https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}', data);
-  
+
+      const data = {
+        "insideTower": true
+      };
+      // console.log(event.data);
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/6548b79e233b9f5f0b42bb79`, data);
+
+      setTimeout(() => {
+       this.scanner.reactivate();
+      }, 3000);
       console.log('Solicitud exitosa:', response.data);
-  
-      this.scanner.reactivate();
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       console.error('Error en la solicitud:', error);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -48,10 +47,12 @@ const ScanQr = () => {
         cameraStyle={{ height: '100%' }}
         showMarker={true}
       />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Wait please...</Text>
-      </View>
+      {isLoading && (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text>Wait please...</Text>
+        </View>
+      )}
     </View>
   );
 };
