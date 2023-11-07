@@ -51,7 +51,7 @@ const Mortimer = () => {
     
     const newTimer = setTimeout(() => {
       setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
-    }, 100); 
+    }, 200); 
   
     setUpdateTimer(newTimer);
   };
