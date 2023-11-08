@@ -91,7 +91,8 @@ const App =  () => {
           tabBarIcon: ({focused, color,}) => {
             let iconName;
             if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
-          
+
+          else if(route.name === 'Home' & role === 'JACOB') iconName = 'home'
           else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
           else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
           else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
@@ -111,13 +112,14 @@ const App =  () => {
         })}
       >
       
-      {role === 'ACÓLITO'&& <Tab.Screen name = "Home" component={Home} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Home" component={Home} />}
+      {role === 'JACOB' && <Tab.Screen name = "Home" component={Home} />}
       {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
-      <Tab.Screen name = "CreatePotions" component={CreatePotions} />
-      <Tab.Screen name = "Torreon" component={Torreon} />
+      {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
       {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}

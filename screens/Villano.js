@@ -3,8 +3,11 @@ import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
-import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { StyledProgressBar } from "../components/ProgressBar";
+import { StyledSlider } from "../components/Slider";
+import { Alert } from "react-native";
+
 
 const Villano = () => {
   const [users, setUsers] = useState([]);
@@ -57,9 +60,6 @@ const Villano = () => {
   };
   
 //sliders
-  const handleLevelChange = (newValue) => {
-    handleSliderChange(newValue, "level");
-  };
   const handleHitPointsChange = (newValue) => {
     handleSliderChange(newValue, "hitPoints");
   };
@@ -68,18 +68,6 @@ const Villano = () => {
   };
   const handleDineroChange = (newValue) => {
     handleSliderChange(newValue, "dinero");
-  };
-  const handleCansancioChange = (newValue) => {
-    handleSliderChange(newValue, "cansancio");
-  };
-  const handleResistenciaChange = (newValue) => {
-    handleSliderChange(newValue, "resistencia");
-  };
-  const handleAgilidadChange = (newValue) => {
-    handleSliderChange(newValue, "agilidad");
-  };
-  const handleInteligenciaChange = (newValue) => {
-    handleSliderChange(newValue, "inteligencia");
   };
 
   //switches
@@ -141,8 +129,20 @@ const Villano = () => {
 
       getUsersFromDatabase();
 
-      // Cierra el modal de edición
-      setModalVisible(false);
+     // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Usuario Actualizado",
+        "Los datos del usuario han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setModalVisible(false);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       console.error('Error al actualizar los datos del usuario:', error);
     }
@@ -173,52 +173,40 @@ const Villano = () => {
               <UserText>{selectedUser.username}</UserText>
 
               <Icon name="github-alt" size={20} color="blue" />
-              <Text>LEVEL: {selectedUser.level} </Text>
-              <Slider style={{ width: 300, height: 40 }} value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
-              />
+              <Text>LEVEL: {selectedUser.level}</Text>
+              <StyledProgressBar progress={selectedUser.level/20} />
+    
 
               <Icon name="legal" size={20} color="blue" />
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.hitPoints}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
+              <StyledSlider value={selectedUser.hitPoints} onValueChange={handleHitPointsChange}
               />
 
               <Icon name="hand-rock-o" size={20} color="blue" />
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
+              <StyledSlider value={selectedUser.fuerza} onValueChange={handleFuerzaChange}
               />
 
               <Icon name="money" size={20} color="blue" />
               <Text>GOLD: {selectedUser.dinero} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
+              <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
               />
 
-              <Icon name="heartbeat" size={20} color="blue" />
-              <Text>FATIGUE: {selectedUser.cansancio} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.cansancio}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
-              />
+              <Icon name="github-alt" size={20} color="blue" />
+              <Text>FATIGUE: {selectedUser.cansancio}</Text>
+              <StyledProgressBar progress={selectedUser.cansancio/100} />
 
               <Icon name="bomb" size={20} color="blue" />
               <Text>RESISTENCE: {selectedUser.resistencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.resistencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
-              />
+              <StyledProgressBar progress={selectedUser.resistencia/100} />
 
               <Icon name="motorcycle" size={20} color="blue" />
               <Text>AGILITY: {selectedUser.agilidad} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.agilidad}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
-              />
+              <StyledProgressBar progress={selectedUser.agilidad/100} />
 
               <Icon name="info" size={20} color="blue" />
               <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.inteligencia}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
-              />
+              <StyledProgressBar progress={selectedUser.inteligencia/100} />
               
               <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
               <Text></Text>
