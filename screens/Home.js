@@ -18,14 +18,14 @@ const Home = () => {
             webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         });
     }, []);
-    // const handleLogin = () => {
+    const handleLogin = () => {
        
-    //     setIsAuthenticated(true);
-    //     setUser(user);
-    //     console.log("user", user);
-    //     setRole(role);
-    //     setLoginModalVisible(true);
-    //   };
+        setIsAuthenticated(true);
+        setUser(user);
+        console.log("user", user);
+        setRole(role);
+        setLoginModalVisible(true);
+      };
 
     async function onSignOutButtonPress() {
         try {
@@ -46,25 +46,20 @@ const Home = () => {
         }
     }
 
-    return(
-        <View>
-            <Text>HOME</Text>
-            <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isLoginModalVisible}
-                    onRequestClose={() => {
-                    setLoginModalVisible(false); 
-                    }}
-                >
-                <LoginModal/>
-                </Modal>
-                )}
+    return (
+        <View style={{ flex: 1 }}>
+          {isAuthenticated ? (
+            <>
+              <Text>HOME</Text>
+              <SignOutButton onPress={onSignOutButtonPress}>
                 <ButtonText>Sign Out</ButtonText>
-            </SignOutButton>
-        </View>  
-    )
+              </SignOutButton>
+            </>
+          ) : (
+            <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+          )}
+        </View>
+      );
 }
 
 const styles = StyleSheet.create({

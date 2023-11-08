@@ -86,8 +86,8 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     }
     
     const handleSuccessfulLogin = () => {  
-        setIsAuthenticated(true);
-        //onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
+        //setIsAuthenticated(true);
+        onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
       };
 

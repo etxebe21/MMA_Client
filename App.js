@@ -52,7 +52,7 @@ const App =  () => {
 
   const handleLogin = async () => {
     // Realiza la lógica de autenticación
-    //setRole(role);
+    setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
   };
@@ -62,16 +62,7 @@ const App =  () => {
 <View style = {{ flex: 1}}>
 <Splash/>
   {!isAuthenticated && (
-    <Modal
-        animationType="slide"
-        transparent={false}
-        visible={isLoginModalVisible}
-        onRequestClose={() => {
-          setLoginModalVisible(false); 
-        }}
-      >
-        <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-      </Modal>
+   <LoginModal onLogin={handleLogin} />
     )}
     {isAuthenticated && ( 
         <>
