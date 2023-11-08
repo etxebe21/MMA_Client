@@ -72,8 +72,8 @@ const ingredients = [
     },
     {
       id: 12,
-      nombre: "Raving bee",
-      imagen: require("../assets/RavingBee.png"),
+      nombre: "Black Lotus",
+      imagen: require("../assets/BlackLotus.png"),
       efectos: ["cleanse_parchment"],
     },
   ];
