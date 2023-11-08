@@ -60,7 +60,7 @@ const App =  () => {
      
 <View style = {{ flex: 1}}>
 <Splash/>
-  {/* {!isAuthenticated && (
+  {!isAuthenticated && (
     <Modal
         animationType="slide"
         transparent={false}
@@ -74,7 +74,7 @@ const App =  () => {
         </View>
       </Modal>
     )}
-    {isAuthenticated && (  */}
+    {isAuthenticated && ( 
         <>
       <Header/>  
   
@@ -99,7 +99,7 @@ const App =  () => {
           else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle';
-          else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
+          //else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
@@ -133,7 +133,7 @@ const App =  () => {
       </Tab.Navigator>
     </NavigationContainer>
     </>
-      {/* )} */}
+       )}
       </View>
   );
   

@@ -50,19 +50,19 @@ const Home = () => {
         <View>
             <Text>HOME</Text>
             {/* <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isLoginModalVisible}
-                    onRequestClose={() => {
-                    setLoginModalVisible(false); 
-                    }}
-                >
-                <View style={styles.modalContainer}>
-                <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                    </View>
-                </Modal>
-                )}
+                // <Modal
+                //     animationType="slide"
+                //     transparent={false}
+                //     visible={isLoginModalVisible}
+                //     onRequestClose={() => {
+                //     setLoginModalVisible(false); 
+                //     }}
+                // >
+                // <View style={styles.modalContainer}>
+                // <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+                //     </View>
+                // </Modal>
+                // )}
                 <ButtonText>Sign Out</ButtonText>
             </SignOutButton> */}
         </View>  
