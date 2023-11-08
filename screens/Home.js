@@ -2,7 +2,7 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import Login from "./Login";
+import LoginModal from "../components/LoginModal";
 import { Modal , StyleSheet} from "react-native";
 
 
@@ -18,14 +18,14 @@ const Home = () => {
             webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         });
     }, []);
-    const handleLogin = () => {
+    // const handleLogin = () => {
        
-        setIsAuthenticated(true);
-        setUser(user);
-        console.log("user", user);
-        setRole(role);
-        setLoginModalVisible(true);
-      };
+    //     setIsAuthenticated(true);
+    //     setUser(user);
+    //     console.log("user", user);
+    //     setRole(role);
+    //     setLoginModalVisible(true);
+    //   };
 
     async function onSignOutButtonPress() {
         try {
@@ -58,9 +58,7 @@ const Home = () => {
                     setLoginModalVisible(false); 
                     }}
                 >
-                <View style={styles.modalContainer}>
-                <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                    </View>
+                <LoginModal/>
                 </Modal>
                 )}
                 <ButtonText>Sign Out</ButtonText>

@@ -2,8 +2,8 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import Login from "./Login";
 import { Modal , StyleSheet} from "react-native";
+import LoginModal from "../components/LoginModal";
 
 const ProfileVillano = () => {
     const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
@@ -18,14 +18,14 @@ const ProfileVillano = () => {
         });      
     }, []);
 
-    const handleLogin = () => {
+    // const handleLogin = () => {
        
-        setIsAuthenticated(true);
-        setUser(user);
-        console.log("user", user);
-        setRole(role);
-        setLoginModalVisible(true);
-      };
+    //     setIsAuthenticated(true);
+    //     setUser(user);
+    //     console.log("user", user);
+    //     setRole(role);
+    //     setLoginModalVisible(true);
+    //   };
 
     async function onSignOutButtonPress() {
         try {
@@ -58,9 +58,7 @@ const ProfileVillano = () => {
                     setLoginModalVisible(false); 
                     }}
                 >
-                <View style={styles.modalContainer}>
-                <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                    </View>
+               <LoginModal/>
                 </Modal>
                 )}
                 <ButtonText>Sign Out</ButtonText>

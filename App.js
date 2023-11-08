@@ -9,7 +9,8 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
-import Login from './screens/Login';
+//import Login from './screens/Login';
+import LoginModal from './components/LoginModal';
 import Qr from './screens/Qr';
 import ProfileMortimer from './screens/ProfileMortimer';
 import Villano from './screens/Villano';
@@ -51,7 +52,7 @@ const App =  () => {
 
   const handleLogin = async () => {
     // Realiza la lógica de autenticación
-    setRole(role);
+    //setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
   };
@@ -69,9 +70,7 @@ const App =  () => {
           setLoginModalVisible(false); 
         }}
       >
-       <View style={styles.modalContainer}>
-       <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-        </View>
+        <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
       </Modal>
     )}
     {isAuthenticated && ( 
@@ -122,13 +121,9 @@ const App =  () => {
       {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
+      {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
 
-      {/* <Tab.Screen name = "readQR" component={ScanQr} /> */}
-
-     
-   
 
       </Tab.Navigator>
     </NavigationContainer>
