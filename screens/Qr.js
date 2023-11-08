@@ -7,9 +7,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {request, PERMISSIONS} from 'react-native-permissions';
 const PERMISSION_AUTHORIZED = 'authorized';
 
+
+PERMISSIONS.IOS.CAMERA;
+
 function componentDidMount() {
     if (Platform.OS === 'ios') {
-
       Promise.all([
         request(PERMISSIONS.IOS.CAMERA),
       ]).then(([cameraStatus]) => {
