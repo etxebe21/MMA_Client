@@ -3,19 +3,15 @@ import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
-import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { StyledProgressBar } from "../components/ProgressBar";
+import { StyledSlider } from "../components/Slider";
+import { Alert } from "react-native";
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isCegueraEnabled, setIsCegueraEnabled] = useState();
-  const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
-  const [isLocuraEnabled, setIsLocuraEnabled] = useState();
-  const [isMiedoEnabled, setIsMiedoEnabled] = useState();
-  const [isParalisisEnabled, setIsParalisisEnabled] = useState();
-  const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   const [updateTimer, setUpdateTimer] = useState(null);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
@@ -47,9 +43,8 @@ const Mortimer = () => {
     if (updateTimer) {
       clearTimeout(updateTimer);
     }
-  
-    
-    const newTimer = setTimeout(() => {
+   
+  const newTimer = setTimeout(() => {
       setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
     }, 350); 
   
@@ -57,9 +52,6 @@ const Mortimer = () => {
   };
   
 //sliders
-  const handleLevelChange = (newValue) => {
-    handleSliderChange(newValue, "level");
-  };
   const handleHitPointsChange = (newValue) => {
     handleSliderChange(newValue, "hitPoints");
   };
@@ -69,65 +61,7 @@ const Mortimer = () => {
   const handleDineroChange = (newValue) => {
     handleSliderChange(newValue, "dinero");
   };
-  const handleCansancioChange = (newValue) => {
-    handleSliderChange(newValue, "cansancio");
-  };
-  const handleResistenciaChange = (newValue) => {
-    handleSliderChange(newValue, "resistencia");
-  };
-  const handleAgilidadChange = (newValue) => {
-    handleSliderChange(newValue, "agilidad");
-  };
-  const handleInteligenciaChange = (newValue) => {
-    handleSliderChange(newValue, "inteligencia");
-  };
-
-  //switches
-  const toggleCeguera = () => {
-    setIsCegueraEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      ceguera: !prevState.ceguera 
-    }));
-  };  
-  const toggleHambruna = () => {
-    setIsHambrunaEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      hambruna: !prevState.hambruna
-    }));
-  };
-  const toggleLocura = () => {
-    setIsLocuraEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      locura: !prevState.locura
-    }));
-  };
-  
-  const toggleMiedo = () => {
-    setIsMiedoEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      miedo: !prevState.miedo
-    }));
-  };
-  
-  const toggleParalisis = () => {
-    setIsParalisisEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      parálisis: !prevState.parálisis
-    }));
-  };
-  
-  const togglePsicosis = () => {
-    setIsPsicosisEnabled(previousState => !previousState);
-    setSelectedUser(prevState => ({
-      ...prevState,
-      psicosis: !prevState.psicosis
-    }));
-  };  
+ 
   
   const handleEditUserConfirm = async () => {
     try {
@@ -141,8 +75,20 @@ const Mortimer = () => {
 
       getUsersFromDatabase();
 
-      // Cierra el modal de edición
-      setModalVisible(false);
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Usuario Actualizado",
+        "Los datos del usuario han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              setModalVisible(false);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error) {
       console.error('Error al actualizar los datos del usuario:', error);
     }
@@ -171,91 +117,63 @@ const Mortimer = () => {
             <ModalContent>
               <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserText>{selectedUser.username}</UserText>
-
+      
               <Icon name="github-alt" size={20} color="blue" />
-              <Text>LEVEL: {selectedUser.level} </Text>
-              <Slider style={{ width: 300, height: 40 }} value={selectedUser.level}minimumValue={0}maximumValue={20} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleLevelChange}
-              />
+              <Text>LEVEL: {selectedUser.level}</Text>
+              <StyledProgressBar progress={selectedUser.level/20} />
+    
 
               <Icon name="legal" size={20} color="blue" />
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.hitPoints}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleHitPointsChange}
+              <StyledSlider value={selectedUser.hitPoints} onValueChange={handleHitPointsChange}
               />
 
               <Icon name="hand-rock-o" size={20} color="blue" />
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.fuerza}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleFuerzaChange}
+              <StyledSlider value={selectedUser.fuerza} onValueChange={handleFuerzaChange}
               />
 
               <Icon name="money" size={20} color="blue" />
               <Text>GOLD: {selectedUser.dinero} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.dinero}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleDineroChange}
+              <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
               />
 
-              <Icon name="heartbeat" size={20} color="blue" />
-              <Text>FATIGUE: {selectedUser.cansancio} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.cansancio}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleCansancioChange}
-              />
+              <Icon name="github-alt" size={20} color="blue" />
+              <Text>FATIGUE: {selectedUser.cansancio}</Text>
+              <StyledProgressBar progress={selectedUser.cansancio/100} />
 
               <Icon name="bomb" size={20} color="blue" />
               <Text>RESISTENCE: {selectedUser.resistencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.resistencia}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleResistenciaChange}
-              />
+              <StyledProgressBar progress={selectedUser.resistencia/100} />
 
               <Icon name="motorcycle" size={20} color="blue" />
               <Text>AGILITY: {selectedUser.agilidad} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.agilidad}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleAgilidadChange}
-              />
+              <StyledProgressBar progress={selectedUser.agilidad/100} />
 
               <Icon name="info" size={20} color="blue" />
               <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
-              <Slider style={{ width: 300, height: 40 }}value={selectedUser.inteligencia}minimumValue={0}maximumValue={100} minimumTrackImage={1}
-                maximumTrackImage={50} thumbTintColor="#913595" minimumTrackTintColor="#4c2882" maximumTrackTintColor="#0087FF" onValueChange={handleInteligenciaChange}
-              />
+              <StyledProgressBar progress={selectedUser.inteligencia/100} />
               
               <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
               <Text></Text>
 
-              <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleCeguera}
-              value={selectedUser.ceguera}
-            />
-               <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleHambruna}
-              value={selectedUser.hambruna}
-            />
+            <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
+            <Switch value={selectedUser.ceguera}/>
+
+            <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
+            <Switch value={selectedUser.hambruna}/>
 
             <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleLocura}              
-              value={selectedUser.locura}
-            />
+            <Switch value={selectedUser.locura}/>
+
             <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleMiedo}
-              value={selectedUser.miedo}
-            />
+            <Switch value={selectedUser.miedo}/>
 
             <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleParalisis}
-              value={selectedUser.parálisis}
-            />
+            <Switch value={selectedUser.parálisis}/>
 
             <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={togglePsicosis}
-              value={selectedUser.psicosis}
-            />
+            <Switch value={selectedUser.psicosis}/>
 
               <CloseButton onPress={() => setModalVisible(false)}>
                 <ButtonText>Close</ButtonText>
