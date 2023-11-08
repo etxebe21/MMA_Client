@@ -226,23 +226,27 @@ const Villano = () => {
             <Switch
               onValueChange={toggleLocura}              
               value={selectedUser.locura}
+              disabled
             />
             <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleMiedo}
               value={selectedUser.miedo}
+              disabled
             />
 
             <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={toggleParalisis}
               value={selectedUser.parálisis}
+              disabled
             />
 
             <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
             <Switch
               onValueChange={togglePsicosis}
               value={selectedUser.psicosis}
+              disabled
             />
 
               <CloseButton onPress={() => setModalVisible(false)}>

@@ -112,8 +112,8 @@ const App =  () => {
       {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
-      <Tab.Screen name = "CreatePotions" component={CreatePotions} />
-      <Tab.Screen name = "Torreon" component={Torreon} />
+      {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER'  && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
