@@ -13,7 +13,7 @@ const Parchment = () => {
     <View>
         <ImageBackground source={require(bgImage)} style={styles.container}> 
             <ClearParchmentButton onPress={() => { console.log("Pulsado Boton Pergamino")}}>
-                <ClearParchmentText>Create Potion</ClearParchmentText>
+                <ClearParchmentText>Clean Parchment</ClearParchmentText>
             </ClearParchmentButton>
         </ImageBackground>
     </View>
