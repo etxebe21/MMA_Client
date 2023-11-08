@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, ProgressBarAndroidComponent} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
