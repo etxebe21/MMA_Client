@@ -4,7 +4,7 @@ import React from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 
-const bgImage = '../assets/fondoTorreon.png';
+const bgImage = '../assets/permaginoEncriptado.png';
 
 const Parchment = () => {
    

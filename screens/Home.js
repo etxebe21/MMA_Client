@@ -49,7 +49,7 @@ const Home = () => {
     return(
         <View>
             <Text>HOME</Text>
-            <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
+            {/* <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
                 <Modal
                     animationType="slide"
                     transparent={false}
@@ -64,7 +64,7 @@ const Home = () => {
                 </Modal>
                 )}
                 <ButtonText>Sign Out</ButtonText>
-            </SignOutButton>
+            </SignOutButton> */}
         </View>  
     )
 }
