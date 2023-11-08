@@ -91,7 +91,8 @@ const App =  () => {
           tabBarIcon: ({focused, color,}) => {
             let iconName;
             if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
-          
+
+          else if(route.name === 'Home' & role === 'JACOB') iconName = 'home'
           else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
           else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
           else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
@@ -107,7 +108,8 @@ const App =  () => {
         })}
       >
       
-      {role === 'ACÓLITO'&& <Tab.Screen name = "Home" component={Home} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Home" component={Home} />}
+      {role === 'JACOB' && <Tab.Screen name = "Home" component={Home} />}
       {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
