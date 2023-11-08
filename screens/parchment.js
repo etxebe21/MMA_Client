@@ -1,21 +1,43 @@
 // Pantalla de papiro 
 
-import React from "react";
+import React, { useState, useRef } from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 
 const bgImage = '../assets/pergaminoEncriptado.png';
 
 const Parchment = () => {
-   
+    const [isCleaned, setIsCleaned] = useState();     // Booleana pergamino
+    
+    // Funcion de limpieza de pergamino
+    const cleanParchment = () => { setIsCleaned(true) };
+
+    const returnButton = () => { setIsCleaned(false) };
+    
+
+
     return(
     
     <View>
+        {/* Cuando El pergamino Esta SUCIO */}
+        {!isCleaned && (
         <ImageBackground source={require(bgImage)} style={styles.container}> 
-            <ClearParchmentButton onPress={() => { console.log("Pulsado Boton Pergamino")}}>
+            <CleanParchmentButton onPress={() => { cleanParchment()}}>
                 <ClearParchmentText>Clean Parchment</ClearParchmentText>
-            </ClearParchmentButton>
+            </CleanParchmentButton>
         </ImageBackground>
+          )}
+        <>
+
+        {/* Cuando EL pergamino Esta LIMPIO */}
+        {isCleaned && (
+        <ImageBackground source={require(bgImage)} style={styles.container}> 
+            <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
+                <ClearParchmentText>Return</ClearParchmentText>
+            </CleanParchmentButtonReturn>
+        </ImageBackground>
+            )}
+            </>
     </View>
     )
 }
@@ -28,14 +50,24 @@ const ClearParchmentText = styled.Text`
   top: 5px;
 `
 
-const ClearParchmentButton = styled.TouchableOpacity`
-  top: -150px;
+const CleanParchmentButton = styled.TouchableOpacity`
+  top: 220px;
   background: #CCCCCC;
   width: 180px;
   height: 50px;
   align-self: center;
   border-radius: 30px;
-  border: #4c2882; 
+  border: #4c2882;
+`
+
+const CleanParchmentButtonReturn = styled.TouchableOpacity`
+  top: -200px;
+  background: #CCCCCC;
+  width: 180px;
+  height: 50px;
+  align-self: center;
+  border-radius: 30px;
+  border: #4c2882;
 `
 
 const View = styled.View`
