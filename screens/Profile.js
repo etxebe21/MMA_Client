@@ -141,7 +141,6 @@ const Profile = () => {
 const iconStyles = {
     marginLeft: 140,
     color: 'blue',
-    size: 20,
     top: 10
   };
 export default Profile;
