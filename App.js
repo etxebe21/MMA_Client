@@ -122,10 +122,10 @@ const App =  () => {
       {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-      {role != 'MORTIMER' && <Tab.Screen name = "Profile" component={Profile} />}
+
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
 
-      <Tab.Screen name = "readQR" component={ScanQr} />
+      {/* <Tab.Screen name = "readQR" component={ScanQr} /> */}
 
      
    
