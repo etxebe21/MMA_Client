@@ -4,7 +4,8 @@ import React, { useState, useRef } from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 
-const bgImage = '../assets/pergaminoEncriptado.png';
+const bgImageDirty = '../assets/pergaminoEncriptado.png';
+const bgImageClean = '../assets/pergaminoNOEncriptado.png';
 
 const Parchment = () => {
     const [isCleaned, setIsCleaned] = useState();     // Booleana pergamino
@@ -21,7 +22,7 @@ const Parchment = () => {
     <View>
         {/* Cuando El pergamino Esta SUCIO */}
         {!isCleaned && (
-        <ImageBackground source={require(bgImage)} style={styles.container}> 
+        <ImageBackground source={require(bgImageDirty)} style={styles.container}> 
             <CleanParchmentButton onPress={() => { cleanParchment()}}>
                 <ClearParchmentText>Clean Parchment</ClearParchmentText>
             </CleanParchmentButton>
@@ -31,7 +32,7 @@ const Parchment = () => {
 
         {/* Cuando EL pergamino Esta LIMPIO */}
         {isCleaned && (
-        <ImageBackground source={require(bgImage)} style={styles.container}> 
+        <ImageBackground source={require(bgImageClean)} style={styles.container}> 
             <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
                 <ClearParchmentText>Return</ClearParchmentText>
             </CleanParchmentButtonReturn>
