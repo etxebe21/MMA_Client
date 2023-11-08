@@ -4,6 +4,12 @@ import { AppRegistry, StyleSheet, TouchableOpacity, Linking, ActivityIndicator }
 import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
+import {PERMISSIONS} from 'react-native-permissions';
+
+PERMISSIONS.IOS.CAMERA;
+
+
+
 const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
