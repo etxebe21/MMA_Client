@@ -4,14 +4,15 @@ import React from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 
-const bgImage = '../assets/permaginoEncriptado.png';
+const bgImage = '../assets/pergaminoEncriptado.png';
 
 const Parchment = () => {
    
     return(
     
     <View>
-     <ImageBackground source={require(bgImage)} style={styles.container}>    
+     <ImageBackground source={require(bgImage)} style={styles.container}> 
+
         </ImageBackground>
     </View>
     )

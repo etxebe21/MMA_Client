@@ -19,7 +19,7 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
-//import Parchment from './screens/parchment';
+import Parchment from './screens/Parchment';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -61,20 +61,20 @@ const App =  () => {
 <View style = {{ flex: 1}}>
 <Splash/>
   {!isAuthenticated && (
-    <Modal
-        animationType="slide"
-        transparent={false}
-        visible={isLoginModalVisible}
-        onRequestClose={() => {
-          setLoginModalVisible(false); 
-        }}
-      >
-       <View style={styles.modalContainer}>
-       <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-        </View>
-      </Modal>
-    )}
-    {isAuthenticated && ( 
+    // <Modal
+    //     animationType="slide"
+    //     transparent={false}
+    //     visible={isLoginModalVisible}
+    //     onRequestClose={() => {
+    //       setLoginModalVisible(false); 
+    //     }}
+    //   >
+    //    <View style={styles.modalContainer}>
+    //    <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+    //     </View>
+    //   </Modal>
+    // )}
+    // {isAuthenticated && ( 
         <>
       <Header/>  
   
@@ -99,7 +99,7 @@ const App =  () => {
           else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle';
-          //else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
+          else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
@@ -120,6 +120,7 @@ const App =  () => {
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
+      {role === 'ACÓLITO' && <Tab.Screen name = "Parchment" component={Parchment} />}
       {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
 
