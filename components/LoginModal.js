@@ -10,8 +10,6 @@ import axios from "axios";
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState(null);
-    
 
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',

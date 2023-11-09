@@ -5,12 +5,10 @@ import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
 import {StyleSheet} from "react-native";
 
-
 const Home = () => {
-    const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoginModalVisible, setLoginModalVisible] = useState(true);
-    const [role, setRole] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+    const [role, setRole] = useState(role);
     
     useEffect(() => {
         // Configura Google Sign-In solo una vez al cargar el componente
@@ -18,13 +16,12 @@ const Home = () => {
             webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         });
     }, []);
+
     const handleLogin = () => {
        
         setIsAuthenticated(true);
-        setUser(user);
-        console.log("user", user);
         setRole(role);
-        setLoginModalVisible(true);
+        setLoginModalVisible(false);
       };
 
     async function onSignOutButtonPress() {
@@ -33,10 +30,8 @@ const Home = () => {
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
             setRole(null); // Actualiza el estado del usuario autenticado
-            setUser(null);
             console.log('Cerró sesión de Google');
             console.log("role" ,role);
-            console.log("user", user);
             setIsAuthenticated(false);
             setLoginModalVisible(true);
         } catch (error) {
@@ -45,19 +40,20 @@ const Home = () => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-              <Text>HOME</Text>
-              <SignOutButton onPress={onSignOutButtonPress} setLoginModalVisible={setLoginModalVisible}>
-                <ButtonText>Sign Out</ButtonText>
-              </SignOutButton>
-
-              {/* {!isAuthenticated && (
-                
-                <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-            
-                )} */}
-
-        </View>
+      <View style={{ flex: 1 }}>
+      
+      {!isAuthenticated && (
+          <LoginModal onLogin={handleLogin}  />
+        )}
+        
+      {isAuthenticated && ( 
+        <>
+          <Text>HOME</Text>
+          <SignOutButton onPress={onSignOutButtonPress}>
+            <ButtonText>Sign Out</ButtonText>
+          </SignOutButton>
+        </>)}
+      </View>
       );
 }
 
@@ -90,11 +86,11 @@ const SignOutButton = styled.TouchableOpacity`
     height: 55px;
     border-radius: 60px;
     align-self: center;
-`;
+`
 const ButtonText = styled.Text`
     color: white;
     font-size: 20px;
     text-align: center;
-`;
+`
 
 export default Home
