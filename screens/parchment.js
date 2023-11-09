@@ -5,19 +5,27 @@ import { ImageBackground, StyleSheet } from 'react-native'
 import { Modal } from "react-native-paper";
 import { Image } from "react-native-svg";
 import styled from "styled-components/native";
+import CreatePotions from "./CreatePotions";
 
 const bgImageDirty = '../assets/pergaminoEncriptado.png';
 const bgImageClean = '../assets/pergaminoNOEncriptado.png';
 
 const Parchment = ({towerBoolean}) => {
     const [isCleaned, setIsCleaned] = useState(false);     // Booleana pergamino
+    const [isPotionCreated, setIsPotionCreeated] = useState(false);     // Booleana pergamino
     
     // Funcion de limpieza de pergamino
-    const cleanParchment = () => { setIsCleaned(true) };
+    const cleanParchment        = () => { setIsCleaned(true) };
 
-    const returnButton = () => { setIsCleaned(false) };
-    
+    const returnButton          = () => { 
+        setIsCleaned(false); 
+        setIsPotionCreeated(false);
+    };
 
+    const potionCreation        = () => { 
+        setIsPotionCreeated(true);
+        setIsCleaned(true); 
+    };
 
     return(
     
@@ -38,17 +46,35 @@ const Parchment = ({towerBoolean}) => {
                     </>
                     
                 )}
-                <>
 
-                {/* Cuando EL pergamino Esta LIMPIO */}
-                {isCleaned && (
-                <ImageBackground source={require(bgImageClean)} style={styles.container}> 
-                    <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
-                        <ClearParchmentText>Return</ClearParchmentText>
-                    </CleanParchmentButtonReturn>
-                </ImageBackground>
-                    )}
+                {/* Cuando Sale de pergamino Sucio para CREAR POCION */}
+                {isCleaned && !isPotionCreated && (
+                    <>
+                    <ImageBackground source={require(bgImageClean)} style={styles.container}> 
+                    {/* 
+                        Sacar modal de creacion de pociones, darle al boton cuando esten los dos ingredientes, hacer una comprobacion 
+                        y cambiar de modal con el boton.  
+                    */}
+                    <CreatePotions>AAAA</CreatePotions>
+                        <CreatePotionButton onPress={() => { potionCreation()}}>
+                            <CreatePotionButtonText>Create Potion</CreatePotionButtonText>
+                        </CreatePotionButton>
+                    </ImageBackground>
                     </>
+                )}
+
+                    {/* Cuando EL pergamino Esta LIMPIO y la Pocion esta creada */}
+                {isCleaned && isPotionCreated && (
+                    <>
+                    <ImageBackground source={require(bgImageClean)} style={styles.container}> 
+                
+                        <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
+                            <ClearParchmentText>Return2</ClearParchmentText>
+                        </CleanParchmentButtonReturn>
+                        
+                    </ImageBackground>
+                    </>
+                )}
             </Modal>
 
     </View>
@@ -62,6 +88,23 @@ const ParchmentView = styled.View`
     align-self: center;
     background: #4c2882;
     border-radius: 30px; 
+`
+
+const CreatePotionButtonText = styled.Text`
+  fontSize: 25px;
+  color: #4c2882; 
+  align-self: center;
+  top: 5px;
+`
+
+const CreatePotionButton = styled.TouchableOpacity`
+  top: 120px;
+  background: #CCCCCC;
+  width: 180px;
+  height: 50px;
+  align-self: center;
+  border-radius: 30px;
+  border: #4c2882;
 `
 
 const ClearParchmentText = styled.Text`
@@ -93,7 +136,7 @@ const CleanParchmentButtonReturn = styled.TouchableOpacity`
 
 const View = styled.View`
     flex: 1;
-    background: #C8A2C8;
+
 `
 
 const styles = StyleSheet.create({
@@ -108,8 +151,8 @@ const styles = StyleSheet.create({
 })
 
 const Text = styled.Text `
-    bottom: -100px;
-    color: #4c2882;
+    bottom: 100px;
+    color: white;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
