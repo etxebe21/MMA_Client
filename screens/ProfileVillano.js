@@ -2,7 +2,7 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import { StyleSheet} from "react-native";
+import { Modal, StyleSheet} from "react-native";
 import LoginModal from "../components/LoginModal";
 
 const ProfileVillano = () => {
@@ -60,7 +60,7 @@ const ProfileVillano = () => {
 
         {isAuthenticated && ( 
         <>    
-            <Text>MORTIMER</Text>
+            <Text>VILLANO</Text>
             <SignOutButton onPress={onSignOutButtonPress} setLoginModalVisible={setLoginModalVisible}>
             <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
