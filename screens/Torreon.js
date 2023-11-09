@@ -2,7 +2,7 @@ import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 import Parchment from "./Parchment";
 import React, { useState, useEffect } from "react";
-
+import { CreatePotions, CreatePotionsParch } from './CreatePotions';
 
 const bgImage = '../assets/fondoTorreon.png';
 
@@ -15,7 +15,7 @@ const Torreon = () => {
 
     const ocultarBoton = () => { setBotonTowerVisible(false) };
     
-    const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); };
+    const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); setIsInTower(false)};
 
 
     useEffect(() => { 
@@ -26,15 +26,22 @@ const Torreon = () => {
     return(
     
     <View>
-     <ImageBackground source={require(bgImage)} style={styles.container}> 
-        {isInTower && (   
-            <>
-            {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
-                    <EnterTowerButtonText> Enter Tower </EnterTowerButtonText>
-                </EnterTowerButton> }
-                <Parchment towerBoolean={isInTower && isEnteringTower}/> 
-            </>
-        )}
+        <ImageBackground source={require(bgImage)} style={styles.container}> 
+            {isInTower && (   
+                <>
+                {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
+                        <EnterTowerButtonText> Enter Tower </EnterTowerButtonText>
+                                </EnterTowerButton> }
+                </>
+            )}
+
+            {isEnteringTower && (
+            <ViewPotion>
+                <Parchment towerBoolean={isEnteringTower}/> 
+                {/* <CreatePotionsParch  /> */}
+            </ ViewPotion>
+                
+            )}
         </ImageBackground>
     </View>
     )
@@ -59,7 +66,13 @@ const EnterTowerButton = styled.TouchableOpacity`
 
 const View = styled.View`
     flex: 1;
-    background: #C8A2C8;
+    background: #000000;
+`
+
+const ViewPotion = styled.View`
+    backgroundcolor: #000000;
+    height: 100%;
+    width:  100%
 `
 
 const Text = styled.Text `
