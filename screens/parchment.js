@@ -5,25 +5,26 @@ import { ImageBackground, StyleSheet } from 'react-native'
 import { Modal } from "react-native-paper";
 import { Image } from "react-native-svg";
 import styled from "styled-components/native";
-import CreatePotions from "./CreatePotions";
+import { CreatePotions } from "./CreatePotions";
 
 const bgImageDirty = '../assets/pergaminoEncriptado.png';
 const bgImageClean = '../assets/pergaminoNOEncriptado.png';
 
 const Parchment = ({towerBoolean}) => {
     const [isCleaned, setIsCleaned] = useState(false);     // Booleana pergamino
-    const [isPotionCreated, setIsPotionCreeated] = useState(false);     // Booleana pergamino
-    
+    const [isPotionCreated, setIsPotionCreated] = useState(false);     // Booleana pergamino
+    const [isPotionModalVisible, setIsPotionModalVisible] = useState(false);
+
     // Funcion de limpieza de pergamino
     const cleanParchment        = () => { setIsCleaned(true) };
 
     const returnButton          = () => { 
         setIsCleaned(false); 
-        setIsPotionCreeated(false);
+        setIsPotionCreated(false);
     };
 
     const potionCreation        = () => { 
-        setIsPotionCreeated(true);
+        setIsPotionCreated(true);
         setIsCleaned(true); 
     };
 
@@ -36,7 +37,7 @@ const Parchment = ({towerBoolean}) => {
                 {!isCleaned && (
                     <>
                     <View>
-                        <Image source={require('../assets/newPotion.png')} />
+                        <Image source={require('../assets/newPotion.png')}>  </Image>
                         {/* <ImageBackground source={require(bgImageDirty)} style={styles.container}> */}
                             <CleanParchmentButton onPress={() => { cleanParchment(); } }>
                                 <ClearParchmentText>Clean Parchment</ClearParchmentText>
@@ -50,29 +51,26 @@ const Parchment = ({towerBoolean}) => {
                 {/* Cuando Sale de pergamino Sucio para CREAR POCION */}
                 {isCleaned && !isPotionCreated && (
                     <>
-                    <ImageBackground source={require(bgImageClean)} style={styles.container}> 
-                    {/* 
-                        Sacar modal de creacion de pociones, darle al boton cuando esten los dos ingredientes, hacer una comprobacion 
-                        y cambiar de modal con el boton.  
-                    */}
-                    <CreatePotions>AAAA</CreatePotions>
-                        <CreatePotionButton onPress={() => { potionCreation()}}>
+                    <ViewPotion>
+                        <CreatePotions />
+                        <CreatePotionButton onPress={() => { setIsPotionCreated(true) }}>
                             <CreatePotionButtonText>Create Potion</CreatePotionButtonText>
                         </CreatePotionButton>
-                    </ImageBackground>
+                    </ViewPotion>
+                        
                     </>
                 )}
 
                     {/* Cuando EL pergamino Esta LIMPIO y la Pocion esta creada */}
                 {isCleaned && isPotionCreated && (
                     <>
-                    <ImageBackground source={require(bgImageClean)} style={styles.container}> 
+                    {/* <ImageBackground source={require(bgImageClean)} style={styles.container}>  */}
                 
                         <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
-                            <ClearParchmentText>Return2</ClearParchmentText>
+                            <ClearParchmentText>Potion. OK, volver</ClearParchmentText>
                         </CleanParchmentButtonReturn>
                         
-                    </ImageBackground>
+                    {/* </ImageBackground> */}
                     </>
                 )}
             </Modal>
@@ -80,6 +78,12 @@ const Parchment = ({towerBoolean}) => {
     </View>
     )
 }
+
+const ViewPotion = styled.View`
+    backgroundcolor: #000000;
+    height: 95%;
+    width:  100%
+`
 
 const ParchmentView = styled.View`
     bottom: -50px;
@@ -98,7 +102,7 @@ const CreatePotionButtonText = styled.Text`
 `
 
 const CreatePotionButton = styled.TouchableOpacity`
-  top: 120px;
+  top: 12px;
   background: #CCCCCC;
   width: 180px;
   height: 50px;
@@ -144,8 +148,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: null,
-        width: null,
+        height: '100%',
+        width: '100%',
         backgroundColor: '#C8A2C8'
     }
 })
