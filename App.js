@@ -9,7 +9,6 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import CreatePotions from './screens/CreatePotions';
 import Splash from './components/Splash';
-//import Login from './screens/Login';
 import LoginModal from './components/LoginModal';
 import Qr from './screens/Qr';
 import ProfileMortimer from './screens/ProfileMortimer';
@@ -20,7 +19,7 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
-//import Parchment from './screens/parchment';
+import Parchment from './screens/parchment';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -62,7 +61,7 @@ const App =  () => {
 <View style = {{ flex: 1}}>
 <Splash/>
   {!isAuthenticated && (
-   <LoginModal onLogin={handleLogin} />
+   <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible}/>
     )}
     {isAuthenticated && ( 
         <>
@@ -89,13 +88,10 @@ const App =  () => {
           else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
           else if(route.name === 'CreatePotions') iconName = 'bolt'
           else if(route.name === 'Torreon') iconName = 'castle';
-          //else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
+          else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
-
-
-          else if(route.name === 'readQR') iconName = 'qr-code-2'
 
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -110,7 +106,7 @@ const App =  () => {
       {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />}
       {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
-      {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
+      {role === 'ACÓLITO' && <Tab.Screen name="Parchment" component={Parchment}/>}
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }

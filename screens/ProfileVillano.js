@@ -49,18 +49,11 @@ const ProfileVillano = () => {
     return(
         <View>
             <Text>VILLANO</Text>
-            <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isLoginModalVisible}
-                    onRequestClose={() => {
-                    setLoginModalVisible(false); 
-                    }}
-                >
+            <SignOutButton onPress={onSignOutButtonPress}>
+            {!isAuthenticated && (
+                
                <LoginModal/>
-                </Modal>
-                )}
+               )}
                 <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
         </View>  

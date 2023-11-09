@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
-import { Modal , StyleSheet} from "react-native";
+import {StyleSheet} from "react-native";
 
 
 const Home = () => {
@@ -37,10 +37,8 @@ const Home = () => {
             console.log('Cerró sesión de Google');
             console.log("role" ,role);
             console.log("user", user);
-            setLoginModalVisible(true);
             setIsAuthenticated(false);
-
-        
+            setLoginModalVisible(true);
         } catch (error) {
             console.error(error);
         }
@@ -48,16 +46,17 @@ const Home = () => {
 
     return (
         <View style={{ flex: 1 }}>
-          {isAuthenticated ? (
-            <>
               <Text>HOME</Text>
-              <SignOutButton onPress={onSignOutButtonPress}>
+              <SignOutButton onPress={onSignOutButtonPress} setLoginModalVisible={setLoginModalVisible}>
                 <ButtonText>Sign Out</ButtonText>
               </SignOutButton>
-            </>
-          ) : (
-            <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-          )}
+
+              {/* {!isAuthenticated && (
+                
+                <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+            
+                )} */}
+
         </View>
       );
 }
