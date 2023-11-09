@@ -21,7 +21,8 @@ const Parchment = ({towerBoolean}) => {
     return(
     
     <View>
-            {/* <Modal visible = {towerBoolean} > */}
+            <Modal visible = {towerBoolean} >
+                
                 {/* Cuando El pergamino Esta SUCIO */}
                 {!isCleaned && (
                 <ImageBackground source={require(bgImageDirty)} style={styles.container}> 
@@ -41,7 +42,7 @@ const Parchment = ({towerBoolean}) => {
                 </ImageBackground>
                     )}
                     </>
-            {/* </Modal> */}
+            </Modal>
 
     </View>
     )

@@ -1,15 +1,25 @@
-import React from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
+import Parchment from "./Parchment";
+import React, { useState, useEffect } from "react";
+
 
 const bgImage = '../assets/fondoTorreon.png';
 
 const Torreon = () => {
-   
+    
+    // Aqui coge el dato de si esta o no en el torreon (Lo he puesto a true todo el rato)
+    const [isInTower, setIsInTower] = useState(); 
+
+    useEffect(() => { 
+        setIsInTower(true) }, []); 
+
+
     return(
     
     <View>
      <ImageBackground source={require(bgImage)} style={styles.container}>    
+        <Parchment towerBoolean={isInTower}/> 
         </ImageBackground>
     </View>
     )
