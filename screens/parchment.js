@@ -2,13 +2,14 @@
 
 import React, { useState, useRef } from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
+import { Modal } from "react-native-paper";
 import styled from "styled-components/native";
 
 const bgImageDirty = '../assets/pergaminoEncriptado.png';
 const bgImageClean = '../assets/pergaminoNOEncriptado.png';
 
-const Parchment = () => {
-    const [isCleaned, setIsCleaned] = useState();     // Booleana pergamino
+const Parchment = ({towerBoolean}) => {
+    const [isCleaned, setIsCleaned] = useState(false);     // Booleana pergamino
     
     // Funcion de limpieza de pergamino
     const cleanParchment = () => { setIsCleaned(true) };
@@ -20,25 +21,28 @@ const Parchment = () => {
     return(
     
     <View>
-        {/* Cuando El pergamino Esta SUCIO */}
-        {!isCleaned && (
-        <ImageBackground source={require(bgImageDirty)} style={styles.container}> 
-            <CleanParchmentButton onPress={() => { cleanParchment()}}>
-                <ClearParchmentText>Clean Parchment</ClearParchmentText>
-            </CleanParchmentButton>
-        </ImageBackground>
-          )}
-        <>
+            {/* <Modal visible = {towerBoolean} > */}
+                {/* Cuando El pergamino Esta SUCIO */}
+                {!isCleaned && (
+                <ImageBackground source={require(bgImageDirty)} style={styles.container}> 
+                    <CleanParchmentButton onPress={() => { cleanParchment()}}>
+                        <ClearParchmentText>Clean Parchment</ClearParchmentText>
+                    </CleanParchmentButton>
+                </ImageBackground>
+                )}
+                <>
 
-        {/* Cuando EL pergamino Esta LIMPIO */}
-        {isCleaned && (
-        <ImageBackground source={require(bgImageClean)} style={styles.container}> 
-            <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
-                <ClearParchmentText>Return</ClearParchmentText>
-            </CleanParchmentButtonReturn>
-        </ImageBackground>
-            )}
-            </>
+                {/* Cuando EL pergamino Esta LIMPIO */}
+                {isCleaned && (
+                <ImageBackground source={require(bgImageClean)} style={styles.container}> 
+                    <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
+                        <ClearParchmentText>Return</ClearParchmentText>
+                    </CleanParchmentButtonReturn>
+                </ImageBackground>
+                    )}
+                    </>
+            {/* </Modal> */}
+
     </View>
     )
 }
@@ -87,5 +91,13 @@ const styles = StyleSheet.create({
     }
 })
 
+const Text = styled.Text `
+    bottom: -100px;
+    color: #4c2882;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center;  
+`
 
 export default Parchment;
