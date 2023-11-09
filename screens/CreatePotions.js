@@ -45,6 +45,21 @@ const CreatePotions = () => {
     )
 }
 
+const CreatePotionsParch = () => {
+
+    return(
+        
+        < View>
+            <ImageBackground source={require(bgImage)} style={styles.container}>             
+                <Text> CREATE POTIONS </Text>
+                <IngredientesScreen></IngredientesScreen>
+            </ImageBackground>
+        </View>
+    )
+}
 
 
-export default CreatePotions;
+export {
+    CreatePotions,
+    CreatePotionsParch
+}
