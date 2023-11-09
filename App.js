@@ -100,7 +100,6 @@ const App =  () => {
                 else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
                 else if(route.name === 'CreatePotions') iconName = 'bolt'
                 else if(route.name === 'Torreon') iconName = 'castle';
-                else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
                 else if(route.name === 'Profile') iconName = 'person';
                 else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
                 else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
@@ -121,10 +120,7 @@ const App =  () => {
             {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
             {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />}
             {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
-            {role === 'ACÓLITO' && <Tab.Screen name = "Parchment" component={Parchment} />}
-            {/* <Tab.Screen name = "Parchment" component={Parchment} /> */}
             {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-
             {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
 
             {/* <Tab.Screen name = "readQR" component={ScanQr} /> */}
