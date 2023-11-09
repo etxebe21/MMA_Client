@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './components/Header';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
-import CreatePotions from './screens/CreatePotions';
+import { CreatePotions }from './screens/CreatePotions';
 import Splash from './components/Splash';
 import Login from './screens/Login';
 import Qr from './screens/Qr';
