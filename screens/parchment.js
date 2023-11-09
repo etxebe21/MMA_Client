@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { ImageBackground, StyleSheet } from 'react-native'
 import { Modal } from "react-native-paper";
+import { Image } from "react-native-svg";
 import styled from "styled-components/native";
 
 const bgImageDirty = '../assets/pergaminoEncriptado.png';
@@ -22,14 +23,20 @@ const Parchment = ({towerBoolean}) => {
     
     <View>
             <Modal visible = {towerBoolean} >
-                
+
                 {/* Cuando El pergamino Esta SUCIO */}
                 {!isCleaned && (
-                <ImageBackground source={require(bgImageDirty)} style={styles.container}> 
-                    <CleanParchmentButton onPress={() => { cleanParchment()}}>
-                        <ClearParchmentText>Clean Parchment</ClearParchmentText>
-                    </CleanParchmentButton>
-                </ImageBackground>
+                    <>
+                    <View>
+                        <Image source={require('../assets/newPotion.png')} />
+                        {/* <ImageBackground source={require(bgImageDirty)} style={styles.container}> */}
+                            <CleanParchmentButton onPress={() => { cleanParchment(); } }>
+                                <ClearParchmentText>Clean Parchment</ClearParchmentText>
+                            </CleanParchmentButton>
+                        {/* </ImageBackground> */}
+                    </View>
+                    </>
+                    
                 )}
                 <>
 
@@ -48,6 +55,14 @@ const Parchment = ({towerBoolean}) => {
     )
 }
 
+const ParchmentView = styled.View`
+    bottom: -50px;
+    width: 350px;
+    height: 350x;
+    align-self: center;
+    background: #4c2882;
+    border-radius: 30px; 
+`
 
 const ClearParchmentText = styled.Text`
   fontSize: 25px;
