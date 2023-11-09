@@ -43,9 +43,19 @@ const ProfileVillano = () => {
     return(
         <View>
 
-        {!isAuthenticated && (
-                
-            <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+            {!isAuthenticated && (
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={isLoginModalVisible}
+                    onRequestClose={() => {
+                    setLoginModalVisible(false); 
+                    }}
+                >
+                    <View style={styles.modalContainer}>
+                        <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+                    </View>
+                </Modal>
         )}
 
         {isAuthenticated && ( 

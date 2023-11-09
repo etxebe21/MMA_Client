@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
-import {StyleSheet} from "react-native";
+import {Modal, StyleSheet} from "react-native";
 
 const Home = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -43,7 +43,18 @@ const Home = () => {
       <View style={{ flex: 1 }}>
       
       {!isAuthenticated && (
-          <LoginModal onLogin={handleLogin}  />
+        <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={isLoginModalVisible}
+                    onRequestClose={() => {
+                    setLoginModalVisible(false); 
+                    }}
+                >
+                <View style={styles.modalContainer}>
+                <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+                    </View>
+                </Modal>
         )}
         
       {isAuthenticated && ( 
@@ -56,6 +67,7 @@ const Home = () => {
       </View>
       );
 }
+
 
 const styles = StyleSheet.create({
     modalContainer: {
