@@ -5,14 +5,11 @@ import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
-import { StyledSlider } from "../components/Slider";
-import { Alert } from "react-native";
 
 const Mortimer = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [updateTimer, setUpdateTimer] = useState(null);
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
@@ -37,63 +34,7 @@ const Mortimer = () => {
     setSelectedUser(user);
     setModalVisible(true);
   };
-
-  const handleSliderChange = (newValue, attribute) => {
-
-    if (updateTimer) {
-      clearTimeout(updateTimer);
-    }
-   
-  const newTimer = setTimeout(() => {
-      setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
-    }, 350); 
   
-    setUpdateTimer(newTimer);
-  };
-  
-//sliders
-  const handleHitPointsChange = (newValue) => {
-    handleSliderChange(newValue, "hitPoints");
-  };
-  const handleFuerzaChange = (newValue) => {
-    handleSliderChange(newValue, "fuerza");
-  };
-  const handleDineroChange = (newValue) => {
-    handleSliderChange(newValue, "dinero");
-  };
- 
-  
-  const handleEditUserConfirm = async () => {
-    try {
-      console.log('id usuario seleccionado', selectedUser._id);
-
-      // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, selectedUser);
-      const updatedUser = response.data;
-      // Maneja la respuesta del servidor 
-      console.log('Datos del usuario actualizados:', updatedUser);
-
-      getUsersFromDatabase();
-
-      // Muestra un mensaje de confirmación
-      Alert.alert(
-        "Usuario Actualizado",
-        "Los datos del usuario han sido actualizados correctamente.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              setModalVisible(false);
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-    } catch (error) {
-      console.error('Error al actualizar los datos del usuario:', error);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
@@ -115,6 +56,10 @@ const Mortimer = () => {
         <Modal visible={modalVisible}>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <ModalContent>
+              <CloseButton onPress={() => setModalVisible(false)}>
+                <Icon name="times" size={50} color="#4c2882" />
+              </CloseButton>
+
               <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserText>{selectedUser.username}</UserText>
       
@@ -122,21 +67,17 @@ const Mortimer = () => {
               <Text>LEVEL: {selectedUser.level}</Text>
               <StyledProgressBar progress={selectedUser.level/20} />
     
-
               <Icon name="legal" size={20} color="blue" />
               <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <StyledSlider value={selectedUser.hitPoints} onValueChange={handleHitPointsChange}
-              />
+              <StyledProgressBar progress={selectedUser.hitPoints/100} />
 
               <Icon name="hand-rock-o" size={20} color="blue" />
               <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <StyledSlider value={selectedUser.fuerza} onValueChange={handleFuerzaChange}
-              />
+              <StyledProgressBar progress={selectedUser.fuerza/100} />
 
               <Icon name="money" size={20} color="blue" />
               <Text>GOLD: {selectedUser.dinero} </Text>
-              <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
-              />
+              <StyledProgressBar progress={selectedUser.dinero/100} />
 
               <Icon name="github-alt" size={20} color="blue" />
               <Text>FATIGUE: {selectedUser.cansancio}</Text>
@@ -175,12 +116,9 @@ const Mortimer = () => {
             <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
             <Switch value={selectedUser.psicosis}/>
 
-              <CloseButton onPress={() => setModalVisible(false)}>
-                <ButtonText>Close</ButtonText>
-              </CloseButton>
-              <ConfirmButton onPress={() => handleEditUserConfirm()}>
-                <ButtonText>Confirm</ButtonText>
-              </ConfirmButton>
+            <Text>insideTower: {selectedUser.insideTower ? 'Sí' : 'No'}</Text>
+            <Switch value={selectedUser.insideTower}/>
+
             </ModalContent>
           </ScrollView>
         </Modal>
@@ -280,36 +218,13 @@ const DetailAvatar = styled.Image`
   top: -25px;
 `
 const CloseButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: -25px;
-    margin-left: -190px;
-    width: 42%;
-    height: 55px;
-    border-radius: 60px;
-    align-self: center;
+  position: 'absolute';            
+  top: -30px;
+  marginLeft: 300px;
 `
-const ButtonText = styled.Text`
-  color: #FFFFFF;
-  font-size: 25px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
-`
-
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
 }))``;
 
-const ConfirmButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: 30px;
-    width: 42%;
-    height: 55px;
-    margin-left: 180px;
-    border-radius: 60px;
-    align-self: center;
-`
 export default Mortimer;
