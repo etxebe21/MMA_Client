@@ -8,6 +8,6 @@ export const StyledSlider = styled(Slider).attrs({
   maximumTrackTintColor: '#0087FF',
   thumbTintColor: '#913595',
 })`
-  width: 300px;
+  width: 285px;
   height: 40px;
 `;

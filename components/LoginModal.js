@@ -8,10 +8,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
 
 
-const Login = ({ onLogin, setLoginModalVisible}) => {
+const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState(null);
-    
 
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
@@ -86,6 +84,7 @@ const Login = ({ onLogin, setLoginModalVisible}) => {
     }
     
     const handleSuccessfulLogin = () => {  
+        //setIsAuthenticated(true);
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
       };
@@ -130,4 +129,4 @@ const ButtonText = styled.Text`
 `;
 
 
-export default Login;
+export default LoginModal;

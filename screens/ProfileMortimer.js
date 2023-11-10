@@ -2,13 +2,12 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import Login from "./Login";
-import { Modal , StyleSheet} from "react-native";
+import {Modal, StyleSheet} from "react-native";
+import LoginModal from "../components/LoginModal";
 
 const ProfileMortimer = () => {
-    const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoginModalVisible, setLoginModalVisible] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isLoginModalVisible, setLoginModalVisible] = useState(false);
     const [role, setRole] = useState(null);
     
     useEffect(() => {
@@ -21,10 +20,8 @@ const ProfileMortimer = () => {
     const handleLogin = () => {
        
         setIsAuthenticated(true);
-        setUser(user);
-        console.log("user", user);
         setRole(role);
-        setLoginModalVisible(true);
+        setLoginModalVisible(false);
       };
 
     async function onSignOutButtonPress() {
@@ -33,13 +30,10 @@ const ProfileMortimer = () => {
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
             setRole(null); // Actualiza el estado del usuario autenticado
-            setUser(null);
             console.log('Cerró sesión de Google');
             console.log("role" ,role);
-            console.log("user", user);
             setLoginModalVisible(true);
             setIsAuthenticated(false);
-
         
         } catch (error) {
             console.error(error);
@@ -48,23 +42,30 @@ const ProfileMortimer = () => {
     
     return(
         <View>
-            <Text>MORTIMER</Text>
-            <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isLoginModalVisible}
-                    onRequestClose={() => {
-                    setLoginModalVisible(false); 
-                    }}
-                >
+
+        {!isAuthenticated && (
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={isLoginModalVisible}
+                onRequestClose={() => {
+                setLoginModalVisible(false); 
+                }}
+            >
                 <View style={styles.modalContainer}>
-                <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                    </View>
-                </Modal>
-                )}
-                <ButtonText>Sign Out</ButtonText>
+                    <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+                </View>
+            </Modal>
+        )}
+
+        {isAuthenticated && ( 
+        <>    
+            <Text>MORTIMER</Text>
+            <SignOutButton onPress={onSignOutButtonPress} setLoginModalVisible={setLoginModalVisible}>
+            <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
+        </>
+           )}          
         </View>  
     )
 }

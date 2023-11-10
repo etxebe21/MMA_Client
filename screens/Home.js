@@ -2,15 +2,13 @@ import React , {useState, useEffect} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import Login from "./Login";
-import { Modal , StyleSheet} from "react-native";
-
+import LoginModal from "../components/LoginModal";
+import {Modal, StyleSheet} from "react-native";
 
 const Home = () => {
-    const [user, setUser] = useState(null); // Agrega un estado para almacenar el usuario autenticado
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoginModalVisible, setLoginModalVisible] = useState(true);
-    const [role, setRole] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isLoginModalVisible, setLoginModalVisible] = useState(false);
+    const [role, setRole] = useState(role);
     
     useEffect(() => {
         // Configura Google Sign-In solo una vez al cargar el componente
@@ -18,13 +16,12 @@ const Home = () => {
             webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         });
     }, []);
+
     const handleLogin = () => {
        
         setIsAuthenticated(true);
-        setUser(user);
-        console.log("user", user);
         setRole(role);
-        setLoginModalVisible(true);
+        setLoginModalVisible(false);
       };
 
     async function onSignOutButtonPress() {
@@ -33,41 +30,44 @@ const Home = () => {
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
             setRole(null); // Actualiza el estado del usuario autenticado
-            setUser(null);
             console.log('Cerró sesión de Google');
             console.log("role" ,role);
-            console.log("user", user);
-            setLoginModalVisible(true);
             setIsAuthenticated(false);
-
-        
+            setLoginModalVisible(true);
         } catch (error) {
             console.error(error);
         }
     }
 
-    return(
-        <View>
-            <Text>HOME</Text>
-            {/* <SignOutButton onPress={onSignOutButtonPress}>{!isAuthenticated && (
-                // <Modal
-                //     animationType="slide"
-                //     transparent={false}
-                //     visible={isLoginModalVisible}
-                //     onRequestClose={() => {
-                //     setLoginModalVisible(false); 
-                //     }}
-                // >
-                // <View style={styles.modalContainer}>
-                // <Login onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
-                //     </View>
-                // </Modal>
-                // )}
-                <ButtonText>Sign Out</ButtonText>
-            </SignOutButton> */}
-        </View>  
-    )
+    return (
+      <View style={{ flex: 1 }}>
+      
+      {!isAuthenticated && (
+        <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={isLoginModalVisible}
+                    onRequestClose={() => {
+                    setLoginModalVisible(false); 
+                    }}
+                >
+                <View style={styles.modalContainer}>
+                <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />
+                    </View>
+                </Modal>
+        )}
+        
+      {isAuthenticated && ( 
+        <>
+          <Text>HOME</Text>
+          <SignOutButton onPress={onSignOutButtonPress}>
+            <ButtonText>Sign Out</ButtonText>
+          </SignOutButton>
+        </>)}
+      </View>
+      );
 }
+
 
 const styles = StyleSheet.create({
     modalContainer: {
@@ -98,11 +98,11 @@ const SignOutButton = styled.TouchableOpacity`
     height: 55px;
     border-radius: 60px;
     align-self: center;
-`;
+`
 const ButtonText = styled.Text`
     color: white;
     font-size: 20px;
     text-align: center;
-`;
+`
 
 export default Home

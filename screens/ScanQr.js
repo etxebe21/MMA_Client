@@ -1,19 +1,22 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { AppRegistry, StyleSheet, TouchableOpacity, Linking, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-
+import { Alert } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
+import { useNavigation } from '@react-navigation/native';
+
 
 PERMISSIONS.IOS.CAMERA;
-
 
 
 const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [insideTower, setInsideTower] = useState(false);
+
+  const navigation = useNavigation();
 
   const onSuccess = async (event) => {
     setIsScanning(false);
@@ -21,23 +24,33 @@ const ScanQr = () => {
 
     try {
       console.log("Escaneando");
-
+      const newInsideTowerState = !insideTower;
       const data = {
-        "insideTower": true
+        "insideTower": newInsideTowerState
       };
       console.log(event);
+
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${event}`, data);
 
       setTimeout(() => {
         this.scanner.reactivate();
       }, 3000);
+
       console.log('Solicitud exitosa:', response.data);
+      setInsideTower(newInsideTowerState);
 
-      setConfirmationMessage('Entrada al torreón confirmada'); 
+      const message = newInsideTowerState
+      ? 'Entrada al torreón confirmada'
+      : 'Salida del torreón confirmada';
 
-      setTimeout(() => {
-        setConfirmationMessage('');
-      }, 2000); // 
+      Alert.alert('Confirmación', message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('Home');
+          },
+        },
+      ]);
     } catch (error) {
       console.error('Error en la solicitud:', error);
     } finally {
@@ -67,11 +80,6 @@ const ScanQr = () => {
         </View>
       )}
 
-      {confirmationMessage && (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
-          <Text>{confirmationMessage}</Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -83,21 +91,13 @@ const View = styled.View`
 `;
 
 const Text = styled.Text`
-    bottom: -28px;
+    bottom: -1px;
     color: #4c2882;
     font-size: 24px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;  
 `
-const ViewText = styled.Text`
-  bottom: -18px;
-  color: #4c2882;
-  font-size: 26px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;
-`;
 
 const styles = StyleSheet.create({
   camera: {

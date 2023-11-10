@@ -54,7 +54,7 @@ const Villano = () => {
     
     const newTimer = setTimeout(() => {
       setSelectedUser((prevState) => ({ ...prevState, [attribute]: Math.round(newValue) }));
-    }, 100); 
+    }, 300); 
   
     setUpdateTimer(newTimer);
   };
@@ -169,6 +169,9 @@ const Villano = () => {
         <Modal visible={modalVisible}>
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <ModalContent>
+              <CloseButton onPress={() => setModalVisible(false)}>
+                <Icon name="times" size={50} color="#4c2882" />
+              </CloseButton>
               <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserText>{selectedUser.username}</UserText>
 
@@ -245,9 +248,6 @@ const Villano = () => {
               value={selectedUser.psicosis}
             />
 
-              <CloseButton onPress={() => setModalVisible(false)}>
-                <ButtonText>Close</ButtonText>
-              </CloseButton>
               <ConfirmButton onPress={() => handleEditUserConfirm()}>
                 <ButtonText>Confirm</ButtonText>
               </ConfirmButton>
@@ -350,23 +350,17 @@ const DetailAvatar = styled.Image`
   top: -25px;
 `
 const CloseButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: -25px;
-    margin-left: -190px;
-    width: 42%;
-    height: 55px;
-    border-radius: 60px;
-    align-self: center;
+  position: 'absolute';            
+  top: -30px;
+  marginLeft: 300px;
 `
 const ButtonText = styled.Text`
-  color: #FFFFFF;
-  font-size: 25px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
+color: #FFFFFF;
+font-size: 25px;
+font-weight: bold;
+letter-spacing: -0.3px;
+align-self: center;  
 `
-
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
@@ -375,10 +369,10 @@ export const Switch = styled.Switch.attrs(({ value }) => ({
 const ConfirmButton = styled.TouchableOpacity`
     background-color: #4c2882;
     padding: 10px 20px;
-    bottom: 30px;
+    bottom: -20px;
     width: 42%;
     height: 55px;
-    margin-left: 180px;
+    margin-left: 0px;
     border-radius: 60px;
     align-self: center;
 `
