@@ -119,14 +119,22 @@ const IngredientesScreen = ({setIsPotionCreated}) => {
         ],
       };
       setCreatedPotion(poción);
-      setIsPotionCreated(true)
-      console.log(selectedIngredients)
-      console.log(selectedIngredients[0].efectos[0]) // Esto Selecciona el Cleanse_parchment si fuese el primer ingrediente
+      // Esto Selecciona el Cleanse_parchment si fuese el primer ingrediente
+      // console.log(selectedIngredients[0].efectos[0]) 
+      // console.log(selectedIngredients)
       
-      const ingredienteConEfecto = selectedIngredients.find(ingrediente => {
+
+      // Constante que me devuelve el objeto que contiene "cleanse_parchment"
+      const ingredientsWithCleanseParchment = selectedIngredients.filter(ingrediente => {
         return ingrediente.efectos.includes("cleanse_parchment");
       });
 
+      const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
+      console.log(cantidadCleanseParchment)
+
+      if(cantidadCleanseParchment === 2)
+        setIsPotionCreated(true);
+      
 
       
     }

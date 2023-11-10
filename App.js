@@ -19,7 +19,6 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
-import Parchment from './screens/Parchment';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App =  () => {
