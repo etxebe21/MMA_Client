@@ -27,10 +27,9 @@ componentDidMount();
 
 const Qr = () => {
     const [userID, setuserID] = useState('');
-    const [insideTower, setInsideTower] = useState(false);
+    const [insideTower, setInsideTower] = useState(null);
     const navigation = useNavigation();
     
-
     useEffect(() => {
         const getuserIDFromStorage = async () => {
             try {
@@ -58,7 +57,7 @@ const Qr = () => {
         } catch (error) {
           console.error('Error al obtener usuarios:', error);
         }
-      };
+    };
 
       useEffect(() => {
         if (insideTower) {
@@ -69,8 +68,21 @@ const Qr = () => {
                     {
                         text: "OK",
                         onPress: () => {
-                            // Puedes agregar aquí la navegación al Torreón si lo deseas
+                            
                             navigation.navigate('Torreon');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
+        } else {
+            Alert.alert(
+                "Acceso Denegado",
+                "Fuiste sacado del Torreón. No tienes permiso para ingresar.",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
                         },
                     },
                 ],
@@ -91,6 +103,10 @@ const Qr = () => {
                 color="purple"
                 backgroundColor="#BB8FCE"
                 logo={require('../assets/newPotion.png')}
+                getRef={(event)  => {
+                    //navigation.navigate('Torreon');
+                    console.log("funciona");
+                }}
               />
             </QrView>
           </View>
