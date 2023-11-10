@@ -78,7 +78,7 @@ const ingredients = [
     },
   ];
   
-const IngredientesScreen = () => {
+const IngredientesScreen = ({setIsPotionCreated}) => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [createdPotion, setCreatedPotion] = useState(null);
   const [scrollEnabled, setScrollEnabled] = useState(true);
@@ -107,7 +107,7 @@ const IngredientesScreen = () => {
     }
   };
 
-  const createPotion = () => {
+  const createPotion = (setIsPotionCreated) => {
     // Verifica que se hayan seleccionado exactamente 2 ingredientes
     if (selectedIngredients.length === 2) {
       // Crea la poción combinando los efectos de los ingredientes seleccionados
@@ -119,6 +119,16 @@ const IngredientesScreen = () => {
         ],
       };
       setCreatedPotion(poción);
+      setIsPotionCreated(true)
+      console.log(selectedIngredients)
+      console.log(selectedIngredients[0].efectos[0]) // Esto Selecciona el Cleanse_parchment si fuese el primer ingrediente
+      
+      const ingredienteConEfecto = selectedIngredients.find(ingrediente => {
+        return ingrediente.efectos.includes("cleanse_parchment");
+      });
+
+
+      
     }
   };
 
@@ -161,7 +171,7 @@ const IngredientesScreen = () => {
       
       {selectedIngredients.length === 2 && !createdPotion && (
         <>
-        <CreatePotionButton onPress={() => { createPotion()}}>
+        <CreatePotionButton onPress={() => { createPotion(setIsPotionCreated)}}>
           <PotionButtonText>Create Potion</PotionButtonText>
         </CreatePotionButton>
       

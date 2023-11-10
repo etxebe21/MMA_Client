@@ -5,7 +5,7 @@ import { ImageBackground, StyleSheet } from 'react-native'
 import { Modal } from "react-native-paper";
 import { Image } from "react-native-svg";
 import styled from "styled-components/native";
-import { CreatePotions } from "./CreatePotions";
+import { CreatePotions, CreatePotionsParch } from "./CreatePotions";
 
 const bgImageDirty = '../assets/pergaminoEncriptado.png';
 const bgImageClean = '../assets/pergaminoNOEncriptado.png';
@@ -52,10 +52,10 @@ const Parchment = ({towerBoolean}) => {
                 {isCleaned && !isPotionCreated && (
                     <>
                     <ViewPotion>
-                        <CreatePotions />
-                        <CreatePotionButton onPress={() => { setIsPotionCreated(true) }}>
+                        <CreatePotionsParch setIsPotionCreated={setIsPotionCreated}/>
+                        {/* <CreatePotionButton onPress={() => { setIsPotionCreated(true) }}>
                             <CreatePotionButtonText>Create Potion</CreatePotionButtonText>
-                        </CreatePotionButton>
+                        </CreatePotionButton> */}
                     </ViewPotion>
                         
                     </>

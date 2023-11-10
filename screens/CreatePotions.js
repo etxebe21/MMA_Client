@@ -45,14 +45,14 @@ const CreatePotions = () => {
     )
 }
 
-const CreatePotionsParch = () => {
+const CreatePotionsParch = ({setIsPotionCreated}) => {
 
     return(
         
         < View>
             <ImageBackground source={require(bgImage)} style={styles.container}>             
                 <Text> CREATE POTIONS </Text>
-                <IngredientesScreen></IngredientesScreen>
+                <IngredientesScreen setIsPotionCreated={setIsPotionCreated}></IngredientesScreen>
             </ImageBackground>
         </View>
     )
