@@ -5,6 +5,8 @@ import axios from 'axios';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { Alert } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
+import { useNavigation } from '@react-navigation/native';
+
 
 PERMISSIONS.IOS.CAMERA;
 
@@ -13,6 +15,8 @@ const ScanQr = () => {
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [insideTower, setInsideTower] = useState(false);
+
+  const navigation = useNavigation();
 
   const onSuccess = async (event) => {
     setIsScanning(false);
@@ -39,7 +43,14 @@ const ScanQr = () => {
       ? 'Entrada al torreón confirmada'
       : 'Salida del torreón confirmada';
 
-    Alert.alert('Confirmación', message);
+      Alert.alert('Confirmación', message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('Home');
+          },
+        },
+      ]);
     } catch (error) {
       console.error('Error en la solicitud:', error);
     } finally {
