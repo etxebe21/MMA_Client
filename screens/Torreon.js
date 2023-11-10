@@ -1,6 +1,6 @@
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
-import Parchment from "./Parchment";
+import Parchment from "./parchment";
 import React, { useState, useEffect } from "react";
 import { CreatePotions, CreatePotionsParch } from './CreatePotions';
 

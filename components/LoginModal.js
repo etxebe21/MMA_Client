@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { ActivityIndicator, ImageBackground } from "react-native";
+import { ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -90,7 +90,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
       };
 
       return (
-        <ImageBackground source={require("../assets/login.png")} style={{ flex: 1 }}>
+        <ImageBackground source={require("../assets/login.png")} style={styles.imageBackground}>
             <View>
                 <Text>LOGIN</Text>
                 <StyledButton onPress={onGoogleButtonPress} disabled={isLoading}>
@@ -132,6 +132,21 @@ const ButtonText = styled.Text`
     font-size: 20px;
     text-align: center;
 `
+const styles = StyleSheet.create({
+    modalContainer: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    imageBackground: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
 
 
 export default LoginModal;
