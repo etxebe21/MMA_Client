@@ -44,7 +44,7 @@ const Parchment = ({ towerBoolean }) => {
 
         {isCleaned && !isPotionCreated && (
           <ViewPotion>
-            <CreatePotionsParch setIsPotionCreated={setIsPotionCreated} />
+            <CreatePotionsParch  setIsPotionCreated={setIsPotionCreated} />
           </ViewPotion>
         )}
 

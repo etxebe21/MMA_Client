@@ -36,7 +36,7 @@ const CreatePotions = () => {
 
     return(
         
-        < View>
+        <View>
             <ImageBackground source={require(bgImage)} style={styles.container}>             
                 <Text> CREATE POTIONS </Text>
                 <IngredientesScreen></IngredientesScreen>
@@ -49,8 +49,8 @@ const CreatePotionsParch = ({setIsPotionCreated}) => {
 
     return(
         
-        < View>
-            <ImageBackground source={require(bgImage)} style={styles.container}>             
+        <View>
+            <ImageBackground source={require(bgImage)}  style={{width: 395, height: 660, top:-35}}>             
                 <Text> CREATE POTIONS </Text>
                 <IngredientesScreen setIsPotionCreated={setIsPotionCreated}></IngredientesScreen>
             </ImageBackground>

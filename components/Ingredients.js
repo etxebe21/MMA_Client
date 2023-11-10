@@ -263,7 +263,7 @@ const ReturnButton = styled.TouchableOpacity`
   height: 50px;
   align-self: center;
   border-radius: 30px;
-  margin-top: 120px;
+  margin-top: 70px;
 `
 const ButtonText = styled.Text`
   font-size: 20px;
