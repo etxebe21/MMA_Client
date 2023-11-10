@@ -1,84 +1,67 @@
-// Pantalla de papiro 
-
-import React, { useState, useRef } from "react";
-import { ImageBackground, StyleSheet } from 'react-native'
+import React, { useState } from "react";
+import {  ImageBackground, StyleSheet } from 'react-native';
 import { Modal } from "react-native-paper";
-import { Image } from "react-native-svg";
 import styled from "styled-components/native";
-import { CreatePotions, CreatePotionsParch } from "./CreatePotions";
+import { CreatePotionsParch } from "./CreatePotions";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const bgImageDirty = require("../assets/pergaminoEncriptado.png");
-const bgImageClean = '../assets/pergaminoNOEncriptado.png';
+const bgImageClean = require("../assets/pergaminoNOEncriptado.png"); // Corregido
 
-const Parchment = ({towerBoolean}) => {
-    const [isCleaned, setIsCleaned] = useState(false);     // Booleana pergamino
-    const [isPotionCreated, setIsPotionCreated] = useState(false);     // Booleana pergamino
-    const [isPotionModalVisible, setIsPotionModalVisible] = useState(false);
+const Parchment = ({ towerBoolean }) => {
+  const [isCleaned, setIsCleaned] = useState(false);
+  const [isPotionCreated, setIsPotionCreated] = useState(false);
+  const [isEnteringTower, setIsEnteringTower] = useState(false);
 
-    // Funcion de limpieza de pergamino
-    const cleanParchment        = () => { setIsCleaned(true) };
+  const cleanParchment = () => {
+    setIsCleaned(true);
+  };
 
-    const returnButton          = () => { 
-        setIsCleaned(false); 
-        setIsPotionCreated(false);
-    };
+  const returnButton = () => {
+    setIsCleaned(false);
+    setIsPotionCreated(false);
+    setIsEnteringTower(false);
+  };
 
-    const potionCreation        = () => { 
-        setIsPotionCreated(true);
-        setIsCleaned(true); 
-    };
+  const potionCreation = () => {
+    setIsPotionCreated(true);
+    setIsCleaned(true);
+  };
 
-    return(
-    
+  return (
     <View>
-            <Modal visible = {towerBoolean} >
+      <Modal visible={towerBoolean}>
+      <>
+        {!isCleaned && (
+          <ImageBackground source={bgImageDirty} style={{width: 395, height: 660  }}>
+            <CleanParchmentButton onPress={() => cleanParchment()}>
+              <ClearParchmentText>CLEAN PARCHMENT</ClearParchmentText>
+            </CleanParchmentButton>
+          </ImageBackground>
+        )}
+        </>
+    
 
-                {/* Cuando El pergamino Esta SUCIO */}
-                {!isCleaned && (
-                    <>
-                    <View>
-                        {/* <Image source={bgImageDirty}>  </Image> */}
-                        <ImageBackground source={bgImageDirty} style={{ width: '100%', height: '100%' }}>
-                            <CleanParchmentButton onPress={() => { cleanParchment(); } }>
-                                <ClearParchmentText>Clean Parchment</ClearParchmentText>
-                            </CleanParchmentButton>
-                        </ImageBackground>
-                    </View>
-                    </>
-                    
-                )}
+        {isCleaned && !isPotionCreated && (
+          <ViewPotion>
+            <CreatePotionsParch setIsPotionCreated={setIsPotionCreated} />
+          </ViewPotion>
+        )}
 
-                {/* Cuando Sale de pergamino Sucio para CREAR POCION */}
-                {isCleaned && !isPotionCreated && (
-                    <>
-                    <ViewPotion>
-                        <CreatePotionsParch setIsPotionCreated={setIsPotionCreated}/>
-                        {/* <CreatePotionButton onPress={() => { setIsPotionCreated(true) }}>
-                            <CreatePotionButtonText>Create Potion</CreatePotionButtonText>
-                        </CreatePotionButton> */}
-                    </ViewPotion>
-                        
-                    </>
-                )}
-
-                    {/* Cuando EL pergamino Esta LIMPIO y la Pocion esta creada */}
-                {isCleaned && isPotionCreated && (
-                    <>
-                    {/* <ImageBackground source={require(bgImageClean)} style={styles.container}>  */}
-                
-                        <CleanParchmentButtonReturn onPress={() => { returnButton()}}>
-                            <ClearParchmentText>Potion. OK, volver</ClearParchmentText>
-                        </CleanParchmentButtonReturn>
-                        
-                    {/* </ImageBackground> */}
-                    </>
-                )}
-            </Modal>
-
+        {isCleaned && isPotionCreated && (
+            
+          <ImageBackground source={bgImageClean} style={{width: 395, height: 660  }}>
+            <CloseButton onPress={() => returnButton()}>
+                <Icon name="times" size={60} color="#4c2882" />
+            </CloseButton>
+           
+              <ClearParchmentCleanText>PARCHMENT CLEANED!</ClearParchmentCleanText>   
+          </ImageBackground>
+        )}
+        </Modal>
     </View>
-    )
-}
-
+  );
+};
 const ViewPotion = styled.View`
     backgroundcolor: #000000;
     height: 95%;
@@ -115,11 +98,16 @@ const ClearParchmentText = styled.Text`
   fontSize: 25px;
   color: #4c2882; 
   align-self: center;
-  top: 5px;
+`
+const ClearParchmentCleanText = styled.Text`
+  fontSize: 45px;
+  color: #000000; 
+  align-self: center;
+  top: 200px;
 `
 
 const CleanParchmentButton = styled.TouchableOpacity`
-  top: 220px;
+  top: 300px;
   background: #CCCCCC;
   width: 180px;
   height: 65px;
@@ -129,15 +117,19 @@ const CleanParchmentButton = styled.TouchableOpacity`
 `
 
 const CleanParchmentButtonReturn = styled.TouchableOpacity`
-  top: -200px;
+  top: 510px;
   background: #CCCCCC;
   width: 180px;
-  height: 50px;
+  height: 80px;
   align-self: center;
-  border-radius: 30px;
+  border-radius: 40px;
   border: #4c2882;
 `
-
+const CloseButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  top: 50px;
+  marginLeft: 330px;
+`
 const View = styled.View`
     flex: 1;
 
@@ -147,17 +139,24 @@ const ImageParchment = styled.View`
 
 
 `
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-        backgroundColor: '#C8A2C8'
-    }
-})
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%',
+    },
+    contentContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100',
+      height: '100',
+    },
+    // Otros estilos...
+  });
+  
 
 const Text = styled.Text `
     bottom: 100px;
