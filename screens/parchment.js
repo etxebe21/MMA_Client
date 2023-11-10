@@ -7,7 +7,7 @@ import { Image } from "react-native-svg";
 import styled from "styled-components/native";
 import { CreatePotions, CreatePotionsParch } from "./CreatePotions";
 
-const bgImageDirty = '../assets/pergaminoEncriptado.png';
+const bgImageDirty = require("../assets/pergaminoEncriptado.png");
 const bgImageClean = '../assets/pergaminoNOEncriptado.png';
 
 const Parchment = ({towerBoolean}) => {
@@ -37,12 +37,12 @@ const Parchment = ({towerBoolean}) => {
                 {!isCleaned && (
                     <>
                     <View>
-                        <Image source={require('../assets/newPotion.png')}>  </Image>
-                        {/* <ImageBackground source={require(bgImageDirty)} style={styles.container}> */}
+                        {/* <Image source={bgImageDirty}>  </Image> */}
+                        <ImageBackground source={bgImageDirty} style={{ width: '100%', height: '100%' }}>
                             <CleanParchmentButton onPress={() => { cleanParchment(); } }>
                                 <ClearParchmentText>Clean Parchment</ClearParchmentText>
                             </CleanParchmentButton>
-                        {/* </ImageBackground> */}
+                        </ImageBackground>
                     </View>
                     </>
                     
@@ -140,6 +140,11 @@ const CleanParchmentButtonReturn = styled.TouchableOpacity`
 
 const View = styled.View`
     flex: 1;
+
+`
+
+const ImageParchment = styled.View`
+
 
 `
 
