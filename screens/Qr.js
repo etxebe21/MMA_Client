@@ -63,7 +63,8 @@ const Qr = () => {
         if (insideTower) {
             Alert.alert(
                 "Escaneo Exitoso",
-                "Tu código QR fue escaneado correctamente. ¡Tienes permiso para ir al Torreón!",
+                "Tu código QR fue escaneado correctamente. ¡Tienes permiso para ir al Torreón! . Para acceder presiona la puerta",
+
                 [
                     {
                         text: "OK",
