@@ -6,6 +6,7 @@ import {request, PERMISSIONS} from 'react-native-permissions';
 const PERMISSION_AUTHORIZED = 'authorized';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import { Alert } from "react-native";
 
 PERMISSIONS.IOS.CAMERA;
 
@@ -59,12 +60,25 @@ const Qr = () => {
         }
       };
 
-    useEffect(() => {
-        
+      useEffect(() => {
         if (insideTower) {
-          navigation.navigate('Torreon');
+            Alert.alert(
+                "Escaneo Exitoso",
+                "Tu código QR fue escaneado correctamente. ¡Tienes permiso para ir al Torreón!",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
+                            // Puedes agregar aquí la navegación al Torreón si lo deseas
+                            navigation.navigate('Torreon');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         }
-      }, [insideTower, navigation]);
+    }, [insideTower, navigation]);
+    
     
       if (userID) {
         return (
