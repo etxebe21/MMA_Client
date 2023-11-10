@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import QRCode from "react-native-qrcode-svg";
-import { ImageBackground, } from 'react-native'
-import QRCodeScanner from 'react-native-qrcode-scanner';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {request, PERMISSIONS} from 'react-native-permissions';
 const PERMISSION_AUTHORIZED = 'authorized';
-
+import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+import { Alert } from "react-native";
 
 PERMISSIONS.IOS.CAMERA;
 
@@ -27,6 +27,9 @@ componentDidMount();
 
 const Qr = () => {
     const [userID, setuserID] = useState('');
+    const [insideTower, setInsideTower] = useState(null);
+    const navigation = useNavigation();
+    
     useEffect(() => {
         const getuserIDFromStorage = async () => {
             try {
@@ -34,6 +37,7 @@ const Qr = () => {
                 console.log("entra");
                 if (storedID) {
                     setuserID(storedID);
+                    getUsersFromDatabase(storedID);
                 }
             } catch (error) {
                 console.error('Cant get email from async storage:', error);
@@ -41,26 +45,75 @@ const Qr = () => {
         };
 
         getuserIDFromStorage();
-    }, []);
-    if (userID) {
+    }, [insideTower]);
+    
+    const getUsersFromDatabase = async (storedID) => {
+        try {
+          const url = `https://mmaproject-app.fly.dev/api/users/${storedID}`;
+          const response = await axios.get(url);
+          const insideTower = response.data.data.insideTower;
+          setInsideTower(insideTower);
+          console.log(insideTower);
+        } catch (error) {
+          console.error('Error al obtener usuarios:', error);
+        }
+    };
 
+      useEffect(() => {
+        if (insideTower) {
+            Alert.alert(
+                "Escaneo Exitoso",
+                "Tu código QR fue escaneado correctamente. ¡Tienes permiso para ir al Torreón! . Para acceder presiona la puerta",
+
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
+                            
+                            navigation.navigate('Torreon');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
+        } else {
+            Alert.alert(
+                "Acceso Denegado",
+                "Fuiste sacado del Torreón. No tienes permiso para ingresar.",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+    }, [insideTower, navigation]);
+    
+    
+      if (userID) {
         return (
-
-            <View>
-                <ViewText>QR</ViewText>
-                <QrView>
-                    <QRCode
-                        value={userID}
-                        size={350}
-                        color="purple"
-                        backgroundColor="#BB8FCE"
-                        logo={require('../assets/newPotion.png')}
-                    />
-                </QrView>
-            </View>
-        )
-    }
-}
+          <View>
+            <ViewText>QR</ViewText>
+            <QrView>
+              <QRCode
+                value={userID}
+                size={350}
+                color="purple"
+                backgroundColor="#BB8FCE"
+                logo={require('../assets/newPotion.png')}
+                getRef={(event)  => {
+                    //navigation.navigate('Torreon');
+                    console.log("funciona");
+                }}
+              />
+            </QrView>
+          </View>
+        );
+      }
+    };
 
 
 const View = styled.View`

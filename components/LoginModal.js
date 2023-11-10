@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, ImageBackground } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -89,44 +89,49 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
       };
 
-    return (
-        <View>
-            <Text>LOGIN</Text>
-            <StyledButton onPress={onGoogleButtonPress} disabled={isLoading}>
-                {isLoading ? <ActivityIndicator color="white" /> : <ButtonText>Google Sign-In</ButtonText>}
-            </StyledButton>
-        </View>
+      return (
+        <ImageBackground source={require("../assets/login.png")} style={{ flex: 1 }}>
+            <View>
+                <Text>LOGIN</Text>
+                <StyledButton onPress={onGoogleButtonPress} disabled={isLoading}>
+                    {isLoading ? <ActivityIndicator color="white" /> : <ButtonText>Google Sign-In</ButtonText>}
+                </StyledButton>
+            </View>
+        </ImageBackground>
     );
 }
+
 const View = styled.View`
     flex: 1;
-    background: #C8A2C8;
-`;
+    justify-content: center;
+    align-items: center;
+`
 
 const Text = styled.Text`
-    bottom: -100px;
+    bottom: 260px;
     color: #4c2882;
-    font-size: 30px;
+    font-size: 50px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;
-`;
+`
 
 const StyledButton = styled.TouchableOpacity`
-    background-color: #4c2882;
+    background-color: #8AC8FF;
     padding: 10px 20px;
-    bottom: -500px;
+    bottom: -150px;
     width: 50%;
     height: 55px;
     border-radius: 60px;
+    border: #4c2882;
     align-self: center;
-`;
+`
 
 const ButtonText = styled.Text`
-    color: white;
+    color: #4c2882;
     font-size: 20px;
     text-align: center;
-`;
+`
 
 
 export default LoginModal;
