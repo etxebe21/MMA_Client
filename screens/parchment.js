@@ -122,7 +122,7 @@ const CleanParchmentButton = styled.TouchableOpacity`
   top: 220px;
   background: #CCCCCC;
   width: 180px;
-  height: 50px;
+  height: 65px;
   align-self: center;
   border-radius: 30px;
   border: #4c2882;

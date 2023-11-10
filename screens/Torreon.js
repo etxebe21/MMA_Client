@@ -30,7 +30,7 @@ const Torreon = () => {
             {isInTower && (   
                 <>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
-                        <EnterTowerButtonText> Enter Tower </EnterTowerButtonText>
+                        {/* <EnterTowerButtonText> Enter Tower </EnterTowerButtonText> */}
                                 </EnterTowerButton> }
                 </>
             )}
@@ -55,13 +55,15 @@ const EnterTowerButtonText = styled.Text`
 `
 
 const EnterTowerButton = styled.TouchableOpacity`
-  top: 220px;
+  top: 85px;
   background: #CCCCCC;
-  width: 180px;
-  height: 50px;
+  width: 65px;
+  height: 60px;
   align-self: center;
   border-radius: 30px;
   border: #4c2882;
+  margin-left:55px;
+  opacity:0;
 `
 
 const View = styled.View`
