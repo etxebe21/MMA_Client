@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import Parchment from "./parchment";
 import React, { useState, useEffect } from "react";
 import { CreatePotions, CreatePotionsParch } from './CreatePotions';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const bgImage = '../assets/fondoTorreon.png';
 
@@ -27,6 +28,8 @@ const Torreon = () => {
     
     <View>
         <ImageBackground source={require(bgImage)} style={styles.container}> 
+        <Entry>PRESS HERE:</Entry>
+        <Icon name="arrow-downward" size={80} color="blue" style={styles.arrowIcon} />
             {isInTower && (   
                 <>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
@@ -47,6 +50,14 @@ const Torreon = () => {
     )
 }
 
+const Entry = styled.Text`
+  fontSize: 25px;
+  color: #ffffff; 
+  align-self: center;
+  top: 5px;
+  left:40px;
+  font-weight: bold;
+`
 const EnterTowerButtonText = styled.Text`
   fontSize: 25px;
   color: #4c2882; 
@@ -56,7 +67,6 @@ const EnterTowerButtonText = styled.Text`
 
 const EnterTowerButton = styled.TouchableOpacity`
   top: 85px;
-  background: #CCCCCC;
   width: 65px;
   height: 60px;
   align-self: center;
@@ -100,7 +110,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: null,
         width: null
-    }
+    },
+
+    arrowIcon: {
+        position: 'absolute', // Posición absoluta para poder ajustar la posición
+        right: 95, // Ajustar el valor según sea necesario
+        top: 280, // Ajustar el valor según sea necesario
+    },
 })
 
 
