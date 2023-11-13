@@ -78,227 +78,268 @@ const ingredients = [
     },
   ];
   
-const IngredientesScreen = ({setIsPotionCreated}) => {
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [createdPotion, setCreatedPotion] = useState(null);
-  const [scrollEnabled, setScrollEnabled] = useState(true);
-  const scrollViewRef = useRef(null);
-
-  const disableScroll = () => {
-    setScrollEnabled(false);
-  };
-
-  const enableScroll = () => {
-    setScrollEnabled(true);
-  };
-
-  const selectIngredient= (ingredient) => {
-    if (selectedIngredients.length < 2) {
-      setSelectedIngredients([...selectedIngredients, ingredient]);
-
-      if (selectedIngredients.length === 1) {
-        disableScroll();
-        
-        // Desplazar hacia el inicio automáticamente cuando se seleccionan dos ingredientes
-        setTimeout(() => {
-          scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
-        }, 100); // Puedes ajustar el tiempo según sea necesario
+  const IngredientesScreen = ({ setIsPotionCreated }) => {
+    const [selectedIngredients, setSelectedIngredients] = React.useState([]);
+    const [createdPotion, setCreatedPotion] = React.useState(null);
+  
+    const disableScroll = () => {
+      // Aquí puedes implementar la lógica necesaria
+    };
+  
+    const enableScroll = () => {
+      // Aquí puedes implementar la lógica necesaria
+    };
+  
+    const selectIngredient = (ingredient) => {
+      if (selectedIngredients.length < 2) {
+        setSelectedIngredients([...selectedIngredients, ingredient]);
+      } else {
+        setSelectedIngredients([ingredient]);
       }
-    }
-  };
-
-  const createPotion = (setIsPotionCreated) => {
-    // Verifica que se hayan seleccionado exactamente 2 ingredientes
-    if (selectedIngredients.length === 2) {
-      // Crea la poción combinando los efectos de los ingredientes seleccionados
-      const poción = {
-        nombre: 'EPIC POTION',
-        efectos: [
-          ...selectedIngredients[0].efectos,
-          ...selectedIngredients[1].efectos,
-        ],
-      };
-      setCreatedPotion(poción);
-      // Esto Selecciona el Cleanse_parchment si fuese el primer ingrediente
-      // console.log(selectedIngredients[0].efectos[0]) 
-      // console.log(selectedIngredients)
-      
-
-      // Constante que me devuelve el objeto que contiene "cleanse_parchment"
-      const ingredientsWithCleanseParchment = selectedIngredients.filter(ingrediente => {
-        return ingrediente.efectos.includes("cleanse_parchment");
+    };
+    const createPotion = () => {
+      // Lógica para crear la poción
+      if (selectedIngredients.length === 2) {
+        const poción = {
+          nombre: 'EPIC POTION',
+          efectos: [
+            ...selectedIngredients[0].efectos,
+            ...selectedIngredients[1].efectos,
+          ],
+        };
+        setCreatedPotion(poción);
+  
+        const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
+          return ingrediente.efectos.includes("cleanse_parchment");
+        });
+  
+        const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
+        console.log(cantidadCleanseParchment);
+  
+        if (cantidadCleanseParchment === 2) {
+          setIsPotionCreated(true);
+        }
+      }
+    };
+  
+    const returnIngredients = () => {
+      setSelectedIngredients([]);
+      setCreatedPotion(null);
+    };
+  
+    const SelectedIngredientsEffects = ({ ingredientesSeleccionados }) => {
+      return (
+        <SelectedIngredientsContainer>
+          <SelectedIngredientsTitle>Ingredients Effects:</SelectedIngredientsTitle>
+          {selectedIngredients.map((ingredient, index) => (
+            <IngredientEffect key={index}>{ingredient.nombre} Effects: {ingredient.efectos.join(", ")}</IngredientEffect>
+          ))}
+        </SelectedIngredientsContainer>
+      );
+    };
+  
+    const renderIngredients = () => {
+      const rows = [];
+      let currentRow = [];
+  
+      ingredients.forEach((ingredient, index) => {
+        currentRow.push(
+          <IngredientButton
+            key={ingredient.id}
+            onPress={() => selectIngredient(ingredient)}
+          >
+            <IngredientView>
+              <IngredientImage source={ingredient.imagen} />
+              <IngredientText>{ingredient.nombre}</IngredientText>
+            </IngredientView>
+          </IngredientButton>
+        );
+  
+        if ((index + 1) % 3 === 0 || index === ingredients.length - 1) {
+          rows.push(
+            <IngredientsRow key={rows.length}>
+              {currentRow}
+            </IngredientsRow>
+          );
+          currentRow = [];
+        }
       });
-
-      const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
-      console.log(cantidadCleanseParchment)
-
-      if(cantidadCleanseParchment === 2)
-        setIsPotionCreated(true);
-      
-
-      
-    }
-  };
-
-  const returnIngredients = () => {
-    // Limpiar los ingredientes seleccionados y la poción creada
-    setSelectedIngredients([]);
-    setCreatedPotion(null);
-  };
-
-  const SelectedIngredientsEffects = ({ ingredientesSeleccionados }) => {
+  
+      return rows;
+    };
+  
     return (
-      <SelectedIngredientsContainer>
-        <SelectedIngredientsTitle>Ingredients Effects:</SelectedIngredientsTitle>
-        {selectedIngredients.map((ingredient, index) => (
-          <IngredientEffect key={index}>{ingredient.nombre} Effects: {ingredient.efectos.join(", ")}</IngredientEffect>
-        ))}
-      </SelectedIngredientsContainer>
+      <ScrollView>
+        <Container>
+          {renderIngredients()}
+  
+          {selectedIngredients.length > 0 && (
+            <SelectedIngredientContainer>
+              <SelectedIngredientsTitle>Selected Ingredient Effects:</SelectedIngredientsTitle>
+              {selectedIngredients.map((ingredient, index) => (
+                <IngredientEffect key={index}>
+                  {ingredient.nombre} Effects: {ingredient.efectos.join(", ")}
+                </IngredientEffect>
+              ))}
+            </SelectedIngredientContainer>
+          )}
+  
+          {selectedIngredients.length === 2 && !createdPotion && (
+            <>
+              <CreatePotionButton onPress={() => createPotion(setIsPotionCreated)}>
+                <PotionButtonText>Create Potion</PotionButtonText>
+              </CreatePotionButton>
+            </>
+          )}
+  
+          {createdPotion && (
+            <PotionView>
+              <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 15 }}>CREATED POTION:</Text>
+              <Text style={{ fontSize: 20, marginTop: 15 }}>{createdPotion.nombre}</Text>
+              <Text style={{ fontSize: 17, marginTop: 30 }}>Efects:</Text>
+              {createdPotion.efectos.map((efecto, index) => (
+                <Text key={index}>{efecto}</Text>
+              ))}
+              <ReturnButton onPress={() => { returnIngredients(); enableScroll(); }}>
+                <ButtonText>RETURN</ButtonText>
+              </ReturnButton>
+            </PotionView>
+          )}
+          <Spacer></Spacer>
+        </Container>
+      </ScrollView>
     );
   };
 
-  return (
-    
-    <ScrollView
-    ref={scrollViewRef}
-    style={{ flex: 1, width: '100%' }}
-    contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-start" }}
-    scrollEnabled={scrollEnabled}>
+const Container = styled.View`
+  flex: 1;
+  padding: 10px;
+`;
 
-      {ingredients.map((ingredient) => (
-        <IngredientButton
-          key={ingredient.id}
-          onPress={() => selectIngredient(ingredient)}
-        >
-          <IngredientView>
-            <IngredientImage source={ingredient.imagen}/>
-            <IngredientText>{ingredient.nombre}</IngredientText>
-          </IngredientView>
-        </IngredientButton>
-      ))}
-      
-      {selectedIngredients.length === 2 && !createdPotion && (
-        <>
-        <CreatePotionButton onPress={() => { createPotion(setIsPotionCreated)}}>
-          <PotionButtonText>Create Potion</PotionButtonText>
-        </CreatePotionButton>
-      
-        <SelectedIngredientsEffects selectedIngredients={selectedIngredients} />
-        </>
-      )}
-
-      {createdPotion && (
-        <PotionView >
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginTop:15  }}>CREATED POTION:</Text>
-          <Text style={{ fontSize: 20, marginTop:15 }}>{createdPotion.nombre}</Text>
-          <Text style={{ fontSize: 17, marginTop: 30 }}>Efects:</Text>
-          {createdPotion.efectos.map((efecto, index) => (
-            <Text key={index}>{efecto}</Text>
-          ))}
-          <ReturnButton onPress={() => { returnIngredients(); enableScroll(); }}>
-            <ButtonText>RETURN</ButtonText>
-          </ReturnButton>
-        </PotionView>
-      )}
-      </ScrollView> 
-  );
-};
-
+const IngredientsContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
 
 const IngredientView = styled.View`
-    flex: 1;
-    bottom: 0px;
-    width: 150px;
-    height: 100px;
-    align-self: center;
-    background: #4c2882;
-    border-radius: 60px; 
-`
-const IngredientText = styled.Text `
-    bottom: -6px;
-    color: #CCCCCC;
-    font-size: 19px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;    
-`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  align-items: center;
+  background: #4c2882;
+  border-radius: 60px;
+`;
+
+const IngredientButton = styled.TouchableOpacity`
+  width: 35%;
+  margin-right: -5px;
+`;
+
 const IngredientImage = styled.Image`
   width: 50px;
-  height: 50px; 
+  height: 50px;
   border-radius: 25px;
-  align-self: center;
-  top: 7px;
-`
-const IngredientButton = styled.TouchableOpacity`
-  marginVertical: 12px;
-  padding: 15px;
-  width: 150px;
-  align-self: center;
-`
+  margin-bottom: 5px;
+`;
+
+const IngredientText = styled.Text`
+  color: #CCCCCC;
+  font-size: 12px;
+  font-weight: bold;
+`;
+
 const CreatePotionButton = styled.TouchableOpacity`
-  top: -150px;
   background: #CCCCCC;
   width: 180px;
   height: 50px;
   align-self: center;
   border-radius: 30px;
-  border: #4c2882; 
-`
+  margin-top: 10px;
+  justify-content: center;
+`;
+
 const PotionButtonText = styled.Text`
-  fontSize: 25px;
-  color: #4c2882; 
-  align-self: center;
-  top: 5px;
-`
+  font-size: 16px;
+  color: #4c2882;
+  text-align: center;
+`;
+
 const PotionView = styled.View`
-  top: -500px;
   align-self: center;
   background: #4c2882;
   width: 250px;
   height: 400px;
-`
+  margin-top: 10px;
+  padding: 20px;
+`;
+
 const ReturnButton = styled.TouchableOpacity`
   background: #913595;
   width: 200px;
   height: 50px;
   align-self: center;
   border-radius: 30px;
-  margin-top: 70px;
-`
+  margin-top: 10px;
+  justify-content: center;
+`;
+
 const ButtonText = styled.Text`
-  font-size: 20px;
+  font-size: 16px;
   color: #CCCCCC;
   text-align: center;
-  line-height: 50px;
-`
+`;
+
 const SelectedIngredientsContainer = styled.View`
-  margin-top: -530px;
+  margin-top: 10px;
   align-self: center;
   background: #4c2882;
   width: 240px;
-  height: 260px;
+  height: 290px;
+  
 `;
 
 const SelectedIngredientsTitle = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   align-self: center;
   color: #CCCCCC;
-  marginTop: 10px;
-`
+  margin-top: 10px;
+`;
 
 const IngredientEffect = styled.Text`
-  font-size: 16px;
-  margin-top: 8px;
+  font-size: 18px;
+  margin-top: 10px;
   align-self: center;
   color: #CCCCCC;
+`;
+
+const Text = styled.Text`
+  color: #CCCCCC;
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;
+`;
+
+const Spacer = styled.View`
+height:80px;
 `
-const Text = styled.Text `
-    bottom: -6px;
-    color: #CCCCCC;
-    font-size: 19px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center; 
-  `
+const IngredientsRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 5px;
+`;
+
+const SelectedIngredientContainer = styled.View`
+  background: #4c2882;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+`;
+
+
+
+
+
 export default IngredientesScreen;

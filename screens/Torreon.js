@@ -57,6 +57,7 @@ const Entry = styled.Text`
   top: 5px;
   left:40px;
   font-weight: bold;
+  font-family: 'Tealand';
 `
 const EnterTowerButtonText = styled.Text`
   fontSize: 25px;
