@@ -72,27 +72,8 @@ const Profile = () => {
         <Text>INTELLIGENCE: {user.inteligencia} </Text>
         <StyledProgressBar progress={user.inteligencia/100} marginTop= {15}/>
         
-        <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
-        <Text></Text>
-
-        <Text>Ceguera: {user.ceguera ? 'Sí' : 'No'}</Text>
-        <Switch value={user.ceguera}/>
-
-        <Text>Hambruna: {user.hambruna ? 'Sí' : 'No'}</Text>
-        <Switch value={user.hambruna}/>
-
-        <Text>Locura: {user.locura ? 'Sí' : 'No'}</Text>
-        <Switch value={user.locura}/>
-
-        <Text>Miedo: {user.miedo ? 'Sí' : 'No'}</Text>
-        <Switch value={user.miedo}/>
-
-        <Text>Parálisis: {user.parálisis ? 'Sí' : 'No'}</Text>
-        <Switch value={user.parálisis}/>
-
-        <Text>Psicosis: {user.psicosis ? 'Sí' : 'No'}</Text>
-        <Switch value={user.psicosis}/>
-
+        
+        
     </ScrollView>
     )}
     </View>
