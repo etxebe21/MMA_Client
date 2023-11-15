@@ -21,6 +21,7 @@ import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
+import { enableLatestRenderer } from 'react-native-maps';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
