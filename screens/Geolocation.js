@@ -2,40 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, PermissionsAndroid } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+//import Geolocation from '@react-native-community/geolocation';
 
-const Geolocation = () => {
+const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
 
-  useEffect(() => {
-    // Solicitar permiso para acceder a la ubicación del usuario
-    const requestLocationPermission = async () => {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: 'App Location Permission',
-            message: 'App needs access to your location.',
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              const { latitude, longitude } = position.coords;
-              setUserLocation({ latitude, longitude });
-            },
-            error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-          );
-        } else {
-          console.log('Location permission denied');
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    };
-
-    requestLocationPermission();
-  }, []);
+// useEffect(() => {
+//     Geolocation.getCurrentPosition(
+//       position => {
+//         const { latitude, longitude } = position.coords;
+//         setUserLocation({ latitude, longitude });
+//       },
+//       error => console.log(error),
+//       { enableHighAccuracy: true, timeout: 50000, maximumAge: 5000 }
+//     );
+//   }, []);
 
   return (
     <Container>
@@ -48,9 +29,13 @@ const Geolocation = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+            showsUserLocation= {true}
       >
-        {/* Marcador en Donostia-San Sebastián */}
-        <Marker coordinate={{ latitude: 43.3183, longitude: -1.9807 }} title="Donostia-San Sebastián" />
+        <Marker
+            coordinate={{ latitude: 43.3183, longitude: -1.9807 }}
+            title="Donostia-San Sebastián"
+        />
+
 
         {/* Marcador en la ubicación del usuario */}
         {userLocation && (
@@ -71,7 +56,7 @@ const Container = styled.View`
   flex: 1;
 `;
 
-export default Geolocation;
+export default GeolocationUser;
 
 
 

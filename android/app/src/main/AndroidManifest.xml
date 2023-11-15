@@ -2,7 +2,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCES_FILE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
        <uses-permission android:name="android.permission.VIBRATE" />
     
@@ -15,7 +16,7 @@
       android:theme="@style/BootTheme">
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value= "AIzaSyBcC7zPTksNXhprofmfgnF5_Ir6Z4kfHG4"/>
+        android:value= "AIzaSyBooqiR_51Z6JclVvus9wcobOjZeZbH21c"/>
       <activity
         android:name=".MainActivity"
          android:label="@string/app_name"
