@@ -20,6 +20,7 @@ import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Geolocation from './screens/Geolocation';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -92,6 +93,7 @@ const App =  () => {
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
+          else if (route.name === 'Geolocation' && role === 'ACÓLITO') iconName = 'map';
 
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -110,7 +112,7 @@ const App =  () => {
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
-
+      {role === 'ACÓLITO' && <Tab.Screen name = "Geolocation" component={Geolocation} /> }
 
       </Tab.Navigator>
     </NavigationContainer>
