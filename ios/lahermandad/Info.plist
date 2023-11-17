@@ -13,7 +13,6 @@
 		<string>FontAwesome5_Solid.ttf</string>
 		<string>FontAwesome6_Brands.ttf</string>
 		<string>FontAwesome6_Regular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
 		<string>Fontisto.ttf</string>
 		<string>Foundation.ttf</string>
 		<string>Ionicons.ttf</string>
@@ -21,6 +20,9 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Creepster.ttf</string>
+		<string>Sacramento.ttf</string>
+		<string>Tealand.ttf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>¿Quieres que Nogueira sea tu marido?</string>
@@ -53,7 +55,7 @@
 			<array>
 				<string>Thread</string>
 				<string>1:</string>
-				<string>&quot;Your</string>
+				<string>"Your</string>
 				<string>app</string>
 				<string>is</string>
 				<string>missing</string>
@@ -63,7 +65,7 @@
 				<string>following</string>
 				<string>URL</string>
 				<string>schemes:</string>
-				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d&quot;</string>
+				<string>com.googleusercontent.apps.769950438406-usnej8r1ufor70gp2h5aep590068si6d"</string>
 			</array>
 		</dict>
 		<dict>
@@ -93,9 +95,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
-	<string></string>
+	<string/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

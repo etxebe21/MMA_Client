@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Creepster.ttf",
+      "sha1": "7d00ea50354f1d3364e6403054254586fbafc533"
+    },
+    {
+      "path": "assets/fonts/Sacramento.ttf",
+      "sha1": "bb942772a1f61c2f6cc0f980a9da39f1fc602d00"
+    },
+    {
+      "path": "assets/fonts/Tealand.ttf",
+      "sha1": "f84f4bbcc7054b62f8639849ed7a2403e63685d1"
+    }
+  ]
+}
