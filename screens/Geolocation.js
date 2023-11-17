@@ -2,25 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { Text } from 'react-native-paper';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
 
-  // useEffect(() => {
-  //   Tu lógica para obtener la ubicación del usuario
-
-  //   Ejemplo de ubicación fija para pruebas
-  //   setUserLocation({ latitude: 43.309800, longitude: -2.002400 });
-  // }, []);
   const img = require("../assets/geofondo.png")
-  const markerLocation = { latitude: 43.309734324002335, longitude: -2.00279175206119 };
+  const userImage = require("../assets/newPotion.png")
+  const artifact1 = {latitude: 43.310625, longitude: -2.003209}
+  const artifact2 = {latitude: 43.310673, longitude: -2.002441}
+  const artifact3 = {latitude: 43.309534, longitude: -2.002030}
+  const artifact4 = {latitude: 43.309801, longitude: -2.003381}
+
+  useEffect(() => {
+   
+    setUserLocation({ latitude: 43.30972753944833, longitude: -2.002748937230638 });
+  }, []);
 
   const isUserNearMarker = () => {
     if (userLocation) {
       if (
-        userLocation.latitude === markerLocation.latitude &&
-        userLocation.longitude === markerLocation.longitude
+        userLocation.latitude === artifact1.latitude &&
+        userLocation.longitude === artifact1.longitude
       ) {
         // Las posiciones son iguales, muestra el botón o realiza acciones adicionales aquí.
         Alert.alert(
@@ -39,39 +41,57 @@ const GeolocationUser = () => {
   
     return (
       <Container>
-        <Border>
+       
 
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          region={{
-            latitude: 43.30972753944833,
-            longitude: -2.002748937230638,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          showsUserLocation={true}
-          >
-          <Marker
-            coordinate={markerLocation}
-            title="Artefacto patxi"
-            identifier="marker1"
-            pinColor="blue"
-            />
+       <MapView
+        provider={PROVIDER_GOOGLE}
+        style={{ flex: 1 }}
+        region={{
+          latitude: 43.30972753944833,
+          longitude: -2.002748937230638,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        showsUserLocation = {true}
+      >
+        {/* Marcador de la ubicación del usuario
+        {userLocation && (
+          <Marker coordinate={userLocation} title="Tu Ubicación"   />
+        )} */}
 
-          {userLocation && (
-            <Marker coordinate={userLocation} title="Tu Ubicación" pinColor="blue" />
-            )}
-        </MapView>
+       
+        <Marker
+          coordinate={{ latitude: 43.310625, longitude: -2.003209 }} // Coordenadas de ejemplo
+          title="Artefacto 1"
+          description="Descripción del Artefacto 1"
+        />
+         <Marker
+          coordinate={{ latitude: 43.310673, longitude: -2.002441 }} // Coordenadas de ejemplo
+          title="Artefacto 2"
+          description="Descripción del Artefacto 2"
+        />
+         <Marker
+          coordinate={{ latitude: 43.309534, longitude: -2.002030}} // Coordenadas de ejemplo
+          title="Artefacto 3"
+          description="Descripción del Artefacto 3"
+        />
+         <Marker
+          coordinate={{ latitude: 43.309801, longitude: -2.003381 }} // Coordenadas de ejemplo
+          title="Artefacto 4"
+          description="Descripción del Artefacto 4"
+        />
+       
+
+      </MapView>
         {userLocation &&
-          userLocation.latitude === markerLocation.latitude &&
-          userLocation.longitude === markerLocation.longitude && (
+          userLocation.latitude === artifact1.latitude &&
+          userLocation.longitude === artifact1.longitude && (
             <Button
             title="Estás en la misma ubicación que el marcador"
             onPress={isUserNearMarker}
             />
             )}
-            </Border>
+            
           <BackgroundImage source={img}>
           <Title>Artifacts</Title>
           <Artifact1>
@@ -95,8 +115,8 @@ const GeolocationUser = () => {
 const styles = StyleSheet.create({
   map: {
     flex: 0,
-    height: '45%',
-    padding:135,
+    height: '50%',
+    padding:170,
   },
 });
 
@@ -111,12 +131,6 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Space = styled.View`
-margin-top:5px;
-`
-const Border = styled.View`
-border:5px;
-`
 const Artifact1 = styled.View`
   border:5px;
   background-color: #CBCACA; 
@@ -154,8 +168,7 @@ const Artifact4 = styled.View`
   margin-left:200px;
   margin-top:-90px;
   border-radius:50px;
-`;
-
+`
 
 const Artifact1Text = styled.Text`
   margin-left:50px; 
