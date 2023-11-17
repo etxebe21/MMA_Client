@@ -95,7 +95,9 @@ const CreatePotionButton = styled.TouchableOpacity`
 `
 
 const ClearParchmentText = styled.Text`
-  fontSize: 25px;
+  top: 15px;
+  fontSize: 28px;
+  opacity: 1;
   color: #4c2882; 
   align-self: center;
   fontFamily: 'Creepster';
@@ -109,7 +111,8 @@ const ClearParchmentCleanText = styled.Text`
 
 const CleanParchmentButton = styled.TouchableOpacity`
   top: 300px;
-  background: #CCCCCC;
+  background: #A3A2A2;
+  opacity: 0.95;
   width: 180px;
   height: 65px;
   align-self: center;
