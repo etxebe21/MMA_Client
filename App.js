@@ -20,12 +20,23 @@ import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Geolocation from './screens/Geolocation';
+import { enableLatestRenderer } from 'react-native-maps';
+import { Context } from './components/Context';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
+  const [globalState, setGlobalState] = useState({dinero: 40});
+
+  const handleGlobalState = (data) => {
+    setGlobalState(globalState =>  ({
+      ...globalState,
+      ...data
+  }));
+}
 
   useEffect(() => {
 
@@ -57,6 +68,7 @@ const App =  () => {
   };
 
   return(
+    <Context.Provider value = {{globalState, handleGlobalState}}>
 <SafeAreaProvider>  
 <View style = {{ flex: 1}}>
 <Splash/>
@@ -92,6 +104,7 @@ const App =  () => {
           else if(route.name === 'Profile') iconName = 'person';
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
+          else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
 
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -110,7 +123,7 @@ const App =  () => {
       {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
-
+      {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
 
       </Tab.Navigator>
     </NavigationContainer>
@@ -118,8 +131,9 @@ const App =  () => {
       )}
       </View>
       </ SafeAreaProvider>
+      </Context.Provider>
   );
-  
+ 
 };
 
 const styles = StyleSheet.create({

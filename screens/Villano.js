@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
 import { Alert } from "react-native";
-
+import { Context } from "../components/Context";
 
 const Villano = () => {
   const [users, setUsers] = useState([]);
@@ -20,6 +20,8 @@ const Villano = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
   const [updateTimer, setUpdateTimer] = useState(null);
+  const {globalState, handleGlobalState} = useContext(Context);
+
 
   const acolitos = users.filter(user => user.role === "ACÓLITO");
 
@@ -191,8 +193,11 @@ const Villano = () => {
               />
 
               <Icon name="money" size={20} color="blue" />
-              <Text>GOLD: {selectedUser.dinero} </Text>
-              <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
+              <Text>GOLD: {globalState.dinero} </Text>
+              {/* <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
+              /> */}
+
+              <StyledSlider value={globalState.dinero} label={`${globalState.dinero}`}
               />
 
               <Icon name="github-alt" size={20} color="blue" />
@@ -248,7 +253,8 @@ const Villano = () => {
               value={selectedUser.psicosis}
             />
 
-              <ConfirmButton onPress={() => handleEditUserConfirm()}>
+              {/* <ConfirmButton onPress={() => handleEditUserConfirm()}> */}
+              <ConfirmButton onPress={() => handleGlobalState({dinero : 100})}>
                 <ButtonText>Confirm</ButtonText>
               </ConfirmButton>
             </ModalContent>
