@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 import { useEffect } from "react";
 import axios from 'axios';
 
+
+
 // const gsReference = ref(storage, 'gs://mmaproject-c1d4c.appspot.com/ingredients/01_ElfEssence.jpg');
 
 // Create a reference from an HTTPS URL

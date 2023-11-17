@@ -98,6 +98,7 @@ const ClearParchmentText = styled.Text`
   fontSize: 25px;
   color: #4c2882; 
   align-self: center;
+  fontFamily: 'Creepster';
 `
 const ClearParchmentCleanText = styled.Text`
   fontSize: 45px;
