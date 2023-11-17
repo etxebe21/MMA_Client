@@ -1,87 +1,112 @@
 import React, { useState, useRef } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
+import { useEffect } from "react";
+import axios from 'axios';
 
+// const gsReference = ref(storage, 'gs://mmaproject-c1d4c.appspot.com/ingredients/01_ElfEssence.jpg');
 
-const ingredients = [
-  {
-    id: 1,
-    nombre: "Elf Essence",
-    imagen: require("../assets/elfo.jpg"),
-    efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
-  },
-  {
-    id: 2,
-    nombre: "Dragon Scales",
-    imagen: require("../assets/escamas.jpg"),
-    efectos: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
-  },
-  {
-    id: 3,
-    nombre: "Mandrake Root",
-    imagen: require("../assets/mandra.jpg"),
-    efectos: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
-  },
-  {
-    id: 4,
-    nombre: "Fairy Dust",
-    imagen: require("../assets/hada.jpg"),
-    efectos: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
-  },
-  {
-    id: 5,
-    nombre: "Witch's Blood",
-    imagen: require("../assets/sangre.jpg"),
-    efectos: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
-  },
-  {
-    id: 6,
-    nombre: "Salamander Eye",
-    imagen: require("../assets/ojo.jpg"),
-    efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
-  },
-  {
-      id: 7,
-      nombre: "Phoenix Flower",
-      imagen: require("../assets/fenix.jpg"),
-      efectos: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
-    },
-    {
-      id: 8,
-      nombre: "Yeti Frost",
-      imagen: require("../assets/yeti.jpg"),
-      efectos: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
-    },
-    {
-      id: 9,
-      nombre: "Griffin Feather",
-      imagen: require("../assets/grifo.jpg"),
-      efectos: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
-    },
-    {
-      id: 10,
-      nombre: "Unicorn Tears",
-      imagen: require("../assets/lagrimas.jpg"),
-      efectos: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
-    },
-    {
-      id: 11,
-      nombre: "Raving bee",
-      imagen: require("../assets/RavingBee.png"),
-      efectos: ["cleanse_parchment"],
-    },
-    {
-      id: 12,
-      nombre: "Black Lotus",
-      imagen: require("../assets/BlackLotus.png"),
-      efectos: ["cleanse_parchment"],
-    },
-  ];
+// Create a reference from an HTTPS URL
+// Note that in the URL, characters are URL escaped!
+
+// const ingredients = [
+//   {
+//     id: 1,
+//     name: "Elf Essence",
+//     image: gsReference,
+//     effects: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
+//   },
+//   {
+//     id: 2,
+//     name: "Dragon Scales",
+//     image: httpsReference,
+//     effects: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
+//   }
+  // {
+  //   id: 3,
+  //   name: "Mandrake Root",
+  //   image: require("../assets/mandra.jpg"),
+  //   effects: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
+  // },
+  // {
+  //   id: 4,
+  //   name: "Fairy Dust",
+  //   image: require("../assets/hada.jpg"),
+  //   effects: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
+  // },
+  // {
+  //   id: 5,
+  //   name: "Witch's Blood",
+  //   image: require("../assets/sangre.jpg"),
+  //   effects: ["restore_strength", "increase_resistance", "fortify_intelligence", "increase_agility"],
+  // },
+  // {
+  //   id: 6,
+  //   name: "Salamander Eye",
+  //   image: require("../assets/ojo.jpg"),
+  //   effects: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
+  // },
+  // {
+  //     id: 7,
+  //     name: "Phoenix Flower",
+  //     image: require("../assets/fenix.jpg"),
+  //     effects: [" regenerate_strength", "increase_agility", "restore_intelligence", "increase_resistance"],
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Yeti Frost",
+  //     image: require("../assets/yeti.jpg"),
+  //     effects: ["increase_agility", "regenerate_resistance", "restore_strength", "fortify_intelligence"],
+  //   },
+  //   {
+  //     id: 9,
+  //     name: "Griffin Feather",
+  //     image: require("../assets/grifo.jpg"),
+  //     effects: ["fortify_resistance", "increase_intelligence", "regenerate_agility", "increase_strength"],
+  //   },
+  //   {
+  //     id: 10,
+  //     name: "Unicorn Tears",
+  //     image: require("../assets/lagrimas.jpg"),
+  //     effects: ["increase_strength", "increase_intelligence", "increase_resistance", "increase_agility"],
+  //   },
+  //   {
+  //     id: 11,
+  //     name: "Raving bee",
+  //     image: require("../assets/RavingBee.png"),
+  //     effects: ["cleanse_parchment"],
+  //   },
+  //   {
+  //     id: 12,
+  //     name: "Black Lotus",
+  //     image: require("../assets/BlackLotus.png"),
+  //     effects: ["cleanse_parchment"],
+  //   },
+  // ];
   
   const IngredientesScreen = ({ setIsPotionCreated }) => {
     const [selectedIngredients, setSelectedIngredients] = React.useState([]);
     const [createdPotion, setCreatedPotion] = React.useState(null);
+    const [ingredients, setIngredients] = useState([]);
+
+
+    const getIngredientsFromDatabase = async () => {
+      try {
+        const url = 'https://mmaproject-app.fly.dev/api/ingredients';
+        const response = await axios.get(url);
+        const ingredients = response.data.data;
+        setIngredients(ingredients);
+        console.log(ingredients);
+      } catch (error) {
+        console.error('Error al obtener ingredientes:', error);
+      }
+    };
   
+    useEffect(() => {
+      getIngredientsFromDatabase();
+    }, []); 
+
+
     const disableScroll = () => {
       // Aquí puedes implementar la lógica necesaria
     };
@@ -101,16 +126,16 @@ const ingredients = [
       // Lógica para crear la poción
       if (selectedIngredients.length === 2) {
         const poción = {
-          nombre: 'EPIC POTION',
-          efectos: [
-            ...selectedIngredients[0].efectos,
-            ...selectedIngredients[1].efectos,
+          name: 'EPIC POTION',
+          effects: [
+            ...selectedIngredients[0].effects,
+            ...selectedIngredients[1].effects,
           ],
         };
         setCreatedPotion(poción);
   
         const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
-          return ingrediente.efectos.includes("cleanse_parchment");
+          return ingrediente.effects.includes("cleanse_parchment");
         });
   
         const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
@@ -132,7 +157,7 @@ const ingredients = [
         <SelectedIngredientsContainer>
           <SelectedIngredientsTitle>Ingredients Effects:</SelectedIngredientsTitle>
           {selectedIngredients.map((ingredient, index) => (
-            <IngredientEffect key={index}>{ingredient.nombre} Effects: {ingredient.efectos.join(", ")}</IngredientEffect>
+            <IngredientEffect key={index}>{ingredient.name} Effects: {ingredient.effects.join(", ")}</IngredientEffect>
           ))}
         </SelectedIngredientsContainer>
       );
@@ -149,8 +174,8 @@ const ingredients = [
             onPress={() => selectIngredient(ingredient)}
           >
             <IngredientView>
-              <IngredientImage source={ingredient.imagen} />
-              <IngredientText>{ingredient.nombre}</IngredientText>
+              <IngredientImage source={{uri: ingredient.image}} />
+              <IngredientText>{ingredient.name}</IngredientText>
             </IngredientView>
           </IngredientButton>
         );
@@ -178,7 +203,7 @@ const ingredients = [
               <SelectedIngredientsTitle>Selected Ingredient Effects:</SelectedIngredientsTitle>
               {selectedIngredients.map((ingredient, index) => (
                 <IngredientEffect key={index}>
-                  {ingredient.nombre} Effects: {ingredient.efectos.join(", ")}
+                  {ingredient.name} Effects: {ingredient.effects.join(", ")}
                 </IngredientEffect>
               ))}
             </SelectedIngredientContainer>
@@ -195,9 +220,9 @@ const ingredients = [
           {createdPotion && (
             <PotionView>
               <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 15 }}>CREATED POTION:</Text>
-              <Text style={{ fontSize: 20, marginTop: 15 }}>{createdPotion.nombre}</Text>
+              <Text style={{ fontSize: 20, marginTop: 15 }}>{createdPotion.name}</Text>
               <Text style={{ fontSize: 17, marginTop: 30 }}>Efects:</Text>
-              {createdPotion.efectos.map((efecto, index) => (
+              {createdPotion.effects.map((efecto, index) => (
                 <Text key={index}>{efecto}</Text>
               ))}
               <ReturnButton onPress={() => { returnIngredients(); enableScroll(); }}>
