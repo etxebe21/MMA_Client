@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground, Image, View } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -113,16 +113,22 @@ const GeolocationUser = () => {
         showsUserLocation = {true}
       >
 
-        {artifacts && artifacts.map((artifact, index) => (
-          <Marker
-            key={index}
-            coordinate={{ latitude: artifact.latitude, longitude: artifact.longitude }}
-            title={ artifact.name}
-            description={artifact.description || ''}
-          />
-        ))}
-
-
+{artifacts && artifacts.map((artifact, index) => (
+    <Marker
+      key={index}
+      coordinate={{ latitude: artifact.latitude, longitude: artifact.longitude }}
+      title={artifact.name}
+      description={artifact.description || ''}
+    >
+      
+      <View style={styles.markerImageContainer}>
+        <Image
+          source={{ uri: artifact.image }}
+          style={styles.roundedMarkerImage}
+        />
+      </View>
+    </Marker>
+  ))}
       </MapView>
 
         {userLocation &&
@@ -137,31 +143,57 @@ const GeolocationUser = () => {
           <BackgroundImage source={img}>
           <Title>Artifacts</Title>
 
-          <Artifact1>
-          </Artifact1>
-
-          <Artifact2>
-
-          </Artifact2>
-          
-          <Artifact3>
-
-          </Artifact3>
-          <Artifact4>
-
-          </Artifact4>
+          <View style={styles.artifactsContainer}>
+          {artifacts.slice(0, 4).map((artifact, index) => (
+            <View key={index} style={styles.artifactContainer}>
+              <Image
+                source={{ uri: artifact.image }}
+                style={styles.roundedArtifactImage}
+              />
+            </View>
+          ))}
+        </View>
           </BackgroundImage>
       </Container>
     );
   };
 
-const styles = StyleSheet.create({
-  map: {
-    flex: 0,
-    height: '50%',
-    padding:170,
-  },
-});
+  const styles = StyleSheet.create({
+    markerImageContainer: {
+      width: 40,
+      height: 40,
+      borderRadius: 20, 
+      overflow: 'hidden', 
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    roundedMarkerImage: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 20, 
+    },
+    artifactsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      paddingHorizontal: 48,
+      paddingVertical: 10,
+    },
+    artifactContainer: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      overflow: 'hidden',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 30,
+    },
+    roundedArtifactImage: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 50,
+    },
+  });
 
 const BackgroundImage = styled(ImageBackground)`
   flex: 1;
@@ -201,7 +233,7 @@ const Artifact3 = styled.View`
 `
 const Artifact4 = styled.View`
   border:5px;
-  background-color: #CBCACA; 
+  
   padding: 40px;
   align-self: center;
   margin-left:200px;
