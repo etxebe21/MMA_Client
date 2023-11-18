@@ -3,9 +3,11 @@ import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground } from 'r
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import axios from 'axios';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
+  const [artifacts, setArtifacts] = useState();
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
@@ -59,7 +61,21 @@ const GeolocationUser = () => {
       console.log("Localización usuario actualizada: " , userLocation);
 
     };
-  
+
+    const getArtifactsFromDataBase = async () => {
+      try {
+        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+        const response = await axios.get(url);
+        const artifacts= response.data.data;
+        setArtifacts(artifacts);
+        //setSelectedUser(selectedUser);
+        console.log('Artefactos:', artifacts);
+      } catch (error) {
+        console.error('Error al obtener artefactos:', error);
+      }
+    };    
+    
+    getArtifactsFromDataBase();
     requestLocationPermission();
   }, []); 
   
