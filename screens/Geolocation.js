@@ -7,17 +7,11 @@ import axios from 'axios';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
-  const [artifacts, setArtifacts] = useState();
+  const [artifacts, setArtifacts] = useState([]);
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
 
-  const artifact1 = {latitude: 43.310625, longitude: -2.003209}
-  const artifact2 = {latitude: 43.310673, longitude: -2.002441}
-  const artifact3 = {latitude: 43.309534, longitude: -2.002030}
-  const artifact4 = {latitude: 43.309801, longitude: -2.003381}
-
- 
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
@@ -68,7 +62,7 @@ const GeolocationUser = () => {
         const response = await axios.get(url);
         const artifacts= response.data.data;
         setArtifacts(artifacts);
-        //setSelectedUser(selectedUser);
+        
         console.log('Artefactos:', artifacts);
       } catch (error) {
         console.error('Error al obtener artefactos:', error);
@@ -118,33 +112,16 @@ const GeolocationUser = () => {
         }}
         showsUserLocation = {true}
       >
-        {/* Marcador de la ubicación del usuario
-        {userLocation && (
-          <Marker coordinate={userLocation} title="Tu Ubicación"   />
-        )} */}
 
-       
-        <Marker
-          coordinate={{ latitude: 43.310625, longitude: -2.003209 }} // Coordenadas de ejemplo
-          title="Artefacto 1"
-          description="Descripción del Artefacto 1"
-        />
-         <Marker
-          coordinate={{ latitude: 43.310673, longitude: -2.002441 }} // Coordenadas de ejemplo
-          title="Artefacto 2"
-          description="Descripción del Artefacto 2"
-        />
-         <Marker
-          coordinate={{ latitude: 43.309534, longitude: -2.002030}} // Coordenadas de ejemplo
-          title="Artefacto 3"
-          description="Descripción del Artefacto 3"
-        />
-         <Marker
-          coordinate={{ latitude: 43.309801, longitude: -2.003381 }} // Coordenadas de ejemplo
-          title="Artefacto 4"
-          description="Descripción del Artefacto 4"
-        />
-       
+        {artifacts && artifacts.map((artifact, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: artifact.latitude, longitude: artifact.longitude }}
+            title={ artifact.name}
+            description={artifact.description || ''}
+          />
+        ))}
+
 
       </MapView>
 
