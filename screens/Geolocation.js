@@ -76,26 +76,7 @@ const GeolocationUser = () => {
   
   
   
-  // const isUserNearMarker = () => {
-  //   if (userLocation) {
-  //     if (
-  //       userLocation.latitude === artifact1.latitude &&
-  //       userLocation.longitude === artifact1.longitude
-  //     ) {
-  //       // Las posiciones son iguales, muestra el botón o realiza acciones adicionales aquí.
-  //       Alert.alert(
-  //         'Estás en la misma ubicación que el marcador',
-  //         'Muestra el botón o realiza acciones adicionales aquí.'
-  //       );
-  //     } else {
-  //       // Las posiciones son diferentes, puedes realizar otras acciones aquí si es necesario.
-  //       Alert.alert(
-  //         'No estás en la misma ubicación que el marcador',
-  //         'Otras acciones pueden realizarse aquí.'
-  //       );
-  //     }
-  //   }
-  // };
+
   
     return (
       <Container>
@@ -113,47 +94,54 @@ const GeolocationUser = () => {
         showsUserLocation = {true}
       >
 
-{artifacts && artifacts.map((artifact, index) => (
-    <Marker
-      key={index}
-      coordinate={{ latitude: artifact.latitude, longitude: artifact.longitude }}
-      title={artifact.name}
-      description={artifact.description || ''}
-    >
-      
-      <View style={styles.markerImageContainer}>
-        <Image
-          source={{ uri: artifact.image }}
-          style={styles.roundedMarkerImage}
-        />
-      </View>
-    </Marker>
-  ))}
-      </MapView>
+{artifacts &&
+        artifacts
+          .filter(artifact => !artifact.found) // Filtrar solo artefactos no encontrados
+          .map((artifact, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: artifact.latitude,
+                longitude: artifact.longitude,
+              }}
+              title={artifact.name}
+              description={artifact.description || ''}
+            >
+              {/* Contenedor del marcador con imagen */}
+              <View style={styles.markerImageContainer}>
+                <Image
+                  source={{ uri: artifact.image }}
+                  style={styles.roundedMarkerImage}
+                />
+              </View>
+            </Marker>
+          ))}
+    </MapView>
 
-        {userLocation &&
+        {/* {userLocation &&
           userLocation.latitude === artifact1.latitude &&
           userLocation.longitude === artifact1.longitude && (
             <Button
             title="Estás en la misma ubicación que el marcador"
             onPress={isUserNearMarker}
             />
-            )}
+            )} */}
             
-          <BackgroundImage source={img}>
+        <BackgroundImage source={img}>
           <Title>Artifacts</Title>
 
           <View style={styles.artifactsContainer}>
-          {artifacts.slice(0, 4).map((artifact, index) => (
-            <View key={index} style={styles.artifactContainer}>
-              <Image
-                source={{ uri: artifact.image }}
-                style={styles.roundedArtifactImage}
-              />
-            </View>
-          ))}
-        </View>
-          </BackgroundImage>
+            {artifacts.slice(0, 4).map((artifact, index) => (
+              <View key={index} style={styles.artifactContainer}>
+                <Image
+                  source={{ uri: artifact.image }}
+                  style={[styles.roundedArtifactImage,{ opacity: artifact.found ? 1 : 0.4 }
+                  ]}/>
+              </View>
+            ))}
+          </View>
+
+        </BackgroundImage>
       </Container>
     );
   };
