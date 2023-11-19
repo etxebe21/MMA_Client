@@ -73,8 +73,35 @@ const GeolocationUser = () => {
     requestLocationPermission();
   }, []); 
   
-  
-  
+  const updateFoundedArtifact = async () => {
+    try {
+      console.log('id artefacto encontrado', artifact._id);
+
+      // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, foundedArtifact);
+      const updatedArtifact = response.data;
+      // Maneja la respuesta del servidor 
+      console.log('Datos del artefacto actualizados:', updatedArtifact);
+
+      getArtifactsFromDatabase();
+
+     // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Artefacto Encontrado",
+        "Los datos del artefacto han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error('Error al actualizar los datos del artefacto:', error);
+    }
+  };
   
 
   
