@@ -8,6 +8,7 @@ import axios from 'axios';
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
+  const [showFinishButton, setShowFinishButton] = useState(false);
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
@@ -105,6 +106,32 @@ const GeolocationUser = () => {
     }
   };
   
+   // Función para contar los artefactos encontrados
+   const countFoundArtifacts = () => {
+    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
+    return foundArtifacts.length;
+  };
+
+  // Actualizar el estado de visibilidad del botón
+  useEffect(() => {
+    const foundCount = countFoundArtifacts();
+    setShowFinishButton(foundCount === 4);
+  }, [artifacts]);
+
+  // Renderizado condicional del botón para finalizar la búsqueda
+  const renderFinishButton = () => {
+    if (showFinishButton) {
+      return (
+        <Button
+          title="FINISH"
+          onPress={() => {
+            
+          }}
+        />
+      );
+    }
+    return null;
+  };
   
     return (
       <Container>
@@ -176,6 +203,7 @@ const GeolocationUser = () => {
           ))}
         </View>
 
+        {renderFinishButton()}
         </BackgroundImage>
       </Container>
     );
