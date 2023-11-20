@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground, Image, View } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Button, Alert,ImageBackground, Image, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -75,12 +75,13 @@ const GeolocationUser = () => {
   
   const updateFoundedArtifact = async (artifact) => {
     try {
-      const foundedArtifact = { found: true }; // Nuevo estado del artefacto
-  
+      console.log('Artefacto seleccionado:', artifact);
+      const selectedArtifact = { found: !artifact.found }; // Invertir el estado de 'found'
+      console.log( 'modificar estado found' ,selectedArtifact);
       console.log('ID del artefacto encontrado:', artifact._id);
   
-      // Realiza una solicitud PATCH al servidor para actualizar los datos del artefacto
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, foundedArtifact);
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
       const updatedArtifact = response.data;
       console.log('Datos del artefacto actualizados:', updatedArtifact);
   
@@ -94,6 +95,7 @@ const GeolocationUser = () => {
           {
             text: "OK",
             onPress: () => {
+              // Lógica adicional luego de actualizar el artefacto, si es necesaria
             },
           },
         ],
@@ -103,6 +105,7 @@ const GeolocationUser = () => {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
+  
   
 
   
@@ -159,15 +162,22 @@ const GeolocationUser = () => {
           <Title>Artifacts</Title>
 
           <View style={styles.artifactsContainer}>
-            {artifacts.slice(0, 4).map((artifact, index) => (
-              <View key={index} style={styles.artifactContainer}>
-                <Image
-                  source={{ uri: artifact.image }}
-                  style={[styles.roundedArtifactImage,{ opacity: artifact.found ? 1 : 0.4 }
-                  ]}/>
-              </View>
-            ))}
-          </View>
+          {artifacts.slice(0, 4).map((artifact, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => updateFoundedArtifact(artifact)}
+              style={styles.artifactContainer}
+            >
+              <Image
+                source={{ uri: artifact.image }}
+                style={[
+                  styles.roundedArtifactImage,
+                  { opacity: artifact.found ? 1 : 0.4 },
+                ]}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
 
         </BackgroundImage>
       </Container>
