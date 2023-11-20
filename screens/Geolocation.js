@@ -54,25 +54,25 @@ const GeolocationUser = () => {
       }
       console.log("Localización usuario actualizada: " , userLocation);
 
-    };
-
-    const getArtifactsFromDataBase = async () => {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-        const response = await axios.get(url);
-        const artifacts= response.data.data;
-        setArtifacts(artifacts);
-        
-        console.log('Artefactos:', artifacts);
-      } catch (error) {
-        console.error('Error al obtener artefactos:', error);
-      }
-    };    
+    };   
     
     getArtifactsFromDataBase();
     requestLocationPermission();
   }, []); 
   
+  const getArtifactsFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+      const response = await axios.get(url);
+      const artifacts= response.data.data;
+      setArtifacts(artifacts);
+      
+      console.log('Artefactos:', artifacts);
+    } catch (error) {
+      console.error('Error al obtener artefactos:', error);
+    }
+  }; 
+
   const updateFoundedArtifact = async (artifact) => {
     try {
       console.log('Artefacto seleccionado:', artifact);
@@ -84,8 +84,6 @@ const GeolocationUser = () => {
       const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
       const updatedArtifact = response.data;
       console.log('Datos del artefacto actualizados:', updatedArtifact);
-  
-      getArtifactsFromDatabase();
   
       // Muestra un mensaje de confirmación
       Alert.alert(
@@ -101,13 +99,12 @@ const GeolocationUser = () => {
         ],
         { cancelable: false }
       );
+      getArtifactsFromDataBase();
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
   
-  
-
   
     return (
       <Container>
