@@ -8,6 +8,7 @@ import axios from 'axios';
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
+  const [searches, setSearches] = useState([]);
   const [showFinishButton, setShowFinishButton] = useState(false);
 
   const img = require("../assets/geofondo.png")
@@ -58,6 +59,7 @@ const GeolocationUser = () => {
     };   
     
     getArtifactsFromDataBase();
+    getSearchesFromDataBase();
     requestLocationPermission();
   }, []); 
   
@@ -94,12 +96,12 @@ const GeolocationUser = () => {
           {
             text: "OK",
             onPress: () => {
-              // Lógica adicional luego de actualizar el artefacto, si es necesaria
             },
           },
         ],
         { cancelable: false }
       );
+
       getArtifactsFromDataBase();
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
@@ -124,15 +126,58 @@ const GeolocationUser = () => {
       return (
         <Button
           title="FINISH"
-          onPress={() => {
-            
-          }}
+          onPress={() => { updateSearch()}}
         />
       );
     }
     return null;
   };
   
+  const getSearchesFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/searches';
+      const response = await axios.get(url);
+      const searches= response.data.data;
+      setSearches(searches);
+      
+      console.log('BUsquedas:', searches);
+    } catch (error) {
+      console.error('Error al obtener artefactos:', error);
+    }
+  }; 
+
+  const updateSearch = async (search) => {
+    try {
+      console.log('busqueda:', search);
+      const finishedSearch= { state: "finished"}; 
+      console.log( 'modificar estado state' ,finishedSearch);
+      console.log('ID de la busqueda :', search._id);
+  
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/searches/updateSearch/${search._id}`, finishedSearch );
+      const updatedSearch = response.data;
+      console.log('Datos busqueda actualizados:', updatedSearch);
+  
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Artefacto Encontrado",
+        "Los datos del artefacto han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+      
+      getSearchesFromDataBase();
+    } catch (error) {
+      console.error('Error al actualizar los datos del artefacto:', error);
+    }
+  };
+
     return (
       <Container>
        
