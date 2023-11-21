@@ -529,6 +529,8 @@ PODS:
     - React-Core
   - react-native-geolocation (3.1.0):
     - React-Core
+  - react-native-geolocation-service (5.3.1):
+    - React
   - react-native-google-maps (1.8.0):
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 7.4.0)
@@ -775,6 +777,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -894,6 +897,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -1018,6 +1023,7 @@ SPEC CHECKSUMS:
   React-logger: 2e4aee3e11b3ec4fa6cfd8004610bbb3b8d6cca4
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-google-maps: 356b9d01da0920be13e4c4dc83673b30e8a22c16
   react-native-maps: f699e0753c22c4d5c3a44d03895b193a4dbca6c2
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df

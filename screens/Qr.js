@@ -10,7 +10,7 @@ import { Alert } from "react-native";
 
 PERMISSIONS.IOS.CAMERA;
 
-function componentDidMount() {
+function componentDidMount()  {
     if (Platform.OS === 'ios') {
       Promise.all([
         request(PERMISSIONS.IOS.CAMERA),
@@ -21,9 +21,9 @@ function componentDidMount() {
         });
       });
     }
-    };
+};
 
-componentDidMount();
+// componentDidMount();
 
 const Qr = () => {
     const [userID, setuserID] = useState('');
@@ -34,7 +34,7 @@ const Qr = () => {
         const getuserIDFromStorage = async () => {
             try {
                 const storedID = await AsyncStorage.getItem('userID');
-                console.log("entra");
+                // console.log("entra");
                 if (storedID) {
                     setuserID(storedID);
                     getUsersFromDatabase(storedID);
@@ -53,7 +53,7 @@ const Qr = () => {
           const response = await axios.get(url);
           const insideTower = response.data.data.insideTower;
           setInsideTower(insideTower);
-          console.log(insideTower);
+          // console.log(insideTower);
         } catch (error) {
           console.error('Error al obtener usuarios:', error);
         }
@@ -106,7 +106,6 @@ const Qr = () => {
                 logo={require('../assets/newPotion.png')}
                 getRef={(event)  => {
                     //navigation.navigate('Torreon');
-                    console.log("funciona");
                 }}
               />
             </QrView>
@@ -132,7 +131,7 @@ const Text = styled.Text`
 const QrView = styled.View`
     bottom: -50px;
     width: 350px;
-    height: 350x;
+    height: 350px;
     align-self: center;
     background: #4c2882;
     border-radius: 30px; 

@@ -15,13 +15,17 @@ const GeolocationUser = () => {
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
+        if(Platform.OS === 'ios'){
+          Geolocation.requestAuthorization();
+      }else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios') {
           navigator.geolocation.watchPosition(
             (position) => {
+              console.log("Entra en Location User");
               const { latitude, longitude } = position.coords;
               setUserLocation({ latitude, longitude });
 
@@ -36,7 +40,8 @@ const GeolocationUser = () => {
         } else {
           console.log('Permiso de ubicación denegado');
         }
-      } catch (err) {
+      } 
+    }catch (err) {
         console.warn(err);
       }
     };
@@ -73,7 +78,7 @@ const GeolocationUser = () => {
       const artifacts= response.data.data;
       setArtifacts(artifacts);
       
-      console.log('Artefactos:', artifacts);
+      // console.log('Artefactos:', artifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
@@ -88,7 +93,7 @@ const GeolocationUser = () => {
       // Realiza una solicitud PATCH al servidor para actualizar los datos del artefacto
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, foundedArtifact);
       const updatedArtifact = response.data;
-      console.log('Datos del artefacto actualizados:', updatedArtifact);
+      // console.log('Datos del artefacto actualizados:', updatedArtifact);
   
       getArtifactsFromDatabase();
   
