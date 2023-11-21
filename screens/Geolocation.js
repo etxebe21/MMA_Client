@@ -253,8 +253,9 @@ const Container = styled.View`
 const Title = styled.Text`
 font-size: 40px; 
 align-self:center;
-color:#000000;
+color:#49CFDF;
 font-family: 'Tealand';
 bottom:20px;
+text-shadow: 2px 2px 7px black;
 `
 export default GeolocationUser;
