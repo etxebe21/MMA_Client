@@ -9,38 +9,42 @@ const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
   const [showButton, setShowButton] = useState(false);
+  const [collectedArtifacts, setCollectedArtifacts] = useState(4);
+  const [showAnotherButton, setShowAnotherButton] = useState(false);
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
   const markerLocation = { latitude: 43.25320406434306, longitude: -2.019308098147169 };
+
+  //EFFECT INICIAL
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
-        if(Platform.OS === 'ios'){
+        if (Platform.OS === 'ios') {
           Geolocation.requestAuthorization();
-      }else {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-        );
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios') {
-          Geolocation.watchPosition(
-            position => {
-              setUserLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-            },
-            (error) => {
-              console.error('Error al obtener la ubicación:', error);
-            },
-            { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1 }
-          );
         } else {
-          console.log('Permiso de ubicación denegado');
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+          );
+
+          if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios') {
+            Geolocation.watchPosition(
+              position => {
+                setUserLocation({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
+              },
+              (error) => {
+                console.error('Error al obtener la ubicación:', error);
+              },
+              { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1 }
+            );
+          } else {
+            console.log('Permiso de ubicación denegado');
+          }
         }
-      } 
-    }catch (err) {
+      } catch (err) {
         console.warn(err);
       }
     };
@@ -49,25 +53,42 @@ const GeolocationUser = () => {
     requestLocationPermission();
   }, []);
 
+  //cuando se modifica la posicion actual del usuario se llama a este efecto
   useEffect(() => {
     if (userLocation) {
 
       console.log(userLocation.latitude);
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
+
   }, [userLocation]);
+
+
+  //CUANDO recoges un artefacto se llama a este effect
+  useEffect(() => {
+    if (collectedArtifacts === 4) {
+      setShowAnotherButton(true);
+      setShowButton(false);
+    } else {
+      setShowAnotherButton(false);
+    }
+  }, [collectedArtifacts]);
+
 
   const checkIfUserNearMarker = (latitude, longitude) => {
     console.log(latitude, longitude);
     artifacts.forEach((artifact) => {
-      const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-      console.log(distance);
-      if (distance < 3500) {
-        console.log('Estás cerca del marcador:', artifact.name);
+      if (!artifact.found) {
+        const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
+        console.log(distance);
+        if (distance < 3500) {
+          console.log('Estás cerca del marcador:', artifact.name);
 
-        setShowButton(true);
+          setShowButton(true);
+
+        }
+        else setShowButton(false);
       }
-      else setShowButton(false);
     });
   };
 
@@ -85,7 +106,7 @@ const GeolocationUser = () => {
       const response = await axios.get(url);
       const artifacts = response.data.data;
       setArtifacts(artifacts);
-      
+
       // console.log('Artefactos:', artifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
@@ -94,6 +115,7 @@ const GeolocationUser = () => {
 
   const updateFoundedArtifact = async (artifact) => {
     try {
+      // setCollectedArtifacts((prevCount) => prevCount + 1);
       const foundedArtifact = { found: true }; // Nuevo estado del artefacto
 
       console.log('ID del artefacto encontrado:', artifact._id);
@@ -166,6 +188,12 @@ const GeolocationUser = () => {
           <Buttons onPress={() => updateFoundedArtifact()}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
+        )}
+
+        {showAnotherButton && (
+          <SendButton onPress={() => updateFoundedArtifact()}>
+            <ButtonsText>CHECK</ButtonsText>
+          </SendButton>
         )}
 
         <Title>Artifacts</Title>
@@ -246,6 +274,19 @@ const ButtonsText = styled.Text`
   align-self: center;
   top:10px;
   `
+
+const SendButton = styled.TouchableOpacity`
+background: #A3A2A2;
+opacity: 0.95;
+width: 180px;
+height: 65px;
+align-self: center;
+border-radius: 30px;
+border: #0B0B0B;
+bottom:25px;
+background-color:#ffffff
+`
+
 const Container = styled.View`
   flex: 1;
   `
