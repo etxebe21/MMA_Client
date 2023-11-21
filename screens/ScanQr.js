@@ -23,12 +23,12 @@ const ScanQr = () => {
     setIsLoading(true);
 
     try {
-      console.log("Escaneando");
+      // console.log("Escaneando");
       const newInsideTowerState = !insideTower;
       const data = {
         "insideTower": newInsideTowerState
       };
-      console.log(event);
+      // console.log(event);
 
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${event}`, data);
 
@@ -36,7 +36,7 @@ const ScanQr = () => {
         this.scanner.reactivate();
       }, 3000);
 
-      console.log('Solicitud exitosa:', response.data);
+      // console.log('Solicitud exitosa:', response.data);
       setInsideTower(newInsideTowerState);
 
       const message = newInsideTowerState
@@ -63,7 +63,7 @@ const ScanQr = () => {
       <Text>SCAN QR</Text>
       <QRCodeScanner
         onRead={(event) => {
-          console.log("Código QR leído:", event.data);
+          // console.log("Código QR leído:", event.data);
           onSuccess(event.data);
         }}
         reactivate={false}

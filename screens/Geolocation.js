@@ -16,11 +16,14 @@ const GeolocationUser = () => {
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
+        if(Platform.OS === 'ios'){
+          Geolocation.requestAuthorization();
+      }else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios') {
           Geolocation.watchPosition(
             position => {
               setUserLocation({
@@ -36,7 +39,8 @@ const GeolocationUser = () => {
         } else {
           console.log('Permiso de ubicación denegado');
         }
-      } catch (err) {
+      } 
+    }catch (err) {
         console.warn(err);
       }
     };
@@ -81,8 +85,8 @@ const GeolocationUser = () => {
       const response = await axios.get(url);
       const artifacts = response.data.data;
       setArtifacts(artifacts);
-
-      console.log('Artefactos:', artifacts);
+      
+      // console.log('Artefactos:', artifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }

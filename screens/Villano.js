@@ -32,7 +32,7 @@ const Villano = () => {
       const users= response.data.data;
       setUsers(users);
       setSelectedUser(selectedUser);
-      console.log('Usuarios:', users);
+      // console.log('Usuarios:', users);
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
     }
@@ -121,13 +121,13 @@ const Villano = () => {
   
   const handleEditUserConfirm = async () => {
     try {
-      console.log('id usuario seleccionado', selectedUser._id);
+      // console.log('id usuario seleccionado', selectedUser._id);
 
       // Realiza una solicitud PATCH al servidor para actualizar los datos del usuario
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${selectedUser._id}`, selectedUser);
       const updatedUser = response.data;
       // Maneja la respuesta del servidor 
-      console.log('Datos del usuario actualizados:', updatedUser);
+      // console.log('Datos del usuario actualizados:', updatedUser);
 
       getUsersFromDatabase();
 

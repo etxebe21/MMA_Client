@@ -12,7 +12,7 @@ def node_require(script)
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
-platform :ios, min_ios_version_supported
+platform :ios, '13.0'
 prepare_react_native_project!
 setup_permissions([
                   # 'AppTrackingTransparency',
@@ -21,9 +21,9 @@ setup_permissions([
                    'Camera',
                   # 'Contacts',
                   # 'FaceID',
-                  # 'LocationAccuracy',
+                   'LocationAccuracy',
                   # 'LocationAlways',
-                  # 'LocationWhenInUse',
+                   'LocationWhenInUse',
                   # 'MediaLibrary',
                   # 'Microphone',
                   # 'Motion',
@@ -53,7 +53,12 @@ if linkage != nil
 end
 
 target 'lahermandad' do
+
   config = use_native_modules!
+
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -63,6 +68,8 @@ target 'lahermandad' do
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleSignIn'
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
   
   use_react_native!(
     :path => config[:reactNativePath],

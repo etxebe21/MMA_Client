@@ -20,7 +20,7 @@ const Mortimer = () => {
       const users= response.data.data;
       setUsers(users);
       setSelectedUser(selectedUser);
-      console.log('Usuarios:', users);
+      // console.log('Usuarios:', users);
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
     }

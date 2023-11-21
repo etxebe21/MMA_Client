@@ -17,7 +17,7 @@ import axios from 'axios';
         const response = await axios.get(url);
         const ingredients = response.data.data;
         setIngredients(ingredients);
-        console.log(ingredients);
+        // console.log(ingredients);
       } catch (error) {
         console.error('Error al obtener ingredientes:', error);
       }
@@ -60,7 +60,7 @@ import axios from 'axios';
         });
   
         const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
-        console.log(cantidadCleanseParchment);
+        // console.log(cantidadCleanseParchment);
   
         if (cantidadCleanseParchment === 2) {
           setIsPotionCreated(true);
