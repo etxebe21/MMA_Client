@@ -11,40 +11,27 @@ const GeolocationUser = () => {
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
-
+  const markerLocation = { latitude: 43.25320406434306, longitude: -2.019308098147169};
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          Geolocation.getCurrentPosition(
-            (position) => {
-              setUserLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-              //console.log("Localización  actualizada: " , userLocation);
 
-            },
-            (error) => {
-              console.error('Error al obtener la ubicación: ', error);
-            },
-            { enableHighAccuracy: true, timeout: 50000, maximumAge: 10000 }
-          );
-          Geolocation.watchPosition(
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          navigator.geolocation.watchPosition(
             (position) => {
-              setUserLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-              //console.log("Localización usuario actualizada: " , userLocation);
+              const { latitude, longitude } = position.coords;
+              setUserLocation({ latitude, longitude });
+
+              // Comprobar si la ubicación está dentro del área de un marcador
+              checkIfUserNearMarker({ latitude, longitude });
             },
             (error) => {
-              console.error('Error al obtener la ubicación: ', error);
+              console.error('Error al obtener la ubicación:', error);
             },
-            { enableHighAccuracy: true, timeout: 50000, maximumAge: 10000, distanceFilter: 1}
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10 }
           );
         } else {
           console.log('Permiso de ubicación denegado');
@@ -52,26 +39,45 @@ const GeolocationUser = () => {
       } catch (err) {
         console.warn(err);
       }
-      console.log("Localización usuario actualizada: " , userLocation);
-
     };
 
-    const getArtifactsFromDataBase = async () => {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-        const response = await axios.get(url);
-        const artifacts= response.data.data;
-        setArtifacts(artifacts);
-        
-        console.log('Artefactos:', artifacts);
-      } catch (error) {
-        console.error('Error al obtener artefactos:', error);
-      }
-    };    
-    
     getArtifactsFromDataBase();
     requestLocationPermission();
-  }, []); 
+  }, []);
+
+  const checkIfUserNearMarker = ({ latitude, longitude }) => {
+    artifacts.forEach((artifact) => {
+      const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
+
+      if (distance < 0.01) {
+        console.log('Estás cerca del marcador:', artifact.name);
+        // updateFoundedArtifact(artifact);
+      }
+    });
+  };
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3;
+    const x = (lon2-lon1) * Math.cos((lat1+lat2)/2);
+    const y = (lat2-lat1);
+    const d = Math.sqrt(x*x + y*y) * R;
+    return d;
+  };
+
+  
+
+  const getArtifactsFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+      const response = await axios.get(url);
+      const artifacts= response.data.data;
+      setArtifacts(artifacts);
+      
+      console.log('Artefactos:', artifacts);
+    } catch (error) {
+      console.error('Error al obtener artefactos:', error);
+    }
+  };   
   
   const updateFoundedArtifact = async (artifact) => {
     try {
