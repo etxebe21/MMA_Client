@@ -10,10 +10,10 @@ const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [search, setSearches] = useState([]);
-  const [showFinishButton, setShowFinishButton] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [collectedArtifacts, setCollectedArtifacts] = useState(4);
   const [showAnotherButton, setShowAnotherButton] = useState(false);
+  const [showPendingText, setShowPendingText] = useState(false);
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
@@ -175,17 +175,17 @@ const GeolocationUser = () => {
       // Muestra un mensaje de confirmación
       Alert.alert(
         "Busqueda finalizada",
-        "Pendiente de aprovación.",
+        "Pendiente de aprovación por Mortimer.",
         [
           {
             text: "OK",
-            onPress: () => {
+            onPress: () => { setShowPendingText(true); 
             },
           },
         ],
         { cancelable: false }
       );
-      
+      getArtifactsFromDataBase();
       getSearchesFromDataBase();
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
@@ -198,26 +198,6 @@ const GeolocationUser = () => {
     return foundArtifacts.length;
   };
 
-  // Actualizar el estado de visibilidad del botón
-  useEffect(() => {
-    const foundCount = countFoundArtifacts();
-    setShowFinishButton(foundCount === 4);
-  }, [artifacts]);
-
-  // Renderizado condicional del botón para finalizar la búsqueda
-  const renderFinishButton = () => {
-    if (showFinishButton) {
-      return (
-        <Button
-          title="FINISH"
-          onPress={() => { updateSearch()}}
-        />
-      );
-    }
-    return null;
-  };
-  
- 
 
   return (
     <Container>
@@ -271,7 +251,7 @@ const GeolocationUser = () => {
           </SendButton>
         )}
 
-        <Title>Artifacts</Title>
+        <Title>ARTIFACTS</Title>
         <View style={styles.artifactsContainer}>
           {artifacts.slice(0, 4).map((artifact, index) => (
             <View key={index} style={styles.artifactContainer}>
@@ -283,7 +263,10 @@ const GeolocationUser = () => {
           ))}
         </View>
 
-        {renderFinishButton()}
+        {showPendingText && (
+        <PendingText style={styles.pendingText}>PENDING</PendingText>
+      )}
+       
       </BackgroundImage>
     </Container>
   );
@@ -351,7 +334,6 @@ const ButtonsText = styled.Text`
   align-self: center;
   top:17px;
   `
-
 const SendButton = styled.TouchableOpacity`
 background: #A3A2A2;
 opacity: 0.95;
@@ -363,11 +345,9 @@ border: #0B0B0B;
 bottom:25px;
 background-color:#ffffff
 `
-
 const Container = styled.View`
   flex: 1;
   `
-
 const Title = styled.Text`
 font-size: 40px; 
 align-self:center;
@@ -376,4 +356,11 @@ font-family: 'Tealand';
 bottom:20px;
 text-shadow: 2px 2px 7px black;
 `
+const PendingText = styled.Text`
+  fontSize: 65px;
+  font-family: 'Tealand';
+  color: #4c2882; 
+  align-self: center;
+  top:1px;
+  `
 export default GeolocationUser;
