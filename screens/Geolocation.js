@@ -8,6 +8,7 @@ import axios from 'axios';
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
+  const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [searches, setSearches] = useState([]);
   const [showFinishButton, setShowFinishButton] = useState(false);
   const [showButton, setShowButton] = useState(false);
@@ -16,7 +17,7 @@ const GeolocationUser = () => {
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
-  const markerLocation = { latitude: 43.25320406434306, longitude: -2.019308098147169 };
+ 
 
   //EFFECT INICIAL
   useEffect(() => {
@@ -52,17 +53,16 @@ const GeolocationUser = () => {
     };
 
     getArtifactsFromDataBase();
+    getSearchesFromDataBase();
     requestLocationPermission();
   }, []);
 
   //cuando se modifica la posicion actual del usuario se llama a este efecto
   useEffect(() => {
     if (userLocation) {
-
       console.log(userLocation.latitude);
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
-
   }, [userLocation]);
 
 
@@ -78,18 +78,17 @@ const GeolocationUser = () => {
 
 
   const checkIfUserNearMarker = (latitude, longitude) => {
-    console.log(latitude, longitude);
     artifacts.forEach((artifact) => {
       if (!artifact.found) {
         const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
         console.log(distance);
         if (distance < 3500) {
           console.log('Estás cerca del marcador:', artifact.name);
-
           setShowButton(true);
-
+          setSelectedArtifact(artifact); // Almacena el artefacto seleccionado
+        } else {
+          setShowButton(false);
         }
-        else setShowButton(false);
       }
     });
   };
@@ -109,7 +108,7 @@ const GeolocationUser = () => {
       const artifacts = response.data.data;
       setArtifacts(artifacts);
 
-      // console.log('Artefactos:', artifacts);
+      console.log('Artefactos:', artifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
@@ -121,6 +120,7 @@ const GeolocationUser = () => {
       const selectedArtifact = { found: !artifact.found }; // Invertir el estado de 'found'
       console.log( 'modificar estado found' ,selectedArtifact);
       console.log('ID del artefacto encontrado:', artifact._id);
+      setSelectedArtifact(selectedArtifact);
 
       // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
       const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
@@ -181,14 +181,14 @@ const GeolocationUser = () => {
       
       console.log('BUsquedas:', searches);
     } catch (error) {
-      console.error('Error al obtener artefactos:', error);
+      console.error('Error al obtener busquedas:', error);
     }
   }; 
 
   const updateSearch = async (search) => {
     try {
       console.log('busqueda:', search);
-      const finishedSearch= { state: "finished"}; 
+      const finishedSearch= { state: "pending"}; 
       console.log( 'modificar estado state' ,finishedSearch);
       console.log('ID de la busqueda :', search._id);
   
@@ -199,8 +199,8 @@ const GeolocationUser = () => {
 
       // Muestra un mensaje de confirmación
       Alert.alert(
-        "Artefacto Encontrado",
-        "Los datos del artefacto han sido actualizados correctamente.",
+        "Busqueda finalizada",
+        "Pendiente de aprovación.",
         [
           {
             text: "OK",
@@ -213,7 +213,7 @@ const GeolocationUser = () => {
       
       getSearchesFromDataBase();
     } catch (error) {
-      console.error('Error al actualizar los datos del artefacto:', error);
+      console.error('Error al actualizar busquedas:', error);
     }
   };
 
@@ -254,16 +254,17 @@ const GeolocationUser = () => {
               </Marker>
             ))}
       </MapView>
-      <BackgroundImage source={img}>
-        {showButton && (
 
-          <Buttons onPress={() => updateFoundedArtifact()}>
+      <BackgroundImage source={img}>
+        
+        {showButton && (
+          <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
         )}
 
         {showAnotherButton && (
-          <SendButton onPress={() => updateFoundedArtifact()}>
+          <SendButton onPress={() => updateSearch()}>
             <ButtonsText>CHECK</ButtonsText>
           </SendButton>
         )}
@@ -285,6 +286,7 @@ const GeolocationUser = () => {
     </Container>
   );
 };
+
 const styles = StyleSheet.create({
   markerImageContainer: {
     width: 40,
@@ -345,7 +347,7 @@ const ButtonsText = styled.Text`
   font-family: 'Tealand';
   color: #4c2882; 
   align-self: center;
-  top:10px;
+  top:17px;
   `
 
 const SendButton = styled.TouchableOpacity`
