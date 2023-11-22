@@ -9,7 +9,7 @@ const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
-  const [searches, setSearches] = useState([]);
+  const [search, setSearches] = useState([]);
   const [showFinishButton, setShowFinishButton] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [collectedArtifacts, setCollectedArtifacts] = useState(4);
@@ -146,6 +146,51 @@ const GeolocationUser = () => {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
+
+  const getSearchesFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/searches';
+      const response = await axios.get(url);
+      const searches= response.data.data;
+      setSearches(searches);
+      
+      console.log('BUsquedas:', searches);
+    } catch (error) {
+      console.error('Error al obtener busquedas:', error);
+    }
+  }; 
+
+  const updateSearch = async (search) => {
+    try {
+      console.log('busqueda:', search);
+      const finishedSearch= { state: "pending"}; 
+      console.log( 'modificar estado state' ,finishedSearch);
+      console.log('ID de la busqueda :', search[0]._id);
+  
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch );
+      const updatedSearch = response.data;
+      console.log('Datos busqueda actualizados:', updatedSearch);
+
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Busqueda finalizada",
+        "Pendiente de aprovación.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+      
+      getSearchesFromDataBase();
+    } catch (error) {
+      console.error('Error al actualizar busqueda:', error);
+    }
+  };
   
    // Función para contar los artefactos encontrados
    const countFoundArtifacts = () => {
@@ -172,50 +217,7 @@ const GeolocationUser = () => {
     return null;
   };
   
-  const getSearchesFromDataBase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/searches';
-      const response = await axios.get(url);
-      const searches= response.data.data;
-      setSearches(searches);
-      
-      console.log('BUsquedas:', searches);
-    } catch (error) {
-      console.error('Error al obtener busquedas:', error);
-    }
-  }; 
-
-  const updateSearch = async (search) => {
-    try {
-      console.log('busqueda:', search);
-      const finishedSearch= { state: "pending"}; 
-      console.log( 'modificar estado state' ,finishedSearch);
-      console.log('ID de la busqueda :', search._id);
-  
-      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/searches/updateSearch/${search._id}`, finishedSearch );
-      const updatedSearch = response.data;
-      console.log('Datos busqueda actualizados:', updatedSearch);
-
-      // Muestra un mensaje de confirmación
-      Alert.alert(
-        "Busqueda finalizada",
-        "Pendiente de aprovación.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-      
-      getSearchesFromDataBase();
-    } catch (error) {
-      console.error('Error al actualizar busquedas:', error);
-    }
-  };
+ 
 
   return (
     <Container>
@@ -264,7 +266,7 @@ const GeolocationUser = () => {
         )}
 
         {showAnotherButton && (
-          <SendButton onPress={() => updateSearch()}>
+          <SendButton onPress={() => updateSearch(search)}>
             <ButtonsText>CHECK</ButtonsText>
           </SendButton>
         )}
