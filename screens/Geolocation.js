@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -8,6 +8,8 @@ import axios from 'axios';
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
+  const [searches, setSearches] = useState([]);
+  const [showFinishButton, setShowFinishButton] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [collectedArtifacts, setCollectedArtifacts] = useState(4);
   const [showAnotherButton, setShowAnotherButton] = useState(false);
@@ -115,17 +117,15 @@ const GeolocationUser = () => {
 
   const updateFoundedArtifact = async (artifact) => {
     try {
-      // setCollectedArtifacts((prevCount) => prevCount + 1);
-      const foundedArtifact = { found: true }; // Nuevo estado del artefacto
-
+      console.log('Artefacto seleccionado:', artifact);
+      const selectedArtifact = { found: !artifact.found }; // Invertir el estado de 'found'
+      console.log( 'modificar estado found' ,selectedArtifact);
       console.log('ID del artefacto encontrado:', artifact._id);
 
-      // Realiza una solicitud PATCH al servidor para actualizar los datos del artefacto
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, foundedArtifact);
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
       const updatedArtifact = response.data;
       console.log('Datos del artefacto actualizados:', updatedArtifact);
-
-      getArtifactsFromDatabase();
 
       // Muestra un mensaje de confirmación
       Alert.alert(
@@ -140,6 +140,78 @@ const GeolocationUser = () => {
         ],
         { cancelable: false }
       );
+
+      getArtifactsFromDataBase();
+    } catch (error) {
+      console.error('Error al actualizar los datos del artefacto:', error);
+    }
+  };
+  
+   // Función para contar los artefactos encontrados
+   const countFoundArtifacts = () => {
+    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
+    return foundArtifacts.length;
+  };
+
+  // Actualizar el estado de visibilidad del botón
+  useEffect(() => {
+    const foundCount = countFoundArtifacts();
+    setShowFinishButton(foundCount === 4);
+  }, [artifacts]);
+
+  // Renderizado condicional del botón para finalizar la búsqueda
+  const renderFinishButton = () => {
+    if (showFinishButton) {
+      return (
+        <Button
+          title="FINISH"
+          onPress={() => { updateSearch()}}
+        />
+      );
+    }
+    return null;
+  };
+  
+  const getSearchesFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/searches';
+      const response = await axios.get(url);
+      const searches= response.data.data;
+      setSearches(searches);
+      
+      console.log('BUsquedas:', searches);
+    } catch (error) {
+      console.error('Error al obtener artefactos:', error);
+    }
+  }; 
+
+  const updateSearch = async (search) => {
+    try {
+      console.log('busqueda:', search);
+      const finishedSearch= { state: "finished"}; 
+      console.log( 'modificar estado state' ,finishedSearch);
+      console.log('ID de la busqueda :', search._id);
+  
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/searches/updateSearch/${search._id}`, finishedSearch );
+      const updatedSearch = response.data;
+      console.log('Datos busqueda actualizados:', updatedSearch);
+
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Artefacto Encontrado",
+        "Los datos del artefacto han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+      
+      getSearchesFromDataBase();
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
@@ -208,6 +280,7 @@ const GeolocationUser = () => {
           ))}
         </View>
 
+        {renderFinishButton()}
       </BackgroundImage>
     </Container>
   );
