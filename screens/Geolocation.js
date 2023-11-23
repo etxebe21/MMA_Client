@@ -12,7 +12,7 @@ const GeolocationUser = () => {
   const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [search, setSearches] = useState([]);
   const [showButton, setShowButton] = useState(false);
-  const [collectedArtifacts, setCollectedArtifacts] = useState(3);
+  const [collectedArtifacts, setCollectedArtifacts] = useState(4);
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const scaleAnim = useRef(new Animated.Value(0)).current;
