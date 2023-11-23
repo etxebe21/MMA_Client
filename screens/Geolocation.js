@@ -95,6 +95,35 @@ const GeolocationUser = () => {
     }
   }, [collectedArtifacts]);
 
+  // Dentro del efecto para cargar los artefactos
+  useEffect(() => {
+    const loadArtifacts = async () => {
+      try {
+        const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
+        const artifacts = artifactsData.data.data;
+        console.log("ARTEFACTOS", artifacts);
+
+        // Actualizar los artefactos con la imagen del usuario
+        const updatedArtifacts = await Promise.all(
+          artifacts.map(async (artifact) => {
+            if (artifact.found) {
+              const userImage = await getUserImageById(artifact.who);
+              console.log("imagen del usuario", userImage);
+              return { ...artifact, userImage };
+            }
+            return artifact;
+          })
+        );
+
+        setArtifacts(updatedArtifacts);
+      } catch (error) {
+        console.error('Error al cargar los artefactos:', error);
+      }
+    };
+
+    loadArtifacts();
+  }, []);
+
 
   const checkIfUserNearMarker = (latitude, longitude) => {
     artifacts.forEach((artifact) => {
@@ -201,11 +230,18 @@ const GeolocationUser = () => {
     }
   };
   
-   // Función para contar los artefactos encontrados
-   const countFoundArtifacts = () => {
-    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
-    return foundArtifacts.length;
-  };
+  // función para obtener la imagen del usuario por su ID
+  const getUserImageById = async (userId) => {
+    try {
+      const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+      const userPicture = user.data.data.picture;
+      console.log(userPicture);
+      return userPicture; // Devolvemos la URL de la imagen del usuario
+
+  } catch (error) {
+    console.error('Error al obtener la imagen del usuario:', error);
+  }
+};
 
 
   return (
@@ -261,7 +297,7 @@ const GeolocationUser = () => {
         )}
 
               <View>
-              {showPendingText && (
+        {showPendingText && (
         <>
           <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
             <PendingText style={styles.pendingText}>PENDING</PendingText>
@@ -269,24 +305,38 @@ const GeolocationUser = () => {
           </Animated.View>
         </>
       )}
-                </View>
+        </View>
 
-
-                {!showPendingText && (
-        <>
-          <Title>ARTIFACTS</Title>
-          <View style={styles.artifactsContainer}>
-            {artifacts.slice(0, 4).map((artifact, index) => (
-              <View key={index} style={styles.artifactContainer}>
+  {!showPendingText && (
+    <>
+      <Title>ARTIFACTS</Title>
+      <View style={styles.artifactsContainer}>
+        {artifacts.slice(0, 4).map((artifact, index) => (
+          <View key={index} style={styles.artifactUserContainer}>
+            <View style={styles.artifactContainer}>
+              <Image
+                source={{ uri: artifact.image }}
+                style={[
+                  styles.roundedArtifactImage,
+                  { opacity: artifact.found ? 1 : 0.4 },
+                ]}
+              />
+            </View>
+            {artifact.found && artifact.userImage && (
+              <View style={styles.userImageContainer}>
                 <Image
-                  source={{ uri: artifact.image }}
-                  style={[styles.roundedArtifactImage, { opacity: artifact.found ? 1 : 0.4 }]}
+                  source={{ uri: artifact.userImage }}
+                  style={styles.roundedUserImage}
                 />
               </View>
-            ))}
+            )}
           </View>
-        </>
-      )}
+        ))}
+      </View>
+    </>
+  )}
+
+
       </BackgroundImage>
     </Container>
   );
@@ -315,19 +365,36 @@ const styles = StyleSheet.create({
     bottom: 20
   },
   artifactContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 10,
   },
   roundedArtifactImage: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
   },
+  userImageContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  roundedUserImage: {
+    width: 35, // Tamaño deseado de la imagen del usuario
+    height:35,
+    borderRadius: 17.5, // Mitad del tamaño deseado para hacerlo redondo
+    borderWidth: 1, // Puedes ajustar el grosor y el color del borde si lo deseas
+    borderColor: '#4c2882',
+    top: 27,
+    marginLeft: 33
+  },
+
 });
 
 const BackgroundImage = styled(ImageBackground)`
