@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity,ActivityIndicator,Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import { Modal } from 'react-native-paper';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -14,10 +15,28 @@ const GeolocationUser = () => {
   const [collectedArtifacts, setCollectedArtifacts] = useState(4);
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
+  const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
  
+  useEffect(() => {
+    if (showPendingText) {
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 3,  // Ajusta la fricción para cambiar la velocidad de la animación
+        tension: 40, // Ajusta la tensión para cambiar la velocidad de la animación
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.spring(scaleAnim, {
+        toValue: 0,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showPendingText, scaleAnim]);
 
   //EFFECT INICIAL
   useEffect(() => {
@@ -172,19 +191,9 @@ const GeolocationUser = () => {
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
 
-      // Muestra un mensaje de confirmación
-      Alert.alert(
-        "Busqueda finalizada",
-        "Pendiente de aprovación por Mortimer.",
-        [
-          {
-            text: "OK",
-            onPress: () => { setShowPendingText(true); 
-            },
-          },
-        ],
-        { cancelable: false }
-      );
+     
+      setShowPendingText(true);
+      setShowAnotherButton(false);
       getArtifactsFromDataBase();
       getSearchesFromDataBase();
     } catch (error) {
@@ -251,22 +260,33 @@ const GeolocationUser = () => {
           </SendButton>
         )}
 
-        <Title>ARTIFACTS</Title>
-        <View style={styles.artifactsContainer}>
-          {artifacts.slice(0, 4).map((artifact, index) => (
-            <View key={index} style={styles.artifactContainer}>
-              <Image
-                source={{ uri: artifact.image }}
-                style={[styles.roundedArtifactImage, { opacity: artifact.found ? 1 : 0.4 }
-                ]} />
-            </View>
-          ))}
-        </View>
-
-        {showPendingText && (
-        <PendingText style={styles.pendingText}>PENDING</PendingText>
+              <View>
+              {showPendingText && (
+        <>
+          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+            <PendingText style={styles.pendingText}>PENDING</PendingText>
+            <ActivityIndicator size="large" color="#3498db" animating={true} />
+          </Animated.View>
+        </>
       )}
-       
+                </View>
+
+
+                {!showPendingText && (
+        <>
+          <Title>ARTIFACTS</Title>
+          <View style={styles.artifactsContainer}>
+            {artifacts.slice(0, 4).map((artifact, index) => (
+              <View key={index} style={styles.artifactContainer}>
+                <Image
+                  source={{ uri: artifact.image }}
+                  style={[styles.roundedArtifactImage, { opacity: artifact.found ? 1 : 0.4 }]}
+                />
+              </View>
+            ))}
+          </View>
+        </>
+      )}
       </BackgroundImage>
     </Container>
   );
@@ -358,9 +378,9 @@ text-shadow: 2px 2px 7px black;
 `
 const PendingText = styled.Text`
   fontSize: 65px;
-  font-family: 'Tealand';
-  color: #4c2882; 
+  font-family: 'Creepster';
+  color: #49CFDF; 
   align-self: center;
-  top:1px;
+  top: -30px;
   `
 export default GeolocationUser;
