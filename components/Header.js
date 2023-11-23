@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 const Container = styled.View`
     width: 100%;
-    height: 58px;
+    height: 85px;
     padding: 0 11px;
     align-items: center;
     flex-direction: row;
@@ -14,10 +14,12 @@ const Container = styled.View`
 
 
 const Text = styled.Text `
+    margin-top: 40px;
     color: #4c2882;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
+    font-family: 'Parade Groovy'
 `
 const Row = styled.View`
     flex-direction: row;
