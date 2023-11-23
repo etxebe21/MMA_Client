@@ -16,10 +16,10 @@ const Container = styled.View`
 const Text = styled.Text `
     margin-top: 40px;
     color: #4c2882;
-    font-size: 25px;
+    font-size: 30px;
     font-weight: bold;
     letter-spacing: -0.3px;
-    font-family: 'Parade Groovy'
+    font-family: 'Tealand';
 `
 const Row = styled.View`
     flex-direction: row;
