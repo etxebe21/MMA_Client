@@ -30,7 +30,7 @@ const Profile = () => {
   };
   useEffect(() => {
     getUserFromDatabase();
-  }, []); // El efecto se ejecutará solo una vez, al montar el componente
+  }, []); 
 
   return (
 

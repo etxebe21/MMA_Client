@@ -78,7 +78,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             data={ingredients}
             keyExtractor={(item) => item.id.toString()}
             horizontal
-            contentContainerStyle={{ paddingRight: 10 }} // Ajuste de espaciado a la derecha
+            contentContainerStyle={{ paddingRight: 10 }} 
             renderItem={({ item }) => (
               <IngredientButton onPress={() => selectIngredient(item)}>
                 <IngredientView>
@@ -118,9 +118,9 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
           <Text style={{ fontSize: 17, marginTop: 30 }}>Effects:</Text>
           {createdPotion.effects.map((efecto, index) => (
             <TextEffects key={index}>{efecto}</TextEffects>
-          ))}
+            ))}
           
-        </PotionView>
+            </PotionView>
       )}
       <Spacer></Spacer>
     </Container>
@@ -148,7 +148,7 @@ const IngredientView = styled.View`
   height: 100px;
   margin-bottom: 10px;
   align-items: center;
-  background: #4c2882;
+  background: transparent;
   border-radius: 60px;
 `;
 
@@ -187,40 +187,20 @@ const PotionButtonText = styled.Text`
 
 const PotionView = styled.View`
   align-self: center;
-  background: gray;
+  background: #FD78FF;
   width: 250px;
   height: 400px;
   margin-top: 10px;
   padding: 20px;
   border-radius:40px;
   top:25px;
-
-`;
-
-const ReturnButton = styled.TouchableOpacity`
-  background: #913595;
-  width: 200px;
-  height: 50px;
-  align-self: center;
-  border-radius: 30px;
-  margin-top: 10px;
-  justify-content: center;
-`;
-
-const ButtonText = styled.Text`
-  font-size: 16px;
-  color: #CCCCCC;
-  text-align: center;
-`;
-
-const SelectedIngredientsContainer = styled.View`
-  margin-top: 10px;
-  align-self: center;
-  background: #4c2882;
-  width: 240px;
-  height: 290px;
+  opacity:0.5;
+  position:absolute;
+  padding:25px;
+  justifyContent: center,
   
 `;
+
 
 const SelectedIngredientsTitle = styled.Text`
   font-size: 20px;
@@ -259,6 +239,7 @@ const TextEffects = styled.Text`
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;
+
 `;
 
 const Spacer = styled.View`
