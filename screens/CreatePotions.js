@@ -18,7 +18,8 @@ const Text = styled.Text `
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
-    align-self: center; 
+    align-self: center;
+    top:15px; 
     
 `
 

@@ -92,6 +92,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       )}
 
       {selectedIngredients.length > 0 && !createdPotion && (
+        
         <SelectedIngredientContainer>
           <SelectedIngredientsTitle>{selectedPotion ? selectedPotion.name : ''}</SelectedIngredientsTitle>
           {selectedIngredients.map((ingredient, index) => (
@@ -119,7 +120,6 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
           {createdPotion.effects.map((efecto, index) => (
             <TextEffects key={index}>{efecto}</TextEffects>
             ))}
-          
             </PotionView>
       )}
       <Spacer></Spacer>
@@ -130,13 +130,14 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
 const Container = styled.View`
   flex: 1;
-  padding: 10px;
+  padding: 0px;
 `;
 
 
 const IngredientsContainer = styled.View`
   flexDirection: row;
-  marginTop: 10px;
+  marginTop: 30px;
+  
 `;
 
 const PotionEffectText = styled.Text`
@@ -144,21 +145,34 @@ const PotionEffectText = styled.Text`
 `;
 
 const IngredientView = styled.View`
-  width: 100px;
+  width: 120px;
   height: 100px;
   margin-bottom: 10px;
   align-items: center;
-  background: transparent;
-  border-radius: 60px;
+  border-radius: 50px;
+`;
+
+const EffectsBackground = styled.ImageBackground`
+width: 100%;
+padding: 10px;
+margin-top: 10px;
+right:20px; 
 `;
 
 const IngredientButton = styled.TouchableOpacity`
-  marginRight: 10px;
+  marginRight: 0px;
 `;
 
+const ContainerBrackground = styled.View`
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  right:20px;
+  background:purple;
+`
 const IngredientImage = styled.Image`
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 25px;
   margin-bottom: 5px;
 `;
@@ -207,7 +221,7 @@ const SelectedIngredientsTitle = styled.Text`
   font-weight: bold;
   align-self: center;
   color: #CCCCCC;
-  margin-top: 10px;
+  
 `;
 
 const IngredientEffect = styled.Text`
@@ -252,10 +266,13 @@ const IngredientsRow = styled.View`
 `;
 
 const SelectedIngredientContainer = styled.View`
-  background: #4c2882;
-  width: 100%;
+  width: 72%;
   padding: 10px;
   margin-top: 10px;
+  align-self:center;
+  right:20px;
+  backgroundColor: 'rgba(247, 62, 250, 0.4)';
+  border-radius: 20px;
 `;
 
 
