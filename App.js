@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  
 });
 
 
