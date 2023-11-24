@@ -19,6 +19,7 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
+import Roseta from './screens/Roseta';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { enableLatestRenderer } from 'react-native-maps';
@@ -157,6 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  
 });
 
 

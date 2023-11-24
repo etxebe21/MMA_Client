@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity,ActivityIndicator,Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
+import { Modal } from 'react-native-paper';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -14,10 +15,28 @@ const GeolocationUser = () => {
   const [collectedArtifacts, setCollectedArtifacts] = useState(4);
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
+  const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
  
+  useEffect(() => {
+    if (showPendingText) {
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 3,  // Ajusta la fricción para cambiar la velocidad de la animación
+        tension: 40, // Ajusta la tensión para cambiar la velocidad de la animación
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.spring(scaleAnim, {
+        toValue: 0,
+        friction: 3,
+        tension: 40,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showPendingText, scaleAnim]);
 
   //EFFECT INICIAL
   useEffect(() => {
@@ -75,6 +94,35 @@ const GeolocationUser = () => {
       setShowAnotherButton(false);
     }
   }, [collectedArtifacts]);
+
+  // Dentro del efecto para cargar los artefactos
+  useEffect(() => {
+    const loadArtifacts = async () => {
+      try {
+        const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
+        const artifacts = artifactsData.data.data;
+        console.log("ARTEFACTOS", artifacts);
+
+        // Actualizar los artefactos con la imagen del usuario
+        const updatedArtifacts = await Promise.all(
+          artifacts.map(async (artifact) => {
+            if (artifact.found) {
+              const userImage = await getUserImageById(artifact.who);
+              console.log("imagen del usuario", userImage);
+              return { ...artifact, userImage };
+            }
+            return artifact;
+          })
+        );
+
+        setArtifacts(updatedArtifacts);
+      } catch (error) {
+        console.error('Error al cargar los artefactos:', error);
+      }
+    };
+
+    loadArtifacts();
+  }, []);
 
 
   const checkIfUserNearMarker = (latitude, longitude) => {
@@ -134,14 +182,13 @@ const GeolocationUser = () => {
         [
           {
             text: "OK",
-            onPress: () => {
-            },
+            onPress: () => {getArtifactsFromDataBase();},
           },
         ],
         { cancelable: false }
       );
 
-      getArtifactsFromDataBase();
+      //getArtifactsFromDataBase();
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
@@ -172,19 +219,9 @@ const GeolocationUser = () => {
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
 
-      // Muestra un mensaje de confirmación
-      Alert.alert(
-        "Busqueda finalizada",
-        "Pendiente de aprovación por Mortimer.",
-        [
-          {
-            text: "OK",
-            onPress: () => { setShowPendingText(true); 
-            },
-          },
-        ],
-        { cancelable: false }
-      );
+     
+      setShowPendingText(true);
+      setShowAnotherButton(false);
       getArtifactsFromDataBase();
       getSearchesFromDataBase();
     } catch (error) {
@@ -192,11 +229,18 @@ const GeolocationUser = () => {
     }
   };
   
-   // Función para contar los artefactos encontrados
-   const countFoundArtifacts = () => {
-    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
-    return foundArtifacts.length;
-  };
+  // función para obtener la imagen del usuario por su ID
+  const getUserImageById = async (userId) => {
+    try {
+      const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+      const userPicture = user.data.data.picture;
+      console.log(userPicture);
+      return userPicture; // Devolvemos la URL de la imagen del usuario
+
+  } catch (error) {
+    console.error('Error al obtener la imagen del usuario:', error);
+  }
+};
 
 
   return (
@@ -251,22 +295,47 @@ const GeolocationUser = () => {
           </SendButton>
         )}
 
-        <Title>ARTIFACTS</Title>
-        <View style={styles.artifactsContainer}>
-          {artifacts.slice(0, 4).map((artifact, index) => (
-            <View key={index} style={styles.artifactContainer}>
-              <Image
-                source={{ uri: artifact.image }}
-                style={[styles.roundedArtifactImage, { opacity: artifact.found ? 1 : 0.4 }
-                ]} />
-            </View>
-          ))}
+              <View>
+        {showPendingText && (
+        <>
+          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+            <PendingText style={styles.pendingText}>PENDING</PendingText>
+            <ActivityIndicator size="large" color="#3498db" animating={true} />
+          </Animated.View>
+        </>
+      )}
         </View>
 
-        {showPendingText && (
-        <PendingText style={styles.pendingText}>PENDING</PendingText>
-      )}
-       
+  {!showPendingText && (
+    <>
+      <Title>ARTIFACTS</Title>
+      <View style={styles.artifactsContainer}>
+        {artifacts.slice(0, 4).map((artifact, index) => (
+          <View key={index} style={styles.artifactUserContainer}>
+            <View style={styles.artifactContainer}>
+              <Image
+                source={{ uri: artifact.image }}
+                style={[
+                  styles.roundedArtifactImage,
+                  { opacity: artifact.found ? 1 : 0.4 },
+                ]}
+              />
+            </View>
+            {artifact.found && artifact.userImage && (
+              <View style={styles.userImageContainer}>
+                <Image
+                  source={{ uri: artifact.userImage }}
+                  style={styles.roundedUserImage}
+                />
+              </View>
+            )}
+          </View>
+        ))}
+      </View>
+    </>
+  )}
+
+
       </BackgroundImage>
     </Container>
   );
@@ -295,19 +364,36 @@ const styles = StyleSheet.create({
     bottom: 20
   },
   artifactContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 10,
   },
   roundedArtifactImage: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
   },
+  userImageContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  roundedUserImage: {
+    width: 35, // Tamaño deseado de la imagen del usuario
+    height:35,
+    borderRadius: 17.5, // Mitad del tamaño deseado para hacerlo redondo
+    borderWidth: 1, // Puedes ajustar el grosor y el color del borde si lo deseas
+    borderColor: '#4c2882',
+    top: 27,
+    marginLeft: 33
+  },
+
 });
 
 const BackgroundImage = styled(ImageBackground)`
@@ -358,9 +444,9 @@ text-shadow: 2px 2px 7px black;
 `
 const PendingText = styled.Text`
   fontSize: 65px;
-  font-family: 'Tealand';
-  color: #4c2882; 
+  font-family: 'Creepster';
+  color: #49CFDF; 
   align-self: center;
-  top:1px;
+  top: -30px;
   `
 export default GeolocationUser;
