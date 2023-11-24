@@ -1,15 +1,17 @@
-import React , {useState, useEffect} from "react";
+import React , {useState, useEffect, useContext} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { Modal, StyleSheet} from "react-native";
 import LoginModal from "../components/LoginModal";
+import { Context } from "../components/Context";
 
 const ProfileVillano = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [isLoginModalVisible, setLoginModalVisible] = useState(false);
     const [role, setRole] = useState(null);
-    
+    const {globalState, handleGlobalState} = useContext(Context);
+
     useEffect(() => {
         // Configura Google Sign-In solo una vez al cargar el componente
         GoogleSignin.configure({
@@ -23,6 +25,10 @@ const ProfileVillano = () => {
         setRole(role);
         setLoginModalVisible(false);
       };
+
+    const setStamina = () => {
+        globalState.fatigue = 100;
+    };
 
     async function onSignOutButtonPress() {
         try {
@@ -61,6 +67,9 @@ const ProfileVillano = () => {
         {isAuthenticated && ( 
         <>    
             <Text>VILLANO</Text>
+            {/* <SetButton  onPress={() => setStamina()}> 
+                <Text> Stamina </Text>
+            </SetButton>  */}
             <SignOutButton onPress={onSignOutButtonPress} setLoginModalVisible={setLoginModalVisible}>
             <ButtonText>Sign Out</ButtonText>
             </SignOutButton>
@@ -69,6 +78,16 @@ const ProfileVillano = () => {
         </View>  
     )
 }
+
+
+const SetButton = styled.TouchableOpacity`
+  background: #CCCCCC;
+  width: 180px;
+  height: 50px;
+  align-self: center;
+  border-radius: 30px;
+  justify-content: center;
+`;
 
 const styles = StyleSheet.create({
     modalContainer: {
