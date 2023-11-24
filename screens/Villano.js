@@ -201,7 +201,7 @@ const Villano = () => {
               />
 
               <Icon name="github-alt" size={20} color="blue" />
-              <Text>FATIGUE: {selectedUser.cansancio}</Text>
+              <Text>FATIGUE: {globalState.fatigue}</Text>
               <StyledProgressBar progress={selectedUser.cansancio/100} />
 
               <Icon name="bomb" size={20} color="blue" />

@@ -108,7 +108,7 @@ const GeolocationUser = () => {
       const artifacts = response.data.data;
       setArtifacts(artifacts);
 
-      console.log('Artefactos:', artifacts);
+      // console.log('Artefactos:', artifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
@@ -154,7 +154,7 @@ const GeolocationUser = () => {
       const searches= response.data.data;
       setSearches(searches);
       
-      console.log('BUsquedas:', searches);
+      // console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
     }

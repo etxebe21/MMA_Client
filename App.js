@@ -29,7 +29,8 @@ const App =  () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
-  const [globalState, setGlobalState] = useState({dinero: 40});
+  const [globalState, setGlobalState] = useState({dinero: 20, fatigue: 40});
+  const [userGlobalState, setUserGlobalState] = useState({})
 
   const handleGlobalState = (data) => {
     setGlobalState(globalState =>  ({
@@ -68,70 +69,70 @@ const App =  () => {
   };
 
   return(
-    <Context.Provider value = {{globalState, handleGlobalState}}>
 <SafeAreaProvider>  
-<View style = {{ flex: 1}}>
-<Splash/>
-  {!isAuthenticated && (
-   <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible}/>
-    )}
-    {isAuthenticated && ( 
-        <>
-      <Header/>  
-  
-    <NavigationContainer>
-      <Tab.Navigator
-          screenOptions={({ route}) => ({
-            swipeEnabled: true,
-            tabBarStyle: { backgroundColor:'#C8A2C8'}, 
-            tabBarIndicatorStyle: {backgroundColor: "#4c2882",},
-            tabBarActiveTintColor: '#4c2882',
-            tabBarInactiveTintColor: '#913595',
-            tabBarShowLabel: false,
-            tabBarShowIcon: true,
-          tabBarIcon: ({focused, color,}) => {
-            let iconName;
-            if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
-
-          else if(route.name === 'Home' & role === 'JACOB') iconName = 'home'
-          else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
-          else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
-          else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
-          else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
-          // else if(route.name === 'CreatePotions') iconName = 'bolt'
-          else if(route.name === 'Torreon') iconName = 'castle';
-          // else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
-          else if(route.name === 'Profile') iconName = 'person';
-          else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
-          else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
-          else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
-
-          return <Icon name = {iconName} size={26} color={color} />
-            },
-        })}
-      >
-      
-      {role === 'ACÓLITO' && <Tab.Screen name = "Home" component={Home} />}
-      {role === 'JACOB' && <Tab.Screen name = "Home" component={Home} />}
-      {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
-      {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
-      {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
-      {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
-      {/* {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />} */}
-      {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
-      {/* {role === 'ACÓLITO' && <Tab.Screen name="Parchment" component={Parchment}/>} */}
-      {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-      {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
-      {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
-      {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
-
-      </Tab.Navigator>
-    </NavigationContainer>
-    </>
+  <Context.Provider value = {{globalState, handleGlobalState}}>
+  <View style = {{ flex: 1}}>
+  <Splash/>
+    {!isAuthenticated && (
+    <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible}/>
       )}
-      </View>
-      </ SafeAreaProvider>
-      </Context.Provider>
+      {isAuthenticated && ( 
+          <>
+        <Header/>  
+    
+      <NavigationContainer>
+        <Tab.Navigator
+            screenOptions={({ route}) => ({
+              swipeEnabled: true,
+              tabBarStyle: { backgroundColor:'#C8A2C8'}, 
+              tabBarIndicatorStyle: {backgroundColor: "#4c2882",},
+              tabBarActiveTintColor: '#4c2882',
+              tabBarInactiveTintColor: '#913595',
+              tabBarShowLabel: false,
+              tabBarShowIcon: true,
+            tabBarIcon: ({focused, color,}) => {
+              let iconName;
+              if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
+
+            else if(route.name === 'Home' & role === 'JACOB') iconName = 'home'
+            else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
+            else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
+            else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
+            else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
+            // else if(route.name === 'CreatePotions') iconName = 'bolt'
+            else if(route.name === 'Torreon') iconName = 'castle';
+            // else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
+            else if(route.name === 'Profile') iconName = 'person';
+            else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
+            else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
+            else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
+
+            return <Icon name = {iconName} size={26} color={color} />
+              },
+          })}
+        >
+        
+        {role === 'ACÓLITO' && <Tab.Screen name = "Home" component={Home} />}
+        {role === 'JACOB' && <Tab.Screen name = "Home" component={Home} />}
+        {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
+        {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
+        {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
+        {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
+        {/* {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />} */}
+        {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
+        {/* {role === 'ACÓLITO' && <Tab.Screen name="Parchment" component={Parchment}/>} */}
+        {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
+        {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
+        {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
+        {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
+
+        </Tab.Navigator>
+      </NavigationContainer>
+      </>
+        )}
+        </View>
+  </Context.Provider>
+</ SafeAreaProvider>
   );
  
 };
