@@ -90,7 +90,7 @@ const Qr = () => {
       }
   }, [scanned, insideTower, navigation]);
   
-  if (userID && scanned) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
+  if (userID ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
       return (
           <View>
               <ViewText>QR</ViewText>
@@ -102,7 +102,7 @@ const Qr = () => {
                       backgroundColor="#BB8FCE"
                       logo={require('../assets/newPotion.png')}
                       getRef={(event)  => {
-                          setScanned(true);
+                          //setScanned(true);
                       }}
                   />
               </QrView>
