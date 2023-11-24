@@ -5,21 +5,37 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [artifacts, setArtifacts] = useState([]);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [search, setSearches] = useState([]);
-  const [showButton, setShowButton] = useState(false);
-  const [collectedArtifacts, setCollectedArtifacts] = useState(4);
+  const [showButton, setShowButton] = useState();
+  const [collectedArtifacts, setCollectedArtifacts] = useState();
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
+  const [userId, setuserId] = useState([]);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
   const userImage = require("../assets/newPotion.png")
  
+  // Función para contar los artefactos encontrados
+  const countFoundArtifacts = () => {
+    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
+    return foundArtifacts.length;
+  };
+
+  // Actualizar el estado de visibilidad del botón
+  useEffect(() => {
+    const foundCount = countFoundArtifacts();
+    setShowAnotherButton(foundCount === 4);
+    setShowButton(foundCount < 4);
+  }, [artifacts]);
+
+
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -76,13 +92,27 @@ const GeolocationUser = () => {
     requestLocationPermission();
   }, []);
 
-  //cuando se modifica la posicion actual del usuario se llama a este efecto
   useEffect(() => {
-    if (userLocation) {
-      console.log(userLocation.latitude);
-      checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
-    }
-  }, [userLocation]);
+    const getID = async () => {
+      try {
+        const userId = await AsyncStorage.getItem('userID')
+        setuserId(userId);
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+        
+      } catch (e) {
+      }
+    };
+
+  getID();
+  }, []); 
+
+  // //cuando se modifica la posicion actual del usuario se llama a este efecto
+  // useEffect(() => {
+  //   if (userLocation) {
+  //     console.log(userLocation.latitude);
+  //     checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
+  //   }
+  // }, [userLocation]);
 
 
   //CUANDO recoges un artefacto se llama a este effect
@@ -125,21 +155,27 @@ const GeolocationUser = () => {
   }, []);
 
 
-  const checkIfUserNearMarker = (latitude, longitude) => {
-    artifacts.forEach((artifact) => {
-      if (!artifact.found) {
-        const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-        console.log(distance);
-        if (distance < 3500) {
-          console.log('Estás cerca del marcador:', artifact.name);
-          setShowButton(true);
-          setSelectedArtifact(artifact); // Almacena el artefacto seleccionado
-        } else {
-          setShowButton(false);
+  useEffect(() => {
+    const checkIfUserNearMarker = (latitude, longitude) => {
+      artifacts.forEach((artifact) => {
+        if (!artifact.found) {
+          const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
+          console.log(distance);
+          if (distance < 8500) {
+            console.log('Estás cerca del marcador:', artifact.name);
+            setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
+            setSelectedArtifact(artifact);
+          } else {
+            setShowButton(false); // Si no está cerca, oculta el botón
+          }
         }
-      }
-    });
-  };
+      });
+    };
+
+    if (userLocation) {
+      checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
+    }
+  }, [userLocation, artifacts]); // 
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371e3;
@@ -162,18 +198,33 @@ const GeolocationUser = () => {
     }
   };
 
+  
   const updateFoundedArtifact = async (artifact) => {
     try {
-      console.log('Artefacto seleccionado:', artifact);
-      const selectedArtifact = { found: !artifact.found }; // Invertir el estado de 'found'
-      console.log( 'modificar estado found' ,selectedArtifact);
-      console.log('ID del artefacto encontrado:', artifact._id);
+      const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
       setSelectedArtifact(selectedArtifact);
-
+  
       // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
       const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
       const updatedArtifact = response.data;
-      console.log('Datos del artefacto actualizados:', updatedArtifact);
+  
+      // Obtener la imagen del usuario actual
+      const userImage = await getUserImageById(userId);
+  
+      // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      const updatedArtifacts = artifacts.map(art => {
+        if (art._id === updatedArtifact._id) {
+          return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+        } else if (art.found) {
+          // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+          return { ...art, userImage: art.userImage };
+        }
+        return art;
+      });
+      setArtifacts(updatedArtifacts);
+      getArtifactsFromDataBase(userImage);
+      // Incrementar collectedArtifacts al recoger un artefacto
+      setCollectedArtifacts(prevCount => prevCount + 1);
 
       // Muestra un mensaje de confirmación
       Alert.alert(
@@ -182,17 +233,17 @@ const GeolocationUser = () => {
         [
           {
             text: "OK",
-            onPress: () => {getArtifactsFromDataBase();},
+            onPress: () => {}, // No recargar los artefactos después de presionar "OK" para mantener las imágenes de usuario
           },
         ],
         { cancelable: false }
       );
-
-      //getArtifactsFromDataBase();
+        
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
+  
 
   const getSearchesFromDataBase = async () => {
     try {
@@ -210,24 +261,25 @@ const GeolocationUser = () => {
   const updateSearch = async (search) => {
     try {
       console.log('busqueda:', search);
-      const finishedSearch= { state: "pending"}; 
-      console.log( 'modificar estado state' ,finishedSearch);
+      const finishedSearch = { state: "pending" }; 
+      console.log('modificar estado state', finishedSearch);
       console.log('ID de la busqueda :', search[0]._id);
   
       // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch );
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
-
-     
+  
       setShowPendingText(true);
-      setShowAnotherButton(false);
+      setShowAnotherButton(false); // Ocultar el botón 'Check'
+  
       getArtifactsFromDataBase();
       getSearchesFromDataBase();
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
     }
   };
+  
   
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
@@ -289,8 +341,8 @@ const GeolocationUser = () => {
           </Buttons>
         )}
 
-        {showAnotherButton && (
-          <SendButton onPress={() => updateSearch(search)}>
+        {showAnotherButton &&  !showPendingText &&(
+          <SendButton onPress={() => updateSearch(search) }>
             <ButtonsText>CHECK</ButtonsText>
           </SendButton>
         )}
