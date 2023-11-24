@@ -1,16 +1,16 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
-
+import { Context } from "./Context";
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     const [isLoading, setIsLoading] = useState(false);
-
+    const {userGlobalState, setUserGlobalState } = useContext(Context);
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         requestProfile: true,
@@ -48,6 +48,9 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             const response = await axios.post(url, {idToken:checkToken});
             const {validToken, user }= response.data;
             console.log('Iniciado sesión con Google!');
+            // console.log(user);
+            setUserGlobalState(user);
+            
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
             // console.log('Usuario:', user);
