@@ -189,14 +189,26 @@ const GeolocationUser = () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/artifacts';
       const response = await axios.get(url);
-      const artifacts = response.data.data;
-      setArtifacts(artifacts);
-
-      console.log('Artefactos:', artifacts);
+      const artifactsData = response.data.data;
+  
+      // Actualizar los artefactos con la información de las imágenes del usuario
+      const updatedArtifacts = await Promise.all(
+        artifactsData.map(async (artifact) => {
+          if (artifact.found) {
+            const userImage = await getUserImageById(artifact.who);
+            return { ...artifact, userImage };
+          }
+          return artifact;
+        })
+      );
+  
+      setArtifacts(updatedArtifacts);
+      console.log('Artefactos:', updatedArtifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
   };
+  
 
   
   const updateFoundedArtifact = async (artifact) => {
@@ -221,11 +233,12 @@ const GeolocationUser = () => {
         }
         return art;
       });
+  
       setArtifacts(updatedArtifacts);
-      getArtifactsFromDataBase(userImage);
+      getArtifactsFromDataBase();
       // Incrementar collectedArtifacts al recoger un artefacto
       setCollectedArtifacts(prevCount => prevCount + 1);
-
+  
       // Muestra un mensaje de confirmación
       Alert.alert(
         "Artefacto Encontrado",
@@ -238,11 +251,12 @@ const GeolocationUser = () => {
         ],
         { cancelable: false }
       );
-        
+  
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
+  
   
 
   const getSearchesFromDataBase = async () => {
