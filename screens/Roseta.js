@@ -24,20 +24,22 @@ const Roseta = () => {
   };
 
   const calculateArtifactPosition = (index) => {
-    const numArtifacts = 2;
+    const numArtifacts = 4;
+
     const radius = 135;
-  
 
     const centerX = Dimensions.get('window').width / 2.6;
     const centerY = Dimensions.get('window').height / 3;
-  
-    //angulo
-    const angle = ((index * (360 / numArtifacts)) * (Math.PI / 180)) + 130.35; 
+    
+    
+    const angle = (((index * (360 / numArtifacts)) + 270) * (Math.PI / 180));
 
     const x = centerX + radius * Math.cos(angle);
     const y = centerY + radius * Math.sin(angle);
+
     return { left: x, top: y };
-  };
+};
+
 
   return (
     <BackgroundContainer>
