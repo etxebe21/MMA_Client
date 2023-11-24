@@ -8,11 +8,12 @@ const bgImage = '../assets/wallpaper_potionCreation3.png';
 const View = styled.View`
     flex: 1;
     background: #C8A2C8;
-    heigth: 100%;
+    heigth: '100%';
+    top:-13px;
 `
 
 const Text = styled.Text `
-    bottom: -8px;
+    bottom: -13px;
     color: #C8A2C8;
     font-size: 25px;
     font-weight: bold;
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
 const CreatePotions = () => {
 
     return(
-        
         <View>
             <ImageBackground source={require(bgImage)} style={styles.container}>             
                 <Text> CREATE POTIONS </Text>

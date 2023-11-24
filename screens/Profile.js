@@ -46,7 +46,7 @@ const Profile = () => {
             >
               <DetailAvatar source={{ uri: user.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserLevelMarco>
-              <UserTextLevel> 20</UserTextLevel>
+              <UserTextLevel> {user.level}</UserTextLevel>
               </UserLevelMarco>
             </Marco>
               <UserText>{user.username}</UserText>
