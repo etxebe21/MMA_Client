@@ -4,22 +4,20 @@ import { Image } from 'react-native';
 
 const Container = styled.View`
   width: 100%;
-  height: 85px;
+  height: 17%
+  margin-bottom: -10%;
   padding: 0 11px;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  background: #2e1b3c;
-  elevation: 5;
-  opacity:1;
+  background: #000000;
 `;
 
 const Text = styled.Text`
-  margin-top: 5px;
-  color: #bf55ec; 
+
+  color: #9203F0; 
   font-size: 24px;
   font-weight: bold;
-  letter-spacing: -0.3px;
   font-family: 'Tealand';
 `;
 
