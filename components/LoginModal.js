@@ -94,9 +94,9 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
       };
 
       return (
-        <ImageBackground source={require("../assets/login.png")} style={styles.imageBackground}>
+        <ImageBackground source={require("../assets/login3.png")} style={styles.imageBackground}>
             <View>
-                <Text>LOGIN</Text>
+                {/* <Text>LOGIN</Text> */}
                 <StyledButton onPress={onGoogleButtonPress} disabled={isLoading}>
                     {isLoading ? <ActivityIndicator color="white" /> : <ButtonText>Google Sign-In</ButtonText>}
                 </StyledButton>
@@ -109,6 +109,7 @@ const View = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
+    width: 45%;
 `
 
 const Text = styled.Text`
@@ -121,18 +122,19 @@ const Text = styled.Text`
 `
 
 const StyledButton = styled.TouchableOpacity`
-    background-color: #8AC8FF;
-    padding: 10px 20px;
-    bottom: -150px;
-    width: 50%;
-    height: 55px;
+    background-color: rgba(171, 147, 192, 0.7);
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    width: 100%;
+    margin-top: 350%;
     border-radius: 60px;
-    border: #4c2882;
+    border: #7B26C4;
     align-self: center;
 `
 
 const ButtonText = styled.Text`
-    color: #4c2882;
+    color:rgba(92, 0, 172, 0.8);
     font-size: 20px;
     text-align: center;
 `
@@ -147,6 +149,7 @@ const styles = StyleSheet.create({
       flex: 1,
       width: '100%',
       height: '100%',
+      backgroundColor: 'black',
       justifyContent: 'center',
       alignItems: 'center',
     },
