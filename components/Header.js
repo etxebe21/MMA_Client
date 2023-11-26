@@ -31,11 +31,11 @@ const Header = () => {
   return (
     <Container>
       <Row>
-          <Image source={require('../assets/chaos2.png')} style={{ width: 60, height: 60, borderRadius:40 }} />
+          <Image source={require('../assets/La_Hermandad_Icon.png')} style={{ width: 60, height: 60, borderRadius:40 }} />
       </Row>
       <Text>LA HERMANDAD</Text>
       <Row>
-          <Image source={require('../assets/chaos1.png')} style={{ width: 60, height: 60, borderRadius:40 }} />
+          <Image source={require('../assets/La_Hermandad_Icon.png')} style={{ width: 60, height: 60, borderRadius:40 }} />
       </Row>
     </Container>
   );
