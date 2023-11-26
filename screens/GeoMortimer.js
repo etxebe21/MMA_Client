@@ -106,14 +106,6 @@ const GeolocationUser = () => {
   getID();
   }, []); 
 
-  // //cuando se modifica la posicion actual del usuario se llama a este efecto
-  // useEffect(() => {
-  //   if (userLocation) {
-  //     console.log(userLocation.latitude);
-  //     checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
-  //   }
-  // }, [userLocation]);
-
 
   //CUANDO recoges un artefacto se llama a este effect
   useEffect(() => {
@@ -211,51 +203,43 @@ const GeolocationUser = () => {
   
 
   
-//   const updateFoundedArtifact = async (artifact) => {
-//     try {
-//       const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
-//       setSelectedArtifact(selectedArtifact);
+  const resetSearch = async (artifacts) => {
+    try {
+      const updatedArtifacts = [];
+      
+      // Iterar sobre cada uno de los cuatro artefactos
+      for (let i = 0; i < artifacts.length; i++) {
+        const selectedArtifact = { found: false, who: "" };
+        
+        // Realizar una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+        const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifacts[i]._id}`, selectedArtifact);
+        const updatedArtifact = response.data;
+        
+        updatedArtifacts.push(updatedArtifact);
+      }
   
-//       // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-//       const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
-//       const updatedArtifact = response.data;
+      setArtifacts(updatedArtifacts);
+      getArtifactsFromDataBase();
+      getSearchesFromDataBase();
+      
+      // Mostrar un mensaje de confirmación
+      Alert.alert(
+        "BÚSQUEDA REINICIADA",
+        "Los datos de la búsqueda han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {}, 
+          },
+        ],
+        { cancelable: false }
+      );
   
-//       // Obtener la imagen del usuario actual
-//       const userImage = await getUserImageById(userId);
+    } catch (error) {
+      console.error('Error al actualizar los datos de los artefactos:', error);
+    }
+  };
   
-//       // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
-//       const updatedArtifacts = artifacts.map(art => {
-//         if (art._id === updatedArtifact._id) {
-//           return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
-//         } else if (art.found) {
-//           // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
-//           return { ...art, userImage: art.userImage };
-//         }
-//         return art;
-//       });
-  
-//       setArtifacts(updatedArtifacts);
-//       getArtifactsFromDataBase();
-//       // Incrementar collectedArtifacts al recoger un artefacto
-//       setCollectedArtifacts(prevCount => prevCount + 1);
-  
-//       // Muestra un mensaje de confirmación
-//       Alert.alert(
-//         "Artefacto Encontrado",
-//         "Los datos del artefacto han sido actualizados correctamente.",
-//         [
-//           {
-//             text: "OK",
-//             onPress: () => {}, // No recargar los artefactos después de presionar "OK" para mantener las imágenes de usuario
-//           },
-//         ],
-//         { cancelable: false }
-//       );
-  
-//     } catch (error) {
-//       console.error('Error al actualizar los datos del artefacto:', error);
-//     }
-//   };
   
   
 
@@ -373,11 +357,13 @@ const GeolocationUser = () => {
 
       <BackgroundImage source={img}>
         
-        {showButton && (
-          <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
+        
+      {!showPendingText && showButton && (
+        <Buttons onPress={() => resetSearch(artifacts)}>
             <ButtonsText>RESET</ButtonsText>
-          </Buttons>
+        </Buttons>
         )}
+
 
         {showAnotherButton && !showPendingText &&(
         <SendButton onPress={() => updateSearch(search) }>
