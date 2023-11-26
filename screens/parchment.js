@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
 
     parchment: {
       top: -40,
-      width: 400, 
-      height: 800,  
+      width: '100%', 
+      height: '110%',  
     }
 
   });
