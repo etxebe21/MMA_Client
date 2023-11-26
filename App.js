@@ -10,7 +10,7 @@ import Profile from './screens/Profile';
 import { CreatePotions }from './screens/CreatePotions';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
-import Qr from './screens/Qr';
+import Qr  from './screens/Qr';
 import ProfileMortimer from './screens/ProfileMortimer';
 import Villano from './screens/Villano';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +19,7 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
+import Roseta from './screens/Roseta';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { enableLatestRenderer } from 'react-native-maps';
@@ -43,9 +44,9 @@ const App =  () => {
     const getData = async () => {
       try {
         const email = await AsyncStorage.getItem('userEmail');
-        console.log(email); 
+        // console.log(email); 
         const role = await AsyncStorage.getItem('userRole');
-        console.log(role);
+        // console.log(role);
         const id = await AsyncStorage.getItem('userID')
         setRole(role); // Almacena el rol del usuario en el estado
         return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -53,7 +54,7 @@ const App =  () => {
       } catch (e) {
         // error reading value
       }
-      console.log('Done get.')
+      // console.log('Done get.')
     };
 
   getData();
@@ -105,6 +106,7 @@ const App =  () => {
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
           else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
+          else if (route.name === 'Roseta' && role === 'ACÓLITO') iconName = 'camera';
 
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -124,6 +126,8 @@ const App =  () => {
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
       {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
+      {role === 'ACÓLITO' && <Tab.Screen name = "Roseta" component={Roseta} /> }
+
 
       </Tab.Navigator>
     </NavigationContainer>
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  
 });
 
 

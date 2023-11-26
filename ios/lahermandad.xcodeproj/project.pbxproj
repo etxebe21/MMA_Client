@@ -15,10 +15,10 @@
 		27FE34DC2AEFC1C5009B2E9A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27FE34DB2AEFC1C5009B2E9A /* GoogleService-Info.plist */; };
 		36BB550FFDAB196C795A864B /* libPods-lahermandad-lahermandadTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15D33BF08EA864D50F9BEDD7 /* libPods-lahermandad-lahermandadTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E92D1CF3C4E70F3EF948D4D2 /* libPods-lahermandad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53296729731553208B42C060 /* libPods-lahermandad.a */; };
+		84913752E81F44E39B8FBC88 /* Tealand.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DEEF5650EA94C529FAFF505 /* Tealand.ttf */; };
 		BFBBC10D4CB94F3698E9EC48 /* Creepster.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D42F657852144DA487AE4EC3 /* Creepster.ttf */; };
 		DAA2555BDF204061894C16CC /* Sacramento.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D13671A48E44BADA28D65E7 /* Sacramento.ttf */; };
-		84913752E81F44E39B8FBC88 /* Tealand.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DEEF5650EA94C529FAFF505 /* Tealand.ttf */; };
+		E92D1CF3C4E70F3EF948D4D2 /* libPods-lahermandad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53296729731553208B42C060 /* libPods-lahermandad.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,14 +64,14 @@
 		27F247CD2AF3A3C600BC4A60 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
 		27FE34DB2AEFC1C5009B2E9A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-lahermandad.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lahermandad.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lahermandad/Pods-lahermandad.debug.xcconfig"; sourceTree = "<group>"; usesTabs = 0; };
+		4D13671A48E44BADA28D65E7 /* Sacramento.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Sacramento.ttf; path = ../assets/fonts/Sacramento.ttf; sourceTree = "<group>"; };
 		53296729731553208B42C060 /* libPods-lahermandad.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lahermandad.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5709B34CF0A7D63546082F79 /* Pods-lahermandad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lahermandad.release.xcconfig"; path = "Pods/Target Support Files/Pods-lahermandad/Pods-lahermandad.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-lahermandad-lahermandadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lahermandad-lahermandadTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-lahermandad-lahermandadTests/Pods-lahermandad-lahermandadTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7DEEF5650EA94C529FAFF505 /* Tealand.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Tealand.ttf; path = ../assets/fonts/Tealand.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lahermandad/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-lahermandad-lahermandadTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lahermandad-lahermandadTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-lahermandad-lahermandadTests/Pods-lahermandad-lahermandadTests.release.xcconfig"; sourceTree = "<group>"; };
-		D42F657852144DA487AE4EC3 /* Creepster.ttf */ = {isa = PBXFileReference; name = "Creepster.ttf"; path = "../assets/fonts/Creepster.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4D13671A48E44BADA28D65E7 /* Sacramento.ttf */ = {isa = PBXFileReference; name = "Sacramento.ttf"; path = "../assets/fonts/Sacramento.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7DEEF5650EA94C529FAFF505 /* Tealand.ttf */ = {isa = PBXFileReference; name = "Tealand.ttf"; path = "../assets/fonts/Tealand.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D42F657852144DA487AE4EC3 /* Creepster.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Creepster.ttf; path = ../assets/fonts/Creepster.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +109,17 @@
 				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		111EF8E1235E4A6DAFB60CC0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D42F657852144DA487AE4EC3 /* Creepster.ttf */,
+				4D13671A48E44BADA28D65E7 /* Sacramento.ttf */,
+				7DEEF5650EA94C529FAFF505 /* Tealand.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* lahermandad */ = {
@@ -204,17 +215,6 @@
 			);
 			name = Pods;
 			sourceTree = "<group>";
-		};
-		111EF8E1235E4A6DAFB60CC0 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				D42F657852144DA487AE4EC3 /* Creepster.ttf */,
-				4D13671A48E44BADA28D65E7 /* Sacramento.ttf */,
-				7DEEF5650EA94C529FAFF505 /* Tealand.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 

@@ -21,24 +21,25 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
-            console.log("PASO 1 token");
-            console.log(idToken);
+            // console.log("PASO 1 token");
+            // console.log(idToken);
 
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             // Sign-in the user with the credential
-            console.log("PASO 2 credenciales google")
-            console.log(googleCredential);
+            // console.log("PASO 2 credenciales google")
+            // console.log(googleCredential);
 
-            console.log("PASO 3 credenciales");
+            // console.log("PASO 3 credenciales");
             await auth().signInWithCredential(googleCredential);
 
-            console.log("PASO 4 autenticar usuario actual");
+            // console.log("PASO 4 autenticar usuario actual");
             const idTokenResult = await auth().currentUser.getIdTokenResult();
-            console.log(idTokenResult);
+            // console.log(idTokenResult);
             const checkToken = idTokenResult.token;
 
-            console.log("CHEEECK TOKEEEN");
-            console.log(checkToken);
+            // console.log("CHEEECK TOKEEEN");
+            // console.log(checkToken);
+
             //const url = 'http://192.168.1.170:3000/api/users/verify-token';
             //const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
             //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
@@ -49,29 +50,29 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             console.log('Iniciado sesión con Google!');
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
-            console.log('Usuario:', user);
+            // console.log('Usuario:', user);
             const email = user.email;
-            console.log(email);
+            // console.log(email);
             const role = user.role;
-            console.log(role);
+            // console.log(role);
             const id = user._id;
 
             // Guarda el correo electrónico en AsyncStorage
             await AsyncStorage.setItem('userEmail', email)
             .then(() => {
-            console.log('Correo electrónico guardado en AsyncStorage:', email);
+            // console.log('Correo electrónico guardado en AsyncStorage:', email);
             })
             .catch(error => {
             console.error('Error al guardar el correo electrónico en AsyncStorage:', error);
             });
             await AsyncStorage.setItem('userRole', role)
             .then(() => {
-            console.log('Crole guardado en AsyncStorage:', role);
+            // console.log('Crole guardado en AsyncStorage:', role);
             })
             
             await AsyncStorage.setItem('userID', id)
             .then(() => {
-            console.log('Crole guardado en AsyncStorage:', id);
+            // console.log('Crole guardado en AsyncStorage:', id);
             })
                 handleSuccessfulLogin();
            

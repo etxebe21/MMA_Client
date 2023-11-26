@@ -30,8 +30,8 @@ const Home = () => {
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
             setRole(null); // Actualiza el estado del usuario autenticado
-            console.log('Cerró sesión de Google');
-            console.log("role" ,role);
+            // console.log('Cerró sesión de Google');
+            // console.log("role" ,role);
             setIsAuthenticated(false);
             setLoginModalVisible(true);
         } catch (error) {

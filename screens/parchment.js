@@ -71,7 +71,7 @@ const ViewPotion = styled.View`
 const ParchmentView = styled.View`
     bottom: -50px;
     width: 350px;
-    height: 350x;
+    height: 350px;
     align-self: center;
     background: #4c2882;
     border-radius: 30px; 
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
       width: '100',
       height: '100',
     },
-    // Otros estilos...
+
   });
   
 
