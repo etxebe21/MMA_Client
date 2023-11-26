@@ -216,8 +216,17 @@ const GeolocationUser = () => {
         const updatedArtifact = response.data;
         
         updatedArtifacts.push(updatedArtifact);
+        console.log("artefactos reiniciados" , updatedArtifacts)
       }
+      const finishedSearch = { state: " " }; 
+      console.log('modificar estado state', finishedSearch);
+      console.log('ID de la busqueda :', search[0]._id);
   
+      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
+      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
+      const updatedSearch = response.data;
+      console.log('Datos busqueda reiniciados:', updatedSearch);
+
       setArtifacts(updatedArtifacts);
       getArtifactsFromDataBase();
       getSearchesFromDataBase();
@@ -225,7 +234,7 @@ const GeolocationUser = () => {
       // Mostrar un mensaje de confirmación
       Alert.alert(
         "BÚSQUEDA REINICIADA",
-        "Los datos de la búsqueda han sido actualizados correctamente.",
+        "Los datos de la búsqueda han sido reiniciados correctamente.",
         [
           {
             text: "OK",
