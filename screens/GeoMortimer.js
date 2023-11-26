@@ -265,7 +265,11 @@ const GeolocationUser = () => {
       const response = await axios.get(url);
       const searches= response.data.data;
       setSearches(searches);
-      
+      setShowPendingText(search[0].state === "completed");
+    
+      // Mostrar u ocultar el botón de validación según el estado de la búsqueda
+      setShowAnotherButton(search[0].state === "pending");
+
       console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
@@ -283,12 +287,19 @@ const GeolocationUser = () => {
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
-  
-      setShowPendingText(true);
-      setShowAnotherButton(false); // Ocultar el botón 'Check'
+
+    //   if (search[0].state === "pending") {
+    //     setShowPendingText(true);
+    //   } else {
+    //     setShowPendingText(false);
+      
   
       getArtifactsFromDataBase();
-      getSearchesFromDataBase();
+      getSearchesFromDataBase(search);
+      setShowPendingText(search[0].state === "completed");
+    
+      // Mostrar u ocultar el botón de validación según el estado de la búsqueda
+      setShowAnotherButton(search[0].state === "pending");
 
        // Muestra un mensaje de confirmación
       Alert.alert(
@@ -368,10 +379,10 @@ const GeolocationUser = () => {
           </Buttons>
         )}
 
-        {showAnotherButton &&  !showPendingText &&(
-          <SendButton onPress={() => updateSearch(search) }>
+        {showAnotherButton && !showPendingText &&(
+        <SendButton onPress={() => updateSearch(search) }>
             <ButtonsText>VALIDATE</ButtonsText>
-          </SendButton>
+        </SendButton>
         )}
 
               <View>
