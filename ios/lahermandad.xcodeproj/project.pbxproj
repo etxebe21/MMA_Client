@@ -19,6 +19,10 @@
 		BFBBC10D4CB94F3698E9EC48 /* Creepster.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D42F657852144DA487AE4EC3 /* Creepster.ttf */; };
 		DAA2555BDF204061894C16CC /* Sacramento.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D13671A48E44BADA28D65E7 /* Sacramento.ttf */; };
 		E92D1CF3C4E70F3EF948D4D2 /* libPods-lahermandad.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53296729731553208B42C060 /* libPods-lahermandad.a */; };
+		7497929354544A80856AB1DC /* Groovy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCF91493491A486988956A60 /* Groovy.ttf */; };
+		5E75FBF780534F8DAF7FFA5E /* Parade_Groovy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFE63E58131F4E129EDCD126 /* Parade_Groovy.ttf */; };
+		764AFDBA31C94FF89B95D961 /* Beyond-Wonderland.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 008C47FA3B59440EAFA766A1 /* Beyond-Wonderland.ttf */; };
+		6FB2A1A3887F43ECB3449BF6 /* AlmendraSC-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D37DC3308B7F4909B0F3F153 /* AlmendraSC-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +76,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lahermandad/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-lahermandad-lahermandadTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lahermandad-lahermandadTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-lahermandad-lahermandadTests/Pods-lahermandad-lahermandadTests.release.xcconfig"; sourceTree = "<group>"; };
 		D42F657852144DA487AE4EC3 /* Creepster.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Creepster.ttf; path = ../assets/fonts/Creepster.ttf; sourceTree = "<group>"; };
+		FCF91493491A486988956A60 /* Groovy.ttf */ = {isa = PBXFileReference; name = "Groovy.ttf"; path = "../assets/fonts/Groovy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DFE63E58131F4E129EDCD126 /* Parade_Groovy.ttf */ = {isa = PBXFileReference; name = "Parade_Groovy.ttf"; path = "../assets/fonts/Parade_Groovy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		008C47FA3B59440EAFA766A1 /* Beyond-Wonderland.ttf */ = {isa = PBXFileReference; name = "Beyond-Wonderland.ttf"; path = "../assets/fonts/Beyond-Wonderland.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D37DC3308B7F4909B0F3F153 /* AlmendraSC-Regular.ttf */ = {isa = PBXFileReference; name = "AlmendraSC-Regular.ttf"; path = "../assets/fonts/AlmendraSC-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +125,10 @@
 				D42F657852144DA487AE4EC3 /* Creepster.ttf */,
 				4D13671A48E44BADA28D65E7 /* Sacramento.ttf */,
 				7DEEF5650EA94C529FAFF505 /* Tealand.ttf */,
+				FCF91493491A486988956A60 /* Groovy.ttf */,
+				DFE63E58131F4E129EDCD126 /* Parade_Groovy.ttf */,
+				008C47FA3B59440EAFA766A1 /* Beyond-Wonderland.ttf */,
+				D37DC3308B7F4909B0F3F153 /* AlmendraSC-Regular.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -319,6 +331,10 @@
 				BFBBC10D4CB94F3698E9EC48 /* Creepster.ttf in Resources */,
 				DAA2555BDF204061894C16CC /* Sacramento.ttf in Resources */,
 				84913752E81F44E39B8FBC88 /* Tealand.ttf in Resources */,
+				7497929354544A80856AB1DC /* Groovy.ttf in Resources */,
+				5E75FBF780534F8DAF7FFA5E /* Parade_Groovy.ttf in Resources */,
+				764AFDBA31C94FF89B95D961 /* Beyond-Wonderland.ttf in Resources */,
+				6FB2A1A3887F43ECB3449BF6 /* AlmendraSC-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

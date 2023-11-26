@@ -18,7 +18,7 @@ const Text = styled.Text`
   color: #9203F0; 
   font-size: 24px;
   font-weight: bold;
-  font-family: 'Tealand';
+  font-family: 'Groovy';
 `;
 
 const Row = styled.View`

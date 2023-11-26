@@ -2,8 +2,24 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/AlmendraSC-Regular.ttf",
+      "sha1": "70a097dc59925071d9e1a790df43c2a09e8b62e5"
+    },
+    {
+      "path": "assets/fonts/Beyond-Wonderland.ttf",
+      "sha1": "5256d41715580216c19b85b74c879d23dd032879"
+    },
+    {
       "path": "assets/fonts/Creepster.ttf",
       "sha1": "7d00ea50354f1d3364e6403054254586fbafc533"
+    },
+    {
+      "path": "assets/fonts/Groovy.ttf",
+      "sha1": "0b82f4ad4de8164b68500b242901929a4d4ff50d"
+    },
+    {
+      "path": "assets/fonts/Parade_Groovy.ttf",
+      "sha1": "0b82f4ad4de8164b68500b242901929a4d4ff50d"
     },
     {
       "path": "assets/fonts/Sacramento.ttf",
