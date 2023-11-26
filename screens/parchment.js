@@ -51,20 +51,23 @@ const Parchment = ({ towerBoolean }) => {
         {isCleaned && isPotionCreated && (
             
           <ImageBackground source={bgImageClean} style={styles.parchment}>
-            {/* <CloseButton onPress={() => returnButton()}>
+            <CloseButton onPress={() => returnButton()}>
                 <Icon name="times" size={60} color="#4c2882" />
-            </CloseButton> */}
+            </CloseButton>
            
-              <ClearParchmentCleanText>Este pergamino recoge la historia de la leyenda de la armadura épica: 
+              <ClearParchmentCleanText>
+                                        Este pergamino recoge la historia de la leyenda de la armadura épica: 
                                         un artefacto de brillo dorado necesario para acceder a la tumba Espectral, 
                                         lugar donde residen los 4 jinetes.
-              </ClearParchmentCleanText>   
+              </ClearParchmentCleanText>
+
               <ClearParchmentCleanText>   
                                         La armadura se perdió en la 2ª Era, pero se conservan aún manuales de cómo se llegó a forjar. 
                                         Cada una de las piezas necesarias para su construcción descansa en una tumba del Obituario. 
                                         El problema es que la entrada permanece sellada por el rosetón de los 4 artefactos arcanos 
                                         necesarios para desbloquearla.
               </ClearParchmentCleanText>
+              
               <ClearParchmentCleanText>      
                                         Los artefactos se perdieron a lo largo de la ciénaga, pero poco más se sabe. 
                                         El único material disponible es un viejo manuscrito con un mapa de la zona. 
