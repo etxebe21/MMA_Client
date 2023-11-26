@@ -101,7 +101,7 @@ const Text = styled.Text `
     align-self: center;  
 `
 const SignOutButton = styled.TouchableOpacity`
-    background-color: rgba(255, 20, 20, 1);
+    background-color: rgba(232, 0, 0 , 0.6);
     justify-content: center;
     width: 50%;
     height: 7%;
@@ -110,7 +110,7 @@ const SignOutButton = styled.TouchableOpacity`
     align-self: center;
 `
 const ButtonText = styled.Text`
-    color: white;
+    color: rgba(255,255,255,1);
     font-size: 20px;
     text-align: center;
 `
