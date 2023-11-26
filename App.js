@@ -24,6 +24,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { enableLatestRenderer } from 'react-native-maps';
 import { Context } from './components/Context';
+import GeolocationMortimer from './screens/GeoMortimer';
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -107,6 +108,7 @@ const App =  () => {
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
           else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
           else if (route.name === 'Roseta' && role === 'ACÓLITO') iconName = 'camera';
+          else if (route.name === 'GeolocationMortimer' && role === 'MORTIMER') iconName = 'map';
 
           return <Icon name = {iconName} size={26} color={color} />
             },
@@ -127,7 +129,7 @@ const App =  () => {
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
       {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
       {role === 'ACÓLITO' && <Tab.Screen name = "Roseta" component={Roseta} /> }
-
+      {role === 'MORTIMER' && <Tab.Screen name = "GeolocationMortimer" component={GeolocationMortimer} /> }
 
       </Tab.Navigator>
     </NavigationContainer>
