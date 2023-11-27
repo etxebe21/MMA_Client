@@ -19,7 +19,7 @@ const Text = styled.Text `
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;
-    top: 20%; 
+    top: 23%; 
     
 `
 
