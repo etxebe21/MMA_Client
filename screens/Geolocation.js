@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View, TouchableOpacity,ActivityIndicator,Animated } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View,Text, TouchableOpacity,ActivityIndicator,Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Roseta from './Roseta';
 
 const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -17,6 +18,8 @@ const GeolocationUser = () => {
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
+  const [searchState, setSearchState] = useState([]);
+  const [showRosetaModal, setShowRosetaModal] = useState(false); 
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
@@ -105,15 +108,6 @@ const GeolocationUser = () => {
 
   getID();
   }, []); 
-
-  // //cuando se modifica la posicion actual del usuario se llama a este efecto
-  // useEffect(() => {
-  //   if (userLocation) {
-  //     console.log(userLocation.latitude);
-  //     checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
-  //   }
-  // }, [userLocation]);
-
 
   //CUANDO recoges un artefacto se llama a este effect
   useEffect(() => {
@@ -215,7 +209,7 @@ const GeolocationUser = () => {
     try {
       const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
       setSelectedArtifact(selectedArtifact);
-  
+      console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
       // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
       const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
       const updatedArtifact = response.data;
@@ -266,6 +260,13 @@ const GeolocationUser = () => {
       const searches= response.data.data;
       setSearches(searches);
       
+
+      if (searches.state === 'completed') {
+        setShowRosetaModal(true);
+      }else{
+        setShowRosetaModal(false);
+      }
+      
       console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
@@ -283,7 +284,9 @@ const GeolocationUser = () => {
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
-  
+      
+      const searchState = updatedSearch.state;
+      setSearchState(searchState);
       setShowPendingText(true);
       setShowAnotherButton(false); // Ocultar el botón 'Check'
   
@@ -310,7 +313,10 @@ const GeolocationUser = () => {
 
 
   return (
+
+    
     <Container>
+      
       <MapView
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
@@ -364,6 +370,9 @@ const GeolocationUser = () => {
               <View>
         {showPendingText && (
         <>
+          <UpdateButton onPress={() => getSearchesFromDataBase()}>
+            <ButtonsText>UPDATE</ButtonsText>
+          </UpdateButton>
           <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
             <PendingText style={styles.pendingText}>PENDING</PendingText>
             <ActivityIndicator size="large" color="#3498db" animating={true} />
@@ -401,9 +410,14 @@ const GeolocationUser = () => {
     </>
   )}
 
-
-      </BackgroundImage>
+  {showRosetaModal && (
+      
+      <Roseta  style={styles.modalContainer}/>
+   
+  )}
+  </BackgroundImage>
     </Container>
+    
   );
 };
 
@@ -459,7 +473,10 @@ const styles = StyleSheet.create({
     top: 27,
     marginLeft: 33
   },
-
+  modalContainer: {
+    zIndex: 999, // Asegúrate de tener un valor alto para posicionarlo en la parte superior
+    top: 1000
+  },
 });
 
 const BackgroundImage = styled(ImageBackground)`
@@ -515,4 +532,16 @@ const PendingText = styled.Text`
   align-self: center;
   top: -30px;
   `
+const UpdateButton = styled.TouchableOpacity`
+background: #A3A2A2;
+opacity: 0.95;
+width: 180px;
+height: 65px;
+align-self: center;
+border-radius: 30px;
+border: #0B0B0B;
+bottom:25px;
+background-color:#ffffff
+`
+
 export default GeolocationUser;

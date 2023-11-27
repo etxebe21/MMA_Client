@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { ImageBackground, Image, Dimensions } from 'react-native';
+import { ImageBackground, Image, Dimensions, StyleSheet} from 'react-native';
 import axios from 'axios';
-
-const bgImage = require('../assets/roseta.png');
 
 const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
@@ -43,7 +41,7 @@ const Roseta = () => {
 
   return (
     <BackgroundContainer>
-      <BackgroundImage source={bgImage}>
+      <ImageBackground source={require("../assets/roseta.png")} style={styles.imageBackground}>
         {artifactImages.length === 4 &&
           artifactImages.map((image, index) => {
             const position = calculateArtifactPosition(index);
@@ -58,7 +56,7 @@ const Roseta = () => {
             };
             return <ArtifactImage key={index} source={{ uri: image }} style={styles} />;
           })}
-      </BackgroundImage>
+          </ImageBackground>
     </BackgroundContainer>
   );
 };
@@ -68,11 +66,21 @@ const BackgroundContainer = styled.View`
   background-color: #c8a2c8;
 `;
 
-const BackgroundImage = styled(ImageBackground)`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 const ArtifactImage = styled(Image)``;
 
