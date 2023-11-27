@@ -40,7 +40,6 @@ const Roseta = () => {
 
 
   return (
-    <BackgroundContainer>
       <ImageBackground source={require("../assets/roseta.png")} style={styles.imageBackground}>
         {artifactImages.length === 4 &&
           artifactImages.map((image, index) => {
@@ -57,7 +56,6 @@ const Roseta = () => {
             return <ArtifactImage key={index} source={{ uri: image }} style={styles} />;
           })}
           </ImageBackground>
-    </BackgroundContainer>
   );
 };
 

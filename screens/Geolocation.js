@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, PermissionsAndroid, Button, Alert, ImageBackground, Image, View,Text, TouchableOpacity,ActivityIndicator,Animated } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Alert, ImageBackground, Image, View,ActivityIndicator,Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -18,12 +18,11 @@ const GeolocationUser = () => {
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
-  const [searchState, setSearchState] = useState([]);
-  const [showRosetaModal, setShowRosetaModal] = useState(false); 
+  const [mapVisible, setMapVisible] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
-  const userImage = require("../assets/newPotion.png")
  
   // Función para contar los artefactos encontrados
   const countFoundArtifacts = () => {
@@ -252,26 +251,46 @@ const GeolocationUser = () => {
   };
   
   
-
   const getSearchesFromDataBase = async () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/searches';
       const response = await axios.get(url);
-      const searches= response.data.data;
+      const searches = response.data.data;
       setSearches(searches);
-      
-
-      if (searches.state === 'completed') {
-        setShowRosetaModal(true);
-      }else{
-        setShowRosetaModal(false);
+      console.log(searches[0].state);
+  
+      if (searches[0].state !== 'completed') {
+        Alert.alert(
+          'BUSQUEDA PENDIENTE',
+          '  ',
+          [
+            {
+              text: 'OK',
+              onPress: () => closeModal(),
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        // Si el estado es 'completed', muestra un alert antes de abrir el modal
+        Alert.alert(
+          'BUSQUEDA VALIDADA',
+          '',
+          [
+            {
+              text: 'OK',
+              onPress: () => openModal(),
+            },
+          ],
+          { cancelable: false }
+        );
       }
-      
-      console.log('BUsquedas:', searches);
     } catch (error) {
-      console.error('Error al obtener busquedas:', error);
+      console.error('Error al obtener búsquedas:', error);
     }
-  }; 
+  };
+  
+  
 
   const updateSearch = async (search) => {
     try {
@@ -285,8 +304,6 @@ const GeolocationUser = () => {
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
       
-      const searchState = updatedSearch.state;
-      setSearchState(searchState);
       setShowPendingText(true);
       setShowAnotherButton(false); // Ocultar el botón 'Check'
   
@@ -311,12 +328,23 @@ const GeolocationUser = () => {
   }
 };
 
+const openModal = () => {
+  setShowModal(true);
+  setMapVisible(false);
+};
+
+const closeModal = () => {
+  setShowModal(false);
+  setMapVisible(true);
+};
 
   return (
 
     
     <Container>
       
+      
+      {mapVisible && (
       <MapView
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
@@ -352,6 +380,7 @@ const GeolocationUser = () => {
               </Marker>
             ))}
       </MapView>
+      )}
 
       <BackgroundImage source={img}>
         
@@ -370,9 +399,10 @@ const GeolocationUser = () => {
               <View>
         {showPendingText && (
         <>
-          <UpdateButton onPress={() => getSearchesFromDataBase()}>
+          <UpdateButton onPress={getSearchesFromDataBase}>
             <ButtonsText>UPDATE</ButtonsText>
           </UpdateButton>
+
           <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
             <PendingText style={styles.pendingText}>PENDING</PendingText>
             <ActivityIndicator size="large" color="#3498db" animating={true} />
@@ -410,11 +440,13 @@ const GeolocationUser = () => {
     </>
   )}
 
-  {showRosetaModal && (
-      
-      <Roseta  style={styles.modalContainer}/>
-   
-  )}
+  <Modal visible={showModal} onDismiss={() => setShowModal(true)} contentContainerStyle={styles.modalContainer}>
+    <Roseta />
+    <UpdateButton onPress={getSearchesFromDataBase}>
+            <ButtonsText>UPDATE</ButtonsText>
+          </UpdateButton>
+  </Modal>
+
   </BackgroundImage>
     </Container>
     
@@ -474,8 +506,10 @@ const styles = StyleSheet.create({
     marginLeft: 33
   },
   modalContainer: {
-    zIndex: 999, // Asegúrate de tener un valor alto para posicionarlo en la parte superior
-    top: 1000
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Color de fondo del modal
   },
 });
 
