@@ -1,13 +1,12 @@
 import 'react-native-gesture-handler';
 import React , {useState, useEffect} from 'react';
-import { View, Modal, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './components/Header';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
-import { CreatePotions }from './screens/CreatePotions';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
 import Qr  from './screens/Qr';
@@ -19,10 +18,8 @@ import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
-import Roseta from './screens/Roseta';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
-import { enableLatestRenderer } from 'react-native-maps';
 import { Context } from './components/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
 
@@ -107,7 +104,6 @@ const App =  () => {
           else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
           else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
           else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
-          else if (route.name === 'Roseta' && role === 'ACÓLITO') iconName = 'camera';
           else if (route.name === 'GeolocationMortimer' && role === 'MORTIMER') iconName = 'map';
 
           return <Icon name = {iconName} size={26} color={color} />
@@ -128,7 +124,6 @@ const App =  () => {
       {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
       {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
       {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
-      {role === 'ACÓLITO' && <Tab.Screen name = "Roseta" component={Roseta} /> }
       {role === 'MORTIMER' && <Tab.Screen name = "GeolocationMortimer" component={GeolocationMortimer} /> }
 
       </Tab.Navigator>
