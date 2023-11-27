@@ -10,8 +10,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
   const [search, setSearches] = useState([]);
-  const [showButton, setShowButton] = useState();
-  const [collectedArtifacts, setCollectedArtifacts] = useState();
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
@@ -127,36 +125,36 @@ const GeolocationUser = () => {
   
 
   
-  const resetSearch = async (artifacts) => {
+  const resetSearch = async () => {
     try {
-
       setShowPendingText(false);
       const updatedArtifacts = [];
-      
-      // Iterar sobre cada uno de los cuatro artefactos
+      const artifactPatchRequests = [];
+  
+      // Preparar las solicitudes PATCH para cada artefacto
       for (let i = 0; i < artifacts.length; i++) {
         const selectedArtifact = { found: true, who: "6544c8377d059ba9672456e3" };
-        
-        // Realizar una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-        const response = await axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifacts[i]._id}`, selectedArtifact);
-        const updatedArtifact = response.data;
-        
-        updatedArtifacts.push(updatedArtifact);
-        console.log("artefactos reiniciados" , updatedArtifacts)
+        artifactPatchRequests.push(
+          axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifacts[i]._id}`, selectedArtifact)
+        );
       }
-      const finishedSearch = { state: "stopped" }; 
-      console.log('modificar estado state', finishedSearch);
-      console.log('ID de la busqueda :', search[0]._id);
   
-      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
-      const updatedSearch = response.data;
-      console.log('Datos busqueda reiniciados:', updatedSearch);
-
+      // Realizar todas las solicitudes PATCH simultáneamente
+      const responses = await Promise.all(artifactPatchRequests);
+  
+      // Actualizar los artefactos después de que todas las solicitudes se completen con éxito
+      responses.forEach((response) => {
+        updatedArtifacts.push(response.data);
+      });
+  
+      const finishedSearch = { state: "stopped" };
+      await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
+  
+      // Actualizar el estado una vez que todas las operaciones se completen
       setArtifacts(updatedArtifacts);
-      getArtifactsFromDataBase();
+      getArtifactsFromDataBase(artifacts);
       getSearchesFromDataBase();
-      
+  
       // Mostrar un mensaje de confirmación
       Alert.alert(
         "BÚSQUEDA REINICIADA",
@@ -164,7 +162,7 @@ const GeolocationUser = () => {
         [
           {
             text: "OK",
-            onPress: () => {}, 
+            onPress: () => {},
           },
         ],
         { cancelable: false }
@@ -174,7 +172,7 @@ const GeolocationUser = () => {
       console.error('Error al actualizar los datos de los artefactos:', error);
     }
   };
-
+  
 
   const getSearchesFromDataBase = async () => {
     try {
@@ -196,8 +194,6 @@ const GeolocationUser = () => {
 
   const updateSearch = async (search) => {
     try {
-      // Mostrar el mensaje de "SEARCH VALIDATE" antes de la solicitud PATCH
-      setShowPendingText(search[0].state === "completed");
   
       const finishedSearch = { state: "completed" }; 
       console.log('modificar estado state', finishedSearch);
@@ -207,10 +203,10 @@ const GeolocationUser = () => {
       const updatedSearch = response.data;
       console.log('Datos busqueda actualizados:', updatedSearch);
   
+      setShowPendingText(true);
       getArtifactsFromDataBase();
       getSearchesFromDataBase(search);
-      setShowAnotherButton(search[0].state === "pending");
-  
+     
       Alert.alert(
         "BUSQUEDA VALIDADA",
         "Los datos de la búsqueda han sido actualizados correctamente.",
@@ -262,8 +258,8 @@ const GeolocationUser = () => {
               <Marker
                 key={index}
                 coordinate={{
-                  latitude: artifact.latitude,
-                  longitude: artifact.longitude,
+                  latitude: artifact.latitude ? artifact.latitude : 0,
+                  longitude: artifact.longitude ? artifact.longitude : 0,
                 }}
                 title={artifact.name}
                 description={artifact.description || ''}
@@ -279,15 +275,10 @@ const GeolocationUser = () => {
       </MapView>
 
       <BackgroundImage source={img}>
-        {showAnotherButton && !showPendingText && (
-          <SendButton onPress={() => updateSearch(search)}>
-            <ButtonsText>VALIDATE</ButtonsText>
-          </SendButton>
-        )}
 
         {showPendingText && (
           <>
-            <Buttons onPress={() => resetSearch(artifacts)}>
+            <Buttons onPress={() => resetSearch()}>
               <ButtonsText>RESET</ButtonsText>
             </Buttons>
             <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
@@ -298,9 +289,13 @@ const GeolocationUser = () => {
 
         {!showPendingText && (
           <>
-            <Buttons onPress={() => resetSearch(artifacts)}>
+            <Buttons onPress={() => resetSearch()}>
               <ButtonsText>RESET</ButtonsText>
             </Buttons>
+
+            <SendButton onPress={() => updateSearch(search)}>
+            <ButtonsText>VALIDATE</ButtonsText>
+          </SendButton>
 
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
