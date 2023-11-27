@@ -101,8 +101,8 @@ const Qr = () => {
             <QrView>
               <QRCode
                 value={userID}
-                size={190}
-                color="purple"
+                size={160}
+                color="#e2d7eb"
                 backgroundColor="rgba(0, 0, 0, 0)"
                 // logo={require('../assets/newPotion.png')}
                 getRef={(event)  => {
@@ -131,7 +131,7 @@ const Text = styled.Text`
     align-self: center;  
 `
 const QrView = styled.View`
-  margin-top: 63%
+  margin-top: 61%
   width: 50%;
   height: 30%;
   justify-content: center;
