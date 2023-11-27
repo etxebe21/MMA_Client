@@ -77,18 +77,18 @@ const Qr = () => {
                 { cancelable: false }
             );
         } else {
-            // Alert.alert(
-            //     "Acceso Denegado",
-            //     "Fuiste sacado del Torreón. No tienes permiso para ingresar.",
-            //     [
-            //         {
-            //             text: "OK",
-            //             onPress: () => {
-            //             },
-            //         },
-            //     ],
-            //     { cancelable: false }
-            // );
+            Alert.alert(
+                "Acceso Denegado",
+                "Fuiste sacado del Torreón. No tienes permiso para ingresar.",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         }
     }, [insideTower, navigation]);
     
