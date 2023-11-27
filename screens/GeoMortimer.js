@@ -133,7 +133,7 @@ const GeolocationUser = () => {
   
       // Preparar las solicitudes PATCH para cada artefacto
       for (let i = 0; i < artifacts.length; i++) {
-        const selectedArtifact = { found: true, who: "6544c8377d059ba9672456e3" };
+        const selectedArtifact = { found: false, who: "" };
         artifactPatchRequests.push(
           axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifacts[i]._id}`, selectedArtifact)
         );
@@ -293,9 +293,11 @@ const GeolocationUser = () => {
               <ButtonsText>RESET</ButtonsText>
             </Buttons>
 
-            <SendButton onPress={() => updateSearch(search)}>
-            <ButtonsText>VALIDATE</ButtonsText>
-          </SendButton>
+            {countFoundArtifacts() === 4 && (
+              <SendButton onPress={() => updateSearch(search)}>
+                <ButtonsText>VALIDATE</ButtonsText>
+              </SendButton>
+            )}
 
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
