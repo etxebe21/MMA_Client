@@ -21,7 +21,7 @@ const Profile = () => {
 
       // Filtra los usuarios para encontrar el que coincide con el ID guardado en AsyncStorage
       const user = users.find(user => user._id === storedUserId);
-      console.log('Usuario encontrado:', user);
+      // console.log('Usuario encontrado:', user);
       setUser(user);
 
     } catch (error) {

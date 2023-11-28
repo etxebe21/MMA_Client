@@ -1,15 +1,17 @@
-import React , {useState, useEffect} from "react";
+import React , {useState, useEffect, useContext} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
 import {Modal, StyleSheet} from "react-native";
+import { Context } from "../components/Context";
 
 const Home = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [isLoginModalVisible, setLoginModalVisible] = useState(false);
     const [role, setRole] = useState(role);
-    
+    const {userGlobalState, handleUserGlobalState } = useContext(Context);
+
     useEffect(() => {
         // Configura Google Sign-In solo una vez al cargar el componente
         GoogleSignin.configure({
@@ -26,6 +28,7 @@ const Home = () => {
 
     async function onSignOutButtonPress() {
         try {
+          // console.log(userGlobalState.username);
             await GoogleSignin.revokeAccess(); // Revoca el acceso de Google
             await GoogleSignin.signOut(); // Cierra sesión de Google
             await auth().signOut(); // Cierra sesión de Firebase (si estás utilizando Firebase)
