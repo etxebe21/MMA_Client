@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { SocketContext } from '../context/socketContext';
+import { SocketContext } from './SocketContext';
 
 function SocketListener(props) {
 	const {currentSocketEvent} = props;
@@ -17,7 +17,7 @@ function SocketListener(props) {
 
 	const handleAcoliteStamina = (data) => {handleGlobalState({stamina: data})};
 	const handleAcoliteLife = (data) => {handleGlobalState({life: data})};
-	const handleAcoliteGold = (data) => {handleGlobalState({gold: data})};
+	const handleAcoliteGold = (data) => {handleGlobalState({dinero: data})};
 	const handleAcoliteXperience = (data) => {handleGlobalState({xp: data})};
 	const handleNewAcolite = (data) => {handleGlobalState({user: data})};
 	
