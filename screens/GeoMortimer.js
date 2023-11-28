@@ -75,14 +75,14 @@ const GeolocationUser = () => {
       try {
         const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
         const artifacts = artifactsData.data.data;
-        console.log("ARTEFACTOS", artifacts);
+        // console.log("ARTEFACTOS", artifacts);
 
         // Actualizar los artefactos con la imagen del usuario
         const updatedArtifacts = await Promise.all(
           artifacts.map(async (artifact) => {
             if (artifact.found) {
               const userImage = await getUserImageById(artifact.who);
-              console.log("imagen del usuario", userImage);
+              // console.log("imagen del usuario", userImage);
               return { ...artifact, userImage };
             }
             return artifact;
@@ -91,7 +91,7 @@ const GeolocationUser = () => {
 
         setArtifacts(updatedArtifacts);
       } catch (error) {
-        console.error('Error al cargar los artefactos:', error);
+        // console.error('Error al cargar los artefactos:', error);
       }
     };
 
@@ -117,7 +117,7 @@ const GeolocationUser = () => {
       );
   
       setArtifacts(updatedArtifacts);
-      console.log('Artefactos:', updatedArtifacts);
+      // console.log('Artefactos:', updatedArtifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
@@ -186,7 +186,7 @@ const GeolocationUser = () => {
       // // Mostrar u ocultar el botón de validación según el estado de la búsqueda
       // setShowAnotherButton(search[0].state === "pending");
 
-      console.log('BUsquedas:', searches);
+      // console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
     }
@@ -196,12 +196,12 @@ const GeolocationUser = () => {
     try {
   
       const finishedSearch = { state: "completed" }; 
-      console.log('modificar estado state', finishedSearch);
-      console.log('ID de la busqueda :', search[0]._id);
+      // console.log('modificar estado state', finishedSearch);
+      // console.log('ID de la busqueda :', search[0]._id);
   
       const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
       const updatedSearch = response.data;
-      console.log('Datos busqueda actualizados:', updatedSearch);
+      // console.log('Datos busqueda actualizados:', updatedSearch);
   
       setShowPendingText(true);
       getArtifactsFromDataBase();
@@ -229,7 +229,7 @@ const GeolocationUser = () => {
     try {
       const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
       const userPicture = user.data.data.picture;
-      console.log(userPicture);
+      // console.log(userPicture);
       return userPicture; // Devolvemos la URL de la imagen del usuario
 
   } catch (error) {

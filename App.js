@@ -68,7 +68,7 @@ const handleUserGlobalState = (data) => {
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
-    console.log("indico: " + userGlobalState);
+    console.log("User Global State: " + userGlobalState);
 
   },[userGlobalState])
 
