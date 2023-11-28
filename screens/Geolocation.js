@@ -259,7 +259,7 @@ const GeolocationUser = () => {
       setSearches(searches);
       console.log(searches[0].state);
   
-      if (searches[0].state !== 'completed') {
+      if (searches[0].state === 'pending') {
         Alert.alert(
           'BUSQUEDA PENDIENTE',
           '  ',
@@ -271,8 +271,7 @@ const GeolocationUser = () => {
           ],
           { cancelable: false }
         );
-      } else {
-        // Si el estado es 'completed', muestra un alert antes de abrir el modal
+      } if(searches[0].state === 'completed'){
         Alert.alert(
           'BUSQUEDA VALIDADA',
           '',
