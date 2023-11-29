@@ -10,8 +10,12 @@ import { Alert } from "react-native";
 import { Context } from "../context/Context";
 
 const Villano = () => {
-  const [users, setUsers] = useState([]);
+
+  const { userGlobalState,   handleUserGlobalState }    = useContext(Context);
+  const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
+
   const [selectedUser, setSelectedUser] = useState(null);
+  // const [users, setUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCegueraEnabled, setIsCegueraEnabled] = useState();
   const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
@@ -23,23 +27,23 @@ const Villano = () => {
   const {globalState, handleGlobalState} = useContext(Context);
 
 
-  const acolitos = users.filter(user => user.role === "ACÓLITO");
+  // const acolitos = users.filter(user => user.role === "ACÓLITO");
 
-  const getUsersFromDatabase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/users';
-      const response = await axios.get(url);
-      const users= response.data.data;
-      setUsers(users);
-      setSelectedUser(selectedUser);
-      // console.log('Usuarios:', users);
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-    }
-  };
+  // const getUsersFromDatabase = async () => {
+  //   try {
+  //     const url = 'https://mmaproject-app.fly.dev/api/users';
+  //     const response = await axios.get(url);
+  //     const users= response.data.data;
+  //     setUsers(users);
+  //     setSelectedUser(selectedUser);
+  //     // console.log('Usuarios:', users);
+  //   } catch (error) {
+  //     console.error('Error al obtener usuarios:', error);
+  //   }
+  // };
 
   useEffect(() => {
-    getUsersFromDatabase();
+    // getUsersFromDatabase();
   }, [selectedUser]); 
 
   const handleUserPress = (user) => {
@@ -154,14 +158,14 @@ const Villano = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <HeaderText>ACÓLITOS</HeaderText>
-        {acolitos.map((data) => (
-          <TouchableOpacity key={data.picture} onPress={() => handleUserPress(data)}>
+        {usersGlobalState.map((user) => (
+          <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
             <UserContainer>
               <AvatarContainer>
-                <Avatar source={{ uri: data.picture }} />
-                <StatusIndicator isInsideTower={data.insideTower} />
+                <Avatar source={{ uri: user.picture }} />
+                <StatusIndicator isInsideTower={user.insideTower} />
               </AvatarContainer>
-              <NameText>{data.username}</NameText>
+              <NameText>{user.username}</NameText>
             </UserContainer>
           </TouchableOpacity>
         ))}
