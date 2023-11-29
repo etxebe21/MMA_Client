@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
@@ -6,15 +6,19 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { Alert } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
 import { useNavigation } from '@react-navigation/native';
+import { Context } from '../context/Context';
 
 
 PERMISSIONS.IOS.CAMERA;
 
 
 const ScanQr = () => {
+
+  const {userGlobalState, handleUserGlobalState} = useContext (Context);
+
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [insideTower, setInsideTower] = useState(false);
+
 
   const navigation = useNavigation();
 
@@ -24,9 +28,8 @@ const ScanQr = () => {
 
     try {
       // console.log("Escaneando");
-      const newInsideTowerState = !insideTower;
       const data = {
-        "insideTower": newInsideTowerState
+        "insideTower": !userGlobalState.insideTower
       };
       // console.log(event);
 
