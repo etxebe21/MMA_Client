@@ -11,10 +11,6 @@ const Profile = () => {
 
   const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
 
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(user);
-
-  
   useEffect(() => {
 
   }, []); 
@@ -22,7 +18,7 @@ const Profile = () => {
   return (
 
     <View >
-      {user && (
+      {userGlobalState && (
           <Content>
           <AvatarBox>
             <AdditionalImageBackground
@@ -31,12 +27,12 @@ const Profile = () => {
             <Marco
             source={require("../assets/marco.png")}
             >
-              <DetailAvatar source={{ uri: user.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+              <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <UserLevelMarco>
-              <UserTextLevel> {user.level}</UserTextLevel>
+              <UserTextLevel> {userGlobalState.level}</UserTextLevel>
               </UserLevelMarco>
             </Marco>
-              <UserText>{user.username}</UserText>
+              <UserText>{userGlobalState.username}</UserText>
             </AdditionalImageBackground>
           </AvatarBox>
 
@@ -46,25 +42,25 @@ const Profile = () => {
           >
           <ProgressBarRow>       
             <ProgressBarColumn>
-              <ProgressBarTitle>LEVEL:   {user.level}</ProgressBarTitle>
-              <StyledProgressBar progress={user.level / 20} />
-              <ProgressBarTitle>HITPOINTS:   {user.hitPoints}</ProgressBarTitle>
-              <StyledProgressBar progress={user.hitPoints / 100} />
-              <ProgressBarTitle>STRENGTH: {user.fuerza}  </ProgressBarTitle>
-              <StyledProgressBar progress={user.fuerza / 100} />
-              <ProgressBarTitle>GOLD:  {user.dinero}</ProgressBarTitle>
-              <StyledProgressBar progress={user.dinero / 100} />
+              <ProgressBarTitle>LEVEL:   {userGlobalState.level}</ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.level / 20} />
+              <ProgressBarTitle>HITPOINTS:   {userGlobalState.hitPoints}</ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.hitPoints / 100} />
+              <ProgressBarTitle>STRENGTH: {userGlobalState.fuerza}  </ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.fuerza / 100} />
+              <ProgressBarTitle>GOLD:  {userGlobalState.dinero}</ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.dinero / 100} />
             </ProgressBarColumn>
 
             <ProgressBarColumn>
-              <ProgressBarTitle>TIRED: {user.cansancio} </ProgressBarTitle>
-              <StyledProgressBar progress={user.cansancio / 100} />
-              <ProgressBarTitle>RESISTENCE: {user.resistencia} </ProgressBarTitle>
-              <StyledProgressBar progress={user.resistencia / 100} />
-              <ProgressBarTitle>AGILITY:  {user.agilidad}</ProgressBarTitle>
-              <StyledProgressBar progress={user.agilidad / 100} />
-              <ProgressBarTitle>INTELLIGENCE: {user.inteligencia}</ProgressBarTitle>
-              <StyledProgressBar progress={user.inteligencia / 100} />
+              <ProgressBarTitle>TIRED: {userGlobalState.cansancio} </ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.cansancio / 100} />
+              <ProgressBarTitle>RESISTENCE: {userGlobalState.resistencia} </ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.resistencia / 100} />
+              <ProgressBarTitle>AGILITY:  {userGlobalState.agilidad}</ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.agilidad / 100} />
+              <ProgressBarTitle>INTELLIGENCE: {userGlobalState.inteligencia}</ProgressBarTitle>
+              <StyledProgressBar progress={userGlobalState.inteligencia / 100} />
             </ProgressBarColumn>
           </ProgressBarRow>
           </Statsbackground>
