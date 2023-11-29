@@ -1,16 +1,19 @@
 import { ImageBackground, StyleSheet } from 'react-native'
 import styled from "styled-components/native";
 import Parchment from "./parchment";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CreatePotions, CreatePotionsParch } from './CreatePotions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Context } from '../context/Context';
 
 const bgImage = '../assets/fondoTorreon.png';
 
 const Torreon = () => {
     
+    const { userGlobalState, handleUserGlobalState } = useContext(Context) 
+
     // Aqui coge el dato de si esta o no en el torreon (Lo he puesto a true todo el rato)
-    const [isInTower, setIsInTower] = useState(); 
+    // const [isInTower, setIsInTower] = useState(); 
     const [isEnteringTower, setIsEnteringTower] = useState(false);
     const [botonTowerVisible, setBotonTowerVisible] = useState(true);
 
@@ -19,9 +22,9 @@ const Torreon = () => {
     const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); setIsInTower(false)};
 
 
-    useEffect(() => { 
-        setIsInTower(true) 
-    }, []); // Lo deberia de poner segun el get del usuario que hagamos tras scaneo
+    useEffect(() => {  
+        
+    }, []); 
 
 
     return(
@@ -30,7 +33,7 @@ const Torreon = () => {
         <ImageBackground source={require(bgImage)} style={styles.container}> 
         <Entry>PRESS HERE:</Entry>
         <Icon name="arrow-downward" size={80} color="blue" style={styles.arrowIcon} />
-            {isInTower && (   
+            {userGlobalState.insideTower && (   
                 <>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
                         {/* <EnterTowerButtonText> Enter Tower </EnterTowerButtonText> */}
