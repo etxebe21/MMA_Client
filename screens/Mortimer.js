@@ -12,7 +12,6 @@ const Mortimer = () => {
   const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
   const {usersGlobalState,  setUsersGlobalState}    = useContext(Context);
 
-  const [Acolytes,      setAcolytes]      = useState(null);  
   const [selectedUser,  setSelectedUser]  = useState(null);
   const [modalVisible,  setModalVisible]  = useState(false);
   
@@ -23,10 +22,7 @@ const Mortimer = () => {
       const response = await axios.get(url);
 
       // Seleccionamos todos los usuarios y los seteamos 
-      setUsersGlobalState(response.data.data)
-
-      // Seleccionamos los acolitos y lo seteamos al estado de Acolitos
-      setAcolytes(response.data.data.filter(user => user.role === "ACÓLITO"));
+      setUsersGlobalState(response.data.data.filter(user => user.role === "ACÓLITO"))
       
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
@@ -43,14 +39,14 @@ const Mortimer = () => {
     setModalVisible(true);
   };
 
-  if (Acolytes === null)
+  if (usersGlobalState === null)
     return null;
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <HeaderText>ACÓLITOS</HeaderText>
-        {Acolytes.map((user) => (
+        {usersGlobalState.map((user) => (
           <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
             <UserContainer>
               <AvatarContainer>
