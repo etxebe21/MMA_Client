@@ -22,6 +22,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './components/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
+import { socket } from './socket/socketConnect';
+import SocketListener from './socket/socketEvents';
+
+
 
 const App =  () => {
   const Tab = createMaterialTopTabNavigator();
@@ -29,16 +33,16 @@ const App =  () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({dinero: 40});
-
+  const [currentEvent, setCurrentEvent] = useState(null);
   const handleGlobalState = (data) => {
     setGlobalState(globalState =>  ({
       ...globalState,
       ...data
-  }));
-}
-
-  useEffect(() => {
-
+    }));
+  }
+  
+  useEffect(() => { 
+    
     const getData = async () => {
       try {
         const email = await AsyncStorage.getItem('userEmail');
@@ -56,6 +60,11 @@ const App =  () => {
     };
 
   getData();
+  socket.onAny((event, ...args) => setCurrentEvent({event, value: args[0]})); 
+  return () => {
+	socket.removeAllListeners();  
+  };
+
   }, []); 
 
 
@@ -132,6 +141,7 @@ const App =  () => {
       )}
       </View>
       </ SafeAreaProvider>
+      <SocketListener currentSocketEvent={currentEvent} /> 
       </Context.Provider>
   );
  
