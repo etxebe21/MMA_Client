@@ -1,52 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import styled from "styled-components/native";
 import { Modal, StyleSheet, TouchableOpacity} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
+import { Context } from "../components/Context";
 
 const Mortimer = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
-  const acolitos = users.filter(user => user.role === "ACÓLITO");
+  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+  const {usersGlobalState,  setUsersGlobalState}    = useContext(Context);
+
+  const [Acolytes,      setAcolytes]      = useState(null);  
+  const [selectedUser,  setSelectedUser]  = useState(null);
+  const [modalVisible,  setModalVisible]  = useState(false);
+  
 
   const getUsersFromDatabase = async () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/users';
       const response = await axios.get(url);
-      const users= response.data.data;
-      setUsers(users);
-      setSelectedUser(selectedUser);
-      // console.log('Usuarios:', users);
+
+      // Seleccionamos todos los usuarios y los seteamos 
+      setUsersGlobalState(response.data.data)
+
+      // Seleccionamos los acolitos y lo seteamos al estado de Acolitos
+      setAcolytes(response.data.data.filter(user => user.role === "ACÓLITO"));
+      
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
     }
   };
-
+  
   useEffect(() => {
     getUsersFromDatabase();
-  }, [selectedUser]); 
+  
+  }, []); 
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
   };
-  
+
+  if (Acolytes === null)
+    return null;
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <HeaderText>ACÓLITOS</HeaderText>
-        {acolitos.map((data) => (
-          <TouchableOpacity key={data.picture} onPress={() => handleUserPress(data)}>
+        {Acolytes.map((user) => (
+          <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
             <UserContainer>
               <AvatarContainer>
-                <Avatar source={{ uri: data.picture }} />
-                <StatusIndicator isInsideTower={data.insideTower} />
+                <Avatar source={{ uri: user.picture }} />
+                <StatusIndicator isInsideTower={user.insideTower} />
               </AvatarContainer>
-              <NameText>{data.username}</NameText>
+              <NameText>{user.username}</NameText>
             </UserContainer>
           </TouchableOpacity>
         ))}

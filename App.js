@@ -29,7 +29,10 @@ const App =  () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({dinero: 20, fatigue: 40});
+  
   const [userGlobalState, setUserGlobalState] = useState();
+  const [usersGlobalState, setUsersGlobalState] = useState(null);
+
 
   const handleGlobalState = (data) => {
     setGlobalState(globalState =>  ({
@@ -40,6 +43,13 @@ const App =  () => {
 }
 
 const handleUserGlobalState = (data) => {
+  setGlobalState(globalState =>  ({
+    ...globalState,
+    ...data
+}));
+}
+
+const handleUsersGlobalState = (data) => {
   setGlobalState(globalState =>  ({
     ...globalState,
     ...data
@@ -70,9 +80,11 @@ const handleUserGlobalState = (data) => {
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
+    
     // console.log(userGlobalState.username);
+    // console.log(usersGlobalState);
 
-  },[userGlobalState])
+  },[userGlobalState, usersGlobalState])
 
 
   const handleLogin = async () => {
@@ -84,7 +96,13 @@ const handleUserGlobalState = (data) => {
 
   return(
 <SafeAreaProvider>  
-  <Context.Provider value = {{globalState, userGlobalState,handleGlobalState, handleUserGlobalState, setUserGlobalState}}>
+  <Context.Provider value = {{
+    globalState, userGlobalState, usersGlobalState,
+    handleGlobalState, handleUserGlobalState, handleUsersGlobalState,
+    setUserGlobalState, setUsersGlobalState
+    
+    }}>
+
   <View style = {{ flex: 1}}>
   <Splash/>
     {!isAuthenticated && (
