@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import QRCode from "react-native-qrcode-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,6 +7,7 @@ const PERMISSION_AUTHORIZED = 'authorized';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import { Alert } from "react-native";
+import { Context } from "../context/Context";
 
 PERMISSIONS.IOS.CAMERA;
 
@@ -26,41 +27,20 @@ function componentDidMount()  {
 // componentDidMount();
 
 const Qr = () => {
-  const [userID, setuserID] = useState('');
-  const [insideTower, setInsideTower] = useState(null);
+      
+  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
   
   useEffect(() => {
-      const getuserIDFromStorage = async () => {
-          try {
-              const storedID = await AsyncStorage.getItem('userID');
-              if (storedID) {
-                  setuserID(storedID);
-                  getUsersFromDatabase(storedID);
-              }
-          } catch (error) {
-              console.error('Cant get email from async storage:', error);
-          }
-      };
-
-      getuserIDFromStorage();
-  }, [insideTower]);
+  }, []);
   
-  const getUsersFromDatabase = async (storedID) => {
-      try {
-        const url = `https://mmaproject-app.fly.dev/api/users/${storedID}`;
-        const response = await axios.get(url);
-        const insideTower = response.data.data.insideTower;
-        setInsideTower(insideTower);
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-      }
-  };
+
 
   useEffect(() => {
-      if (scanned && insideTower !== null) {
-          if (insideTower) {
+      if (scanned && userGlobalState.insideTower !== null) {
+          if (userGlobalState.insideTower) {
               Alert.alert(
                   "Escaneo Exitoso",
                   "Tu código QR fue escaneado correctamente. ¡Tienes permiso para ir al Torreón! . Para acceder presiona la puerta",
@@ -88,15 +68,15 @@ const Qr = () => {
               );
           }
       }
-  }, [scanned, insideTower, navigation]);
+  }, [scanned, navigation]);
   
-  if (userID ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
+  if (userGlobalState._id ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
       return (
           <View>
               <ViewText>QR</ViewText>
               <QrView>
                   <QRCode
-                      value={userID}
+                      value={userGlobalState._id}
                       size={350}
                       color="purple"
                       backgroundColor="#BB8FCE"
