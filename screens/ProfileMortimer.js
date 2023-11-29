@@ -1,20 +1,22 @@
-import React , {useState, useEffect} from "react";
+import React , {useState, useEffect, useContext} from "react";
 import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {Modal, StyleSheet} from "react-native";
 import LoginModal from "../components/LoginModal";
+import { Context } from "../context/Context";
 
 const ProfileMortimer = () => {
+    
+    const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [isLoginModalVisible, setLoginModalVisible] = useState(false);
     const [role, setRole] = useState(null);
+
     
     useEffect(() => {
-        // Configura Google Sign-In solo una vez al cargar el componente
-        GoogleSignin.configure({
-            webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
-        });      
+        
     }, []);
 
     const handleLogin = () => {
