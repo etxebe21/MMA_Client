@@ -4,7 +4,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import { Modal, StyleSheet} from "react-native";
 import LoginModal from "../components/LoginModal";
-import { Context } from "../components/Context";
+import { Context } from "../context/Context";
 
 const ProfileVillano = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);

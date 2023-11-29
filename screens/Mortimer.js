@@ -5,7 +5,7 @@ import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
-import { Context } from "../components/Context";
+import { Context } from "../context/Context";
 
 const Mortimer = () => {
 
@@ -15,22 +15,7 @@ const Mortimer = () => {
   const [selectedUser,  setSelectedUser]  = useState(null);
   const [modalVisible,  setModalVisible]  = useState(false);
   
-
-  const getUsersFromDatabase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/users';
-      const response = await axios.get(url);
-
-      // Seleccionamos todos los usuarios y los seteamos 
-      setUsersGlobalState(response.data.data.filter(user => user.role === "ACÓLITO"))
-      
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-    }
-  };
-  
   useEffect(() => {
-    getUsersFromDatabase();
   
   }, []); 
 

@@ -1,35 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from '../components/ProgressBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Context } from "../context/Context";
 
 const Profile = () => {
+
+  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState(user);
 
-  const getUserFromDatabase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/users/';
-      const response = await axios.get(url);
-      const users = response.data.data;
-      setUsers(users);
-      // Obtén el ID del usuario guardado en AsyncStorage
-      const storedUserId = await AsyncStorage.getItem('userID');
-
-      // Filtra los usuarios para encontrar el que coincide con el ID guardado en AsyncStorage
-      const user = users.find(user => user._id === storedUserId);
-      // console.log('Usuario encontrado:', user);
-      setUser(user);
-
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-    }
-  };
+  
   useEffect(() => {
-    getUserFromDatabase();
+
   }, []); 
 
   return (

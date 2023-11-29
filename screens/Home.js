@@ -4,7 +4,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
 import {Modal, StyleSheet} from "react-native";
-import { Context } from "../components/Context";
+import { Context } from "../context/Context";
 
 const Home = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);

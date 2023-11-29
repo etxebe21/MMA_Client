@@ -6,11 +6,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
-import { Context } from "./Context";
+import { Context } from "../context/Context";
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
+    
+    const {userGlobalState,     setUserGlobalState }    = useContext(Context);
+    const {usersGlobalState,    setUsersGlobalState }   = useContext(Context);
+
     const [isLoading, setIsLoading] = useState(false);
-    const {userGlobalState, setUserGlobalState } = useContext(Context);
+
     GoogleSignin.configure({
         webClientId: '769950438406-pm146gcnl6923e2nivi7ledskljt423l.apps.googleusercontent.com',
         requestProfile: true,
@@ -44,12 +48,20 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             //const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
             //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
             const url = 'https://mmaproject-app.fly.dev/api/users/verify-data'; //FLY 
+            const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
             
             const response = await axios.post(url, {idToken:checkToken});
+            const responseUsers = await axios.get(urlUsers);
+            
             const {validToken, user }= response.data;
             console.log('Iniciado sesión con Google!');
-            // console.log(user);
+
+            // Seteamos el usuario el cual ha iniciado sesion al estado global del user
             setUserGlobalState(user);
+            
+            // Seleccionamos todos los usuarios y los seteamos 
+            setUsersGlobalState(responseUsers.data.data.filter(user => user.role === "ACÓLITO"))
+            
             
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
