@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import LoginModal from "../components/LoginModal";
-import {Modal, StyleSheet} from "react-native";
+import {Modal, StyleSheet, ImageBackground} from "react-native";
 import { Context } from "../context/Context";
 
 const Home = () => {
@@ -62,10 +62,12 @@ const Home = () => {
         
       {isAuthenticated && ( 
         <>
-          <Text>HOME</Text>
+        <ImageBackground source={require("../assets/home.jpeg")} style={styles.container}> 
+          {/* <Text>HOME</Text> */}
           <SignOutButton onPress={onSignOutButtonPress}>
             <ButtonText>Sign Out</ButtonText>
           </SignOutButton>
+        </ ImageBackground>
         </>)}
       </View>
       );
@@ -78,31 +80,40 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
-  });
+
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: null,
+      width: null
+  },
+});
+
   
 const View = styled.View`
     flex: 1;
-    background: #C8A2C8;
+    background: #000000;
+
 `
 const Text = styled.Text `
-    bottom: -100px;
-    color: #4c2882;
+    color: #000000;
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;  
 `
 const SignOutButton = styled.TouchableOpacity`
-    background-color: #FF0000;
-    padding: 10px 20px;
-    bottom: -400px;
+    background-color: rgba(232, 0, 0 , 0.6);
+    justify-content: center;
     width: 50%;
-    height: 55px;
+    height: 7%;
+    margin-top: 130%;
     border-radius: 60px;
     align-self: center;
 `
 const ButtonText = styled.Text`
-    color: white;
+    color: rgba(255,255,255,1);
     font-size: 20px;
     text-align: center;
 `

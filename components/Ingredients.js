@@ -266,12 +266,12 @@ const IngredientsRow = styled.View`
 `;
 
 const SelectedIngredientContainer = styled.View`
-  width: 72%;
-  padding: 10px;
-  margin-top: 10px;
-  align-self:center;
-  right:20px;
-  backgroundColor: 'rgba(247, 62, 250, 0.4)';
+  width: 70%;
+  padding: 10%;
+  margin-top: 10%;
+  display: flex;
+  margin-left: 15%;
+  backgroundColor: 'rgba(124, 44, 245 , 0.5)';
   border-radius: 20px;
 `;
 

@@ -8,6 +8,7 @@ import { Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Roseta from './Roseta';
 import { Context } from '../context/Context';
+import MapStyle from '../components/MapStyle.json'
 
 const GeolocationUser = () => {
 
@@ -396,6 +397,7 @@ const getUserLocation = async () => {
           longitudeDelta: 0.0421,
         }}
         showsUserLocation={true}
+        customMapStyle={MapStyle}
       >
 
         {artifactsGlobalState &&

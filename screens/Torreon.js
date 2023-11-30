@@ -35,9 +35,10 @@ const Torreon = () => {
         <Icon name="arrow-downward" size={80} color="blue" style={styles.arrowIcon} />
             {userGlobalState.insideTower && (   
                 <>
+                <Text>You can enter</Text>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
-                        {/* <EnterTowerButtonText> Enter Tower </EnterTowerButtonText> */}
                                 </EnterTowerButton> }
+                        {/* <EnterTowerButtonText> Enter Tower </EnterTowerButtonText> */}
                 </>
             )}
 
@@ -70,14 +71,14 @@ const EnterTowerButtonText = styled.Text`
 `
 
 const EnterTowerButton = styled.TouchableOpacity`
-  top: 85px;
-  width: 65px;
-  height: 60px;
-  align-self: center;
-  border-radius: 30px;
+  width: 100%;
+  height: 20%;
+  margin-top: 80%;
+  align-items: center;
+  border-radius: 100px;
   border: #4c2882;
-  margin-left:55px;
-  opacity:0;
+  opacity: 0;
+  backgroundcolor: #DDDDDD;
 `
 
 const View = styled.View`
@@ -92,12 +93,12 @@ const ViewPotion = styled.View`
 `
 
 const Text = styled.Text `
-    bottom: -8px;
-    color: #4c2882;
+    color: white;
     font-size: 24px;
     font-weight: bold;
+    font-family: Creepster
     letter-spacing: -0.3px;
-    align-self: center;  
+
 `
 const TorreonView = styled.View`
     bottom: -50px;

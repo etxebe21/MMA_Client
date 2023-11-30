@@ -33,7 +33,7 @@ const Parchment = ({ towerBoolean }) => {
       <Modal visible={towerBoolean}>
       <>
         {!isCleaned && (
-          <ImageBackground source={bgImageDirty} style={{width: 395, height: 660  }}>
+          <ImageBackground source={bgImageDirty} style={styles.parchment}>
             <CleanParchmentButton onPress={() => cleanParchment()}>
               <ClearParchmentText>CLEAN PARCHMENT</ClearParchmentText>
             </CleanParchmentButton>
@@ -50,12 +50,30 @@ const Parchment = ({ towerBoolean }) => {
 
         {isCleaned && isPotionCreated && (
             
-          <ImageBackground source={bgImageClean} style={{width: 395, height: 660  }}>
+          <ImageBackground source={bgImageClean} style={styles.parchment}>
             <CloseButton onPress={() => returnButton()}>
                 <Icon name="times" size={60} color="#4c2882" />
             </CloseButton>
            
-              <ClearParchmentCleanText>PARCHMENT CLEANED!</ClearParchmentCleanText>   
+              <ClearParchmentCleanText>
+                                        Este pergamino recoge la historia de la leyenda de la armadura épica: 
+                                        un artefacto de brillo dorado necesario para acceder a la tumba Espectral, 
+                                        lugar donde residen los 4 jinetes.
+              </ClearParchmentCleanText>
+
+              <ClearParchmentCleanText>   
+                                        La armadura se perdió en la 2ª Era, pero se conservan aún manuales de cómo se llegó a forjar. 
+                                        Cada una de las piezas necesarias para su construcción descansa en una tumba del Obituario. 
+                                        El problema es que la entrada permanece sellada por el rosetón de los 4 artefactos arcanos 
+                                        necesarios para desbloquearla.
+              </ClearParchmentCleanText>
+              
+              <ClearParchmentCleanText>      
+                                        Los artefactos se perdieron a lo largo de la ciénaga, pero poco más se sabe. 
+                                        El único material disponible es un viejo manuscrito con un mapa de la zona. 
+                                        Sin embargo, a excepción de unos números extraños, no incluye detalles relevantes. 
+                                        Nadie ha logrado comprender su significado, pero podrían indicar el paradero de los artefactos.
+              </ClearParchmentCleanText>   
           </ImageBackground>
         )}
         </Modal>
@@ -103,10 +121,11 @@ const ClearParchmentText = styled.Text`
   fontFamily: 'Creepster';
 `
 const ClearParchmentCleanText = styled.Text`
-  fontSize: 45px;
+  fontSize: 15px;
+  padding: 5%;
   color: #000000; 
   align-self: center;
-  top: 200px;
+  top: 15%
 `
 
 const CleanParchmentButton = styled.TouchableOpacity`
@@ -158,6 +177,12 @@ const styles = StyleSheet.create({
       width: '100',
       height: '100',
     },
+
+    parchment: {
+      top: -40,
+      width: '100%', 
+      height: '110%',  
+    }
 
   });
   

@@ -6,7 +6,7 @@ import {request, PERMISSIONS} from 'react-native-permissions';
 const PERMISSION_AUTHORIZED = 'authorized';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
-import { Alert } from "react-native";
+import { Alert, ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import { Context } from "../context/Context";
 
 PERMISSIONS.IOS.CAMERA;
@@ -96,7 +96,7 @@ const Qr = () => {
 
 const View = styled.View`
     flex: 1;
-    background: #C8A2C8;
+
 `
 
 const Text = styled.Text`
@@ -108,12 +108,12 @@ const Text = styled.Text`
     align-self: center;  
 `
 const QrView = styled.View`
-    bottom: -50px;
-    width: 350px;
-    height: 350px;
-    align-self: center;
-    background: #4c2882;
-    border-radius: 30px; 
+  margin-top: 61%
+  width: 50%;
+  height: 30%;
+  justify-content: center;
+  background: rgba(76, 40, 130, 0);
+  border-radius: 0px;
 `
 
 
@@ -125,5 +125,16 @@ const ViewText = styled.Text`
     letter-spacing: -0.3px;
     align-self: center;  
 `
+
+const styles = StyleSheet.create({
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Qr;

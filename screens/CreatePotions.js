@@ -19,7 +19,7 @@ const Text = styled.Text `
     font-weight: bold;
     letter-spacing: -0.3px;
     align-self: center;
-    top:15px; 
+    top: 23%; 
     
 `
 
@@ -30,8 +30,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: null,
         width: null
-    }
+    },
+
+    potionContainer: {
+        top: '-20%',
+        width: '100%', 
+        height: '120%',  
+      }
 })
+
+
 
 
 const CreatePotions = () => {
@@ -51,7 +59,7 @@ const CreatePotionsParch = ({setIsPotionCreated}) => {
     return(
         
         <View>
-            <ImageBackground source={require(bgImage)}  style={{width: 395, height: 660, top:-35}}>             
+            <ImageBackground source={require(bgImage)}  style={styles.potionContainer}>             
                 <Text> CREATE POTIONS </Text>
                 <IngredientesScreen setIsPotionCreated={setIsPotionCreated}></IngredientesScreen>
             </ImageBackground>
