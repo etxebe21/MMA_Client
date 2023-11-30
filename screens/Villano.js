@@ -17,14 +17,15 @@ const Villano = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   // const [users, setUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [updateTimer, setUpdateTimer] = useState(null);
+
+  // Constantes para cambios de estado
   const [isCegueraEnabled, setIsCegueraEnabled] = useState();
   const [isHambrunaEnabled, setIsHambrunaEnabled] = useState(null);
   const [isLocuraEnabled, setIsLocuraEnabled] = useState();
   const [isMiedoEnabled, setIsMiedoEnabled] = useState();
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
-  const [updateTimer, setUpdateTimer] = useState(null);
-  const {globalState, handleGlobalState} = useContext(Context);
 
 
   // const acolitos = users.filter(user => user.role === "ACÓLITO");
@@ -133,7 +134,7 @@ const Villano = () => {
       // Maneja la respuesta del servidor 
       // console.log('Datos del usuario actualizados:', updatedUser);
 
-      getUsersFromDatabase();
+      // getUsersFromDatabase();
 
      // Muestra un mensaje de confirmación
       Alert.alert(
