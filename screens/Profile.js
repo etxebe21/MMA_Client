@@ -67,7 +67,7 @@ const Profile = () => {
         </Content>
 
       )}
-      </ImageBackground>
+      
     </View>
   )
 }
