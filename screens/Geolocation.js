@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Roseta from './Roseta';
 import { Context } from '../context/Context';
 import MapStyle from '../components/MapStyle.json'
+import io from 'socket.io-client';
 
 const GeolocationUser = () => {
 
@@ -26,10 +27,41 @@ const GeolocationUser = () => {
   const [userId, setuserId] = useState([]);
   const [mapVisible, setMapVisible] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
  
+  useEffect(() => {
+    // Crea una conexión al servidor de Socket.io al montar el componente
+    const newSocket = io('https://mmaproject-app.fly.dev'); // Reemplaza con la URL de tu servidor Socket.io
+
+    // Escucha eventos desde el servidor
+    newSocket.on('connect', () => {
+      console.log('Conectado al servidor MMA de Socket.io');
+    });
+
+    newSocket.on('new_user', (level) => {
+      console.log('Datos recibidos desde el servidor:', level);
+    });
+
+    // Establece la instancia del socket en el estado
+    setSocket(newSocket);
+
+    // Limpia la instancia del socket al desmontar el componente
+    return () => {
+      newSocket.disconnect(); // Desconecta el socket al desmontar el componente
+    };
+    
+  }, [artifactsGlobalState]);
+
+   // Función para emitir eventos al servidor
+   const emitEventServer = (data) => {
+    if (socket) {
+      socket.emit('test_broadcast', data); // Emite un evento al servidor con los datos que desees enviar
+    }
+  };
+
  // Función para contar los artefactos encontrados
  const countFoundArtifacts = () => {
   const foundArtifacts =  artifactsGlobalState.filter((artifact) => artifact.found);
@@ -332,7 +364,6 @@ const closeModal = () => {
 
 const updateSearchAndArtfifacts = () => {
 getSearchesFromDataBase();
-
 };
 
 // Lógica para obtener la ubicación del acólito y enviarla al servidor
@@ -439,7 +470,7 @@ const getUserLocation = async () => {
             <ButtonsText>CHECK</ButtonsText>
           </SendButton>
 
-          <UpdateButton onPress={updateSearchAndArtfifacts}>
+          <UpdateButton onPress={emitEventServer}>
             <ButtonsText>UPDATE</ButtonsText>
           </UpdateButton>
           </>
@@ -482,7 +513,7 @@ const getUserLocation = async () => {
           </View>
         ))}
       </View>
-      <UpdateButton onPress={updateSearchAndArtfifacts}>
+      <UpdateButton onPress={emitEventServer}>
             <ButtonsText>UPDATE</ButtonsText>
           </UpdateButton>
     </>
