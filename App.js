@@ -32,29 +32,38 @@ const App =  () => {
   
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
+  const [artefactsGlobalState, setArtefactsGlobalState] = useState(null);
 
 
   const handleGlobalState = (data) => {
     setGlobalState(globalState =>  ({
       ...globalState,
       ...data
-  }));
+    }));
   
-}
+  }
 
 const handleUserGlobalState = (data) => {
-  setGlobalState(globalState =>  ({
+  setUserGlobalState(globalState =>  ({
     ...globalState,
     ...data
-}));
-}
+    }));
+  }
 
 const handleUsersGlobalState = (data) => {
-  setGlobalState(globalState =>  ({
+  setUsersGlobalState(globalState =>  ({
     ...globalState,
     ...data
-}));
-}
+    }));
+  }
+
+  const handleArtefactsGlobalState = (data) => {
+    setArtefactsGlobalState(globalState =>  ({
+      ...globalState,
+      ...data
+    }));
+  
+  }
 
 
   useEffect(() => {
@@ -83,8 +92,9 @@ const handleUsersGlobalState = (data) => {
     
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
+    console.log(artefactsGlobalState);
 
-  },[userGlobalState, usersGlobalState])
+  },[userGlobalState, usersGlobalState, artefactsGlobalState])
 
 
   const handleLogin = async () => {
@@ -97,9 +107,9 @@ const handleUsersGlobalState = (data) => {
   return(
 <SafeAreaProvider>  
   <Context.Provider value = {{
-    globalState, userGlobalState, usersGlobalState,
-    handleGlobalState, handleUserGlobalState, handleUsersGlobalState,
-    setUserGlobalState, setUsersGlobalState
+    globalState, userGlobalState, usersGlobalState, artefactsGlobalState,
+    handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
+    setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
     
     }}>
 
