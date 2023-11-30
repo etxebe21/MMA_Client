@@ -49,7 +49,7 @@ const Roseta = () => {
               height: 80,
               borderRadius: 40,
               borderWidth: 1,
-              borderColor: 'red', 
+              borderColor: 'blue', 
               position: 'absolute',
               ...position,
             };

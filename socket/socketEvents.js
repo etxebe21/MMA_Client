@@ -1,18 +1,22 @@
 import { useContext, useEffect, useState } from 'react';
-import { SocketContext } from '../context/socketContext';
+import { Context } from '../context/Context';  
 
 function SocketListener(props) {
 	const {currentSocketEvent} = props;
 	const [currentEvent, setEvent] = useState(currentSocketEvent);
-	const {handleGlobalState} = useContext(SocketContext);
+	const {handleGlobalState} = useContext(Context);
 
 	useEffect(() => { 
 		setEvent(currentSocketEvent);        
 	}, [currentSocketEvent]);
 	
-	useEffect(() => {    
-		const handler = handlers[currentEvent.event];
-		handler(currentEvent.value);          
+	useEffect(() => {   
+		if (currentEvent !== null)
+		{
+			const handler = handlers[currentEvent.event];
+			handler(currentEvent.value);          
+		} 
+		else return;
 	}, [currentEvent]);
 
 	const handleAcoliteStamina = (data) => {handleGlobalState({stamina: data})};
