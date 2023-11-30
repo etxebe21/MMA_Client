@@ -12,7 +12,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     
     const {userGlobalState,     setUserGlobalState }    = useContext(Context);
     const {usersGlobalState,    setUsersGlobalState }   = useContext(Context);
-
+    const {artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
     const [isLoading, setIsLoading] = useState(false);
 
     GoogleSignin.configure({
@@ -104,6 +104,44 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
       };
+
+      const getArtifactsFromDataBase = async () => {
+        try {
+          const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+          const response = await axios.get(url);
+          const artifactsData = response.data.data;
+      
+          // Actualizar los artefactos con la información de las imágenes del usuario
+          const updatedArtifacts = await Promise.all(
+            artifactsData.map(async (artifact) => {
+              if (artifact.found) {
+                const userImage = await getUserImageById(artifact.who);
+                return { ...artifact, userImage };
+              }
+              return artifact;
+            })
+          );
+         
+          setArtefactsGlobalState(updatedArtifacts);
+          
+          console.log('Artefactos guardados en artifactsGlobalState:', updatedArtifacts);
+        } catch (error) {
+          console.error('Error al obtener artefactos:', error);
+        }
+      };
+       // función para obtener la imagen del usuario por su ID
+       const getUserImageById = async (userId) => {
+        try {
+          const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+          const userPicture = user.data.data.picture;
+          console.log(userPicture);
+          return userPicture; // Devolvemos la URL de la imagen del usuario
+    
+      } catch (error) {
+        console.error('Error al obtener la imagen del usuario:', error);
+      }
+    };
+    
 
       return (
         <ImageBackground source={require("../assets/login3.png")} style={styles.imageBackground}>

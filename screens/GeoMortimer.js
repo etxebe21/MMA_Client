@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { StyleSheet, PermissionsAndroid, Alert, ImageBackground, Image, View,Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
+import { Context } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GeolocationUser = () => {
@@ -13,13 +14,16 @@ const GeolocationUser = () => {
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
+  const { artifactsGlobalState, handleArtefactsGlobalStat} = useContext(Context);
+
+  const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
  
   // Función para contar los artefactos encontrados
   const countFoundArtifacts = () => {
-    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
+    const foundArtifacts = artifactsGlobalState.filter((artifact) => artifact.found);
     return foundArtifacts.length;
   };
 

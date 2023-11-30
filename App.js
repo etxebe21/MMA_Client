@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -35,44 +35,44 @@ const App = () => {
   
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
-  const [artifactsGlobalState, setArtefactsGlobalState] = useState();
+  const [artifactsGlobalState, setArtefactsGlobalState] = useState()
 
- const getArtifactsFromDataBase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-      const response = await axios.get(url);
-      const artifactsData = response.data.data;
+//  const getArtifactsFromDataBase = async () => {
+//     try {
+//       const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+//       const response = await axios.get(url);
+//       const artifactsData = response.data.data;
   
-      // Actualizar los artefactos con la información de las imágenes del usuario
-      const updatedArtifacts = await Promise.all(
-        artifactsData.map(async (artifact) => {
-          if (artifact.found) {
-            const userImage = await getUserImageById(artifact.who);
-            return { ...artifact, userImage };
-          }
-          return artifact;
-        })
-      );
+//       // Actualizar los artefactos con la información de las imágenes del usuario
+//       const updatedArtifacts = await Promise.all(
+//         artifactsData.map(async (artifact) => {
+//           if (artifact.found) {
+//             const userImage = await getUserImageById(artifact.who);
+//             return { ...artifact, userImage };
+//           }
+//           return artifact;
+//         })
+//       );
      
-      setArtefactsGlobalState(updatedArtifacts);
+//       setArtefactsGlobalState(updatedArtifacts);
       
-      console.log('Artefactos guardados en artifactsGlobalState:', artifactsGlobalState);
-    } catch (error) {
-      console.error('Error al obtener artefactos:', error);
-    }
-  };
-   // función para obtener la imagen del usuario por su ID
-   const getUserImageById = async (userId) => {
-    try {
-      const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
-      const userPicture = user.data.data.picture;
-      console.log(userPicture);
-      return userPicture; // Devolvemos la URL de la imagen del usuario
+//       console.log('Artefactos guardados en artifactsGlobalState:', updatedArtifacts);
+//     } catch (error) {
+//       console.error('Error al obtener artefactos:', error);
+//     }
+//   };
+//    // función para obtener la imagen del usuario por su ID
+//    const getUserImageById = async (userId) => {
+//     try {
+//       const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+//       const userPicture = user.data.data.picture;
+//       console.log(userPicture);
+//       return userPicture; // Devolvemos la URL de la imagen del usuario
 
-  } catch (error) {
-    console.error('Error al obtener la imagen del usuario:', error);
-  }
-};
+//   } catch (error) {
+//     console.error('Error al obtener la imagen del usuario:', error);
+//   }
+// };
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -124,17 +124,17 @@ const handleUsersGlobalState = (data) => {
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
-    getArtifactsFromDataBase()
+    //getArtifactsFromDataBase()
   }, []);
 
-  // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
-  useEffect(() => {
+  // // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
+  // useEffect(() => {
     
-    // console.log(userGlobalState.username);
-    // console.log(usersGlobalState);
-    console.log(artifactsGlobalState);
+  //   // console.log(userGlobalState.username);
+  //   // console.log(usersGlobalState);
+  //   console.log(artifactsGlobalState);
 
-  },[userGlobalState, usersGlobalState, artifactsGlobalState])
+  // },[userGlobalState, usersGlobalState, artifactsGlobalState])
 
 
   // Maneja el login

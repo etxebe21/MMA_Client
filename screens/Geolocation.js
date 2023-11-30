@@ -14,9 +14,9 @@ import io, { Socket } from 'socket.io-client';
 const GeolocationUser = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
-  const { artifactsGlobalState, handleArtefactsGlobalStat} = useContext(Context);
+  const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
 
-  const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
+  //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [search, setSearches] = useState([]);
@@ -78,18 +78,6 @@ socket.emit('clientEvent', { message: 'Hola desde el cliente' });
   }
   };
 
- // Función para contar los artefactos encontrados
- const countFoundArtifacts = () => {
-  const foundArtifacts =  artifactsGlobalState.filter((artifact) => artifact.found);
-  return foundArtifacts.length;
-};
-
-// Actualizar el estado de visibilidad del botón
-useEffect(() => {
-  const foundCount = countFoundArtifacts();
-  setShowAnotherButton(foundCount === 4);
-  setShowButton(foundCount < 4);
-}, [artifactsGlobalState]);
 
   useEffect(() => {
     if (showPendingText) {
@@ -185,6 +173,18 @@ useEffect(() => {
       setShowAnotherButton(false);
     }
   }, [collectedArtifacts]);
+//   // Función para contar los artefactos encontrados
+//  const countFoundArtifacts = () => {
+//   const foundArtifacts = artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
+//   return foundArtifacts.length;
+// };
+
+// //Actualizar el estado de visibilidad del botón
+// useEffect(() => {
+//   const foundCount = countFoundArtifacts();
+//   setShowAnotherButton(foundCount === 4);
+//   setShowButton(foundCount < 4);
+// }, [artifactsGlobalState]);
 
   // Dentro del efecto para cargar los artefactos
   useEffect(() => {
@@ -204,7 +204,7 @@ useEffect(() => {
           })
         );
     
-        handleArtefactsGlobalState(updatedArtifacts);
+        setArtefactsGlobalState(updatedArtifacts);
       } catch (error) {
         console.error('Error al cargar los artefactos:', error);
       }
@@ -269,7 +269,7 @@ useEffect(() => {
         return art;
       });
   
-      handleArtefactsGlobalState(updatedArtifacts);
+      setArtefactsGlobalState(updatedArtifacts);
       // Incrementar collectedArtifacts al recoger un artefacto
       setCollectedArtifacts(prevCount => prevCount + 1);
   
