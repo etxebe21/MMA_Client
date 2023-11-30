@@ -72,6 +72,7 @@ const Qr = () => {
   
   if (userGlobalState._id ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
       return (
+        <ImageBackground source={require("../assets/QRbackground.png")} style={styles.imageBackground}>
           <View>
               <ViewText>QR</ViewText>
               <QrView>
@@ -87,6 +88,7 @@ const Qr = () => {
                   />
               </QrView>
           </View>
+          </ImageBackground>
       );
   } else {
       return null; // Ocultar el código QR si no se cumple la condición
