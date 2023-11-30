@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Roseta from './Roseta';
 import { Context } from '../context/Context';
 import MapStyle from '../components/MapStyle.json'
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 
 const GeolocationUser = () => {
 
@@ -31,8 +31,9 @@ const GeolocationUser = () => {
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
- 
+
   useEffect(() => {
+    
     // Crea una conexión al servidor de Socket.io al montar el componente
     const newSocket = io('https://mmaproject-app.fly.dev'); // Reemplaza con la URL de tu servidor Socket.io
 
@@ -40,14 +41,26 @@ const GeolocationUser = () => {
     newSocket.on('connect', () => {
       console.log('Conectado al servidor MMA de Socket.io');
     });
+    setSocket(newSocket);
 
+// Enviar datos al servidor con el evento 'clientEvent'
+newSocket.emit('clientEvent', { data: 'Información a enviar al servidor' });
+
+// Escuchar la respuesta del servidor al evento 'responseEvent'
+newSocket.on('responseEvent', (responseData) => {
+  console.log('Respuesta desde el servidor:', responseData);
+});
     newSocket.on('new_user', (level) => {
       console.log('Datos recibidos desde el servidor:', level);
     });
 
-    // Establece la instancia del socket en el estado
+    // // Establece la instancia del socket en el estado
     setSocket(newSocket);
 
+    newSocket.on('updateArtifacts',() => {
+      console.log('Datos recibidos desde el servidor:', );
+    });
+    setSocket(newSocket);
     // Limpia la instancia del socket al desmontar el componente
     return () => {
       newSocket.disconnect(); // Desconecta el socket al desmontar el componente
@@ -56,10 +69,13 @@ const GeolocationUser = () => {
   }, [artifactsGlobalState]);
 
    // Función para emitir eventos al servidor
-   const emitEventServer = (data) => {
+   const emitEventServer = () => {
     if (socket) {
-      socket.emit('test_broadcast', data); // Emite un evento al servidor con los datos que desees enviar
-    }
+      console.log("PULSADOOOO")
+// Emitir un evento 'clientEvent' con datos al servidor
+socket.emit('clientEvent', { message: 'Hola desde el cliente' });
+
+  }
   };
 
  // Función para contar los artefactos encontrados
@@ -140,7 +156,7 @@ useEffect(() => {
         console.error('Error al enviar la ubicación al servidor:', error);
       }
     };
-    //getArtifactsFromDataBase();
+    
     getSearchesFromDataBase();
     requestLocationPermission();
     //getAndSendUserLocation();
@@ -470,7 +486,7 @@ const getUserLocation = async () => {
             <ButtonsText>CHECK</ButtonsText>
           </SendButton>
 
-          <UpdateButton onPress={emitEventServer}>
+          <UpdateButton onPress={emitEventServer()}>
             <ButtonsText>UPDATE</ButtonsText>
           </UpdateButton>
           </>

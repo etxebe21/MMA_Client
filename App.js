@@ -36,7 +36,6 @@ const App = () => {
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
   const [artifactsGlobalState, setArtefactsGlobalState] = useState();
-console.log("app" , artifactsGlobalState)
 
  const getArtifactsFromDataBase = async () => {
     try {
@@ -57,7 +56,7 @@ console.log("app" , artifactsGlobalState)
      
       setArtefactsGlobalState(updatedArtifacts);
       
-      console.log('Artefactos:', artifactsGlobalState);
+      console.log('Artefactos guardados en artifactsGlobalState:', artifactsGlobalState);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
