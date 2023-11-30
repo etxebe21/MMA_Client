@@ -1,0 +1,1 @@
+export const SOCKET_URL = "https://mmaproject-app.fly.dev";
