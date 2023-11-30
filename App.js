@@ -177,12 +177,12 @@ const handleUserGlobalState = (data) => {
               <Header />
               <NavigationContainer>
                 <Tab.Navigator
-                  screenOptions={({ route }) => ({
+                  screenOptions={({ route}) => ({
                     swipeEnabled: true,
-                    tabBarStyle: { backgroundColor: '#C8A2C8' },
-                    tabBarIndicatorStyle: { backgroundColor: "#4c2882" },
-                    tabBarActiveTintColor: '#4c2882',
-                    tabBarInactiveTintColor: '#913595',
+                    tabBarStyle: { backgroundColor:'#000000'}, 
+                    tabBarIndicatorStyle: {backgroundColor: "#B01AFF",},
+                    tabBarActiveTintColor: 'rgba(146, 3, 240, 1.0)',
+                    tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.55)',
                     tabBarShowLabel: false,
                     tabBarShowIcon: true,
                     tabBarIcon: ({ focused, color }) => renderTabIcon(route, role, color),
