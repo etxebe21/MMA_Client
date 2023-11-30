@@ -20,7 +20,7 @@ import Mortimer from './screens/Mortimer';
 import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
-import { Context } from './components/Context';
+import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
 
 const App = () => {

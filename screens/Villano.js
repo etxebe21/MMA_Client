@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
 import { Alert } from "react-native";
-import { Context } from "../components/Context";
+import { Context } from "../context/Context";
 
 const Villano = () => {
   const [users, setUsers] = useState([]);
