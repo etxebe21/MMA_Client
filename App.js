@@ -22,6 +22,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
+import axios from 'axios';
 
 const App = () => {
 
@@ -34,8 +35,45 @@ const App = () => {
   
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
-  const [artefactsGlobalState, setArtefactsGlobalState] = useState(null);
+  const [artifactsGlobalState, setArtefactsGlobalState] = useState();
+console.log("app" , artifactsGlobalState)
 
+ const getArtifactsFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+      const response = await axios.get(url);
+      const artifactsData = response.data.data;
+  
+      // Actualizar los artefactos con la información de las imágenes del usuario
+      const updatedArtifacts = await Promise.all(
+        artifactsData.map(async (artifact) => {
+          if (artifact.found) {
+            const userImage = await getUserImageById(artifact.who);
+            return { ...artifact, userImage };
+          }
+          return artifact;
+        })
+      );
+     
+      setArtefactsGlobalState(updatedArtifacts);
+      
+      console.log('Artefactos:', artifactsGlobalState);
+    } catch (error) {
+      console.error('Error al obtener artefactos:', error);
+    }
+  };
+   // función para obtener la imagen del usuario por su ID
+   const getUserImageById = async (userId) => {
+    try {
+      const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+      const userPicture = user.data.data.picture;
+      console.log(userPicture);
+      return userPicture; // Devolvemos la URL de la imagen del usuario
+
+  } catch (error) {
+    console.error('Error al obtener la imagen del usuario:', error);
+  }
+};
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -87,6 +125,7 @@ const handleUsersGlobalState = (data) => {
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
+    getArtifactsFromDataBase()
   }, []);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
@@ -94,9 +133,9 @@ const handleUsersGlobalState = (data) => {
     
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
-    console.log(artefactsGlobalState);
+    console.log(artifactsGlobalState);
 
-  },[userGlobalState, usersGlobalState, artefactsGlobalState])
+  },[userGlobalState, usersGlobalState, artifactsGlobalState])
 
 
   // Maneja el login
@@ -193,7 +232,7 @@ const handleUsersGlobalState = (data) => {
 
   return (
     <Context.Provider value = {{
-      globalState, userGlobalState, usersGlobalState, artefactsGlobalState,
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,
       handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
       setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
       
