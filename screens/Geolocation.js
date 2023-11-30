@@ -328,6 +328,11 @@ const closeModal = () => {
   setMapVisible(true);
 };
 
+const updateArtifactsAndSearch = () => {
+  getArtifactsFromDataBase();
+  getSearchesFromDataBase()
+};
+
 if (artefactsGlobalState === null)
   return null;
 
@@ -428,6 +433,9 @@ if (artefactsGlobalState === null)
           </View>
         ))}
       </View>
+      <UpdateButton onPress={updateArtifactsAndSearch}>
+            <ButtonsText>UPDATE</ButtonsText>
+          </UpdateButton>
     </>
   )}
 

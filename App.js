@@ -1,15 +1,15 @@
 import 'react-native-gesture-handler';
-import React , {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { NavigationContainer} from '@react-navigation/native';
-import {createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './components/Header';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
-import Qr  from './screens/Qr';
+import Qr from './screens/Qr';
 import ProfileMortimer from './screens/ProfileMortimer';
 import Villano from './screens/Villano';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,7 +23,9 @@ import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
 
-const App =  () => {
+const App = () => {
+
+  //STATES
   const Tab = createMaterialTopTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
@@ -35,8 +37,9 @@ const App =  () => {
   const [artefactsGlobalState, setArtefactsGlobalState] = useState(null);
 
 
+  //GLOBAL STATES
   const handleGlobalState = (data) => {
-    setGlobalState(globalState =>  ({
+    setGlobalState(globalState => ({
       ...globalState,
       ...data
     }));
@@ -66,26 +69,25 @@ const handleUsersGlobalState = (data) => {
   }
 
 
+  //Datos iniciales email role e id
+  const getInitialData = async () => {
+    try {
+      const email = await AsyncStorage.getItem('userEmail');
+      const role = await AsyncStorage.getItem('userRole');
+      const id = await AsyncStorage.getItem('userID');
+
+      setRole(role);
+      return { email, role, id };
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
+  };
+
+  //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
-
-    const getData = async () => {
-      try {
-        const email = await AsyncStorage.getItem('userEmail');
-        // console.log(email); 
-        const role = await AsyncStorage.getItem('userRole');
-        // console.log(role);
-        const id = await AsyncStorage.getItem('userID')
-        setRole(role); // Almacena el rol del usuario en el estado
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-        
-      } catch (e) {
-        // error reading value
-      }
-      // console.log('Done get.')
-    };
-
-  getData();
-  }, []); 
+    getInitialData();
+  }, []);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
@@ -97,86 +99,135 @@ const handleUsersGlobalState = (data) => {
   },[userGlobalState, usersGlobalState, artefactsGlobalState])
 
 
+  // Maneja el login
   const handleLogin = async () => {
-    // Realiza la lógica de autenticación
     setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
   };
 
-  return(
-<SafeAreaProvider>  
-  <Context.Provider value = {{
-    globalState, userGlobalState, usersGlobalState, artefactsGlobalState,
-    handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-    setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
-    
-    }}>
+  //Renderiza los iconos del navegador
+  const renderTabIcon = (route, role, color) => {
+    let iconName;
 
-  <View style = {{ flex: 1}}>
-  <Splash/>
-    {!isAuthenticated && (
-    <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible}/>
-      )}
-      {isAuthenticated && ( 
+    switch (route.name) {
+      case 'Home':
+        iconName = 'home';
+        break;
+      case 'Qr':
+        iconName = role === 'ACÓLITO' ? 'qr-code-2' : null;
+        break;
+
+      case 'ScanQr':
+        iconName = role === 'JACOB' ? 'qr-code-scanner' : null;
+        break;
+
+      case 'Mortimer':
+      case 'Villano':
+        iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
+        break;
+      case 'Torreon':
+        iconName = 'castle';
+        break;
+      case 'Profile':
+      case 'ProfileMortimer':
+      case 'ProfileVillano':
+        iconName = 'person';
+        break;
+      case 'GeolocationUser':
+      case 'GeolocationMortimer':
+        iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
+        break;
+      case 'roseta':
+  
+
+      default:
+        iconName = null;
+    }
+
+    return iconName && <Icon name={iconName} size={26} color={color} />;
+  };
+
+
+  //renderiza las pestañas de navegacion
+  const renderTabScreens = () => {
+    switch (role) {
+      case 'ACÓLITO':
+        return (
           <>
-        <Header/>  
-    
-      <NavigationContainer>
-        <Tab.Navigator
-            screenOptions={({ route}) => ({
-              swipeEnabled: true,
-              tabBarStyle: { backgroundColor:'#C8A2C8'}, 
-              tabBarIndicatorStyle: {backgroundColor: "#4c2882",},
-              tabBarActiveTintColor: '#4c2882',
-              tabBarInactiveTintColor: '#913595',
-              tabBarShowLabel: false,
-              tabBarShowIcon: true,
-            tabBarIcon: ({focused, color,}) => {
-              let iconName;
-              if(route.name === 'Home' & role === 'ACÓLITO') iconName = 'home'
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Qr" component={Qr} />
+            <Tab.Screen name="Torreon" component={Torreon} />
+            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="GeolocationUser" component={Geolocation} />
+          </>
+        );
+      case 'JACOB':
+        return (
+          <>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="ScanQr" component={ScanQr} />
+          </>
+        );
+      case 'MORTIMER':
+        return (
+          <>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Mortimer" component={Mortimer} />
+            <Tab.Screen name="ProfileMortimer" component={ProfileMortimer} />
+            <Tab.Screen name="GeolocationMortimer" component={GeolocationMortimer} />
+          </>
+        );
+      case 'VILLANO':
+        return (
+          <>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Villano" component={Villano} />
+            <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
-            else if(route.name === 'Home' & role === 'JACOB') iconName = 'home'
-            else if (route.name === 'Qr' && role === 'ACÓLITO') iconName = 'qr-code-2';
-            else if (route.name === 'ScanQr' && role === 'JACOB') iconName = 'qr-code-scanner';
-            else if (route.name === 'Mortimer' && role === 'MORTIMER') iconName = 'people';
-            else if (route.name === 'Villano' && role === 'VILLANO') iconName = 'people';
-            // else if(route.name === 'CreatePotions') iconName = 'bolt'
-            else if(route.name === 'Torreon') iconName = 'castle';
-            // else if(route.name === 'Parchment') iconName = 'new-releases' // Esta tendra que ser tras escanear QR
-            else if(route.name === 'Profile') iconName = 'person';
-            else if (route.name === 'ProfileMortimer' && role === 'MORTIMER') iconName = 'person';
-            else if (route.name === 'ProfileVillano' && role === 'VILLANO') iconName = 'person';
-            else if (route.name === 'GeolocationUser' && role === 'ACÓLITO') iconName = 'map';
-
-            return <Icon name = {iconName} size={26} color={color} />
-              },
-          })}
-        >
-        
-        {role === 'ACÓLITO' && <Tab.Screen name = "Home" component={Home} />}
-        {role === 'JACOB' && <Tab.Screen name = "Home" component={Home} />}
-        {role === 'MORTIMER' && <Tab.Screen name = "Mortimer" component={Mortimer} />}
-        {role === 'VILLANO' && <Tab.Screen name = "Villano" component={Villano} />}
-        {role === 'ACÓLITO' && <Tab.Screen name = "Qr" component={Qr} />}
-        {role === 'JACOB' && <Tab.Screen name = "ScanQr" component={ScanQr} />}
-        {/* {role === 'ACÓLITO' && <Tab.Screen name = "CreatePotions" component={CreatePotions} />} */}
-        {role === 'ACÓLITO' && <Tab.Screen name = "Torreon" component={Torreon} />}
-        {/* {role === 'ACÓLITO' && <Tab.Screen name="Parchment" component={Parchment}/>} */}
-        {role === 'ACÓLITO' && <Tab.Screen name = "Profile" component={Profile} />}
-        {role === 'MORTIMER' && <Tab.Screen name = "ProfileMortimer" component={ProfileMortimer} />}
-        {role === 'VILLANO' && <Tab.Screen name = "ProfileVillano" component={ProfileVillano} /> }
-        {role === 'ACÓLITO' && <Tab.Screen name = "GeolocationUser" component={Geolocation} /> }
-
-        </Tab.Navigator>
-      </NavigationContainer>
-      </>
-        )}
+  return (
+    <Context.Provider value = {{
+      globalState, userGlobalState, usersGlobalState, artefactsGlobalState,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
+      
+      }}>
+      <SafeAreaProvider>
+        <View style={{ flex: 1 }}>
+          <Splash />
+          {!isAuthenticated && <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />}
+          {isAuthenticated && (
+            <>
+              <Header />
+              <NavigationContainer>
+                <Tab.Navigator
+                  screenOptions={({ route }) => ({
+                    swipeEnabled: true,
+                    tabBarStyle: { backgroundColor: '#C8A2C8' },
+                    tabBarIndicatorStyle: { backgroundColor: "#4c2882" },
+                    tabBarActiveTintColor: '#4c2882',
+                    tabBarInactiveTintColor: '#913595',
+                    tabBarShowLabel: false,
+                    tabBarShowIcon: true,
+                    tabBarIcon: ({ focused, color }) => renderTabIcon(route, role, color),
+                  })}
+                >
+                  {renderTabScreens()}
+                </Tab.Navigator>
+              </NavigationContainer>
+            </>
+          )}
         </View>
-  </Context.Provider>
-</ SafeAreaProvider>
+      </SafeAreaProvider>
+    </Context.Provider>
   );
- 
+
 };
 
 const styles = StyleSheet.create({
@@ -186,7 +237,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
-  
+
 });
 
 

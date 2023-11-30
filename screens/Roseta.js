@@ -22,7 +22,7 @@ const Roseta = () => {
   };
 
   const calculateArtifactPosition = (index) => {
-    const numArtifacts = 4;
+    const numArtifacts = artifactImages.length;
 
     const radius = 135;
 
