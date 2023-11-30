@@ -29,28 +29,28 @@ const GeolocationUser = () => {
 
   const img = require("../assets/geofondo.png")
  
-  // Función para contar los artefactos encontrados
-  const countFoundArtifacts = () => {
-    const foundArtifacts = artifacts.filter((artifact) => artifact.found);
-    return foundArtifacts.length;
-  };
+  // // Función para contar los artefactos encontrados
+  // const countFoundArtifacts = () => {
+  //   const foundArtifacts = artifacts.filter((artifact) => artifact.found);
+  //   return foundArtifacts.length;
+  // };
 
   // Actualizar el estado de visibilidad del botón
   useEffect(() => {
     const countFoundArtifacts = async ()  => {
 
-      const foundArtifacts = artefactsGlobalState.filter((artifact) => artifact.found);
-      if(foundArtifacts.length !== null)
-      return foundArtifacts.length;
+      // const foundArtifacts = artefactsGlobalState.filter((artifact) => artifact.found);
+      // if(foundArtifacts.length !== null)
+      // return foundArtifacts.length;
   
-      else
+      // else
       return 4;
     };
 
     const foundCount = countFoundArtifacts();
     setShowAnotherButton(foundCount === 4);
     setShowButton(foundCount < 4);
-  }, [artefactsGlobalState]);
+  }, [artifacts]);
 
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const GeolocationUser = () => {
 
   //EFFECT INICIAL
   useEffect(() => {
-    getArtifactsFromDataBase();
+    
     const requestLocationPermission = async () => {
       try {
         if (Platform.OS === 'ios') {
@@ -104,7 +104,7 @@ const GeolocationUser = () => {
         console.warn(err);
       }
     };
-
+    getArtifactsFromDataBase();
     getSearchesFromDataBase();
     requestLocationPermission();
   }, []);
@@ -136,7 +136,7 @@ const GeolocationUser = () => {
   // Checkea si la posicion del user esta dentro o no del radio del artefacto
   useEffect(() => {
     const checkIfUserNearMarker = (latitude, longitude) => {
-      artifacts.forEach((artifact) => {
+      artefactsGlobalState.forEach((artifact) => {
         if (!artifact.found) {
           console.log("Entra en artifact !found");
           const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
@@ -253,7 +253,7 @@ const GeolocationUser = () => {
       setSearches(searches);
       // console.log(searches[0].state);
   
-      if (searches[0].state === 'pending') {
+      if (searches[0].state === 'pending' || searches[0].state === 'stopped') {
         Alert.alert(
           'BUSQUEDA PENDIENTE',
           '  ',
@@ -380,11 +380,11 @@ if (artefactsGlobalState === null)
 
       <BackgroundImage source={img}>
         
-        {/* {showButton && ( */}
+        {showButton && (
           <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
-        {/* )} */}
+        )}
 
         {showAnotherButton &&  !showPendingText &&(
           <SendButton onPress={() => updateSearch(search) }>
