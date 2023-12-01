@@ -18,22 +18,19 @@ const Profile = () => {
   return (
 
     <View >
+      <ImageBackground source={require("../assets/wallpaperProfile.png")} style={styles.imageBackground}>
       {userGlobalState && (
-          <Content>
+        <Content>
           <AvatarBox>
-            <AdditionalImageBackground
-              source={require("../assets/bosque.jpg")}
-            >
-            <Marco
-            source={require("../assets/marco.png")}
-            >
+              
               <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+              <MarcoFoto source={require("../assets/marcoEpico.png")}/>
+              
               <UserLevelMarco>
-              <UserTextLevel> {userGlobalState.level}</UserTextLevel>
+                <UserTextLevel> {userGlobalState.level}</UserTextLevel>
               </UserLevelMarco>
-            </Marco>
+              
               <UserText>{userGlobalState.username}</UserText>
-            </AdditionalImageBackground>
           </AvatarBox>
 
 
@@ -67,7 +64,7 @@ const Profile = () => {
         </Content>
 
       )}
-      
+      </ImageBackground>
     </View>
   )
 }

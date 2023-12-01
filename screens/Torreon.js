@@ -13,7 +13,7 @@ const Torreon = () => {
     const { userGlobalState, handleUserGlobalState } = useContext(Context) 
 
     // Aqui coge el dato de si esta o no en el torreon (Lo he puesto a true todo el rato)
-    // const [isInTower, setIsInTower] = useState(); 
+    const [isInTower, setIsInTower] = useState(); 
     const [isEnteringTower, setIsEnteringTower] = useState(false);
     const [botonTowerVisible, setBotonTowerVisible] = useState(true);
 
@@ -22,18 +22,16 @@ const Torreon = () => {
     const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); setIsInTower(false)};
 
 
-    useEffect(() => {  
-        
-    }, []); 
+    useEffect(() => { 
+        setIsInTower(true) 
+    }, []); // Lo deberia de poner segun el get del usuario que hagamos tras scaneo
 
 
     return(
     
     <View>
         <ImageBackground source={require(bgImage)} style={styles.container}> 
-        <Entry>PRESS HERE:</Entry>
-        <Icon name="arrow-downward" size={80} color="blue" style={styles.arrowIcon} />
-            {userGlobalState.insideTower && (   
+            {isInTower && (   
                 <>
                 <Text>You can enter</Text>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
