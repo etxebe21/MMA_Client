@@ -41,43 +41,40 @@ const GeolocationUser = () => {
     newSocket.on('connect', () => {
       console.log('Conectado al servidor MMA de Socket.io');
     });
-    setSocket(newSocket);
 
-    // Enviar datos al servidor con el evento 'clientEvent'
-    newSocket.emit('clientEvent', { data: 'Información a enviar al servidor' });
+    // // Enviar datos al servidor con el evento 'clientEvent'
+    // newSocket.emit('clientEvent', { artifactsGlobalState });
 
     // Escuchar la respuesta del servidor al evento 'responseEvent'
     newSocket.on('responseEvent', (responseData) => {
       console.log('Respuesta desde el servidor:', responseData);
+      setArtefactsGlobalState(responseData);
     });
-    newSocket.on('new_user', (level) => {
-      console.log('Datos recibidos desde el servidor:', level);
-    });
+    // newSocket.on('new_user', (level) => {
+    //   console.log('Datos recibidos desde el servidor:', level);
+    // });
 
-    // // Establece la instancia del socket en el estado
-    setSocket(newSocket);
+   
 
-    newSocket.on('updateArtifacts',() => {
-      console.log('Datos recibidos desde el servidor:', );
-    });
+    // newSocket.on('updateArtifacts',() => {
+    //   console.log('Datos recibidos desde el servidor:', );
+    // });
     setSocket(newSocket);
     // Limpia la instancia del socket al desmontar el componente
     return () => {
       newSocket.disconnect(); // Desconecta el socket al desmontar el componente
     };
     
-  }, []);
+  }, [artifactsGlobalState]);
 
-   // Función para emitir eventos al servidor
-   const emitEventServer = () => {
+  const emitEventServer = () => {
     if (socket) {
       console.log("PULSADOOOO")
-// Emitir un evento 'clientEvent' con datos al servidor
-socket.emit('clientEvent', { message: 'Hola desde el cliente' });
-
-  }
+      // Emitir un evento 'clientEvent' con datos al servidor
+      socket.emit('clientEvent', {artifactsGlobalState});
+    }
   };
-
+  
 
   useEffect(() => {
     if (showPendingText) {
@@ -115,8 +112,8 @@ socket.emit('clientEvent', { message: 'Hola desde el cliente' });
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
                 });
-                console.log(latitude)
-                sendLocationToServer(latitude, longitude);
+                // console.log(latitude)
+                // sendLocationToServer(latitude, longitude);
               },
               (error) => {
                 console.error('Error al obtener la ubicación:', error);
@@ -531,9 +528,9 @@ const getUserLocation = async () => {
           </View>
         ))}
       </View>
-      <UpdateButton onPress={emitEventServer}>
-            <ButtonsText>UPDATE</ButtonsText>
-          </UpdateButton>
+        <UpdateButton onPress={() => emitEventServer()}>
+          <ButtonsText>UPDATE</ButtonsText>
+        </UpdateButton>
     </>
   )}
 
