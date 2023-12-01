@@ -74,15 +74,14 @@ const Qr = () => {
       return (
         <ImageBackground source={require("../assets/QRbackground.png")} style={styles.imageBackground}>
           <View>
-              <ViewText>QR</ViewText>
               <QrView>
-                  <QRCode
-                      value={userGlobalState._id}
-                      size={350}
-                      color="purple"
-                      backgroundColor="#BB8FCE"
-                      logo={require('../assets/newPotion.png')}
-                      getRef={(event)  => {
+                <QRCode
+                  value={userGlobalState._id}
+                  size={160}
+                  color="#e2d7eb"
+                  backgroundColor="rgba(0, 0, 0, 0)"
+                  // logo={require('../assets/newPotion.png')}
+                  getRef={(event)  => {
                           //setScanned(true);
                       }}
                   />
