@@ -76,6 +76,7 @@ const GeolocationUser = () => {
   };
   
 
+
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -247,28 +248,27 @@ useEffect(() => {
   
   const updateFoundedArtifact = async (artifact) => {
     try {
-      const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
-      setSelectedArtifact(selectedArtifact);
+      const selectedArtifact = { found: !artifact.found , who: userId , _id : artifact._id }; // Invertir el estado de 'found'
+      //setSelectedArtifact(selectedArtifact);
       console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
-      // Realiza una solicitud PATCH al servidor para actualizar el estado 'found' del artefacto
-      const response = await axios.patch( `https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifact._id}`, selectedArtifact );
-      const updatedArtifact = response.data;
   
-      // Obtener la imagen del usuario actual
-      const userImage = await getUserImageById(userId);
+      socket.emit('clientEvent', {selectedArtifact});
+
+      // // Obtener la imagen del usuario actual
+      // const userImage = await getUserImageById(userId);
   
-      // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
-      const updatedArtifacts = artifactsGlobalState.map(art => {
-        if (art._id === updatedArtifact._id) {
-          return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
-        } else if (art.found) {
-          // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
-          return { ...art, userImage: art.userImage };
-        }
-        return art;
-      });
+      // // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      // const updatedArtifacts = artifactsGlobalState.map(art => {
+      //   if (art._id === updatedArtifact._id) {
+      //     return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+      //   } else if (art.found) {
+      //     // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+      //     return { ...art, userImage: art.userImage };
+      //   }
+      //   return art;
+      // });
   
-      setArtefactsGlobalState(updatedArtifacts);
+      // setArtefactsGlobalState(updatedArtifacts);
       // Incrementar collectedArtifacts al recoger un artefacto
       setCollectedArtifacts(prevCount => prevCount + 1);
   
