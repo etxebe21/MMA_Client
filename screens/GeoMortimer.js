@@ -14,16 +14,15 @@ const GeolocationUser = () => {
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
-  const { artifactsGlobalState, handleArtefactsGlobalStat} = useContext(Context);
+  const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
 
-  const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/geofondo.png")
  
   // Función para contar los artefactos encontrados
   const countFoundArtifacts = () => {
-    const foundArtifacts = artifactsGlobalState.filter((artifact) => artifact.found);
+    const foundArtifacts = 4
     return foundArtifacts.length;
   };
 
@@ -31,7 +30,7 @@ const GeolocationUser = () => {
   useEffect(() => {
     const foundCount = countFoundArtifacts();
     setShowAnotherButton(foundCount === 4);
-  }, [artifacts]);
+  }, [artifactsGlobalState]);
 
 
   useEffect(() => {
@@ -54,8 +53,6 @@ const GeolocationUser = () => {
 
   //EFFECT INICIAL
   useEffect(() => {
-
-    getArtifactsFromDataBase();
     getSearchesFromDataBase();
   }, []);
 
@@ -93,7 +90,7 @@ const GeolocationUser = () => {
           })
         );
 
-        setArtifacts(updatedArtifacts);
+        setArtefactsGlobalState(updatedArtifacts);
       } catch (error) {
         // console.error('Error al cargar los artefactos:', error);
       }
@@ -120,7 +117,7 @@ const GeolocationUser = () => {
         })
       );
   
-      setArtifacts(updatedArtifacts);
+      setArtefactsGlobalState(updatedArtifacts);
       // console.log('Artefactos:', updatedArtifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
@@ -136,10 +133,10 @@ const GeolocationUser = () => {
       const artifactPatchRequests = [];
   
       // Preparar las solicitudes PATCH para cada artefacto
-      for (let i = 0; i < artifacts.length; i++) {
+      for (let i = 0; i < artifactsGlobalState.length; i++) {
         const selectedArtifact = { found: false, who: "" };
         artifactPatchRequests.push(
-          axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifacts[i]._id}`, selectedArtifact)
+          axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifactsGlobalState[i]._id}`, selectedArtifact)
         );
       }
   
@@ -155,9 +152,9 @@ const GeolocationUser = () => {
       await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
   
       // Actualizar el estado una vez que todas las operaciones se completen
-      setArtifacts(updatedArtifacts);
-      getArtifactsFromDataBase(artifacts);
+      setArtefactsGlobalState(updatedArtifacts); 
       getSearchesFromDataBase();
+      get
   
       // Mostrar un mensaje de confirmación
       Alert.alert(
@@ -185,11 +182,6 @@ const GeolocationUser = () => {
       const searches= response.data.data;
       setSearches(searches);
 
-      // setShowPendingText(search[0].state === "completed");
-    
-      // // Mostrar u ocultar el botón de validación según el estado de la búsqueda
-      // setShowAnotherButton(search[0].state === "pending");
-
       // console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
@@ -208,7 +200,7 @@ const GeolocationUser = () => {
       // console.log('Datos busqueda actualizados:', updatedSearch);
   
       setShowPendingText(true);
-      getArtifactsFromDataBase();
+      //getArtifactsFromDataBase();
       getSearchesFromDataBase(search);
      
       Alert.alert(
@@ -255,8 +247,8 @@ const GeolocationUser = () => {
         }}
         showsUserLocation={true}
       >
- {artifacts &&
-          artifacts
+ {artifactsGlobalState &&
+          artifactsGlobalState
             .filter(artifact => !artifact.found)
             .map((artifact, index) => (
               <Marker
@@ -291,7 +283,7 @@ const GeolocationUser = () => {
           </>
         )}
 
-        {!showPendingText && (
+        {!showPendingText && artifactsGlobalState &&(
           <>
             <Buttons onPress={() => resetSearch()}>
               <ButtonsText>RESET</ButtonsText>
@@ -305,7 +297,7 @@ const GeolocationUser = () => {
 
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
-              {artifacts.slice(0, 4).map((artifact, index) => (
+              {artifactsGlobalState.slice(0, 4).map((artifact, index) => (
                 <View key={index} style={styles.artifactUserContainer}>
                   <View style={styles.artifactContainer}>
                     <Image

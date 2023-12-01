@@ -43,13 +43,13 @@ const GeolocationUser = () => {
     });
     setSocket(newSocket);
 
-// Enviar datos al servidor con el evento 'clientEvent'
-newSocket.emit('clientEvent', { data: 'Información a enviar al servidor' });
+    // Enviar datos al servidor con el evento 'clientEvent'
+    newSocket.emit('clientEvent', { data: 'Información a enviar al servidor' });
 
-// Escuchar la respuesta del servidor al evento 'responseEvent'
-newSocket.on('responseEvent', (responseData) => {
-  console.log('Respuesta desde el servidor:', responseData);
-});
+    // Escuchar la respuesta del servidor al evento 'responseEvent'
+    newSocket.on('responseEvent', (responseData) => {
+      console.log('Respuesta desde el servidor:', responseData);
+    });
     newSocket.on('new_user', (level) => {
       console.log('Datos recibidos desde el servidor:', level);
     });
@@ -66,7 +66,7 @@ newSocket.on('responseEvent', (responseData) => {
       newSocket.disconnect(); // Desconecta el socket al desmontar el componente
     };
     
-  }, [artifactsGlobalState]);
+  }, []);
 
    // Función para emitir eventos al servidor
    const emitEventServer = () => {
@@ -121,7 +121,7 @@ socket.emit('clientEvent', { message: 'Hola desde el cliente' });
               (error) => {
                 console.error('Error al obtener la ubicación:', error);
               },
-              { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1 }
+              { enableHighAccuracy: true, timeout: 30000, maximumAge: 10000, distanceFilter: 1 }
             );
           } else {
             console.log('Permiso de ubicación denegado');
@@ -132,22 +132,22 @@ socket.emit('clientEvent', { message: 'Hola desde el cliente' });
       }
     };
   
-    const sendLocationToServer = async (latitude, longitude) => {
-      try {
-        // Envía la ubicación al servidor con alguna identificación del acólito
-        await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUsers/${userId}`, {
-          latitude,
-          longitude
-        });
-        console.log("LATITUUUUD", latitude);
-      } catch (error) {
-        console.error('Error al enviar la ubicación al servidor:', error);
-      }
-    };
+  //   const sendLocationToServer = async (latitude, longitude) => {
+  //     try {
+  //       // Envía la ubicación al servidor con alguna identificación del acólito
+  //       await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUsers/${userId}`, {
+  //         latitude,
+  //         longitude
+  //       });
+  //       console.log("LATITUUUUD", latitude);
+  //     } catch (error) {
+  //       console.error('Error al enviar la ubicación al servidor:', error);
+  //     }
+  //   };
     
-    getSearchesFromDataBase();
-    requestLocationPermission();
-    //getAndSendUserLocation();
+  getSearchesFromDataBase();
+  requestLocationPermission();
+  //   //getAndSendUserLocation();
   }, []);
 
   useEffect(() => {
@@ -173,18 +173,20 @@ socket.emit('clientEvent', { message: 'Hola desde el cliente' });
       setShowAnotherButton(false);
     }
   }, [collectedArtifacts]);
-//   // Función para contar los artefactos encontrados
-//  const countFoundArtifacts = () => {
-//   const foundArtifacts = artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
-//   return foundArtifacts.length;
-// };
 
-// //Actualizar el estado de visibilidad del botón
-// useEffect(() => {
-//   const foundCount = countFoundArtifacts();
-//   setShowAnotherButton(foundCount === 4);
-//   setShowButton(foundCount < 4);
-// }, [artifactsGlobalState]);
+  // Función para contar los artefactos encontrados
+ const countFoundArtifacts = () => {
+  const foundArtifacts = 4;
+  console.log(foundArtifacts.length)
+  return foundArtifacts.length;
+};
+
+//Actualizar el estado de visibilidad del botón
+useEffect(() => {
+  const foundCount = countFoundArtifacts();
+  setShowAnotherButton(foundCount === 4);
+  setShowButton(foundCount < 4);
+}, [artifactsGlobalState]);
 
   // Dentro del efecto para cargar los artefactos
   useEffect(() => {
