@@ -116,6 +116,12 @@ const GeolocationUser = () => {
         // Enviar la ubicación al servidor a través de Socket.io
         //socket.emit('sendUserLocation', { latitude: userLocation.latitude, longitude: userLocation.longitude });
         newSocket.emit('sendUserLocation', { userId,  positions })
+
+        // // Escuchar la respuesta del servidor al evento 'responseEvent'
+        // newSocket.on('receiveUserLocation', (responseData) => {
+        //   console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData)
+        // } )
+
         setuserId(userId);
         
         return jsonValue != null ? JSON.parse(jsonValue) : null;
