@@ -47,8 +47,8 @@ const GeolocationUser = () => {
 
     // Escuchar la respuesta del servidor al evento 'responseEvent'
     newSocket.on('responseEvent', (responseData) => {
-      console.log('Respuesta desde el servidor:', responseData.data.artifactsGlobalState);
-      setArtefactsGlobalState(responseData.data.artifactsGlobalState);
+      console.log('Respuesta desde el servidor:', responseData);
+     // setArtefactsGlobalState(responseData);
     });
     // newSocket.on('new_user', (level) => {
     //   console.log('Datos recibidos desde el servidor:', level);
@@ -248,11 +248,12 @@ useEffect(() => {
   
   const updateFoundedArtifact = async (artifact) => {
     try {
-      const selectedArtifact = { found: !artifact.found , who: userId , artifactId: '655719ea88e0cd6ea51d32bc'}; // Invertir el estado de 'found'
+      const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
+      const id = {artifactId: '655719ea88e0cd6ea51d32bc'};
       //setSelectedArtifact(selectedArtifact);
       console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
   
-      socket.emit('clientEvent', {selectedArtifact});
+      socket.emit('clientEvent', {id, selectedArtifact});
 
       // // Obtener la imagen del usuario actual
       // const userImage = await getUserImageById(userId);
@@ -528,7 +529,7 @@ const getUserLocation = async () => {
           </View>
         ))}
       </View>
-        <UpdateButton onPress={() => emitEventServer()}>
+        <UpdateButton onPress={() => updateFoundedArtifact(selectedArtifact)}>
           <ButtonsText>UPDATE</ButtonsText>
         </UpdateButton>
     </>

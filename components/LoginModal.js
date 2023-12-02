@@ -103,6 +103,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         //setIsAuthenticated(true);
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
+        getArtifactsFromDataBase()
       };
 
       const getArtifactsFromDataBase = async () => {
