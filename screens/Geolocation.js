@@ -13,7 +13,6 @@ import io, { Socket } from 'socket.io-client';
 
 const GeolocationUser = () => {
 
-  const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
 
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
@@ -42,23 +41,6 @@ const GeolocationUser = () => {
       console.log('Conectado al servidor MMA de Socket.io');
     });
 
-    // // Enviar datos al servidor con el evento 'clientEvent'
-    // newSocket.emit('clientEvent', { artifactsGlobalState });
-
-    // Escuchar la respuesta del servidor al evento 'responseEvent'
-    newSocket.on('responseEvent', (responseData) => {
-      console.log('Respuesta desde el servidor:', responseData);
-     // setArtefactsGlobalState(responseData);
-    });
-    // newSocket.on('new_user', (level) => {
-    //   console.log('Datos recibidos desde el servidor:', level);
-    // });
-
-   
-
-    // newSocket.on('updateArtifacts',() => {
-    //   console.log('Datos recibidos desde el servidor:', );
-    // });
     setSocket(newSocket);
     // Limpia la instancia del socket al desmontar el componente
     return () => {
@@ -67,16 +49,7 @@ const GeolocationUser = () => {
     
   }, [artifactsGlobalState]);
 
-  const emitEventServer = () => {
-    if (socket) {
-      console.log("PULSADOOOO")
-      // Emitir un evento 'clientEvent' con datos al servidor
-      socket.emit('clientEvent', {artifactsGlobalState});
-    }
-  };
-  
-
-
+ 
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -145,7 +118,7 @@ const GeolocationUser = () => {
     
   getSearchesFromDataBase();
   requestLocationPermission();
-  //   //getAndSendUserLocation();
+  //getAndSendUserLocation();
   }, []);
 
   useEffect(() => {
@@ -249,14 +222,22 @@ useEffect(() => {
   const updateFoundedArtifact = async (artifact) => {
     try {
       const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
-      const id = {artifactId: '655719ea88e0cd6ea51d32bc'};
-      //setSelectedArtifact(selectedArtifact);
-      console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
-  
-      socket.emit('clientEvent', {id, selectedArtifact});
+      //const id = {artifactId: selectedArtifact._id};
+      const id = {artifactId: '65571a2c88e0cd6ea51d7b75'};
 
-      // // Obtener la imagen del usuario actual
-      // const userImage = await getUserImageById(userId);
+      //setSelectedArtifact(selectedArtifact);
+      console.log("ARTEFACTO SELECCIONADO", selectedArtifact._id);
+  
+      socket.emit('updateArtifact', {id, selectedArtifact});
+      
+      // Escuchar la respuesta del servidor al evento 'responseEvent'
+      socket.on('responseEvent', (responseData) => {
+        console.log('Artefactos actuales recibidos desde el servidor:', responseData);
+        setArtefactsGlobalState(responseData);
+      });
+
+      // Obtener la imagen del usuario actual
+      //const userImage = await getUserImageById(userId);
   
       // // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
       // const updatedArtifacts = artifactsGlobalState.map(art => {
@@ -382,56 +363,10 @@ const updateSearchAndArtfifacts = () => {
 getSearchesFromDataBase();
 };
 
-// Lógica para obtener la ubicación del acólito y enviarla al servidor
-const getAndSendUserLocation = async () => {
-  try {
-    // Obtener la ubicación del dispositivo del acólito (usando Geolocation o alguna librería similar)
-    const location = await getUserLocation();
-    console.log("ubicacion", location)
-    // // Enviar la ubicación al servidor con alguna identificación del acólito
-    // await axios.post('https://tu-servidor.com/api/actualizar-ubicacion-acolito', {
-    //   userId: 'identificador_del_acolito',
-    //   ubicacion: location,
-    // });
-
-    console.log('Ubicación enviada correctamente.');
-  } catch (error) {
-    console.error('Error al enviar la ubicación:', error);
-  }
-};
-const getUserLocation = async () => {
-  try {
-    const location = await new Promise((resolve, reject) => {
-      Geolocation.watchPosition(
-        position => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        error => {
-          reject(error);
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
-      );
-    });
-
-    console.log("UBICACION", location);
-
-    return location;
-  } catch (error) {
-    console.error('Error al obtener la ubicación:', error);
-    return null;
-  }
-};
-
-
 
   return (
-
     
-    <Container>
-      
+    <Container>   
       
       {mapVisible && artifactsGlobalState && (
       <MapView
@@ -543,8 +478,8 @@ const getUserLocation = async () => {
   </Modal>
 
   </BackgroundImage>
-    </Container>
-    
+  </Container>
+   
   );
 };
 
