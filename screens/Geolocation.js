@@ -14,6 +14,7 @@ import io, { Socket } from 'socket.io-client';
 const GeolocationUser = () => {
 
   const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
+  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
 
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -86,8 +87,6 @@ const GeolocationUser = () => {
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
                 });
-                // console.log(latitude)
-                // sendLocationToServer(latitude, longitude);
               },
               (error) => {
                 console.error('Error al obtener la ubicación:', error);
@@ -102,30 +101,23 @@ const GeolocationUser = () => {
         console.warn(err);
       }
     };
-  
-  //   const sendLocationToServer = async (latitude, longitude) => {
-  //     try {
-  //       // Envía la ubicación al servidor con alguna identificación del acólito
-  //       await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUsers/${userId}`, {
-  //         latitude,
-  //         longitude
-  //       });
-  //       console.log("LATITUUUUD", latitude);
-  //     } catch (error) {
-  //       console.error('Error al enviar la ubicación al servidor:', error);
-  //     }
-  //   };
-    
+
   getSearchesFromDataBase();
   requestLocationPermission();
-  //getAndSendUserLocation();
   }, []);
 
   useEffect(() => {
     const getID = async () => {
       try {
         const userId = await AsyncStorage.getItem('userID')
+        const newSocket = io('https://mmaproject-app.fly.dev');
+        console.log("id del usuario", userId);
+        const positions = {latitude: '43.309801', longitude: '-2.003381'}
+        // Enviar la ubicación al servidor a través de Socket.io
+        //socket.emit('sendUserLocation', { latitude: userLocation.latitude, longitude: userLocation.longitude });
+        newSocket.emit('sendUserLocation', { userId,  positions })
         setuserId(userId);
+        
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
