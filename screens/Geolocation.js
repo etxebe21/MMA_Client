@@ -12,14 +12,10 @@ import MapStyle from '../components/MapStyle.json'
 import io, { Socket } from 'socket.io-client';
 
 const GeolocationUser = () => {
-  //GLOBALES
-  const { userGlobalState, handleUserGlobalState } = useContext(Context);
-  const { artifactsGlobalState,setArtefactsGlobalState } = useContext(Context);
-  const {currentEventGlobalState,setCurrentEventGlobalState} = useContext(Context); 
-  
-  
-  
-  //LOCALES
+
+  const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
+  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
@@ -33,19 +29,9 @@ const GeolocationUser = () => {
   const [showModal, setShowModal] = useState(false);
   const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
-  const [currentLocalEvent, setCurrentLocalEvent] = useState(null);
 
   const img = require("../assets/geofondo.png")
 
-  //Use effect para cambiar estado local mediante la global
-  useEffect(() => {
-    if (currentEventGlobalState != null)
-    {
-      setCurrentLocalEvent(currentEventGlobalState);
-    }
-  },[currentEventGlobalState])
-
-  //CONEXION SOCKET
   useEffect(() => {
     
     // Crea una conexión al servidor de Socket.io al montar el componente
@@ -56,22 +42,6 @@ const GeolocationUser = () => {
       console.log('Conectado al servidor MMA de Socket.io');
     });
 
-    console.log(`GLOBAL ARTEEEEEEEFAAAAACT: ${artifactsGlobalState}`);
-
-    // // Enviar datos al servidor con el evento 'clientEvent'
-    // newSocket.emit('clientEvent', { artifactsGlobalState });
-
-   
-
-    // newSocket.on('new_user', (level) => {
-    //   console.log('Datos recibidos desde el servidor:', level);
-    // });
-
-   
-
-    // newSocket.on('updateArtifacts',() => {
-    //   console.log('Datos recibidos desde el servidor:', );
-    // });
     setSocket(newSocket);
     // Limpia la instancia del socket al desmontar el componente
     return () => {
@@ -80,16 +50,7 @@ const GeolocationUser = () => {
     
   }, [artifactsGlobalState]);
 
-  const emitEventServer = () => {
-    if (socket) {
-      console.log("PULSADOOOO")
-      // Emitir un evento 'clientEvent' con datos al servidor
-      socket.emit('clientEvent', {artifactsGlobalState});
-    }
-  };
-  
-
-
+ 
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -126,8 +87,6 @@ const GeolocationUser = () => {
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
                 });
-                // console.log(latitude)
-                // sendLocationToServer(latitude, longitude);
               },
               (error) => {
                 console.error('Error al obtener la ubicación:', error);
@@ -142,30 +101,29 @@ const GeolocationUser = () => {
         console.warn(err);
       }
     };
-  
-  //   const sendLocationToServer = async (latitude, longitude) => {
-  //     try {
-  //       // Envía la ubicación al servidor con alguna identificación del acólito
-  //       await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUsers/${userId}`, {
-  //         latitude,
-  //         longitude
-  //       });
-  //       console.log("LATITUUUUD", latitude);
-  //     } catch (error) {
-  //       console.error('Error al enviar la ubicación al servidor:', error);
-  //     }
-  //   };
-    
+
   getSearchesFromDataBase();
   requestLocationPermission();
-  //   //getAndSendUserLocation();
   }, []);
 
   useEffect(() => {
     const getID = async () => {
       try {
         const userId = await AsyncStorage.getItem('userID')
+        const newSocket = io('https://mmaproject-app.fly.dev');
+        console.log("id del usuario", userId);
+        const positions = {latitude: '43.309801', longitude: '-2.003381'}
+        // Enviar la ubicación al servidor a través de Socket.io
+        //socket.emit('sendUserLocation', { latitude: userLocation.latitude, longitude: userLocation.longitude });
+        newSocket.emit('sendUserLocation', { userId,  positions })
+
+        // // Escuchar la respuesta del servidor al evento 'responseEvent'
+        // newSocket.on('receiveUserLocation', (responseData) => {
+        //   console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData)
+        // } )
+
         setuserId(userId);
+        
         return jsonValue != null ? JSON.parse(jsonValue) : null;
         
       } catch (e) {
@@ -217,7 +175,7 @@ useEffect(() => {
           })
         );
     
-        (updatedArtifacts);
+        setArtefactsGlobalState(updatedArtifacts);
       } catch (error) {
         console.error('Error al cargar los artefactos:', error);
       }
@@ -259,120 +217,58 @@ useEffect(() => {
     return d;
   };
   
-  // const updateFoundedArtifact = async (artifact) => {
-  //   try {
-    //     const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
-    //     const id = {artifactId: '65571a2c88e0cd6ea51d7b75'};
-  //     //setSelectedArtifact(selectedArtifact);
-  //     console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
-  
-  //     socket.emit('clientEvent', {id, selectedArtifact});
-
-  //     // Escuchar la respuesta del servidor al evento 'responseEvent'
-  //    socket.on('responseEvent', (responseData) => {
-  //     const responseData = await new Promise(resolve => {
-  //       socket.on('responseEvent', (data) => {
-  //           resolve(data);
-  //       });
-  //   });
-  //    setArtifactsGlobalState(responseData);
-  //      if (artifactsGlobalState != null)
-  //      {
-  //        console.log(`Artefactos modificados ${artifactsGlobalState}`);
-  //      }
-
-  //     // // Obtener la imagen del usuario actual
-  //     // const userImage = await getUserImageById(userId);
-  
-  //     // // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
-  //     // const updatedArtifacts = artifactsGlobalState.map(art => {
-  //     //   if (art._id === updatedArtifact._id) {
-  //     //     return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
-  //     //   } else if (art.found) {
-  //     //     // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
-  //     //     return { ...art, userImage: art.userImage };
-  //     //   }
-  //     //   return art;
-  //     // });
-  
-  //   });
-  //     // Incrementar collectedArtifacts al recoger un artefacto
-  //     setCollectedArtifacts(prevCount => prevCount + 1);
-  //    // // Obtener la imagen del usuario actual
-  //     // const userImage = await getUserImageById(userId);
-  
-  //     // // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
-  //     // const updatedArtifacts = artifactsGlobalState.map(art => {
-  //     //   if (art._id === updatedArtifact._id) {
-  //     //     return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
-  //     //   } else if (art.found) {
-  //     //     // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
-  //     //     return { ...art, userImage: art.userImage };
-  //     //   }
-  //     //   return art;
-  //     // });
-  //     // Muestra un mensaje de confirmación
-  //     Alert.alert(
-  //       "Artefacto Encontrado",
-  //       "Los datos del artefacto han sido actualizados correctamente.",
-  //       [
-  //         {
-  //           text: "OK",
-  //           onPress: () => {}, // No recargar los artefactos después de presionar "OK" para mantener las imágenes de usuario
-  //         },
-  //       ],
-  //       { cancelable: false }
-  //     );
-  
-  //   } catch (error) {
-  //     console.error('Error al actualizar los datos del artefacto:', error);
-  //   }
-  // };
-
   const updateFoundedArtifact = async (artifact) => {
     try {
-        const selectedArtifact = { found: !artifact.found, who: userId };
-        const id = { artifactId: '65571a2c88e0cd6ea51d7b75' };
+      const selectedArtifact = { found: !artifact.found , who: userId }; // Invertir el estado de 'found'
+      //const id = {artifactId: selectedArtifact._id};
+      const id = {artifactId: '65571a2c88e0cd6ea51d7b75'};
 
-        console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
+      //setSelectedArtifact(selectedArtifact);
+      console.log("ARTEFACTO SELECCIONADO", selectedArtifact._id);
+  
+      socket.emit('updateArtifact', {id, selectedArtifact});
+      
+      // Escuchar la respuesta del servidor al evento 'responseEvent'
+      socket.on('responseEvent', (responseData) => {
+        console.log('Artefactos actuales recibidos desde el servidor:', responseData);
+        setArtefactsGlobalState(responseData);
+      });
 
-        // Emitir el evento al servidor
-        socket.emit('updateArtifact', { id, selectedArtifact });
-
-        // Esperar la respuesta del servidor al evento 'responseEvent' usando una promesa
-        const responseData = await new Promise(resolve => {
-            socket.on('responseEvent', (data) => {
-                resolve(data);
-            });
-        });
-
-        console.log('Respuesta desde el servidor con artefactos modificados:', responseData);
-        setCurrentEventGlobalState(responseData);
-        // setArtefactsGlobalState(responseData);
-        
-
-
-        // Incrementar collectedArtifacts al recoger un artefacto
-        setCollectedArtifacts(prevCount => prevCount + 1);
-
-        // Muestra un mensaje de confirmación
-        Alert.alert(
-            "Artefacto Encontrado",
-            "Los datos del artefacto han sido actualizados correctamente.",
-            [
-                {
-                    text: "OK",
-                    onPress: () => { /* No recargar los artefactos después de presionar "OK" */ },
-                },
-            ],
-            { cancelable: false }
-        );
-
+      // Obtener la imagen del usuario actual
+      //const userImage = await getUserImageById(userId);
+  
+      // // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      // const updatedArtifacts = artifactsGlobalState.map(art => {
+      //   if (art._id === updatedArtifact._id) {
+      //     return { ...updatedArtifact, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+      //   } else if (art.found) {
+      //     // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+      //     return { ...art, userImage: art.userImage };
+      //   }
+      //   return art;
+      // });
+  
+      // setArtefactsGlobalState(updatedArtifacts);
+      // Incrementar collectedArtifacts al recoger un artefacto
+      setCollectedArtifacts(prevCount => prevCount + 1);
+  
+      // Muestra un mensaje de confirmación
+      Alert.alert(
+        "Artefacto Encontrado",
+        "Los datos del artefacto han sido actualizados correctamente.",
+        [
+          {
+            text: "OK",
+            onPress: () => {}, // No recargar los artefactos después de presionar "OK" para mantener las imágenes de usuario
+          },
+        ],
+        { cancelable: false }
+      );
+  
     } catch (error) {
-        console.error('Error al actualizar los datos del artefacto:', error);
+      console.error('Error al actualizar los datos del artefacto:', error);
     }
-};
-
+  };
   
   
   const getSearchesFromDataBase = async () => {
@@ -465,56 +361,10 @@ const updateSearchAndArtfifacts = () => {
 getSearchesFromDataBase();
 };
 
-// Lógica para obtener la ubicación del acólito y enviarla al servidor
-const getAndSendUserLocation = async () => {
-  try {
-    // Obtener la ubicación del dispositivo del acólito (usando Geolocation o alguna librería similar)
-    const location = await getUserLocation();
-    console.log("ubicacion", location)
-    // // Enviar la ubicación al servidor con alguna identificación del acólito
-    // await axios.post('https://tu-servidor.com/api/actualizar-ubicacion-acolito', {
-    //   userId: 'identificador_del_acolito',
-    //   ubicacion: location,
-    // });
-
-    console.log('Ubicación enviada correctamente.');
-  } catch (error) {
-    console.error('Error al enviar la ubicación:', error);
-  }
-};
-const getUserLocation = async () => {
-  try {
-    const location = await new Promise((resolve, reject) => {
-      Geolocation.watchPosition(
-        position => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        error => {
-          reject(error);
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
-      );
-    });
-
-    console.log("UBICACION", location);
-
-    return location;
-  } catch (error) {
-    console.error('Error al obtener la ubicación:', error);
-    return null;
-  }
-};
-
-
 
   return (
-
     
-    <Container>
-      
+    <Container>   
       
       {mapVisible && artifactsGlobalState && (
       <MapView
@@ -626,8 +476,8 @@ const getUserLocation = async () => {
   </Modal>
 
   </BackgroundImage>
-    </Container>
-    
+  </Container>
+   
   );
 };
 
