@@ -12,10 +12,14 @@ import MapStyle from '../components/MapStyle.json'
 import io, { Socket } from 'socket.io-client';
 
 const GeolocationUser = () => {
-
+  //GLOBALES
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { artifactsGlobalState,setArtefactsGlobalState } = useContext(Context);
-
+  const {currentEventGlobalState,setCurrentEventGlobalState} = useContext(Context); 
+  
+  
+  
+  //LOCALES
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
@@ -29,9 +33,19 @@ const GeolocationUser = () => {
   const [showModal, setShowModal] = useState(false);
   const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
+  const [currentLocalEvent, setCurrentLocalEvent] = useState(null);
 
   const img = require("../assets/geofondo.png")
 
+  //Use effect para cambiar estado local mediante la global
+  useEffect(() => {
+    if (currentEventGlobalState != null)
+    {
+      setCurrentLocalEvent(currentEventGlobalState);
+    }
+  },[currentEventGlobalState])
+
+  //CONEXION SOCKET
   useEffect(() => {
     
     // Crea una conexión al servidor de Socket.io al montar el componente
@@ -323,7 +337,7 @@ useEffect(() => {
         console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
 
         // Emitir el evento al servidor
-        socket.emit('clientEvent', { id, selectedArtifact });
+        socket.emit('updateArtifact', { id, selectedArtifact });
 
         // Esperar la respuesta del servidor al evento 'responseEvent' usando una promesa
         const responseData = await new Promise(resolve => {
@@ -332,14 +346,11 @@ useEffect(() => {
             });
         });
 
-        console.log('Respuesta desde el servidor:', responseData);
+        console.log('Respuesta desde el servidor con artefactos modificados:', responseData);
+        setCurrentEventGlobalState(responseData);
+        // setArtefactsGlobalState(responseData);
+        
 
-        // Asegurarse de que setArtifactsGlobalState y artifactsGlobalState estén definidos
-        setArtefactsGlobalState(responseData);
-
-        if (artifactsGlobalState != undefined) {
-          console.log(`Artefactos modificados ${artifactsGlobalState}`);
-        }
 
         // Incrementar collectedArtifacts al recoger un artefacto
         setCollectedArtifacts(prevCount => prevCount + 1);

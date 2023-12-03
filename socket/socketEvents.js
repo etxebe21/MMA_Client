@@ -5,6 +5,7 @@ function SocketListener(props) {
 	const {currentSocketEvent} = props;
 	const [currentEvent, setEvent] = useState(currentSocketEvent);
 	const {handleGlobalState} = useContext(Context);
+	const { artifactsGlobalState,setArtefactsGlobalState } = useContext(Context);
 
 	useEffect(() => { 
 		setEvent(currentSocketEvent);        
@@ -12,9 +13,10 @@ function SocketListener(props) {
 	
 	useEffect(() => {   
 		if (currentEvent !== null)
-		{
-			const handler = handlers[currentEvent.event];
-			handler(currentEvent.value);          
+		{	
+			// const handler = handlers[currentEvent.event];
+			setArtefactsGlobalState(currentEvent);
+			// handler(currentEvent);          
 		} 
 		else return;
 	}, [currentEvent]);
@@ -24,7 +26,8 @@ function SocketListener(props) {
 	const handleAcoliteGold = (data) => {handleGlobalState({gold: data})};
 	const handleAcoliteXperience = (data) => {handleGlobalState({xp: data})};
 	const handleNewAcolite = (data) => {handleGlobalState({user: data})
-    console.log(data);
+	// const handleUpdatedArtifacts = (data) => {handleArtefactsGlobalState({})}
+	console.log(data);
 };
 	
 	const handlers = {

@@ -23,6 +23,8 @@ import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
 import axios from 'axios';
+import SocketListener from './socket/socketEvents';
+import { socket } from './socket/socketConnect';
 
 const App = () => {
 
@@ -31,11 +33,12 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
-  const [globalState, setGlobalState] = useState({dinero: 20, fatigue: 40});
-  
+  const [globalState, setGlobalState] = useState({ dinero: 20, fatigue: 40 });
+
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
   const [artifactsGlobalState, setArtefactsGlobalState] = useState()
+  const [currentEventGlobalState, setCurrentEventGlobalState] = useState(null)
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -43,31 +46,38 @@ const App = () => {
       ...globalState,
       ...data
     }));
-  
+
   }
 
-const handleUserGlobalState = (data) => {
-  setUserGlobalState(globalState =>  ({
-    ...globalState,
-    ...data
+  const handleUserGlobalState = (data) => {
+    setUserGlobalState(globalState => ({
+      ...globalState,
+      ...data
     }));
   }
 
-const handleUsersGlobalState = (data) => {
-  setUsersGlobalState(globalState =>  ({
-    ...globalState,
-    ...data
+  const handleUsersGlobalState = (data) => {
+    setUsersGlobalState(globalState => ({
+      ...globalState,
+      ...data
     }));
   }
 
   const handleArtefactsGlobalState = (data) => {
-    setArtefactsGlobalState(globalState =>  ({
+    setArtefactsGlobalState(globalState => ({
       ...globalState,
       ...data
     }));
-  
+
   }
 
+  const handleCurrentEventGlobalState = (data) => {
+    setGlobalState(globalState => ({
+      ...globalState,
+      ...data
+    }));
+
+  }
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -87,17 +97,22 @@ const handleUsersGlobalState = (data) => {
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
+    socket.onAny((event, ...args) => handleCurrentEventGlobalState({ event, value: args[0] }));
+    return () => {
+      socket.removeAllListeners();
+    };
     //getArtifactsFromDataBase()
+
   }, []);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
-    
+
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
-    console.log(artifactsGlobalState);
-
-  },[userGlobalState, usersGlobalState, artifactsGlobalState])
+    // console.log(artifactsGlobalState);
+    console.log("global currentEvent  " + currentEventGlobalState);
+  }, [userGlobalState, usersGlobalState, artifactsGlobalState,currentEventGlobalState])
 
 
   // Maneja el login
@@ -127,10 +142,7 @@ const handleUsersGlobalState = (data) => {
       case 'Villano':
         iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
         break;
-      case 'Torreon':
-        iconName = 'castle';
-        break;
-      case 'Profile':
+      case 'Torreon':currentEventGlobalState
       case 'ProfileMortimer':
       case 'ProfileVillano':
         iconName = 'person';
@@ -140,7 +152,7 @@ const handleUsersGlobalState = (data) => {
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
         break;
       case 'roseta':
-  
+
 
       default:
         iconName = null;
@@ -193,12 +205,12 @@ const handleUsersGlobalState = (data) => {
   };
 
   return (
-    <Context.Provider value = {{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
-      
-      }}>
+    <Context.Provider value={{
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,currentEventGlobalState,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,handleCurrentEventGlobalState,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,setCurrentEventGlobalState
+
+    }}>
       <SafeAreaProvider>
         <View style={{ flex: 1 }}>
           <Splash />
@@ -208,10 +220,10 @@ const handleUsersGlobalState = (data) => {
               <Header />
               <NavigationContainer>
                 <Tab.Navigator
-                  screenOptions={({ route}) => ({
+                  screenOptions={({ route }) => ({
                     swipeEnabled: true,
-                    tabBarStyle: { backgroundColor:'#000000'}, 
-                    tabBarIndicatorStyle: {backgroundColor: "#B01AFF",},
+                    tabBarStyle: { backgroundColor: '#000000' },
+                    tabBarIndicatorStyle: { backgroundColor: "#B01AFF", },
                     tabBarActiveTintColor: 'rgba(146, 3, 240, 1.0)',
                     tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.55)',
                     tabBarShowLabel: false,
@@ -226,6 +238,7 @@ const handleUsersGlobalState = (data) => {
           )}
         </View>
       </SafeAreaProvider>
+      <SocketListener currentSocketEvent={currentEventGlobalState} />
     </Context.Provider>
   );
 
