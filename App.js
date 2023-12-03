@@ -38,7 +38,7 @@ const App = () => {
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
   const [artifactsGlobalState, setArtefactsGlobalState] = useState()
-  const [currentEventGlobalState, setCurrentEventGlobalState] = useState(null)
+  const [currentEvent, setCurrentEvent] = useState(null)
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -71,13 +71,8 @@ const App = () => {
 
   }
 
-  const handleCurrentEventGlobalState = (data) => {
-    setGlobalState(globalState => ({
-      ...globalState,
-      ...data
-    }));
 
-  }
+
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -97,7 +92,7 @@ const App = () => {
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
-    socket.onAny((event, ...args) => handleCurrentEventGlobalState({ event, value: args[0] }));
+    socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
     return () => {
       socket.removeAllListeners();
     };
@@ -111,8 +106,7 @@ const App = () => {
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
-    console.log("global currentEvent  " + currentEventGlobalState);
-  }, [userGlobalState, usersGlobalState, artifactsGlobalState,currentEventGlobalState])
+  }, [userGlobalState, usersGlobalState, artifactsGlobalState])
 
 
   // Maneja el login
@@ -142,7 +136,7 @@ const App = () => {
       case 'Villano':
         iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
         break;
-      case 'Torreon':currentEventGlobalState
+      case 'Torreon':
       case 'ProfileMortimer':
       case 'ProfileVillano':
         iconName = 'person';
@@ -206,9 +200,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,currentEventGlobalState,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,handleCurrentEventGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,setCurrentEventGlobalState
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
 
     }}>
       <SafeAreaProvider>
@@ -238,7 +232,7 @@ const App = () => {
           )}
         </View>
       </SafeAreaProvider>
-      <SocketListener currentSocketEvent={currentEventGlobalState} />
+      <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
   );
 
