@@ -137,6 +137,9 @@ const App = () => {
         iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
         break;
       case 'Torreon':
+        iconName = 'castle';
+        break;
+      case 'Profile':
       case 'ProfileMortimer':
       case 'ProfileVillano':
         iconName = 'person';
