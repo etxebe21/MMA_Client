@@ -72,6 +72,7 @@ const GeolocationUser = () => {
         // Escuchar la respuesta del servidor al evento 'responseEvent'
         newSocket.on('receiveUserLocation', (responseData) => {
           console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
+          console.log(responseData[0].latitude , responseData[0].longitude, responseData[0].picture )
           
         });
         const userId = await AsyncStorage.getItem('userID')
