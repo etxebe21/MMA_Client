@@ -56,8 +56,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-
-    // filterFound(artifactsGlobalState);
+    emitPositionServer();
   }, []);
 
   
@@ -217,8 +216,7 @@ useEffect(() => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               });
-              // console.log(latitude)
-              // sendLocationToServer(latitude, longitude);
+              emitPositionServer();
             },
             (error) => {
               console.error('Error al obtener la ubicación:', error);
@@ -303,6 +301,18 @@ useEffect(() => {
     setShowModal(false);
     setMapVisible(true);
   };
+
+  const emitPositionServer = () => {
+    const positions = {
+      latitude: 43.309534,
+      longitude: -2.00203,
+      
+    }
+    socket.emit('sendUserLocation', { 
+      positions,
+      userId: userGlobalState._id});
+  };
+
 
   return (
     <Container>

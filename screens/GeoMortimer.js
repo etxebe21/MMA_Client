@@ -8,6 +8,7 @@ import { Modal } from 'react-native-paper';
 import { Context } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io, { Socket } from 'socket.io-client';
+import { socket } from '../socket/socketConnect';
 
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -270,7 +271,7 @@ const GeolocationUser = () => {
         }}
         showsUserLocation={true}
       >
- {artifactsGlobalState &&
+ {artifactsGlobalState != null && artifactsGlobalState &&
           artifactsGlobalState
             .filter(artifact => !artifact.found)
             .map((artifact, index) => (
@@ -320,7 +321,7 @@ const GeolocationUser = () => {
 
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
-              {artifactsGlobalState.slice(0, 4).map((artifact, index) => (
+              {artifactsGlobalState != null && artifactsGlobalState.slice(0, 4).map((artifact, index) => (
                 <View key={index} style={styles.artifactUserContainer}>
                   <View style={styles.artifactContainer}>
                     <Image
