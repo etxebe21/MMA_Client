@@ -33,10 +33,6 @@ const Qr = () => {
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
   
-  useEffect(() => {
-  }, []);
-  
-
 
   useEffect(() => {
       if (scanned && userGlobalState.insideTower !== null) {

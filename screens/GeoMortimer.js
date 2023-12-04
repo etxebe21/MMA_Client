@@ -34,7 +34,13 @@ const GeolocationUser = () => {
     setShowAnotherButton(foundCount === 4);
   }, [artifactsGlobalState]);
 
-
+  useEffect(() => {
+    responseEvent();
+    console.log(showPendingText);
+  }, [showPendingText]);
+  
+  
+  
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -52,21 +58,21 @@ const GeolocationUser = () => {
       }).start();
     }
   }, [showPendingText, scaleAnim]);
-
+  
   //EFFECT INICIAL
   useEffect(() => {
     getSearchesFromDataBase();
   }, []);
-
+  
   useEffect(() => {
     const getID = async () => {
       try {
         const newSocket = io('https://mmaproject-app.fly.dev'); 
         // Escuchar la respuesta del servidor al evento 'responseEvent'
         newSocket.on('receiveUserLocation', (responseData) => {
-        console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
-        
-      });
+          console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
+          
+        });
         const userId = await AsyncStorage.getItem('userID')
         setuserId(userId);
         return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -74,10 +80,10 @@ const GeolocationUser = () => {
       } catch (e) {
       }
     };
-
-  getID();
+    
+    getID();
   }, []); 
-
+  
   // Dentro del efecto para cargar los artefactos
   useEffect(() => {
     const loadArtifacts = async () => {
@@ -85,7 +91,7 @@ const GeolocationUser = () => {
         const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
         const artifacts = artifactsData.data.data;
         // console.log("ARTEFACTOS", artifacts);
-
+        
         // Actualizar los artefactos con la imagen del usuario
         const updatedArtifacts = await Promise.all(
           artifacts.map(async (artifact) => {
@@ -96,29 +102,40 @@ const GeolocationUser = () => {
             }
             return artifact;
           })
-        );
-
-        setArtefactsGlobalState(updatedArtifacts);
-      } catch (error) {
-        // console.error('Error al cargar los artefactos:', error);
-      }
-    };
-
-    loadArtifacts();
-  }, []);
-
-
-  const getArtifactsFromDataBase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-      const response = await axios.get(url);
-      const artifactsData = response.data.data;
-  
-      // Actualizar los artefactos con la información de las imágenes del usuario
-      const updatedArtifacts = await Promise.all(
-        artifactsData.map(async (artifact) => {
-          if (artifact.found) {
-            const userImage = await getUserImageById(artifact.who);
+          );
+          
+          setArtefactsGlobalState(updatedArtifacts);
+        } catch (error) {
+          // console.error('Error al cargar los artefactos:', error);
+        }
+      };
+      
+      loadArtifacts();
+    }, []);
+    
+    
+    
+      const responseEvent = async () => {
+        const responseData = await new Promise((resolve) => {
+          socket.on('responseVerify', (data) => {
+            resolve(data);
+          });
+        });
+        console.log("respuesta de servidor" + responseData);
+        setShowPendingText(responseData); 
+      };
+      
+    const getArtifactsFromDataBase = async () => {
+      try {
+        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+        const response = await axios.get(url);
+        const artifactsData = response.data.data;
+        
+        // Actualizar los artefactos con la información de las imágenes del usuario
+        const updatedArtifacts = await Promise.all(
+          artifactsData.map(async (artifact) => {
+            if (artifact.found) {
+              const userImage = await getUserImageById(artifact.who);
             return { ...artifact, userImage };
           }
           return artifact;
@@ -133,7 +150,6 @@ const GeolocationUser = () => {
   };
   
 
-  
   const resetSearch = async () => {
     try {
       setShowPendingText(false);
@@ -162,7 +178,6 @@ const GeolocationUser = () => {
       // Actualizar el estado una vez que todas las operaciones se completen
       setArtefactsGlobalState(updatedArtifacts); 
       getSearchesFromDataBase();
-      get
   
       // Mostrar un mensaje de confirmación
       Alert.alert(

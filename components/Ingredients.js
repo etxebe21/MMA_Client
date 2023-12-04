@@ -14,6 +14,9 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedPotion, setSelectedPotion] = useState(null);
 
 
+  useEffect(() => {
+    getIngredientsFromDatabase();
+  }, []);
   const getIngredientsFromDatabase = async () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/ingredients';
@@ -26,9 +29,6 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     }
   };
 
-  useEffect(() => {
-    getIngredientsFromDatabase();
-  }, []);
 
 
   //SELECCIONA LOS INGREDIENTES HASTA UN MAX DE 2
@@ -66,7 +66,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     }
   };
 
- 
+
 
 
   return (

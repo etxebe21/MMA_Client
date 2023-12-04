@@ -139,7 +139,8 @@ const App = () => {
       case 'Torreon':
         iconName = 'castle';
         break;
-      case 'Profile':
+      case 'Profile': iconName = 'person';
+      break;
       case 'ProfileMortimer':
       case 'ProfileVillano':
         iconName = 'person';
