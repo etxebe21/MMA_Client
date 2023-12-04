@@ -125,7 +125,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
          
           setArtefactsGlobalState(updatedArtifacts);
           
-          console.log('Artefactos guardados en artifactsGlobalState:', updatedArtifacts);
+          // console.log('Artefactos guardados en artifactsGlobalState:', updatedArtifacts);
         } catch (error) {
           console.error('Error al obtener artefactos:', error);
         }
@@ -135,7 +135,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         try {
           const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
           const userPicture = user.data.data.picture;
-          console.log(userPicture);
+          // console.log(userPicture);
           return userPicture; // Devolvemos la URL de la imagen del usuario
     
       } catch (error) {
@@ -178,7 +178,7 @@ const StyledButton = styled.TouchableOpacity`
     justify-content: center;
     height: 60px;
     width: 100%;
-    margin-top: 350%;
+    margin-top: 35%;
     border-radius: 60px;
     border: #7B26C4;
     align-self: center;
