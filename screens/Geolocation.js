@@ -66,7 +66,6 @@ const GeolocationUser = () => {
   useEffect(() => {
     requestLocationPermission();
     getSearchesFromDataBase();
-    requestLocationPermission();
     loadArtifacts();
     getID();
 
@@ -75,8 +74,9 @@ const GeolocationUser = () => {
 
   
   useEffect(() => {
-    if (userLocation) {
-      console.log(userLocation);
+    if (userLocation != undefined) {
+      // console.log("Localizacion")
+      // console.log(userLocation);
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
   }, [userLocation, artifactsGlobalState]); // 
@@ -93,19 +93,23 @@ const GeolocationUser = () => {
   }, [collectedArtifacts]);
   
   const checkIfUserNearMarker = (latitude, longitude) => {
-    artifactsGlobalState.forEach((artifact) => {
-      if (!artifact.found) {
-        const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-        console.log(distance);
-        if (distance < 1000000) {
-          console.log('Estás cerca del marcador:', artifact.name);
-          setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
-          setSelectedArtifact(artifact);
-        } else {
-          setShowButton(false); // Si no está cerca, oculta el botón
+    if(artifactsGlobalState !== undefined)
+    {
+      artifactsGlobalState.forEach((artifact) => {
+        if (!artifact.found) {
+          const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
+          // console.log("Distancia: ");
+          // console.log(distance);
+          if (distance < 1000000) {
+            console.log('Estás cerca del marcador:', artifact.name);
+            setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
+            setSelectedArtifact(artifact);
+          } else {
+            setShowButton(false); // Si no está cerca, oculta el botón
+          }
         }
-      }
-    });
+      });
+    }
   };
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -205,6 +209,14 @@ const GeolocationUser = () => {
     try {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();
+        console.log("Entra en OS")
+        Geolocation.watchPosition(
+          position => {
+            setUserLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          });
       } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION

@@ -98,7 +98,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string> ¿Quiéres utilizar tu ubicación actual?<string/>
 	<key>UILaunchStoryboardName</key>
 	<string/>
 	<key>UIRequiredDeviceCapabilities</key>
