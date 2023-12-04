@@ -463,7 +463,6 @@ const GeolocationUser = () => {
             </View>
           </>
         )}
-
       </BackgroundImage>
     </Container>
 

@@ -33,6 +33,7 @@ function SocketListener(props) {
 		console.log(data);
 		setArtefactsGlobalState(data);
 	};
+	
 
 	const handlers = {
 		stamina: handleAcoliteStamina,
@@ -41,6 +42,7 @@ function SocketListener(props) {
 		xp: handleAcoliteXperience,
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts
+		// responseVerify:
 	}
 
 	return null;
