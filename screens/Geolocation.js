@@ -136,7 +136,7 @@ const GeolocationUser = () => {
       const selectedArtifact = { 
         found: !artifact.found, 
         who: userId,
-        id: '65571a0d88e0cd6ea51d5de2',
+        id: artifact._id,
         userImage: '', // Inicializa userImage con un valor vacío por ahora
       }; 
   
