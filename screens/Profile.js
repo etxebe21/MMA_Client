@@ -18,7 +18,7 @@ const Profile = () => {
   return (
 
     <View >
-      <ImageBackground source={require("../assets/wallpaperProfile.png")} style={styles.imageBackground}>
+      <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
       {userGlobalState && (
         <Content>
           <AvatarBox>

@@ -68,7 +68,7 @@ const Qr = () => {
   
   if (userGlobalState._id ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
       return (
-        <ImageBackground source={require("../assets/QRbackground.png")} style={styles.imageBackground}>
+        <ImageBackground source={require("../assets/wallpaper_QR.png")} style={styles.imageBackground}>
           <View>
               <QrView>
                 <QRCode

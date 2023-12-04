@@ -145,7 +145,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     
 
       return (
-        <ImageBackground source={require("../assets/login3.png")} style={styles.imageBackground}>
+        <ImageBackground source={require("../assets/wallpaper_login.png")} style={styles.imageBackground}>
             <View>
                 {/* <Text>LOGIN</Text> */}
                 <StyledButton onPress={onGoogleButtonPress} disabled={isLoading}>

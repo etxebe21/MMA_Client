@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import IngredientesScreen from "../components/Ingredients";
 import { ImageBackground, StyleSheet } from 'react-native'
 
-const bgImage = '../assets/potionCreationWallpaper.png';
+const bgImage = '../assets/wallpaper_potionCreation.png';
 
 const View = styled.View`
     flex: 1;

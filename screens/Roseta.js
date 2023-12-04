@@ -40,7 +40,7 @@ const Roseta = () => {
 
 
   return (
-      <ImageBackground source={require("../assets/roseta.png")} style={styles.imageBackground}>
+      <ImageBackground source={require("../assets/wallpaper_roseta.png")} style={styles.imageBackground}>
         {artifactImages.length === 4 &&
           artifactImages.map((image, index) => {
             const position = calculateArtifactPosition(index);
