@@ -29,11 +29,6 @@ function SocketListener(props) {
 	const handleAcoliteXperience = (data) => { handleGlobalState({ xp: data }) };
 	const handleNewAcolite = (data) => { handleGlobalState({ user: data }) };
 	const handleArtifacts = (data) => {
-<<<<<<< HEAD
-		// console.log("handleartifacts");
-		// console.log(data);
-=======
->>>>>>> pending
 		setArtefactsGlobalState(data);
 	};
 	const handleVerify = (data) => {
