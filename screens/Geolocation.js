@@ -4,12 +4,9 @@ import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
-import { Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Roseta from './Roseta';
 import { Context } from '../context/Context';
 import MapStyle from '../components/MapStyle.json'
-import io, { Socket } from 'socket.io-client';
 import { socket } from '../socket/socketConnect';
 
 const GeolocationUser = () => {
@@ -245,19 +242,7 @@ useEffect(() => {
       setSearches(searches);
       console.log(searches[0].state);
 
-      if (searches[0].state === 'pending' || searches[0].state === 'null') {
-        Alert.alert(
-          'BUSQUEDA PENDIENTE',
-          '  ',
-          [
-            {
-              text: 'OK',
-              onPress: () => closeModal(),
-            },
-          ],
-          { cancelable: false }
-        );
-      } if (searches[0].state === 'completed') {
+       if (searches[0].state === 'completed') {
         Alert.alert(
           'BUSQUEDA VALIDADA',
           '',
@@ -282,13 +267,21 @@ useEffect(() => {
       console.log('modificar estado state', finishedSearch);
       console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
-      setShowPendingText(true);
-      setShowAnotherButton(false); // Ocultar el botón 'Check'
+
+      socket.on('responseVerify', (status) => {
+        console.log("estado busqueda" , status)
+        if (status.state === 'pending') {
+          setShowPendingText(true); // Actualizar el estado para mostrar el Animated.View
+          setShowAnotherButton(false); // Ocultar el botón 'Check'
+          ToastAndroid.showWithGravity('BÚSQUEDA EN ESTADO PENDING', ToastAndroid.SHORT, ToastAndroid.CENTER);
+        }
+      });
       getSearchesFromDataBase();
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
     }
   };
+
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
