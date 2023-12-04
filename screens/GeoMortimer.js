@@ -20,7 +20,7 @@ const GeolocationUser = () => {
 
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
-  const img = require("../assets/geofondo.png")
+  const img = require("../assets/wallpaper_geolocalitation.png")
  
   // Función para contar los artefactos encontrados
   const countFoundArtifacts = () => {
