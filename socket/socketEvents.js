@@ -15,10 +15,9 @@ function SocketListener(props) {
 	useEffect(() => {
 		if (currentEvent !== null) {
 			const handler = handlers[currentEvent.event];
-			console.log("event name: " + currentEvent.event);
 			if (handler)
 			{
-				handler(currentEvent.value);
+				handler(currentEvent.value.state);
 			}
 		}
 		else return;
@@ -30,8 +29,6 @@ function SocketListener(props) {
 	const handleAcoliteXperience = (data) => { handleGlobalState({ xp: data }) };
 	const handleNewAcolite = (data) => { handleGlobalState({ user: data }) };
 	const handleArtifacts = (data) => {
-		console.log("handleartifacts");
-		console.log(data);
 		setArtefactsGlobalState(data);
 	};
 	const handleVerify = (data) => {

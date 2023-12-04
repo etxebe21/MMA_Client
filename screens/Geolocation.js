@@ -16,7 +16,7 @@ const GeolocationUser = () => {
   //GLOBALES
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
-
+  const {pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
 
   //LOCALES
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
@@ -25,7 +25,7 @@ const GeolocationUser = () => {
   const [search, setSearches] = useState([]);
   const [showButton, setShowButton] = useState();
   const [collectedArtifacts, setCollectedArtifacts] = useState();
-  const [showAnotherButton, setShowAnotherButton] = useState(false);
+  const [showAnotherButton, setShowAnotherButton] = useState(true);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
   const [mapVisible, setMapVisible] = useState(true);
@@ -80,7 +80,7 @@ const GeolocationUser = () => {
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
   }, [userLocation, artifactsGlobalState]); // 
-  
+
   useEffect(() => {
     if (collectedArtifacts === 4) {
       console.log("estamos entrando en colectedartifacts"); 
@@ -93,19 +93,23 @@ const GeolocationUser = () => {
   }, [collectedArtifacts]);
   
   const checkIfUserNearMarker = (latitude, longitude) => {
-    artifactsGlobalState.forEach((artifact) => {
-      if (!artifact.found) {
-        const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-        console.log(distance);
-        if (distance < 1000000) {
-          console.log('Estás cerca del marcador:', artifact.name);
-          setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
-          setSelectedArtifact(artifact);
-        } else {
-          setShowButton(false); // Si no está cerca, oculta el botón
+    if (artifactsGlobalState != null)
+    {
+
+      artifactsGlobalState.forEach((artifact) => {
+        if (!artifact.found) {
+          const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
+          console.log(distance);
+          if (distance < 1000000) {
+            console.log('Estás cerca del marcador:', artifact.name);
+            setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
+            setSelectedArtifact(artifact);
+          } else {
+            setShowButton(false); // Si no está cerca, oculta el botón
+          }
         }
-      }
-    });
+      });
+    }
   };
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -132,6 +136,7 @@ const GeolocationUser = () => {
     console.log(foundArtifacts.length)
     return foundArtifacts.length;
   };
+
 
   const loadArtifacts = async () => {
     try {
@@ -164,28 +169,14 @@ const GeolocationUser = () => {
         id:artifact._id
       }; 
       console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
-
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
       socket.emit('updateArtifact', {selectedArtifact, selectedArtifact });
-
-      // Escuchar la respuesta del servidor al evento 'responseEvent' usando una promesa
-      const responseData = await new Promise((resolve) => {
-        socket.on('responseEvent', (data) => {
-          resolve(data);
-        });
-      });
-
-      const count = filterFound(responseData);
-      console.log("CONTADOOOOOOOOREEEES  " + count.length );
-      setCollectedArtifacts(count.length);
       console.log("colecteeeeeeeeeeeeeeed AAAAAAA" + collectedArtifacts);
-
       ToastAndroid.showWithGravity('Artefacto recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
-
 
   //   const sendLocationToServer = async (latitude, longitude) => {
   //     try {
@@ -280,12 +271,9 @@ const GeolocationUser = () => {
       console.log('modificar estado state', finishedSearch);
       console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
-
       setShowPendingText(true);
       setShowAnotherButton(false); // Ocultar el botón 'Check'
-
       getSearchesFromDataBase();
-
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
     }
@@ -416,7 +404,7 @@ const GeolocationUser = () => {
           </Buttons>
         )}
 
-        {!showAnotherButton && (
+        {showAnotherButton === false && (
           <>
             <SendButton onPress={() => updateSearch(search)}>
               <ButtonsText>CHECK</ButtonsText>
@@ -425,7 +413,7 @@ const GeolocationUser = () => {
         )}
 
         <View>
-          {showPendingText && (
+          {pendingTextGlobalState === "pending" && (
             <>
               <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
                 <PendingText style={styles.pendingText}>PENDING</PendingText>
@@ -435,7 +423,7 @@ const GeolocationUser = () => {
           )}
         </View>
 
-        {!showPendingText && (
+        {!pendingTextGlobalState && (
           <>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
