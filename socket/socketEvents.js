@@ -17,7 +17,7 @@ function SocketListener(props) {
 			const handler = handlers[currentEvent.event];
 			if (handler)
 			{
-				handler(currentEvent.value.state);
+				handler(currentEvent.value);
 			}
 		}
 		else return;
@@ -32,7 +32,7 @@ function SocketListener(props) {
 		setArtefactsGlobalState(data);
 	};
 	const handleVerify = (data) => {
-		setPendingTextGlobalState(data);
+		setPendingTextGlobalState(data.state);
 	}
 
 	const handlers = {
