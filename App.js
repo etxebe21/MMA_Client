@@ -38,7 +38,8 @@ const App = () => {
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
   const [artifactsGlobalState, setArtefactsGlobalState] = useState()
-  const [currentEvent, setCurrentEvent] = useState(null)
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -46,7 +47,6 @@ const App = () => {
       ...globalState,
       ...data
     }));
-
   }
 
   const handleUserGlobalState = (data) => {
@@ -204,9 +204,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,pendingTextGlobalState,
       handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,setPendingTextGlobalState
 
     }}>
       <SafeAreaProvider>
