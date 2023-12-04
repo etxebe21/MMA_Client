@@ -6,7 +6,7 @@ import { CreatePotions, CreatePotionsParch } from './CreatePotions';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Context } from '../context/Context';
 
-const bgImage = '../assets/fondoTorreon.png';
+const bgImage = '../assets/wallpaper_tower.png';
 
 const Torreon = () => {
     

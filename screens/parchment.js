@@ -5,8 +5,8 @@ import styled from "styled-components/native";
 import { CreatePotionsParch } from "./CreatePotions";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const bgImageDirty = require("../assets/pergaminoEncriptado.png");
-const bgImageClean = require("../assets/pergaminoNOEncriptado.png"); // Corregido
+const bgImageDirty = require("../assets/modal_encriptedParchment.png");
+const bgImageClean = require("../assets/modal_NonEncriptedParchment.png"); // Corregido
 
 const Parchment = ({ towerBoolean }) => {
   const [isCleaned, setIsCleaned] = useState(false);

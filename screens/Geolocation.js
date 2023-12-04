@@ -33,7 +33,7 @@ const GeolocationUser = () => {
   // const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
-  const img = require("../assets/geofondo.png")
+  const img = require("../assets/wallpaper_geolocalitation.png")
 
   const emitEventServer = () => {
     if (socket) {
