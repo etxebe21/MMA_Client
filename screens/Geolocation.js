@@ -70,7 +70,7 @@ const GeolocationUser = () => {
       // console.log(userLocation);
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
-  }, [userLocation, artifactsGlobalState]); // 
+  }, [userLocation, artifactsGlobalState]); 
   
   const checkIfUserNearMarker = (latitude, longitude) => {
     if(artifactsGlobalState !== undefined)
