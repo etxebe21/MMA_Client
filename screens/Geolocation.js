@@ -131,13 +131,13 @@ const GeolocationUser = () => {
       console.error('Error al cargar los artefactos:', error);
     }
   };
-
   const updateFoundedArtifact = async (artifact) => {
     try {
       const selectedArtifact = { 
         found: !artifact.found, 
         who: userId,
-        id: artifact._id
+        id: '65571a0d88e0cd6ea51d5de2',
+        userImage: '', // Inicializa userImage con un valor vacío por ahora
       }; 
   
       // Obtener la imagen del usuario actual
@@ -146,14 +146,19 @@ const GeolocationUser = () => {
       // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
       const updatedArtifacts = artifactsGlobalState.map(art => {
         if (art._id === artifact._id) {
-          return { ...artifact, found: !artifact.found, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+          return { ...art, found: !artifact.found, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
         } else if (art.found) {
           // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
           return { ...art, userImage: art.userImage };
         }
         return art;
       });
+  
+      // Establecer el nuevo estado global de los artefactos
       setArtefactsGlobalState(updatedArtifacts);
+  
+      // Incluir la imagen del usuario en selectedArtifact
+      selectedArtifact.userImage = userImage;
   
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
       socket.emit('updateArtifact', { selectedArtifact });
