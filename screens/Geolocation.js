@@ -133,22 +133,38 @@ const GeolocationUser = () => {
   };
 
   const updateFoundedArtifact = async (artifact) => {
-    console.log(artifact);
     try {
       const selectedArtifact = { 
         found: !artifact.found, 
         who: userId,
-        id:artifact._id
+        id: artifact._id
       }; 
-      console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
+  
+      // Obtener la imagen del usuario actual
+      const userImage = await getUserImageById(userId);
+  
+      // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      const updatedArtifacts = artifactsGlobalState.map(art => {
+        if (art._id === artifact._id) {
+          return { ...artifact, found: !artifact.found, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+        } else if (art.found) {
+          // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+          return { ...art, userImage: art.userImage };
+        }
+        return art;
+      });
+      setArtefactsGlobalState(updatedArtifacts);
+  
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
-      socket.emit('updateArtifact', {selectedArtifact, selectedArtifact });
+      socket.emit('updateArtifact', { selectedArtifact });
+      
       setCollectedArtifacts(prevCount => prevCount + 1);
       ToastAndroid.showWithGravity('Artefacto recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
+  
 
   //CUANDO recoges un artefacto se llama a este effect
   useEffect(() => {

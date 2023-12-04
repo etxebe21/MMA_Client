@@ -30,6 +30,7 @@ function SocketListener(props) {
 	const handleNewAcolite = (data) => { handleGlobalState({ user: data }) };
 	const handleArtifacts = (data) => {
 		setArtefactsGlobalState(data);
+		console.log(artifactsGlobalState);
 	};
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
