@@ -16,7 +16,7 @@ const GeolocationUser = () => {
   //GLOBALES
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
-
+  const {pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
 
   //LOCALES
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
@@ -25,7 +25,7 @@ const GeolocationUser = () => {
   const [search, setSearches] = useState([]);
   const [showButton, setShowButton] = useState();
   const [collectedArtifacts, setCollectedArtifacts] = useState();
-  const [showAnotherButton, setShowAnotherButton] = useState(false);
+  const [showAnotherButton, setShowAnotherButton] = useState(true);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
   const [mapVisible, setMapVisible] = useState(true);
@@ -141,32 +141,9 @@ const GeolocationUser = () => {
         id:artifact._id
       }; 
       console.log("ARTEFACTO SELECCIONADO", selectedArtifact);
-
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
       socket.emit('updateArtifact', {selectedArtifact, selectedArtifact });
-
-      // Escuchar la respuesta del servidor al evento 'responseEvent' usando una promesa
-      const responseData = await new Promise((resolve) => {
-        socket.on('responseEvent', (data) => {
-          resolve(data);
-        });
-      });
-
       setCollectedArtifacts(prevCount => prevCount + 1);
-
-      // Actualizar el estado de artefactos recolectados
-      //setArtefactsGlobalState(responseData);
-  
-      // // Contar la cantidad de artefactos recolectados
-      // const newCollectedArtifacts = responseData.filter(artifact => artifact.found).length;
-  
-      // // Actualizar la cantidad de artefactos recolectados en el estado global
-      // setCollectedArtifactsGlobalState(newCollectedArtifacts);
-  
-      // // Mostrar u ocultar botones según la cantidad de artefactos recolectados
-      // setShowButton(newCollectedArtifacts < 4);
-      // setShowAnotherButton(newCollectedArtifacts === 4);
-     
       ToastAndroid.showWithGravity('Artefacto recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
@@ -284,12 +261,9 @@ useEffect(() => {
       console.log('modificar estado state', finishedSearch);
       console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
-
       setShowPendingText(true);
       setShowAnotherButton(false); // Ocultar el botón 'Check'
-
       getSearchesFromDataBase();
-
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
     }
@@ -375,7 +349,7 @@ useEffect(() => {
         )}
 
         <View>
-          {showPendingText && (
+          {pendingTextGlobalState === "pending" && (
             <>
               <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
                 <PendingText style={styles.pendingText}>PENDING</PendingText>
@@ -385,7 +359,7 @@ useEffect(() => {
           )}
         </View>
 
-        {!showPendingText && (
+        {!pendingTextGlobalState && (
           <>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
@@ -413,6 +387,7 @@ useEffect(() => {
             </View>
           </>
         )}
+
       </BackgroundImage>
     </Container>
 
