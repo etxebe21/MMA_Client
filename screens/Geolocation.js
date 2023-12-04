@@ -35,15 +35,6 @@ const GeolocationUser = () => {
 
   const img = require("../assets/geofondo.png")
 
-  const emitEventServer = () => {
-    if (socket) {
-      console.log("PULSADOOOO")
-      // Emitir un evento 'clientEvent' con datos al servidor
-      socket.emit('clientEvent', { artifactsGlobalState });
-    }
-  };
-
-
   useEffect(() => {
     if (showPendingText) {
       Animated.spring(scaleAnim, {
@@ -81,19 +72,8 @@ const GeolocationUser = () => {
     }
   }, [userLocation, artifactsGlobalState]); // 
   
-  useEffect(() => {
-    if (collectedArtifacts === 4) {
-      console.log("estamos entrando en colectedartifacts"); 
-      setShowAnotherButton(true);
-      setShowButton(false);
-      console.log("estado boton de" + showAnotherButton);
-    } else {
-      setShowAnotherButton(false);
-    }
-  }, [collectedArtifacts]);
-  
   const checkIfUserNearMarker = (latitude, longitude) => {
-    artifactsGlobalState.forEach((artifact) => {
+    artifactsGlobalState != null && artifactsGlobalState.forEach((artifact) => {
       if (!artifact.found) {
         const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
         console.log(distance);
@@ -124,13 +104,6 @@ const GeolocationUser = () => {
 
     } catch (e) {
     }
-  };
-
-  // Función para contar los artefactos encontrados
-  const countFoundArtifacts = () => {
-    const foundArtifacts = 4;
-    console.log(foundArtifacts.length)
-    return foundArtifacts.length;
   };
 
   const loadArtifacts = async () => {
@@ -175,30 +148,50 @@ const GeolocationUser = () => {
         });
       });
 
-      const count = filterFound(responseData);
-      console.log("CONTADOOOOOOOOREEEES  " + count.length );
-      setCollectedArtifacts(count.length);
-      console.log("colecteeeeeeeeeeeeeeed AAAAAAA" + collectedArtifacts);
+      setCollectedArtifacts(prevCount => prevCount + 1);
 
+      // Actualizar el estado de artefactos recolectados
+      //setArtefactsGlobalState(responseData);
+  
+      // // Contar la cantidad de artefactos recolectados
+      // const newCollectedArtifacts = responseData.filter(artifact => artifact.found).length;
+  
+      // // Actualizar la cantidad de artefactos recolectados en el estado global
+      // setCollectedArtifactsGlobalState(newCollectedArtifacts);
+  
+      // // Mostrar u ocultar botones según la cantidad de artefactos recolectados
+      // setShowButton(newCollectedArtifacts < 4);
+      // setShowAnotherButton(newCollectedArtifacts === 4);
+     
       ToastAndroid.showWithGravity('Artefacto recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
       console.error('Error al actualizar los datos del artefacto:', error);
     }
   };
 
+  //CUANDO recoges un artefacto se llama a este effect
+  useEffect(() => {
+    if (collectedArtifacts === 4) {
+      setShowAnotherButton(true);
+      setShowButton(false);
+    } else {
+      setShowAnotherButton(false);
+    }
+  }, [collectedArtifacts]);
 
-  //   const sendLocationToServer = async (latitude, longitude) => {
-  //     try {
-  //       // Envía la ubicación al servidor con alguna identificación del acólito
-  //       await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUsers/${userId}`, {
-  //         latitude,
-  //         longitude
-  //       });
-  //       console.log("LATITUUUUD", latitude);
-  //     } catch (error) {
-  //       console.error('Error al enviar la ubicación al servidor:', error);
-  //     }
-  //   };
+  // Función para contar los artefactos encontrados
+ const countFoundArtifacts = () => {
+  const foundArtifacts = artifactsGlobalState != null && artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
+  console.log("lenght artefactos", foundArtifacts.length)
+  return foundArtifacts.length;
+};
+
+//Actualizar el estado de visibilidad del botón
+useEffect(() => {
+  const foundCount = countFoundArtifacts();
+  setShowAnotherButton(foundCount === 4);
+  setShowButton(foundCount < 4);
+}, [artifactsGlobalState]);
 
 
   const requestLocationPermission = async () => {
@@ -233,7 +226,6 @@ const GeolocationUser = () => {
       console.warn(err);
     }
   };
-
 
   const getSearchesFromDataBase = async () => {
     try {
@@ -290,8 +282,6 @@ const GeolocationUser = () => {
       console.error('Error al actualizar busqueda:', error);
     }
   };
-
-
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
@@ -314,58 +304,6 @@ const GeolocationUser = () => {
     setMapVisible(true);
   };
 
-  const updateSearchAndArtfifacts = () => {
-    getSearchesFromDataBase();
-  };
-
-  // Lógica para obtener la ubicación del acólito y enviarla al servidor
-  const getAndSendUserLocation = async () => {
-    try {
-      // Obtener la ubicación del dispositivo del acólito (usando Geolocation o alguna librería similar)
-      const location = await getUserLocation();
-      console.log("ubicacion", location)
-      // // Enviar la ubicación al servidor con alguna identificación del acólito
-      // await axios.post('https://tu-servidor.com/api/actualizar-ubicacion-acolito', {
-      //   userId: 'identificador_del_acolito',
-      //   ubicacion: location,
-      // });
-
-      console.log('Ubicación enviada correctamente.');
-    } catch (error) {
-      console.error('Error al enviar la ubicación:', error);
-    }
-  };
-
-  const filterFound = (artifacts) => {
-    return artifacts.filter(artifact => artifact.found === true);
-  };
-  
-  const getUserLocation = async () => {
-    try {
-      const location = await new Promise((resolve, reject) => {
-        Geolocation.watchPosition(
-          position => {
-            resolve({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-          },
-          error => {
-            reject(error);
-          },
-          { enableHighAccuracy: true, timeout: 5000, maximumAge: 1000 }
-        );
-      });
-
-      console.log("UBICACION", location);
-
-      return location;
-    } catch (error) {
-      console.error('Error al obtener la ubicación:', error);
-      return null;
-    }
-  };
-
   return (
     <Container>
       {mapVisible && artifactsGlobalState && (
@@ -382,7 +320,7 @@ const GeolocationUser = () => {
           customMapStyle={MapStyle}
         >
 
-          {artifactsGlobalState &&
+          {artifactsGlobalState != null && artifactsGlobalState &&
             artifactsGlobalState
               .filter(artifact => !artifact.found) // Filtrar solo artefactos no encontrados
               .map((artifact, index) => (
@@ -416,7 +354,7 @@ const GeolocationUser = () => {
           </Buttons>
         )}
 
-        {!showAnotherButton && (
+        {showAnotherButton && (
           <>
             <SendButton onPress={() => updateSearch(search)}>
               <ButtonsText>CHECK</ButtonsText>
@@ -439,7 +377,7 @@ const GeolocationUser = () => {
           <>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
-              {artifactsGlobalState && artifactsGlobalState.slice(0, 4).map((artifact, index) => (
+              {artifactsGlobalState != null && artifactsGlobalState && artifactsGlobalState.slice(0, 4).map((artifact, index) => (
                 <View key={index} style={styles.artifactUserContainer}>
                   <View style={styles.artifactContainer}>
                     <Image
