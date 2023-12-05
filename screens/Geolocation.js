@@ -56,7 +56,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-    //emitPositionServer();
+    emitPositionServer();
   }, []);
 
    //EFFECT conprobar estado busqueda
@@ -104,6 +104,7 @@ const GeolocationUser = () => {
     try {
       const userId = await AsyncStorage.getItem('userID')
       setuserId(userId);
+     
       return jsonValue != null ? JSON.parse(jsonValue) : null;
 
     } catch (e) {
@@ -307,6 +308,13 @@ useEffect(() => {
     socket.emit('sendUserLocation', { 
       positions,
       userId: userGlobalState._id});
+     
+      // Escuchar la respuesta del servidor al evento 'responseEvent'
+      socket.on('receiveUserLocation', (responseData) => {
+      console.log('POsicion usuario actual recibida desde el servidor:', responseData);
+      console.log(responseData.latitude , responseData.longitude, responseData.picture )
+      
+    });
   };
 
 

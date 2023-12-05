@@ -72,8 +72,8 @@ const GeolocationUser = () => {
         const newSocket = io('https://mmaproject-app.fly.dev'); 
         // Escuchar la respuesta del servidor al evento 'responseEvent'
         newSocket.on('receiveUserLocation', (responseData) => {
-          console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
-          console.log(responseData[0].latitude , responseData[0].longitude, responseData[0].picture )
+          console.log('POsicion usuario actual recibido desde el servidor:', responseData);
+          console.log(responseData.latitude , responseData.longitude, responseData.picture )
           
         });
         const userId = await AsyncStorage.getItem('userID')
