@@ -17,7 +17,7 @@ const GeolocationUser = () => {
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
   const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
-  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+  const {usersGlobalState,   handleUsersGlobalState}  = useContext(Context);
 
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
@@ -63,6 +63,7 @@ const GeolocationUser = () => {
   //EFFECT INICIAL
   useEffect(() => {
     getSearchesFromDataBase();
+    console.log(usersGlobalState[0].latitude, usersGlobalState[0].longitude, usersGlobalState[0].picture );
   }, []);
   
   useEffect(() => {
@@ -272,6 +273,30 @@ const GeolocationUser = () => {
         }}
         showsUserLocation={true}
       >
+       <Marker
+          coordinate={{
+            latitude: 43.30972753944833,
+            longitude: -2.002748937230638,
+          }}
+        >
+          <Image
+            source={{ uri: usersGlobalState[0].picture }}
+            style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        </Marker>
+
+        <Marker
+          coordinate={{
+            latitude: 43.30972753944833,
+            longitude: -2.002748937230638,
+          }}
+        >
+          <Image
+            source={{ uri: usersGlobalState[1].picture }}
+            style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        </Marker>
+
  {artifactsGlobalState != null && artifactsGlobalState &&
           artifactsGlobalState
             .filter(artifact => !artifact.found)

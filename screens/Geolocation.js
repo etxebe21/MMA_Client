@@ -56,7 +56,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-    emitPositionServer();
+    //emitPositionServer();
   }, []);
 
    //EFFECT conprobar estado busqueda
@@ -220,7 +220,6 @@ useEffect(() => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               });
-              emitPositionServer();
             },
             (error) => {
               console.error('Error al obtener la ubicación:', error);
