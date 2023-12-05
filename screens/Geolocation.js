@@ -12,6 +12,7 @@ import { socket } from '../socket/socketConnect';
 const GeolocationUser = () => {
   //GLOBALES
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  const {usersGlobalState,   handleUsersGlobalState}  = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
   const {pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
 
@@ -311,9 +312,7 @@ useEffect(() => {
      
       // Escuchar la respuesta del servidor al evento 'responseEvent'
       socket.on('receiveUserLocation', (responseData) => {
-      console.log('POsicion usuario actual recibida desde el servidor:', responseData);
-      console.log(responseData.latitude , responseData.longitude, responseData.picture )
-      
+        console.log('Posicion usuario actual recibida desde el servidor:', responseData);  
     });
   };
 
@@ -341,6 +340,13 @@ useEffect(() => {
           showsUserLocation={true}
           customMapStyle={MapStyle}
         >
+         <Marker
+          coordinate={{ latitude: 43.30972753944833, longitude: -2.002748937230638,}}
+        >
+          <Image
+            source={{ uri: userGlobalState.picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
+          />
+        </Marker>
 
           {artifactsGlobalState != null && artifactsGlobalState &&
             artifactsGlobalState

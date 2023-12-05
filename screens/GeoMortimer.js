@@ -73,8 +73,6 @@ const GeolocationUser = () => {
         // Escuchar la respuesta del servidor al evento 'responseEvent'
         newSocket.on('receiveUserLocation', (responseData) => {
           console.log('POsicion usuario actual recibido desde el servidor:', responseData);
-          console.log(responseData.latitude , responseData.longitude, responseData.picture )
-          
         });
         const userId = await AsyncStorage.getItem('userID')
         setuserId(userId);
@@ -115,44 +113,17 @@ const GeolocationUser = () => {
       
       loadArtifacts();
     }, []);
-    
-    
-    
-      const responseEvent = async () => {
-        const responseData = await new Promise((resolve) => {
-          socket.on('responseVerify', (data) => {
-            resolve(data);
-          });
-        });
-        console.log("respuesta de servidor" + responseData);
-        setShowPendingText(responseData); 
-      };
-      
-    const getArtifactsFromDataBase = async () => {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-        const response = await axios.get(url);
-        const artifactsData = response.data.data;
-        
-        // Actualizar los artefactos con la información de las imágenes del usuario
-        const updatedArtifacts = await Promise.all(
-          artifactsData.map(async (artifact) => {
-            if (artifact.found) {
-              const userImage = await getUserImageById(artifact.who);
-            return { ...artifact, userImage };
-          }
-          return artifact;
-        })
-      );
-  
-      setArtefactsGlobalState(updatedArtifacts);
-      // console.log('Artefactos:', updatedArtifacts);
-    } catch (error) {
-      console.error('Error al obtener artefactos:', error);
-    }
+     
+  const responseEvent = async () => {
+    const responseData = await new Promise((resolve) => {
+      socket.on('responseVerify', (data) => {
+        resolve(data);
+      });
+    });
+    console.log("respuesta de servidor" + responseData);
+    setShowPendingText(responseData); 
   };
-  
-
+      
   const resetSearch = async () => {
     try {
       setShowPendingText(false);
