@@ -80,7 +80,7 @@ const GeolocationUser = () => {
           // console.log("Distancia: ");
           // console.log(distance);
           if (distance < 1000000) {
-            console.log('Estás cerca del marcador:', artifact.name);
+            // console.log('Estás cerca del marcador:', artifact.name);
             setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
             setSelectedArtifact(artifact);
           } else {
@@ -183,7 +183,7 @@ const GeolocationUser = () => {
   // Función para contar los artefactos encontrados
  const countFoundArtifacts = () => {
   const foundArtifacts = artifactsGlobalState != null && artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
-  console.log("lenght artefactos", foundArtifacts.length)
+  // console.log("lenght artefactos", foundArtifacts.length)
   return foundArtifacts.length;
 };
 
@@ -199,7 +199,7 @@ useEffect(() => {
     try {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();
-        console.log("Entra en OS")
+        // console.log("Entra en OS")
         Geolocation.watchPosition(
           position => {
             setUserLocation({
@@ -242,7 +242,7 @@ useEffect(() => {
       const response = await axios.get(url);
       const searches = response.data.data;
       setSearches(searches);
-      console.log(searches[0].state);
+      // console.log(searches[0].state);
 
        if (searches[0].state === 'completed') {
         Alert.alert(
@@ -264,10 +264,10 @@ useEffect(() => {
 
   const updateSearch = async (search) => {
     try {
-      console.log('busqueda:', search);
+      // console.log('busqueda:', search);
       const finishedSearch = { state: "pending" };
-      console.log('modificar estado state', finishedSearch);
-      console.log('ID de la busqueda :', search[0]._id);
+      // console.log('modificar estado state', finishedSearch);
+      // console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
 
      

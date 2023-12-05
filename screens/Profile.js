@@ -12,8 +12,12 @@ const Profile = () => {
   const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
 
   useEffect(() => {
+    console.log("Puntos de salud: " + userGlobalState.hitPoints);
+  }, [userGlobalState]); 
 
-  }, []); 
+  const updateUserStats = () => {
+
+  }
 
   return (
 

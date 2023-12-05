@@ -36,7 +36,7 @@ const GeolocationUser = () => {
 
   useEffect(() => {
     responseEvent();
-    console.log(showPendingText);
+    // console.log(showPendingText);
   }, [showPendingText]);
   
   
