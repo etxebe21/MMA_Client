@@ -8,6 +8,7 @@ import { Modal } from 'react-native-paper';
 import { Context } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io, { Socket } from 'socket.io-client';
+import { socket } from '../socket/socketConnect';
 
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
