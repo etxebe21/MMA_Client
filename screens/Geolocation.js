@@ -56,11 +56,13 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-
-    // filterFound(artifactsGlobalState);
   }, []);
 
-  
+   //EFFECT conprobar estado busqueda
+   useEffect(() => {
+    checkState();
+  }, [pendingTextGlobalState]);
+
   useEffect(() => {
     if (userLocation != undefined) {
       // console.log("Localizacion")
@@ -268,14 +270,7 @@ useEffect(() => {
       console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
 
-      socket.on('responseVerify', (status) => {
-        console.log("estado busqueda" , status)
-        if (status.state === 'pending') {
-          setShowPendingText(true); // Actualizar el estado para mostrar el Animated.View
-          setShowAnotherButton(false); // Ocultar el botón 'Check'
-          ToastAndroid.showWithGravity('BÚSQUEDA EN ESTADO PENDING', ToastAndroid.SHORT, ToastAndroid.CENTER);
-        }
-      });
+     
       getSearchesFromDataBase();
     } catch (error) {
       console.error('Error al actualizar busqueda:', error);
@@ -302,6 +297,14 @@ useEffect(() => {
   const closeModal = () => {
     setShowModal(false);
     setMapVisible(true);
+  };
+
+  const checkState = () => {
+      if (pendingTextGlobalState === 'pending') {
+        setShowPendingText(true); // Actualizar el estado para mostrar el Animated.View
+        setShowAnotherButton(false); // Ocultar el botón 'Check'
+        ToastAndroid.showWithGravity('BÚSQUEDA EN ESTADO PENDING', ToastAndroid.SHORT, ToastAndroid.CENTER);
+      } 
   };
 
   return (
