@@ -28,10 +28,10 @@ const Mortimer = () => {
     setModalVisible(true);
   };
 
-  const getColorForResistencia = (resistencia) => {
-    if (resistencia >= 70) {
+  const getColorForResistencia = (cansancio) => {
+    if (cansancio >= 70) {
       return 'green'; 
-    } else if (resistencia >= 40) {
+    } else if (cansancio >= 40) {
       return 'yellow'; 
     } else {
       return 'red'; 
@@ -62,9 +62,8 @@ const Mortimer = () => {
                   <AnimatedCircularProgress
                     size={80} 
                     width={8} 
-                    fill={user.resistencia} 
-                    tintColor={getColorForResistencia(user.resistencia)}
-                    onAnimationComplete={() => console.log('onAnimationComplete')}
+                    fill={user.cansancio} 
+                    tintColor={getColorForResistencia(user.cansancio)}
                     backgroundColor="black"
                   />
                 </CircularProgressWrapper>
@@ -243,7 +242,7 @@ const StatusIndicator = styled.View`
   border: #4c2882;
 `
 const ImageTired = styled.Image`
-  width: 70px;
+  width: 72.2px;
   height: 70px;
   border-radius: 35px; 
   top:-4px;
