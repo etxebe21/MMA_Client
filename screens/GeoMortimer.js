@@ -17,7 +17,7 @@ const GeolocationUser = () => {
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
   const [verify, setVerify] = useState();
-
+  const [notFound, setNotFound] = useState();
 
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
@@ -28,24 +28,25 @@ const GeolocationUser = () => {
 
   const img = require("../assets/wallpaper_geolocalitation.png")
 
-  // Función para contar los artefactos encontrados
-  const countFoundArtifacts = () => {
-    const foundArtifacts = 4
-    return foundArtifacts.length;
-  };
 
+  const hasFoundArtifacts = () => {
+    if (artifactsGlobalState != null) {
+      const found = artifactsGlobalState.some((artifact) => artifact.found);
+      setNotFound(found);
+    }
+  };
 
   //EFFECT INICIAL
   useEffect(() => {
     getSearchesFromDataBase();
     loadArtifacts();
+    hasFoundArtifacts();
   }, []);
 
-    //EFFECT INICIAL
-    useEffect(() => {
-     console.log(pendingTextGlobalState);
-    }, [pendingTextGlobalState]);
-  
+  useEffect(() => {
+    hasFoundArtifacts();
+  }, [artifactsGlobalState]);
+
 
   // useEffect(() => {
   //   const getID = async () => {
@@ -68,7 +69,7 @@ const GeolocationUser = () => {
   // }, []);
 
 
-  
+
   const loadArtifacts = async () => {
     try {
       const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
@@ -129,20 +130,19 @@ const GeolocationUser = () => {
 
     artifactsGlobalState.forEach((artifact) => {
       artifactData.id.push(artifact._id);
-      if (artifact.found === true)
-      {
+      if (artifact.found === true) {
         artifactData.found.push(!artifact.found);
       }
       else artifactData.found.push(artifact.found);
       artifactData.who.push('');
     });
 
-    socket.emit('verifyMortimer',artifactData.id,artifactData.found,artifactData.who);
+    socket.emit('verifyMortimer', artifactData.id, artifactData.found, artifactData.who);
     getSearchesFromDataBase();
 
     const finishedSearch = { state: "" };
-    socket.emit('verifyArtifact',search[0]._id,finishedSearch);
-    
+    socket.emit('verifyArtifact', search[0]._id, finishedSearch);
+
   };
 
   const getSearchesFromDataBase = async () => {
@@ -161,7 +161,7 @@ const GeolocationUser = () => {
   const updateSearch = async (search) => {
     const finishedSearch = { state: "completed" };
     console.log(search[0].state);
-    socket.emit('verifyArtifact',search[0]._id,finishedSearch);
+    socket.emit('verifyArtifact', search[0]._id, finishedSearch);
   };
 
 
@@ -216,23 +216,17 @@ const GeolocationUser = () => {
       </MapView>
 
       <BackgroundImage source={img}>
-        {showPendingText && (
-          <>
-            <Buttons onPress={() => resetSearch()}>
-              <ButtonsText>RESET</ButtonsText>
-            </Buttons>
-            <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-              <PendingText style={styles.pendingText}>SEARCH VALIDATE</PendingText>
-            </Animated.View>
-          </>
-        )}
+
+
 
         {!showPendingText && artifactsGlobalState && (
           <>
             <View style={styles.buttonsContainer}>
-              <Buttons onPress={() => resetSearch()}>
-                <ButtonsText>RESET</ButtonsText>
-              </Buttons>
+              {!notFound && (
+                <Buttons onPress={() => resetSearch()}>
+                  <ButtonsText>RESET</ButtonsText>
+                </Buttons>
+              )}
 
               {(pendingTextGlobalState === "pending" || verify === "pending") && (
                 <SendButton onPress={() => updateSearch(search)}>
