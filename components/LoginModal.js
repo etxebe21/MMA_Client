@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';

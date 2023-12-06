@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import { ScrollView } from "react-native";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { useEffect } from "react";
 import axios from 'axios';
