@@ -70,6 +70,17 @@ const GeolocationUser = () => {
       checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
     }
   }, [userLocation, artifactsGlobalState]); 
+
+
+  //CUANDO recoges un artefacto se llama a este effect
+  useEffect(() => {
+    if (collectedArtifacts === 4) {
+      setShowAnotherButton(true);
+      setShowButton(false);
+    } else {
+      setShowAnotherButton(false);
+    }
+  }, [collectedArtifacts]);
   
   const checkIfUserNearMarker = (latitude, longitude) => {
     if(artifactsGlobalState !== undefined)
@@ -130,6 +141,7 @@ const GeolocationUser = () => {
       console.error('Error al cargar los artefactos:', error);
     }
   };
+  
   const updateFoundedArtifact = async (artifact) => {
     try {
       const selectedArtifact = { 
@@ -170,20 +182,10 @@ const GeolocationUser = () => {
   };
   
 
-  //CUANDO recoges un artefacto se llama a este effect
-  useEffect(() => {
-    if (collectedArtifacts === 4) {
-      setShowAnotherButton(true);
-      setShowButton(false);
-    } else {
-      setShowAnotherButton(false);
-    }
-  }, [collectedArtifacts]);
 
   // Función para contar los artefactos encontrados
  const countFoundArtifacts = () => {
   const foundArtifacts = artifactsGlobalState != null && artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
-  console.log("lenght artefactos", foundArtifacts.length)
   return foundArtifacts.length;
 };
 
@@ -199,7 +201,6 @@ useEffect(() => {
     try {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();
-        console.log("Entra en OS")
         Geolocation.watchPosition(
           position => {
             setUserLocation({
@@ -219,7 +220,6 @@ useEffect(() => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               });
-              // console.log(latitude)
               // sendLocationToServer(latitude, longitude);
             },
             (error) => {
@@ -242,7 +242,6 @@ useEffect(() => {
       const response = await axios.get(url);
       const searches = response.data.data;
       setSearches(searches);
-      console.log(searches[0].state);
 
        if (searches[0].state === 'completed') {
         Alert.alert(
@@ -264,10 +263,7 @@ useEffect(() => {
 
   const updateSearch = async (search) => {
     try {
-      console.log('busqueda:', search);
       const finishedSearch = { state: "pending" };
-      console.log('modificar estado state', finishedSearch);
-      console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
 
      
@@ -309,7 +305,7 @@ useEffect(() => {
 
   return (
     <Container>
-      {mapVisible && artifactsGlobalState && (
+      {artifactsGlobalState && (
         <MapView
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}

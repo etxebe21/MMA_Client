@@ -35,7 +35,8 @@ function SocketListener(props) {
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
 	}
-
+	const handleReset = (data) => {setArtefactsGlobalState(data)};
+	
 	const handlers = {
 		stamina: handleAcoliteStamina,
 		life: handleAcoliteLife,
@@ -43,7 +44,8 @@ function SocketListener(props) {
 		xp: handleAcoliteXperience,
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
-		responseVerify: handleVerify
+		responseVerify: handleVerify,
+		resetArtifact: handleReset
 	}
 
 	return null;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, PermissionsAndroid, Alert, ImageBackground, Image, View,Animated } from 'react-native';
+import { StyleSheet, PermissionsAndroid, Alert, ImageBackground, Image, View, Animated } from 'react-native';
 import styled from 'styled-components/native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -16,234 +16,155 @@ const GeolocationUser = () => {
   const [showAnotherButton, setShowAnotherButton] = useState(false);
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
-  const { artifactsGlobalState, setArtefactsGlobalState} = useContext(Context);
-  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+  const [verify, setVerify] = useState();
+
+
+  const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
+  const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
+
 
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   const img = require("../assets/wallpaper_geolocalitation.png")
- 
+
   // Función para contar los artefactos encontrados
   const countFoundArtifacts = () => {
     const foundArtifacts = 4
     return foundArtifacts.length;
   };
 
-  // Actualizar el estado de visibilidad del botón
-  useEffect(() => {
-    const foundCount = countFoundArtifacts();
-    setShowAnotherButton(foundCount === 4);
-  }, [artifactsGlobalState]);
 
-  useEffect(() => {
-    responseEvent();
-    console.log(showPendingText);
-  }, [showPendingText]);
-  
-  
-  
-  useEffect(() => {
-    if (showPendingText) {
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 3,  // Ajusta la fricción para cambiar la velocidad de la animación
-        tension: 40, // Ajusta la tensión para cambiar la velocidad de la animación
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.spring(scaleAnim, {
-        toValue: 0,
-        friction: 3,
-        tension: 40,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [showPendingText, scaleAnim]);
-  
   //EFFECT INICIAL
   useEffect(() => {
     getSearchesFromDataBase();
+    loadArtifacts();
   }, []);
+
+    //EFFECT INICIAL
+    useEffect(() => {
+     console.log(pendingTextGlobalState);
+    }, [pendingTextGlobalState]);
   
-  useEffect(() => {
-    const getID = async () => {
-      try {
-        const newSocket = io('https://mmaproject-app.fly.dev'); 
-        // Escuchar la respuesta del servidor al evento 'responseEvent'
-        newSocket.on('receiveUserLocation', (responseData) => {
-          console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
-          
-        });
-        const userId = await AsyncStorage.getItem('userID')
-        setuserId(userId);
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-        
-      } catch (e) {
-      }
-    };
-    
-    getID();
-  }, []); 
+
+  // useEffect(() => {
+  //   const getID = async () => {
+  //     try {
+  //       const newSocket = io('https://mmaproject-app.fly.dev');
+  //       // Escuchar la respuesta del servidor al evento 'responseEvent'
+  //       newSocket.on('receiveUserLocation', (responseData) => {
+  //         console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
+
+  //       });
+  //       const userId = await AsyncStorage.getItem('userID')
+  //       setuserId(userId);
+  //       return jsonValue != null ? JSON.parse(jsonValue) : null;
+
+  //     } catch (e) {
+  //     }
+  //   };
+
+  //   getID();
+  // }, []);
+
+
   
-  // Dentro del efecto para cargar los artefactos
-  useEffect(() => {
-    const loadArtifacts = async () => {
-      try {
-        const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
-        const artifacts = artifactsData.data.data;
-        // console.log("ARTEFACTOS", artifacts);
-        
-        // Actualizar los artefactos con la imagen del usuario
-        const updatedArtifacts = await Promise.all(
-          artifacts.map(async (artifact) => {
-            if (artifact.found) {
-              const userImage = await getUserImageById(artifact.who);
-              // console.log("imagen del usuario", userImage);
-              return { ...artifact, userImage };
-            }
-            return artifact;
-          })
-          );
-          
-          setArtefactsGlobalState(updatedArtifacts);
-        } catch (error) {
-          // console.error('Error al cargar los artefactos:', error);
-        }
-      };
-      
-      loadArtifacts();
-    }, []);
-    
-    
-    
-      const responseEvent = async () => {
-        const responseData = await new Promise((resolve) => {
-          socket.on('responseVerify', (data) => {
-            resolve(data);
-          });
-        });
-        console.log("respuesta de servidor" + responseData);
-        setShowPendingText(responseData); 
-      };
-      
-    const getArtifactsFromDataBase = async () => {
-      try {
-        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-        const response = await axios.get(url);
-        const artifactsData = response.data.data;
-        
-        // Actualizar los artefactos con la información de las imágenes del usuario
-        const updatedArtifacts = await Promise.all(
-          artifactsData.map(async (artifact) => {
-            if (artifact.found) {
-              const userImage = await getUserImageById(artifact.who);
+  const loadArtifacts = async () => {
+    try {
+      const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
+      const artifacts = artifactsData.data.data;
+      // console.log("ARTEFACTOS", artifacts);
+
+      // Actualizar los artefactos con la imagen del usuario
+      const updatedArtifacts = await Promise.all(
+        artifacts.map(async (artifact) => {
+          if (artifact.found) {
+            const userImage = await getUserImageById(artifact.who);
+            // console.log("imagen del usuario", userImage);
             return { ...artifact, userImage };
           }
           return artifact;
         })
       );
-  
+
+      setArtefactsGlobalState(updatedArtifacts);
+    } catch (error) {
+      // console.error('Error al cargar los artefactos:', error);
+    }
+  };
+
+
+  const getArtifactsFromDataBase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+      const response = await axios.get(url);
+      const artifactsData = response.data.data;
+
+      // Actualizar los artefactos con la información de las imágenes del usuario
+      const updatedArtifacts = await Promise.all(
+        artifactsData.map(async (artifact) => {
+          if (artifact.found) {
+            const userImage = await getUserImageById(artifact.who);
+            return { ...artifact, userImage };
+          }
+          return artifact;
+        })
+      );
+
       setArtefactsGlobalState(updatedArtifacts);
       // console.log('Artefactos:', updatedArtifacts);
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     }
   };
-  
+
 
   const resetSearch = async () => {
-    try {
-      setShowPendingText(false);
-      const updatedArtifacts = [];
-      const artifactPatchRequests = [];
-  
-      // Preparar las solicitudes PATCH para cada artefacto
-      for (let i = 0; i < artifactsGlobalState.length; i++) {
-        const selectedArtifact = { found: false, who: "" };
-        artifactPatchRequests.push(
-          axios.patch(`https://mmaproject-app.fly.dev/api/artifacts/updateArtifact/${artifactsGlobalState[i]._id}`, selectedArtifact)
-        );
+
+    const artifactData = {
+      id: [],
+      found: [],
+      who: [],
+    };
+
+    artifactsGlobalState.forEach((artifact) => {
+      artifactData.id.push(artifact._id);
+      if (artifact.found === true)
+      {
+        artifactData.found.push(!artifact.found);
       }
-  
-      // Realizar todas las solicitudes PATCH simultáneamente
-      const responses = await Promise.all(artifactPatchRequests);
-  
-      // Actualizar los artefactos después de que todas las solicitudes se completen con éxito
-      responses.forEach((response) => {
-        updatedArtifacts.push(response.data);
-      });
-  
-      const finishedSearch = { state: "stopped" };
-      await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
-  
-      // Actualizar el estado una vez que todas las operaciones se completen
-      setArtefactsGlobalState(updatedArtifacts); 
-      getSearchesFromDataBase();
-  
-      // Mostrar un mensaje de confirmación
-      Alert.alert(
-        "BÚSQUEDA REINICIADA",
-        "Los datos de la búsqueda han sido reiniciados correctamente.",
-        [
-          {
-            text: "OK",
-            onPress: () => {},
-          },
-        ],
-        { cancelable: false }
-      );
-  
-    } catch (error) {
-      console.error('Error al actualizar los datos de los artefactos:', error);
-    }
+      else artifactData.found.push(artifact.found);
+      artifactData.who.push('');
+    });
+
+    socket.emit('verifyMortimer',artifactData.id,artifactData.found,artifactData.who);
+    getSearchesFromDataBase();
+
+    const finishedSearch = { state: "" };
+    socket.emit('verifyArtifact',search[0]._id,finishedSearch);
+    
   };
-  
 
   const getSearchesFromDataBase = async () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/searches';
       const response = await axios.get(url);
-      const searches= response.data.data;
+      const searches = response.data.data;
       setSearches(searches);
-
+      setVerify(searches[0].state)
       // console.log('BUsquedas:', searches);
     } catch (error) {
       console.error('Error al obtener busquedas:', error);
     }
-  }; 
+  };
 
   const updateSearch = async (search) => {
-    try {
-  
-      const finishedSearch = { state: "completed" }; 
-      // console.log('modificar estado state', finishedSearch);
-      // console.log('ID de la busqueda :', search[0]._id);
-  
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/searches/updateSearch/${search[0]._id}`, finishedSearch);
-      const updatedSearch = response.data;
-      // console.log('Datos busqueda actualizados:', updatedSearch);
-  
-      setShowPendingText(true);
-      //getArtifactsFromDataBase();
-      getSearchesFromDataBase(search);
-     
-      Alert.alert(
-        "BUSQUEDA VALIDADA",
-        "Los datos de la búsqueda han sido actualizados correctamente.",
-        [
-          {
-            text: "OK",
-            onPress: () => {},
-          },
-        ],
-        { cancelable: false }
-      );
-    } catch (error) {
-      console.error('Error al actualizar búsqueda:', error);
-    }
+    const finishedSearch = { state: "completed" };
+    console.log(search[0].state);
+    socket.emit('verifyArtifact',search[0]._id,finishedSearch);
   };
-    
-  
+
+
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
@@ -252,10 +173,10 @@ const GeolocationUser = () => {
       // console.log(userPicture);
       return userPicture; // Devolvemos la URL de la imagen del usuario
 
-  } catch (error) {
-    console.error('Error al obtener la imagen del usuario:', error);
-  }
-};
+    } catch (error) {
+      console.error('Error al obtener la imagen del usuario:', error);
+    }
+  };
 
 
   return (
@@ -271,7 +192,7 @@ const GeolocationUser = () => {
         }}
         showsUserLocation={true}
       >
- {artifactsGlobalState &&
+        {artifactsGlobalState &&
           artifactsGlobalState
             .filter(artifact => !artifact.found)
             .map((artifact, index) => (
@@ -295,7 +216,6 @@ const GeolocationUser = () => {
       </MapView>
 
       <BackgroundImage source={img}>
-
         {showPendingText && (
           <>
             <Buttons onPress={() => resetSearch()}>
@@ -307,18 +227,19 @@ const GeolocationUser = () => {
           </>
         )}
 
-        {!showPendingText && artifactsGlobalState &&(
+        {!showPendingText && artifactsGlobalState && (
           <>
-            <Buttons onPress={() => resetSearch()}>
-              <ButtonsText>RESET</ButtonsText>
-            </Buttons>
+            <View style={styles.buttonsContainer}>
+              <Buttons onPress={() => resetSearch()}>
+                <ButtonsText>RESET</ButtonsText>
+              </Buttons>
 
-            {countFoundArtifacts() === 4 && (
-              <SendButton onPress={() => updateSearch(search)}>
-                <ButtonsText>VALIDATE</ButtonsText>
-              </SendButton>
-            )}
-
+              {(pendingTextGlobalState === "pending" || verify === "pending") && (
+                <SendButton onPress={() => updateSearch(search)}>
+                  <ButtonsText>VALIDATE</ButtonsText>
+                </SendButton>
+              )}
+            </View>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
               {artifactsGlobalState.slice(0, 4).map((artifact, index) => (
@@ -349,7 +270,7 @@ const GeolocationUser = () => {
     </Container>
   );
 };
-      
+
 
 const styles = StyleSheet.create({
   markerImageContainer: {
@@ -396,12 +317,18 @@ const styles = StyleSheet.create({
   },
   roundedUserImage: {
     width: 35, // Tamaño deseado de la imagen del usuario
-    height:35,
+    height: 35,
     borderRadius: 17.5, // Mitad del tamaño deseado para hacerlo redondo
     borderWidth: 1, // Puedes ajustar el grosor y el color del borde si lo deseas
     borderColor: '#4c2882',
     top: 27,
     marginLeft: 33
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Esto distribuirá los elementos en la fila
+    paddingHorizontal: 0, // Ajusta según sea necesario
+    marginTop: "3%", // Puedes ajustar la distancia entre los botones
   },
 
 });
