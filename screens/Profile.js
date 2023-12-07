@@ -1,32 +1,35 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import axios from "axios";
 import { ImageBackground, ScrollView, StyleSheet } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from '../components/ProgressBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
 
-
 const Profile = () => {
 
-  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
+  const {userGlobalState,  handleUserGlobalState}  = useContext(Context);
 
-  //Cambia los valores constantemente del usuario cuando redive el socket de "returnStat"
-  useEffect(() => {
-    console.log("Puntos de salud: " + userGlobalState.hitPoints);
-  }, [userGlobalState]); 
+  const restartAtributes = userGlobalState;
 
-  const updateUserStats = () => {
-    console.log("Pulsado boton de change stats");
-    const cambioPrueba = {
-      stats:{
-        resistencia: 100,
+  const initialAtributes = {
+    resistencia : restartAtributes.resistencia,
+    agilidad: restartAtributes.agilidad,
+    cansancio : restartAtributes.cansancio,
+    fuerza : restartAtributes.fuerza
+  }
 
-      }, 
-    _id: "6548b41cc846522bc401e1cf"};
-    socket.emit("changeStat", cambioPrueba._id, cambioPrueba.stats);
+  const userId = userGlobalState._id;
+
+  const restStats = () => {
+    console.log("Pulsado boton descansar");
+    socket.emit('resetUserAtributes', { userId, initialAtributes });
+    console.log("Atributos enviados");
+
+    socket.on('receiveUserLocation', (responseData) => {
+      console.log('usuario actual recibido desde el servidor:', responseData);
+      handleUserGlobalState(responseData);
+    });
   }
 
   return (
@@ -46,10 +49,7 @@ const Profile = () => {
               <UserText>{userGlobalState.username}</UserText>
           </AvatarBox>
 
-
-          <Statsbackground
-          
-          >
+          <Statsbackground>
           <ProgressBarRow>       
             <ProgressBarColumn>
               <ProgressBarTitle>LEVEL:   {userGlobalState.level}</ProgressBarTitle>
@@ -74,9 +74,9 @@ const Profile = () => {
             </ProgressBarColumn>
           </ProgressBarRow>
 
-          <SendButton onPress={() => updateUserStats()}>
-              <ButtonsText>Change stats</ButtonsText>
-          </SendButton>
+          <RestButton onPress={() => restStats()}>
+              <ButtonsText>DESCANSAR</ButtonsText>
+          </RestButton>
           </Statsbackground>
         </Content>
 
@@ -88,45 +88,25 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   imageBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  flex: 1,
+  width: '100%',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
   },
-  
-  
 });
 
 const Content = styled.View`
   heigth: 100%;
   width: 100%;
-
-`;
-
+`
 const View = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-
   height: 100%; 
   width: 100%;
 `
-const Text = styled.Text`
-    bottom: -15px;
-    color: #4c2882;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
-  `
-const AdditionalImageBackground = styled.ImageBackground`
-  width: 100%;
-  height: 100%;
-  margin-top: -40%;
-  justify-content: center; 
-`
-
 const Statsbackground = styled.ImageBackground`
   height: 60%;
   overflow: hidden;
@@ -145,20 +125,19 @@ const UserText = styled.Text`
   justify-content: center;
   align-items: center;
 `
-
 const UserLevelMarco = styled.View`
-align-self: center;
-border:3px;
-border-radius:50px;
-border-color: rgb(124, 44, 245 );
-height: 25%;
-width:  13%;
-left:   13%;
-margin-top: -13%;
-background-color: rgba(255, 255, 255, 0.9);
-display: flex;
-justify-content: center;
-align-items: center;
+  align-self: center;
+  border:3px;
+  border-radius:50px;
+  border-color: rgb(124, 44, 245 );
+  height: 25%;
+  width:  13%;
+  left:   13%;
+  margin-top: -13%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
   const UserTextLevel = styled.Text`
   color: black;
@@ -168,12 +147,10 @@ align-items: center;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  `
+`
 const DetailAvatar = styled.Image`
   align-self: center;
 `
-
 const AvatarBox = styled.View`
   border: 3px;
   border-color: white;
@@ -181,43 +158,19 @@ const AvatarBox = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
-
 `
-
-const Marco = styled.ImageBackground`
-  width:  150px;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
 const MarcoFoto = styled.Image`
   width:  150px;
   height: 150px;
   border-radius: 100px;
   margin-top: -32%;
 `
-
-const AdditionalImage = styled.Image`
-  width: 360px;
-  height:170px;
-  right:3px;
-`;
-
-
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
   marginRight: 125,
   top: 10
 }))``;
-
-const iconStyles = {
-  marginLeft: 140,
-  color: 'blue',
-  top: 10
-};
 
 const ProgressBarRow = styled.View`
   flex-direction: row;
@@ -237,25 +190,23 @@ const ProgressBarTitle = styled.Text`
   right:15px;
 `;
 
-const SendButton = styled.TouchableOpacity`
-background: #A3A2A2;
-opacity: 0.95;
-width: 180px;
-height: 65px;
-align-self: center;
-border-radius: 30px;
-border: #0B0B0B;
-bottom:25px;
-background-color:#ffffff
+const RestButton = styled.TouchableOpacity`
+  background: #A3A2A2;
+  opacity: 0.95;
+  width: 180px;
+  height: 65px;
+  align-self: center;
+  border-radius: 30px;
+  border: #0B0B0B;
+  bottom:25px;
+  background-color:#ffffff
 `
-
 const ButtonsText = styled.Text`
   fontSize: 28px;
   font-family: 'Tealand';
   color: #4c2882; 
   align-self: center;
   top:17px;
-  `
-
+`
 
 export default Profile;

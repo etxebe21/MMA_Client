@@ -94,32 +94,6 @@ const GeolocationUser = () => {
     }
   };
 
-
-  const getArtifactsFromDataBase = async () => {
-    try {
-      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-      const response = await axios.get(url);
-      const artifactsData = response.data.data;
-
-      // Actualizar los artefactos con la información de las imágenes del usuario
-      const updatedArtifacts = await Promise.all(
-        artifactsData.map(async (artifact) => {
-          if (artifact.found) {
-            const userImage = await getUserImageById(artifact.who);
-            return { ...artifact, userImage };
-          }
-          return artifact;
-        })
-      );
-
-      setArtefactsGlobalState(updatedArtifacts);
-      // console.log('Artefactos:', updatedArtifacts);
-    } catch (error) {
-      console.error('Error al obtener artefactos:', error);
-    }
-  };
-
-
   const resetSearch = async () => {
 
     const artifactData = {
