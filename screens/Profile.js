@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from '../components/ProgressBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from "../context/Context";
+import { socket } from '../socket/socketConnect';
+
 
 const Profile = () => {
 
@@ -16,7 +18,9 @@ const Profile = () => {
   }, [userGlobalState]); 
 
   const updateUserStats = () => {
-
+    console.log("Pulsado boton de change stats");
+    const cambioPrueba = {hitPoints: 40, _id: "6548b41cc846522bc401e1cf"};
+    socket.emit("changeStat", cambioPrueba._id, cambioPrueba.hitPoints);
   }
 
   return (
@@ -64,6 +68,10 @@ const Profile = () => {
               <StyledProgressBar progress={userGlobalState.inteligencia / 100} />
             </ProgressBarColumn>
           </ProgressBarRow>
+
+          <SendButton onPress={() => updateUserStats()}>
+              <ButtonsText>Change stats</ButtonsText>
+          </SendButton>
           </Statsbackground>
         </Content>
 
@@ -223,6 +231,26 @@ const ProgressBarTitle = styled.Text`
   margin-bottom: 10px;
   right:15px;
 `;
+
+const SendButton = styled.TouchableOpacity`
+background: #A3A2A2;
+opacity: 0.95;
+width: 180px;
+height: 65px;
+align-self: center;
+border-radius: 30px;
+border: #0B0B0B;
+bottom:25px;
+background-color:#ffffff
+`
+
+const ButtonsText = styled.Text`
+  fontSize: 28px;
+  font-family: 'Tealand';
+  color: #4c2882; 
+  align-self: center;
+  top:17px;
+  `
 
 
 export default Profile;
