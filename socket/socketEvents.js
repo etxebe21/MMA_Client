@@ -44,6 +44,9 @@ function SocketListener(props) {
 		setUserGlobalState(data.hitPoints); // Aqui seteamos los datos en la global del usuario
 	}
 
+
+	const handleReset = (data) => {setArtefactsGlobalState(data)};
+	
 	const handlers = {
 		stamina: handleAcoliteStamina,
 		life: handleAcoliteLife,
@@ -52,8 +55,8 @@ function SocketListener(props) {
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
 		responseVerify: handleVerify,
-		responseStatsChange: handleStats
-		// Nombre de la llamada: changeStats
+		responseStatsChange: handleStats,
+		resetArtifact: handleReset
 	}
 
 	return null;

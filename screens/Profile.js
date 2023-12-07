@@ -33,7 +33,6 @@ const Profile = () => {
               
               <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <MarcoFoto source={require("../assets/marcoEpico.png")}/>
-              
               <UserLevelMarco>
                 <UserTextLevel> {userGlobalState.level}</UserTextLevel>
               </UserLevelMarco>
