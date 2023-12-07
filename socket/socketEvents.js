@@ -38,10 +38,9 @@ function SocketListener(props) {
 	}
 
 	// Socket de escucha que recibe los datos de cambio de vida del cron
-	const handleStats = (data) => {
-		console.log("Dato Recibido con Exito del socket: ");
-		console.log(data);
-		setUserGlobalState(data.hitPoints); // Aqui seteamos los datos en la global del usuario
+	const handleStats = (user) => {
+		console.log(user);
+		setUserGlobalState(user); // Aqui seteamos los datos en la global del usuario
 	}
 
 
@@ -55,7 +54,7 @@ function SocketListener(props) {
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
 		responseVerify: handleVerify,
-		responseStatsChange: handleStats,
+		returnStat: handleStats,
 		resetArtifact: handleReset
 	}
 
