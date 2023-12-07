@@ -49,7 +49,7 @@ const GeolocationUser = () => {
       }).start();
     }
   }, [showPendingText, scaleAnim]);
-
+  
   //EFFECT INICIAL
   useEffect(() => {
     requestLocationPermission();
@@ -60,17 +60,17 @@ const GeolocationUser = () => {
 
    //EFFECT conprobar estado busqueda
    useEffect(() => {
-    checkState();
-  }, [pendingTextGlobalState]);
-
-  useEffect(() => {
-    if (userLocation != undefined) {
-      // console.log("Localizacion")
-      // console.log(userLocation);
-      checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
-    }
-  }, [userLocation, artifactsGlobalState]); 
-
+     checkState();
+    }, [pendingTextGlobalState]);
+    
+    useEffect(() => {
+      if (userLocation != undefined) {
+        // console.log("Localizacion")
+        // console.log(userLocation);
+        checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
+      }
+    }, [userLocation, artifactsGlobalState]); 
+    
 
   //CUANDO recoges un artefacto se llama a este effect
   useEffect(() => {
@@ -88,8 +88,8 @@ const GeolocationUser = () => {
       artifactsGlobalState != null && artifactsGlobalState.forEach((artifact) => {
         if (!artifact.found) {
           const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-          // console.log("Distancia: ");
-          // console.log(distance);
+          console.log("Distancia: ");
+          console.log(distance);
           if (distance < 1000000) {
             // console.log('Estás cerca del marcador:', artifact.name);
             setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
@@ -197,7 +197,7 @@ useEffect(() => {
 }, [artifactsGlobalState]);
 
 
-  const requestLocationPermission = async () => {
+const requestLocationPermission = async () => {
     try {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();

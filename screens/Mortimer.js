@@ -20,8 +20,8 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-
-  }, []);
+    console.log(userGlobalState.resistencia);
+  }, [userGlobalState]);
 
   const handleUserPress = (user) => {
     setSelectedUser(user);

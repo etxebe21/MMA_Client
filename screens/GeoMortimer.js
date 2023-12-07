@@ -222,7 +222,7 @@ const GeolocationUser = () => {
         {!showPendingText && artifactsGlobalState && (
           <>
             <View style={styles.buttonsContainer}>
-              {!notFound && (
+              {notFound  == true && (
                 <Buttons onPress={() => resetSearch()}>
                   <ButtonsText>RESET</ButtonsText>
                 </Buttons>
