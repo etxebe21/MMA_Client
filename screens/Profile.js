@@ -13,14 +13,20 @@ const Profile = () => {
 
   const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
 
+  //Cambia los valores constantemente del usuario cuando redive el socket de "returnStat"
   useEffect(() => {
     console.log("Puntos de salud: " + userGlobalState.hitPoints);
   }, [userGlobalState]); 
 
   const updateUserStats = () => {
     console.log("Pulsado boton de change stats");
-    const cambioPrueba = {hitPoints: 40, _id: "6548b41cc846522bc401e1cf"};
-    socket.emit("changeStat", cambioPrueba._id, cambioPrueba.hitPoints);
+    const cambioPrueba = {
+      stats:{
+        resistencia: 100,
+
+      }, 
+    _id: "6548b41cc846522bc401e1cf"};
+    socket.emit("changeStat", cambioPrueba._id, cambioPrueba.stats);
   }
 
   return (
