@@ -7,6 +7,7 @@ function SocketListener(props) {
 	const { handleGlobalState } = useContext(Context);
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
+	const { userGlobalState, setUserGlobalState } = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -36,6 +37,13 @@ function SocketListener(props) {
 		setPendingTextGlobalState(data.state);
 	}
 
+	// Socket de escucha que recibe los datos de cambio de vida del cron
+	const handleStats = (data) => {
+		console.log("Dato Recibido con Exito del socket: ");
+		console.log(data);
+		setUserGlobalState(data.hitPoints); // Aqui seteamos los datos en la global del usuario
+	}
+
 	const handlers = {
 		stamina: handleAcoliteStamina,
 		life: handleAcoliteLife,
@@ -43,7 +51,9 @@ function SocketListener(props) {
 		xp: handleAcoliteXperience,
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
-		responseVerify: handleVerify
+		responseVerify: handleVerify,
+		responseStatsChange: handleStats
+		// Nombre de la llamada: changeStats
 	}
 
 	return null;
