@@ -1,8 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { ImageBackground, ScrollView, StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
 import { StyledProgressBar } from '../components/ProgressBar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
 
@@ -26,7 +25,7 @@ const Profile = () => {
     socket.emit('resetUserAtributes', { userId, initialAtributes });
     console.log("Atributos enviados");
 
-    socket.on('receiveUserLocation', (responseData) => {
+    socket.on('receiveUserAtributes', (responseData) => {
       console.log('usuario actual recibido desde el servidor:', responseData);
       handleUserGlobalState(responseData);
     });
