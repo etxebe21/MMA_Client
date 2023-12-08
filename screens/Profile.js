@@ -10,7 +10,7 @@ import { Modal } from "react-native";
 const Profile = () => {
 
   const {userGlobalState,  handleUserGlobalState}  = useContext(Context);
-  const [modal, setModal] = useState();
+  const [modal, setModal] = useState(false);
 
   const restartAtributes = userGlobalState;
   const userId = userGlobalState._id;
@@ -23,8 +23,8 @@ const Profile = () => {
   }
 
   useEffect(() => {
+    console.log("RESISTENCIA", userGlobalState.resistencia)
     if (userGlobalState.resistencia <= 20) {
-      console.log("RESISTENCIA", userGlobalState.resistencia)
       setModal(true);
     } else {
       setModal(false); 
