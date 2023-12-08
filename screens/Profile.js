@@ -13,7 +13,10 @@ const Profile = () => {
   const [modal, setModal] = useState(false);
 
   const restartAtributes = userGlobalState;
-  const userId = userGlobalState._id;
+  if(userGlobalState._id !== undefined){
+    const userId = userGlobalState._id;
+
+  }
 
   const initialAtributes = {
     resistencia : restartAtributes.resistencia,
@@ -40,6 +43,17 @@ const Profile = () => {
       console.log('usuario actual recibido desde el servidor:', responseData);
       handleUserGlobalState(responseData);
     });
+  }
+
+  const updateUserStats = () => {
+    console.log("Pulsado boton de change stats");
+    const cambioPrueba = {
+      stats:{
+        resistencia: 43,
+
+      }, 
+    _id: "6548b41cc846522bc401e1cf"};
+    socket.emit("changeStat", cambioPrueba._id, cambioPrueba.stats);
   }
 
   return (
@@ -87,6 +101,10 @@ const Profile = () => {
           <RestButton onPress={() => restStats()}>
               <ButtonsText>DESCANSAR</ButtonsText>
           </RestButton>
+
+          <ChangeButton onPress={() => updateUserStats()}>
+              <ButtonsText>CHANGE STATS</ButtonsText>
+          </ChangeButton>
           </Statsbackground>
         </Content>
 
@@ -225,6 +243,20 @@ const RestButton = styled.TouchableOpacity`
   bottom:25px;
   background-color:#ffffff
 `
+
+const ChangeButton = styled.TouchableOpacity`
+  background: #A3A2A2;
+  opacity: 0.95;
+  width: 180px;
+  height: 65px;
+  align-self: center;
+  border-radius: 30px;
+  border: #0B0B0B;
+  bottom:25px;
+  background-color:#ffffff
+  margin-bottom: -10%
+`
+
 const ButtonsText = styled.Text`
   fontSize: 28px;
   font-family: 'Tealand';

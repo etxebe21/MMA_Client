@@ -7,7 +7,7 @@ function SocketListener(props) {
 	const { handleGlobalState } = useContext(Context);
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
-	const { userGlobalState, setUserGlobalState } = useContext(Context);
+	const { userGlobalState, setUserGlobalState, handleUserGlobalState } = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -39,8 +39,10 @@ function SocketListener(props) {
 
 	// Socket de escucha que recibe los datos de cambio de vida del cron
 	const handleStats = (user) => {
+		console.log("Datos recibidos del servidor del usuario: ")
 		console.log(user);
 		setUserGlobalState(user); // Aqui seteamos los datos en la global del usuario
+
 	}
 
 

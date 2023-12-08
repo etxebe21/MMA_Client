@@ -66,7 +66,7 @@ const Qr = () => {
       }
   }, [scanned, navigation]);
   
-  if (userGlobalState._id ) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
+  if (userGlobalState._id !== undefined) { // Asegurar que userID tenga un valor y el escaneo se haya realizado
       return (
         <ImageBackground source={require("../assets/wallpaper_QR.png")} style={styles.imageBackground}>
           <View>
