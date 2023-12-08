@@ -33,7 +33,7 @@ const Torreon = () => {
         <ImageBackground source={require(bgImage)} style={styles.container}> 
             {isInTower && (   
                 <>
-                <Text>You can enter</Text>
+                <Text>Press the door</Text>
                 {botonTowerVisible && <EnterTowerButton onPress={() => { enteringTowerButton()} }>
                                 </EnterTowerButton> }
                         {/* <EnterTowerButtonText> Enter Tower </EnterTowerButtonText> */}
@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
     },
 
     arrowIcon: {
-        position: 'absolute', // Posición absoluta para poder ajustar la posición
-        right: 95, // Ajustar el valor según sea necesario
-        top: 280, // Ajustar el valor según sea necesario
+        position: 'absolute', 
+        right: 95,
+        top: 280, 
     },
 })
 
