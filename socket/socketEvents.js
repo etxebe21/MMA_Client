@@ -44,10 +44,10 @@ function SocketListener(props) {
 		setUserGlobalState(user); // Aqui seteamos los datos en la global del usuario
 
 	}
-
-
 	const handleReset = (data) => {setArtefactsGlobalState(data)};
-	
+	const handleTired = (data) => {setUserGlobalState(data)};
+
+
 	const handlers = {
 		stamina: handleAcoliteStamina,
 		life: handleAcoliteLife,
@@ -57,7 +57,8 @@ function SocketListener(props) {
 		responseEvent: handleArtifacts,
 		responseVerify: handleVerify,
 		returnStat: handleStats,
-		resetArtifact: handleReset
+		resetArtifact: handleReset,
+		UpdatedTired: handleTired,
 	}
 
 	return null;

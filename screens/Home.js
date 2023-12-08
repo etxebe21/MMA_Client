@@ -63,7 +63,7 @@ const Home = () => {
       {isAuthenticated && ( 
         <>
         <ImageBackground source={require("../assets/wallpaper_home.jpeg")} style={styles.container}> 
-          {/* <Text>HOME</Text> */}
+
           <SignOutButton onPress={onSignOutButtonPress}>
             <ButtonText>Sign Out</ButtonText>
           </SignOutButton>
