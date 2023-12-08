@@ -1,15 +1,19 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import styled from "styled-components/native";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet, Text } from "react-native";
 import { StyledProgressBar } from '../components/ProgressBar';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
+import TiredModal from "../components/TiredModal";
+import { Modal } from "react-native";
 
 const Profile = () => {
 
   const {userGlobalState,  handleUserGlobalState}  = useContext(Context);
+  const [modal, setModal] = useState();
 
   const restartAtributes = userGlobalState;
+  const userId = userGlobalState._id;
 
   const initialAtributes = {
     resistencia : restartAtributes.resistencia,
@@ -18,7 +22,14 @@ const Profile = () => {
     fuerza : restartAtributes.fuerza
   }
 
-  const userId = userGlobalState._id;
+  useEffect(() => {
+    if (userGlobalState.resistencia <= 20) {
+      console.log("RESISTENCIA", userGlobalState.resistencia)
+      setModal(true);
+    } else {
+      setModal(false); 
+    }
+  }, []);
 
   const restStats = () => {
     console.log("Pulsado boton descansar");
@@ -80,8 +91,22 @@ const Profile = () => {
         </Content>
 
       )}
+
+      <Modal
+        animationType="slide"
+        visible={modal}
+        onRequestClose={() => setModal(false)}
+      >
+        <ImageBackground source={require("../assets/tiredAcolite.png")} style={styles.imageBackground}>
+          <View>
+              <Text>¡TU RESISTENCIA ES MUY BAJA!</Text>
+          </View>
+        </ImageBackground>
+      </Modal>
+ 
       </ImageBackground>
     </View>
+  
   )
 }
 
