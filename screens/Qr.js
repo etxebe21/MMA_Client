@@ -101,12 +101,12 @@ const Text = styled.Text`
 `;
 
 const QrView = styled.View`
-  margin-top: 66%
-  width: 70%;
-  height: 30%;
+  width: ${Dimensions.get('window').width * 0.50}px;
+  height: ${Dimensions.get('window').height * 0.97}px;
   justify-content: center;
   background: rgba(76, 40, 130, 0);
 `;
+
 
 const ViewText = styled.Text`
   bottom: -18px;
