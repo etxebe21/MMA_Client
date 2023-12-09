@@ -45,7 +45,7 @@ function SocketListener(props) {
 
 	}
 	const handleReset = (data) => {setArtefactsGlobalState(data)};
-	const handleTired = (data) => {setUserGlobalState(data)};
+	const handleTired = (data) => {console.log(data)};
 
 
 	const handlers = {
