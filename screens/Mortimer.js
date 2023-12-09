@@ -22,8 +22,8 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
- 
-  }, [selectedUser]);
+    
+  }, [usersGlobalState]);
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
@@ -41,13 +41,20 @@ const Mortimer = () => {
   };
 
   const updateRest = (data) => {
-    const tiredData = 
-    {
+    // Crear un nuevo objeto con la información de actualización
+    const tiredData = {
       id: data._id,
       tired: data.cansancio + 20,
+    };
+  
+    // Asegurarse de que el valor de cansancio no supere 100
+    if (tiredData.tired > 100) {
+      tiredData.tired = 100;
     }
- 
-    socket.emit('RestStat',tiredData);
+    data.cansancio = tiredData.tired;
+    setSelectedUser(data);
+  
+    socket.emit('RestStat', tiredData);
   };
 
   if (usersGlobalState === null)

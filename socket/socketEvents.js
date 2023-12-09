@@ -8,6 +8,7 @@ function SocketListener(props) {
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
 	const { userGlobalState, setUserGlobalState, handleUserGlobalState } = useContext(Context);
+	const { usersGlobalState, setUsersGlobalState } = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -45,7 +46,11 @@ function SocketListener(props) {
 
 	}
 	const handleReset = (data) => {setArtefactsGlobalState(data)};
-	const handleTired = (data) => {console.log(data)};
+	
+	const handleTired = (data) => {
+		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
+		setUsersGlobalState(acolitosData);
+	  };
 
 
 	const handlers = {
