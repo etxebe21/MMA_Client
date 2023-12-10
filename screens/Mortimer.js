@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, Dimensions,ImageBackground } from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,7 +22,7 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-    
+
   }, [usersGlobalState]);
 
   const handleUserPress = (user) => {
@@ -46,14 +46,14 @@ const Mortimer = () => {
       id: data._id,
       tired: data.cansancio + 20,
     };
-  
+
     // Asegurarse de que el valor de cansancio no supere 100
     if (tiredData.tired > 100) {
       tiredData.tired = 100;
     }
     data.cansancio = tiredData.tired;
     setSelectedUser(data);
-  
+
     socket.emit('RestStat', tiredData);
   };
 
@@ -61,47 +61,56 @@ const Mortimer = () => {
     return null;
 
   return (
+
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-        <HeaderText>ACÓLITOS</HeaderText>
-        {usersGlobalState.map((user) => (
-          <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-            <UserContainer>
-              <AvatarContainer>
-                <Avatar source={{ uri: user.picture }} />
-                <StatusIndicator isInsideTower={user.insideTower} />
-              </AvatarContainer>
-              <NameContainer>
-                <NameText>{user.username}</NameText>
-              </NameContainer>
-              <Extra>
-                <ImageTired source={require('../assets/cansado.png')} />
-                <CircularProgressWrapper>
-                  <AnimatedCircularProgress
-                    size={80}
-                    width={8}
-                    fill={user.cansancio}
-                    tintColor={getColorForResistencia(user.cansancio)}
-                    backgroundColor="black"
-                  />
-                </CircularProgressWrapper>
-              </Extra>
-            </UserContainer>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <ImageBackground
+        source={require('../assets/wallpaper_profile.png')}
+        style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
+          <HeaderText>ACÓLITOS</HeaderText>
+          {usersGlobalState.map((user) => (
+            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+              <UserContainer>
+                <AvatarContainer>
+                  <Avatar source={{ uri: user.picture }} />
+                  <StatusIndicator isInsideTower={user.insideTower} />
+                </AvatarContainer>
+                <NameContainer>
+                  <NameText>{user.username}</NameText>
+                </NameContainer>
+                <Extra>
+                  <ImageTired source={require('../assets/cansado.png')} />
+                  <CircularProgressWrapper>
+                    <AnimatedCircularProgress
+                      size={80}
+                      width={8}
+                      fill={user.cansancio}
+                      tintColor={getColorForResistencia(user.cansancio)}
+                      backgroundColor="black"
+                    />
+                  </CircularProgressWrapper>
+                </Extra>
+              </UserContainer>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </ImageBackground>
+
 
       {selectedUser && (
         <Modal visible={modalVisible}>
           <ModalContent>
-          <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
+            <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
 
               <AvatarBox>
                 <CloseButton onPress={() => setModalVisible(false)}>
                   <Icon name="times" size={50} color="#4c2882" />
                 </CloseButton>
-                <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
-                <MarcoFoto source={require("../assets/marcoEpico.png")} />
+                <DetailAvatarContainer>
+                  <DetailAvatar source={{ uri: selectedUser.picture }} />
+                  <MarcoFoto source={require("../assets/marcoEpico.png")} />
+                </DetailAvatarContainer>
                 <UserLevelMarco>
                   <UserTextLevel> {selectedUser.level}</UserTextLevel>
                 </UserLevelMarco>
@@ -133,10 +142,10 @@ const Mortimer = () => {
                   </ProgressBarColumn>
                 </ProgressBarRow>
                 <Rest onPress={() => updateRest(selectedUser)}>
-                <TextRest>REST</TextRest>
+                  <TextRest>REST</TextRest>
                 </Rest>
               </Statsbackground>
-              </ImageBackground>
+            </ImageBackground>
 
           </ModalContent>
         </Modal>
@@ -185,15 +194,20 @@ const AvatarBox = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
+
 `
+
+const DetailAvatarContainer = styled.View`
+  position: relative;
+`;
 
 const MarcoFoto = styled.Image`
-  width:  150px;
-  height: 150px;
-  border-radius: 100px;
-  margin-top: -42%;
-`
-
+  position: absolute;
+  top: -57%;
+  left: -4%;
+  width: ${Dimensions.get('window').width * 0.32}px;
+  height: ${Dimensions.get('window').height * 0.2}px;
+`;
 const NameText = styled.Text`
   margin-left: 5px;
   color: #4c2882;
