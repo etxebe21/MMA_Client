@@ -28,6 +28,7 @@ const GeolocationUser = () => {
   const [userId, setuserId] = useState([]);
   const [mapVisible, setMapVisible] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   // const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
@@ -245,32 +246,36 @@ const requestLocationPermission = async () => {
       const response = await axios.get(url);
       const searches = response.data.data;
       setSearches(searches);
-console.log()
-       if (searches[0].state === 'completed') {
-        Alert.alert(
-          'BUSQUEDA VALIDADA',
-          '',
-          [
-            {
-              text: 'OK',
-              onPress: () => openModal(),
-            },
-          ],
-          { cancelable: false }
-        );
-      }
-      else  if (searches[0].state === 'pending') {
-        Alert.alert(
-          'BUSQUEDA PENDIENTE',
-          '',
-          [
-            {
-              text: 'OK',
-              onPress: () => closeModal(),
-            },
-          ],
-          { cancelable: false }
-        );
+
+      if (firstLoad) {
+        setFirstLoad(false); // Establecer la bandera para futuras cargas
+      } else {
+        // Lógica de alerta para búsquedas después del inicio de sesión
+        if (searches[0].state === 'completed') {
+          Alert.alert(
+            'BUSQUEDA VALIDADA',
+            '',
+            [
+              {
+                text: 'OK',
+                onPress: () => openModal(),
+              },
+            ],
+            { cancelable: false }
+          );
+        } else if (searches[0].state != 'completed') {
+          Alert.alert(
+            'BUSQUEDA PENDIENTE',
+            '',
+            [
+              {
+                text: 'OK',
+                onPress: () => closeModal(),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
       }
     } catch (error) {
       console.error('Error al obtener búsquedas:', error);
