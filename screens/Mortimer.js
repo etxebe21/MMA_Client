@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
+import { Modal, StyleSheet, ActivityIndicator,ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,6 +17,7 @@ const Mortimer = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -41,13 +42,15 @@ const Mortimer = () => {
   };
 
   const updateRest = (data) => {
-    // Crear un nuevo objeto con la información de actualización
+
+    setLoading(true);
+
     const tiredData = {
       id: data._id,
       tired: data.cansancio + 20,
     };
 
-    // Asegurarse de que el valor de cansancio no supere 100
+
     if (tiredData.tired > 100) {
       tiredData.tired = 100;
     }
@@ -55,6 +58,8 @@ const Mortimer = () => {
     setSelectedUser(data);
 
     socket.emit('RestStat', tiredData);
+    ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
+    setLoading(false);
   };
 
   if (usersGlobalState === null)
@@ -85,7 +90,7 @@ const Mortimer = () => {
 
                     <Image source={require('../assets/iconTired.png')} />
                   )}
-            </CenteredIconContainer>
+                </CenteredIconContainer>
                 <Extra>
                   <ImageTired source={require('../assets/cansado.png')} />
                   <CircularProgressWrapper>
@@ -149,7 +154,11 @@ const Mortimer = () => {
                   </ProgressBarColumn>
                 </ProgressBarRow>
                 <Rest onPress={() => updateRest(selectedUser)}>
-                  <TextRest>REST</TextRest>
+                  {loading && (
+
+                    <ActivityIndicator size="small" color="#3498db" animating={true} />
+                  )}
+                  <RestText>REST</RestText>
                 </Rest>
               </Statsbackground>
             </ImageBackground>
@@ -176,7 +185,7 @@ right:10px;
 const CenteredIconContainer = styled.View`
   position: absolute;
   left: ${Dimensions.get('window').width * 0.63}px;
-  top: ${Dimensions.get('window').height* 0.1}px;
+  top: ${Dimensions.get('window').height * 0.1}px;
 
 `;
 
@@ -371,23 +380,26 @@ const Statsbackground = styled.ImageBackground`
   border-color: black;
 `
 const Rest = styled.TouchableOpacity`
-  height:60px;
-  width:100px;
+  flex-direction: row; 
+  height: 60px;
+  width: 120px;
   justify-content: center;
-  border:2px;
-  border-radius:40px;
+  align-items: center;
+  border: 2px;
+  border-radius: 40px;
   background-color: gray;
-  opacity:0.7;
-  left:35%;
-  top:5%;
-`
-const TextRest = styled.Text`
-  height:30px;
-  width:50px;
+  opacity: 0.7;
+  left: 25%;
+  top: 5%;
+  
+`;
+
+const RestText = styled.Text`
   font-size: 20px;
-  text-align:center;
+  text-align: center;
   align-self: center;
-`
+`;
+
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
