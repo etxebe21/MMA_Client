@@ -15,17 +15,6 @@ const Profile = () => {
   const restartAtributes = userGlobalState;
   const userId = userGlobalState._id;
 
-  const openRestModal = () => {
-    setModalRestVisible(true);
-    setTimeout(() => {
-      closeRestModal();
-    }, 4000);
-  };
-
-  const closeRestModal = () => {
-    setModalRestVisible(false);
-  };
-
   const initialAtributes = {
     resistencia: restartAtributes.resistencia,
     agilidad: restartAtributes.agilidad,
@@ -35,12 +24,12 @@ const Profile = () => {
 
   useEffect(() => {
     console.log("RESISTENCIA", userGlobalState.resistencia)
-    if (userGlobalState.resistencia <= 20) {
-      setModal(true);
-    } else {
+    if (userGlobalState.resistencia > 20) {
       setModal(false);
+    } else if((userGlobalState.resistencia <= 20)) {
+      setModal(true);
     }
-  }, []);
+  }, [userGlobalState]);
 
   const restStats = () => {
     console.log("Pulsado boton descansar");
@@ -56,6 +45,16 @@ const Profile = () => {
     });
   }
 
+  const openRestModal = () => {
+    setModalRestVisible(true);
+    setTimeout(() => {
+      closeRestModal();
+    }, 4000);
+  };
+
+  const closeRestModal = () => {
+    setModalRestVisible(false);
+  };
   return (
 
     <View >
