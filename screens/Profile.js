@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import styled from "styled-components/native";
-import { ImageBackground, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ImageBackground, StyleSheet, Text, ToastAndroid } from "react-native";
 import { StyledProgressBar } from '../components/ProgressBar';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
@@ -10,27 +10,21 @@ const Profile = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalRestVisible, setModalRestVisible] = useState(false);
 
   const restartAtributes = userGlobalState;
-  if (userGlobalState._id !== undefined) {
-    const userId = userGlobalState._id;
+  const userId = userGlobalState._id;
 
-  }
-
-  const openModal = () => {
-    setModalVisible(true);
+  const openRestModal = () => {
+    setModalRestVisible(true);
     setTimeout(() => {
-      closeModal();
-    }, 5000);
-    
-
+      closeRestModal();
+    }, 4000);
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const closeRestModal = () => {
+    setModalRestVisible(false);
   };
-
 
   const initialAtributes = {
     resistencia: restartAtributes.resistencia,
@@ -53,9 +47,12 @@ const Profile = () => {
     socket.emit('resetUserAtributes', { userId, initialAtributes });
     console.log("Atributos enviados");
 
+    openRestModal();
+
     socket.on('receiveUserAtributes', (responseData) => {
       console.log('usuario actual recibido desde el servidor:', responseData);
       handleUserGlobalState(responseData);
+      ToastAndroid.showWithGravity('Atributos restablecidos', ToastAndroid.SHORT, ToastAndroid.CENTER);
     });
   }
 
@@ -66,7 +63,7 @@ const Profile = () => {
         {userGlobalState && (
           <Content>
             <AvatarBox>
-              <RestButton onPress={openModal}>
+              <RestButton onPress={restStats}>
                 <ImageTired source={require('../assets/TiredBed.png')} />
               </RestButton>
               <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
@@ -102,15 +99,13 @@ const Profile = () => {
                   <StyledProgressBar progress={userGlobalState.inteligencia / 100} />
                 </ProgressBarColumn>
               </ProgressBarRow>
-
-
             </Statsbackground>
 
             <Modal
               animationType="slide"
               transparent={true}
-              visible={modalVisible}
-              onRequestClose={closeModal}
+              visible={modalRestVisible}
+              onRequestClose={closeRestModal}
             >
               <View style={styles.modalContainer}>
                 <ImageBackground
@@ -133,12 +128,11 @@ const Profile = () => {
           onRequestClose={() => setModal(false)}
         >
           <ImageBackground source={require("../assets/tiredAcolite.png")} style={styles.imageBackground}>
-            <View>
+            <View style={styles.modalContent}>
               <Text>¡TU RESISTENCIA ES MUY BAJA!</Text>
             </View>
           </ImageBackground>
         </Modal>
-
       </ImageBackground>
     </View>
 
@@ -282,7 +276,6 @@ const ModalContent = styled.View`
   background-color: white;
   elevation: 5;
 `;
-
 
 const ButtonSize = styled.TouchableOpacity`
 width:20%;
