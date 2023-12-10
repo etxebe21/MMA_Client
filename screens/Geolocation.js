@@ -62,6 +62,8 @@ const GeolocationUser = () => {
    //EFFECT conprobar estado busqueda
    useEffect(() => {
      checkState();
+     getSearchesFromDataBase();
+     console.log(pendingTextGlobalState);
     }, [pendingTextGlobalState]);
     
     useEffect(() => {
@@ -367,7 +369,7 @@ console.log()
           </Buttons>
         )}
 
-        {mapVisible && showAnotherButton && (
+        {mapVisible && showAnotherButton && !pendingTextGlobalState && (
           <>
             <SendButton onPress={() => updateSearch(search)}>
               <ButtonsText>CHECK</ButtonsText>
