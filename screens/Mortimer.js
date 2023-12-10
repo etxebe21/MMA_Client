@@ -77,8 +77,15 @@ const Mortimer = () => {
                   <StatusIndicator isInsideTower={user.insideTower} />
                 </AvatarContainer>
                 <NameContainer>
+
                   <NameText>{user.username}</NameText>
                 </NameContainer>
+                <CenteredIconContainer>
+                  {user.resistencia > 20 && (
+
+                    <Image source={require('../assets/iconTired.png')} />
+                  )}
+            </CenteredIconContainer>
                 <Extra>
                   <ImageTired source={require('../assets/cansado.png')} />
                   <CircularProgressWrapper>
@@ -166,6 +173,13 @@ const Margin = styled.View`
 right:10px;
 `
 
+const CenteredIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.63}px;
+  top: ${Dimensions.get('window').height* 0.1}px;
+
+`;
+
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
@@ -196,7 +210,11 @@ const AvatarBox = styled.View`
   align-items: center;
 
 `
-
+const Image = styled.Image`
+  width: 37px;
+  height: 37px;
+  border-radius: 30px;
+`;
 const DetailAvatarContainer = styled.View`
   position: relative;
 `;
