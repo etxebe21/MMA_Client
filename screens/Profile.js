@@ -1,22 +1,36 @@
 import React, { useEffect, useContext, useState } from "react";
 import styled from "styled-components/native";
-import { ImageBackground, StyleSheet, Text } from "react-native";
+import { ImageBackground, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { StyledProgressBar } from '../components/ProgressBar';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
-import TiredModal from "../components/TiredModal";
 import { Modal } from "react-native";
 
 const Profile = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const restartAtributes = userGlobalState;
   if (userGlobalState._id !== undefined) {
     const userId = userGlobalState._id;
 
   }
+
+  const openModal = () => {
+    setModalVisible(true);
+    setTimeout(() => {
+      closeModal();
+    }, 5000);
+    
+
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
 
   const initialAtributes = {
     resistencia: restartAtributes.resistencia,
@@ -52,9 +66,9 @@ const Profile = () => {
         {userGlobalState && (
           <Content>
             <AvatarBox>
-            <RestButton onPress={() => {}}>
-            <ImageTired source={require('../assets/TiredBed.png')} />
-            </RestButton>
+              <RestButton onPress={openModal}>
+                <ImageTired source={require('../assets/TiredBed.png')} />
+              </RestButton>
               <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
               <MarcoFoto source={require("../assets/marcoEpico.png")} />
               <UserLevelMarco>
@@ -91,6 +105,24 @@ const Profile = () => {
 
 
             </Statsbackground>
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={closeModal}
+            >
+              <View style={styles.modalContainer}>
+                <ImageBackground
+                  source={require('../assets/wallpaper_profile.png')}
+                  style={styles.imageBackground}
+                >
+                  <View style={styles.modalContent}>
+                  <CloseText>RESTING...</CloseText>
+                  </View>
+                </ImageBackground>
+              </View>
+            </Modal>
           </Content>
 
         )}
@@ -236,6 +268,34 @@ const RestButton = styled.TouchableOpacity`
   background-color: rgba(255, 255, 255, 0.2);
 `;
 
+const ModalContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  width:200px;
+  height:100%;
+  position:absolute;
+`;
+const ModalContent = styled.View`
+  flex: 1;
+  width: 40%;
+  height:50%;
+  background-color: white;
+  elevation: 5;
+`;
 
+
+const ButtonSize = styled.TouchableOpacity`
+width:20%;
+height:10%;
+border-radius:40px;
+border:3px;
+align-self:center;
+`
+const CloseText = styled.Text`
+  color: #3498db;
+  font-size: 60px;
+  flex-direction: row;
+  top:40%;
+`;
 
 export default Profile;
