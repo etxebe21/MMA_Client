@@ -24,9 +24,9 @@ const Profile = () => {
 
   useEffect(() => {
     console.log("RESISTENCIA", userGlobalState.resistencia)
-    if (userGlobalState.resistencia > 20) {
+    if (userGlobalState.resistencia > 25) {
       setModal(false);
-    } else if((userGlobalState.resistencia <= 20)) {
+    } else  {
       setModal(true);
     }
   }, [userGlobalState]);
@@ -136,7 +136,7 @@ const Profile = () => {
         <View style={styles.modalContainer}>
           <ImageBackground source={require("../assets/tiredAcolite.png")} style={styles.imageBackground}>
             <View style={styles.modalContent}>
-              <Text>¡TU RESISTENCIA ES MUY BAJA!</Text>
+              <ResText>¡TU RESISTENCIA ES MUY BAJA!</ResText>
             </View>
           </ImageBackground>
           </View>
@@ -270,33 +270,18 @@ const RestButton = styled.TouchableOpacity`
   background-color: rgba(255, 255, 255, 0.2);
 `;
 
-const ModalContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  width:200px;
-  height:100%;
-  position:absolute;
-`;
-const ModalContent = styled.View`
-  flex: 1;
-  width: 40%;
-  height:50%;
-  background-color: white;
-  elevation: 5;
-`;
-
-const ButtonSize = styled.TouchableOpacity`
-width:20%;
-height:10%;
-border-radius:40px;
-border:3px;
-align-self:center;
-`
 const CloseText = styled.Text`
   color: #3498db;
   font-size: 60px;
   flex-direction: row;
   top:40%;
+`;
+
+const ResText = styled.Text`
+  color:  #ff3333;
+  font-size: 35px;
+  bottom:20%;
+  text-align: center; 
 `;
 
 export default Profile;
