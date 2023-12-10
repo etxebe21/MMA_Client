@@ -83,7 +83,7 @@ const GeolocationUser = () => {
     };
     
     getID();
-  }, []); 
+  }, [usersGlobalState]); 
   
   // Dentro del efecto para cargar los artefactos
   useEffect(() => {
@@ -245,7 +245,7 @@ const GeolocationUser = () => {
         showsUserLocation={true}
       >
        <Marker
-          coordinate={{ latitude: 43.30972753944833, longitude: -2.002748937230638,}}
+          coordinate={{ latitude: usersGlobalState[0].latitude, longitude: usersGlobalState[0].longitude,}}
         >
           <Image
             source={{ uri: usersGlobalState[0].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
@@ -261,7 +261,7 @@ const GeolocationUser = () => {
         </Marker>
 
         <Marker
-          coordinate={{ latitude: 43.309534, longitude: -2.00203,}}
+          coordinate={{ latitude: 43.309134, longitude: -2.00303,}}
         >
           <Image
             source={{ uri: usersGlobalState[2].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
