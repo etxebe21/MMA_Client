@@ -32,24 +32,31 @@ const Profile = () => {
   }, [userGlobalState]);
 
   const restStats = () => {
-    console.log("Pulsado boton descansar");
     socket.emit('resetUserAtributes', { userId, initialAtributes });
-    console.log("Atributos enviados");
-
+  
     openRestModal();
-
-    socket.on('receiveUserAtributes', (responseData) => {
+  
+    const handleUserAttributes = (responseData) => {
       console.log('usuario actual recibido desde el servidor:', responseData);
       handleUserGlobalState(responseData);
       ToastAndroid.showWithGravity('Atributos restablecidos', ToastAndroid.SHORT, ToastAndroid.CENTER);
-    });
-  }
-
+    };
+  
+    // Suscribirse al evento solo una vez
+    socket.once('receiveUserAtributes', handleUserAttributes);
+  
+    // Establecer un temporizador para cerrar la modal después de cierto tiempo
+    const timeout = setTimeout(() => {
+      closeRestModal();
+      socket.off('receiveUserAtributes', handleUserAttributes);
+    }, 5000);
+  
+    // Limpiar el temporizador al desmontar el componente o realizar cambios
+    return () => clearTimeout(timeout);
+  };
+  
   const openRestModal = () => {
     setModalRestVisible(true);
-    setTimeout(() => {
-      closeRestModal();
-    }, 4000);
   };
 
   const closeRestModal = () => {
@@ -108,7 +115,7 @@ const Profile = () => {
             >
               <View style={styles.modalContainer}>
                 <ImageBackground
-                  source={require('../assets/wallpaper_profile.png')}
+                  source={require('../assets/descansoAcolito.png')}
                   style={styles.imageBackground}
                 >
                   <View style={styles.modalContent}>
@@ -126,11 +133,13 @@ const Profile = () => {
           visible={modal}
           onRequestClose={() => setModal(false)}
         >
+        <View style={styles.modalContainer}>
           <ImageBackground source={require("../assets/tiredAcolite.png")} style={styles.imageBackground}>
             <View style={styles.modalContent}>
               <Text>¡TU RESISTENCIA ES MUY BAJA!</Text>
             </View>
           </ImageBackground>
+          </View>
         </Modal>
       </ImageBackground>
     </View>
