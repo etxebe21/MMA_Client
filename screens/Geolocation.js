@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../context/Context';
 import MapStyle from '../components/MapStyle.json'
 import { socket } from '../socket/socketConnect';
+import Roseta from './Roseta';
 
 const GeolocationUser = () => {
   //GLOBALES
@@ -242,7 +243,7 @@ const requestLocationPermission = async () => {
       const response = await axios.get(url);
       const searches = response.data.data;
       setSearches(searches);
-
+console.log()
        if (searches[0].state === 'completed') {
         Alert.alert(
           'BUSQUEDA VALIDADA',
@@ -251,6 +252,19 @@ const requestLocationPermission = async () => {
             {
               text: 'OK',
               onPress: () => openModal(),
+            },
+          ],
+          { cancelable: false }
+        );
+      }
+      else  if (searches[0].state === 'pending') {
+        Alert.alert(
+          'BUSQUEDA PENDIENTE',
+          '',
+          [
+            {
+              text: 'OK',
+              onPress: () => closeModal(),
             },
           ],
           { cancelable: false }
@@ -305,7 +319,7 @@ const requestLocationPermission = async () => {
 
   return (
     <Container>
-      {artifactsGlobalState && (
+      {mapVisible && artifactsGlobalState && (
         <MapView
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}
@@ -319,7 +333,7 @@ const requestLocationPermission = async () => {
           customMapStyle={MapStyle}
         >
 
-          {artifactsGlobalState != null && artifactsGlobalState &&
+          {mapVisible && artifactsGlobalState != null && artifactsGlobalState &&
             artifactsGlobalState
               .filter(artifact => !artifact.found) // Filtrar solo artefactos no encontrados
               .map((artifact, index) => (
@@ -347,13 +361,13 @@ const requestLocationPermission = async () => {
 
       <BackgroundImage source={img}>
 
-        {showButton && (
+        {mapVisible && showButton && (
           <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
         )}
 
-        {showAnotherButton && (
+        {mapVisible && showAnotherButton && (
           <>
             <SendButton onPress={() => updateSearch(search)}>
               <ButtonsText>CHECK</ButtonsText>
@@ -362,7 +376,7 @@ const requestLocationPermission = async () => {
         )}
 
         <View>
-          {pendingTextGlobalState === "pending" && (
+          {mapVisible && pendingTextGlobalState === "pending" && (
             <>
               <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
                 <PendingText style={styles.pendingText}>PENDING</PendingText>
@@ -372,7 +386,7 @@ const requestLocationPermission = async () => {
           )}
         </View>
 
-        {!pendingTextGlobalState && (
+        {mapVisible && !pendingTextGlobalState && (
           <>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
@@ -400,6 +414,12 @@ const requestLocationPermission = async () => {
             </View>
           </>
         )}
+
+        {showModal && !mapVisible && (
+      
+        <Roseta />
+      
+    )}
 
       </BackgroundImage>
     </Container>
