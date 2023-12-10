@@ -113,9 +113,11 @@ const GeolocationUser = () => {
 
     socket.emit('verifyMortimer', artifactData.id, artifactData.found, artifactData.who);
     getSearchesFromDataBase();
-
+    
     const finishedSearch = { state: "" };
     socket.emit('verifyArtifact', search[0]._id, finishedSearch);
+    setVerify("");
+    console.log(pendingTextGlobalState);
 
   };
 

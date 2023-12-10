@@ -58,6 +58,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
+    console.log(showButton);
   }, []);
 
    //EFFECT conprobar estado busqueda
@@ -197,7 +198,7 @@ const GeolocationUser = () => {
 useEffect(() => {
   const foundCount = countFoundArtifacts();
   setShowAnotherButton(foundCount === 4);
-  setShowButton(foundCount < 4);
+  setShowButton(false);
 }, [artifactsGlobalState]);
 
 
@@ -368,7 +369,7 @@ const requestLocationPermission = async () => {
 
       <BackgroundImage source={img}>
 
-        {mapVisible && showButton && (
+        {showButton && mapVisible &&  (
           <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
