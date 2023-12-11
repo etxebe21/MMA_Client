@@ -12,7 +12,8 @@ import Roseta from './Roseta';
 
 const GeolocationUser = () => {
   //GLOBALES
-  const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  // const { userGlobalState, handleUserGlobalState } = useContext(Context);
+   const { userGlobalState, setUserGlobalState } = useContext(Context);
   const {usersGlobalState,   handleUsersGlobalState}  = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
   const {pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
