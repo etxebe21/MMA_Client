@@ -23,7 +23,7 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-
+    console.log(usersGlobalState);
   }, [usersGlobalState]);
 
   const handleUserPress = (user) => {
@@ -47,16 +47,16 @@ const Mortimer = () => {
 
     const tiredData = {
       id: data._id,
-      tired: data.cansancio + 20,
+      tired: data.resistencia + 20,
     };
 
 
-    if (tiredData.tired > 100) {
-      tiredData.tired = 100;
-    }
-    data.cansancio = tiredData.tired;
+    // if (tiredData.tired > 100) {
+    //   tiredData.tired = 100;
+    // }
+    data.resistencia = tiredData.tired;
     setSelectedUser(data);
-
+    console.log(tiredData);
     socket.emit('RestStat', tiredData);
     ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
     setLoading(false);
