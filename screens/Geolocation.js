@@ -93,8 +93,8 @@ const GeolocationUser = () => {
       artifactsGlobalState != null && artifactsGlobalState.forEach((artifact) => {
         if (!artifact.found) {
           const distance = calculateDistance(latitude, longitude, artifact.latitude, artifact.longitude);
-          console.log("Distancia: ");
-          console.log(distance);
+          // console.log("Distancia: ");
+          // console.log(distance);
           if (distance < 1000000) {
             // console.log('Estás cerca del marcador:', artifact.name);
             setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto

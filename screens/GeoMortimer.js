@@ -117,7 +117,7 @@ const GeolocationUser = () => {
     const finishedSearch = { state: "" };
     socket.emit('verifyArtifact', search[0]._id, finishedSearch);
     setVerify("");
-    console.log(pendingTextGlobalState);
+    // console.log(pendingTextGlobalState);
 
   };
 
@@ -136,7 +136,7 @@ const GeolocationUser = () => {
 
   const updateSearch = async (search) => {
     const finishedSearch = { state: "completed" };
-    console.log(search[0].state);
+    // console.log(search[0].state);
     socket.emit('verifyArtifact', search[0]._id, finishedSearch);
   };
 

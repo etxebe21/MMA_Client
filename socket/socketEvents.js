@@ -39,11 +39,19 @@ function SocketListener(props) {
 	}
 
 	// Socket de escucha que recibe los datos de cambio de vida del cron
-	const handleStats = (user) => {
+	const handleStats = (users) => {
 		console.log("Datos recibidos del servidor del usuario: ")
-		console.log(user);
-		setUserGlobalState(user); // Aqui seteamos los datos en la global del usuario
+		console.log(users);
+		if(users !== null || users !== undefined){
+			console.log("Entra en seteo de usuario")
+			setUsersGlobalState(users);
 
+			if(users._id === userGlobalState._id){
+				console.log("Entra en seteo de usuario especifico")
+				setUserGlobalState(users);
+			}
+		}
+	
 	}
 	const handleReset = (data) => {setArtefactsGlobalState(data)};
 	
