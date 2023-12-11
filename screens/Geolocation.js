@@ -60,16 +60,18 @@ const GeolocationUser = () => {
     //emitPositionServer();
   }, []);
 
-  // Emitir la posición cada 10 segundos (10000 milisegundos)
-useEffect(() => {
-  const interval = setInterval(() => {
-    emitPositionServer();
-  }, 10000);
-
-  // Limpieza del intervalo cuando se desmonta el componente
-  return () => clearInterval(interval);
-}, []);
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (userLocation && userLocation.latitude && userLocation.longitude) {
+        const { latitude, longitude } = userLocation;
+        emitPositionServer(latitude, longitude);
+      }
+    }, 10000);
+  
+    // Limpieza del intervalo cuando se desmonta el componente
+    return () => clearInterval(interval);
+  }, [userLocation]);
+  
   useEffect(() => {
     checkState();
   }, [pendingTextGlobalState]);
@@ -91,7 +93,7 @@ useEffect(() => {
           // console.log("Distancia: ");
           // console.log(distance);
           if (distance < 1000000) {
-            console.log('Estás cerca del marcador:', artifact.name);
+            //console.log('Estás cerca del marcador:', artifact.name);
             setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
             setSelectedArtifact(artifact);
           } else {
@@ -220,6 +222,7 @@ useEffect(() => {
             });
             // Emitir la ubicación al servidor
         emitPositionServer(position.coords.latitude, position.coords.longitude);
+        console.log(position.coords.latitude);
           });
       } else {
         const granted = await PermissionsAndroid.request(
@@ -312,9 +315,10 @@ useEffect(() => {
   };
 
   const emitPositionServer = (latitude, longitude) => {
+    console.log(latitude);
     const positions = {
-      latitude: latitude,
-      longitude: longitude,
+      latitude,
+      longitude
       
     }
     socket.emit('sendUserLocation', { 
