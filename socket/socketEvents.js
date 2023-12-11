@@ -7,6 +7,8 @@ function SocketListener(props) {
 	const { handleGlobalState } = useContext(Context);
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
+	const { userGlobalState, setUserGlobalState, handleUserGlobalState } = useContext(Context);
+	const { usersGlobalState, setUsersGlobalState } = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -36,6 +38,29 @@ function SocketListener(props) {
 		setPendingTextGlobalState(data.state);
 	}
 
+	// Socket de escucha que recibe los datos de cambio de vida del cron
+	const handleStats = (users) => {
+		console.log("Datos recibidos del servidor del usuario: ")
+		console.log(users);
+		if(users !== null || users !== undefined){
+			console.log("Entra en seteo de usuario")
+			setUsersGlobalState(users);
+
+			if(users._id === userGlobalState._id){
+				console.log("Entra en seteo de usuario especifico")
+				setUserGlobalState(users);
+			}
+		}
+	
+	}
+	const handleReset = (data) => {setArtefactsGlobalState(data)};
+	
+	const handleTired = (data) => {
+		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
+		setUsersGlobalState(acolitosData);
+	  };
+
+
 	const handlers = {
 		stamina: handleAcoliteStamina,
 		life: handleAcoliteLife,
@@ -43,7 +68,10 @@ function SocketListener(props) {
 		xp: handleAcoliteXperience,
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
-		responseVerify: handleVerify
+		responseVerify: handleVerify,
+		returnStat: handleStats,
+		resetArtifact: handleReset,
+		UpdatedTired: handleTired,
 	}
 
 	return null;

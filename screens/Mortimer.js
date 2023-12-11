@@ -1,118 +1,172 @@
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity} from "react-native";
+import { Modal, StyleSheet, ActivityIndicator,ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { StyledProgressBar } from "../components/ProgressBar";
 import { Context } from "../context/Context";
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { socket } from '../socket/socketConnect';
+
 
 const Mortimer = () => {
 
-  const {userGlobalState,   handleUserGlobalState}  = useContext(Context);
-  const {usersGlobalState,  setUsersGlobalState}    = useContext(Context);
+  const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  const { usersGlobalState, setUsersGlobalState } = useContext(Context);
 
-  const [selectedUser,  setSelectedUser]  = useState(null);
-  const [modalVisible,  setModalVisible]  = useState(false);
-  
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+
   useEffect(() => {
-  
-  }, []); 
+    console.log(usersGlobalState);
+  }, [usersGlobalState]);
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
   };
 
+  const getColorForResistencia = (resistence) => {
+    if (resistence >= 70) {
+      return 'green';
+    } else if (resistence >= 40) {
+      return 'yellow';
+    } else {
+      return 'red';
+    }
+  };
+
+  const updateRest = (data) => {
+
+    setLoading(true);
+
+    const tiredData = {
+      id: data._id,
+      tired: data.resistencia + 20,
+    };
+
+
+    // if (tiredData.tired > 100) {
+    //   tiredData.tired = 100;
+    // }
+    data.resistencia = tiredData.tired;
+    setSelectedUser(data);
+    console.log(tiredData);
+    socket.emit('RestStat', tiredData);
+    ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
+    setLoading(false);
+  };
+
   if (usersGlobalState === null)
     return null;
 
   return (
+
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
-        <HeaderText>ACÓLITOS</HeaderText>
-        {usersGlobalState.map((user) => (
-          <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-            <UserContainer>
-              <AvatarContainer>
-                <Avatar source={{ uri: user.picture }} />
-                <StatusIndicator isInsideTower={user.insideTower} />
-              </AvatarContainer>
-              <NameText>{user.username}</NameText>
-            </UserContainer>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <ImageBackground
+        source={require('../assets/wallpaper_profile.png')}
+        style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
+          <HeaderText>ACÓLITOS</HeaderText>
+          {usersGlobalState.map((user) => (
+            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+              <UserContainer>
+                <AvatarContainer>
+                  <Avatar source={{ uri: user.picture }} />
+                  <StatusIndicator isInsideTower={user.insideTower} />
+                </AvatarContainer>
+                <NameContainer>
+
+                  <NameText>{user.username}</NameText>
+                </NameContainer>
+                <CenteredIconContainer>
+                  {user.resistencia < 20 && (
+
+                    <Image source={require('../assets/iconTired.png')} />
+                  )}
+                </CenteredIconContainer>
+                <Extra>
+                  <ImageTired source={require('../assets/cansado.png')} />
+                  <CircularProgressWrapper>
+                    <AnimatedCircularProgress
+                      size={80}
+                      width={8}
+                      fill={user.resistencia}
+                      tintColor={getColorForResistencia(user.resistencia)}
+                      backgroundColor="black"
+                    />
+                  </CircularProgressWrapper>
+                </Extra>
+              </UserContainer>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </ImageBackground>
+
 
       {selectedUser && (
         <Modal visible={modalVisible}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <ModalContent>
-              <CloseButton onPress={() => setModalVisible(false)}>
-                <Icon name="times" size={50} color="#4c2882" />
-              </CloseButton>
+          <ModalContent>
+            <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
 
-              <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
-              <UserText>{selectedUser.username}</UserText>
-      
-              <Icon name="github-alt" size={20} color="blue" />
-              <Text>LEVEL: {selectedUser.level}</Text>
-              <StyledProgressBar progress={selectedUser.level/20} />
-    
-              <Icon name="legal" size={20} color="blue" />
-              <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <StyledProgressBar progress={selectedUser.hitPoints/100} />
+              <AvatarBox>
+                <CloseButton onPress={() => setModalVisible(false)}>
+                  <Icon name="times" size={50} color="#4c2882" />
+                </CloseButton>
+                <DetailAvatarContainer>
+                  <DetailAvatar source={{ uri: selectedUser.picture }} />
+                  <MarcoFoto source={require("../assets/marcoEpico.png")} />
+                </DetailAvatarContainer>
+                <UserLevelMarco>
+                  <UserTextLevel> {selectedUser.level}</UserTextLevel>
+                </UserLevelMarco>
+                <UserText>{selectedUser.username}</UserText>
+              </AvatarBox>
 
-              <Icon name="hand-rock-o" size={20} color="blue" />
-              <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <StyledProgressBar progress={selectedUser.fuerza/100} />
+              <Statsbackground>
+                <ProgressBarRow>
+                  <ProgressBarColumn>
+                    <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.level / 20} />
+                    <ProgressBarTitle>HITPOINTS:   {selectedUser.hitPoints}</ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.hitPoints / 100} />
+                    <ProgressBarTitle>STRENGTH: {selectedUser.fuerza}  </ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.fuerza / 100} />
+                    <ProgressBarTitle>GOLD:  {selectedUser.dinero}</ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.dinero / 100} />
+                  </ProgressBarColumn>
 
-              <Icon name="money" size={20} color="blue" />
-              <Text>GOLD: {selectedUser.dinero} </Text>
-              <StyledProgressBar progress={selectedUser.dinero/100} />
+                  <ProgressBarColumn>
+                    <ProgressBarTitle>TIRED: {selectedUser.cansancio} </ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.cansancio / 100} />
+                    <ProgressBarTitle>RESISTENCE: {selectedUser.resistencia} </ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.resistencia / 100} />
+                    <ProgressBarTitle>AGILITY:  {selectedUser.agilidad}</ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.agilidad / 100} />
+                    <ProgressBarTitle>INTELLIGENCE: {selectedUser.inteligencia}</ProgressBarTitle>
+                    <StyledProgressBar progress={selectedUser.inteligencia / 100} />
+                  </ProgressBarColumn>
+                </ProgressBarRow>
+                {selectedUser.resistencia < 20 && (
 
-              <Icon name="github-alt" size={20} color="blue" />
-              <Text>FATIGUE: {selectedUser.cansancio}</Text>
-              <StyledProgressBar progress={selectedUser.cansancio/100} />
+                  <Rest onPress={() => updateRest(selectedUser)}>
+                  {loading && (
+                    
+                    <ActivityIndicator size="small" color="#3498db" animating={true} />
+                  )}
+                  <RestText>REST</RestText>
+                </Rest>
+                  )}
+              </Statsbackground>
+            </ImageBackground>
 
-              <Icon name="bomb" size={20} color="blue" />
-              <Text>RESISTENCE: {selectedUser.resistencia} </Text>
-              <StyledProgressBar progress={selectedUser.resistencia/100} />
-
-              <Icon name="motorcycle" size={20} color="blue" />
-              <Text>AGILITY: {selectedUser.agilidad} </Text>
-              <StyledProgressBar progress={selectedUser.agilidad/100} />
-
-              <Icon name="info" size={20} color="blue" />
-              <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
-              <StyledProgressBar progress={selectedUser.inteligencia/100} />
-              
-              <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
-              <Text></Text>
-
-            <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.ceguera}/>
-
-            <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.hambruna}/>
-
-            <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.locura}/>
-
-            <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.miedo}/>
-
-            <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.parálisis}/>
-
-            <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.psicosis}/>
-
-            <Text>insideTower: {selectedUser.insideTower ? 'Sí' : 'No'}</Text>
-            <Switch value={selectedUser.insideTower}/>
-
-            </ModalContent>
-          </ScrollView>
+          </ModalContent>
         </Modal>
       )}
     </View>
@@ -127,6 +181,17 @@ const styles = StyleSheet.create({
   },
 });
 
+const Margin = styled.View`
+right:10px;
+`
+
+const CenteredIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.63}px;
+  top: ${Dimensions.get('window').height * 0.1}px;
+
+`;
+
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
@@ -140,20 +205,47 @@ const Text = styled.Text`
   align-self: center;  
 `
 const UserText = styled.Text`
-  top: -10px;
+  top: 0px;
   color: #4c2882;
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
 `
+const AvatarBox = styled.View`
+  border: 3px;
+  border-color: transparent;
+  height: 36%;
+  width:100%
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+`
+const Image = styled.Image`
+  width: 37px;
+  height: 37px;
+  border-radius: 30px;
+`;
+const DetailAvatarContainer = styled.View`
+  position: relative;
+`;
+
+const MarcoFoto = styled.Image`
+  position: absolute;
+  top: -57%;
+  left: -4%;
+  width: ${Dimensions.get('window').width * 0.32}px;
+  height: ${Dimensions.get('window').height * 0.2}px;
+`;
 const NameText = styled.Text`
-  margin-left: 15px;
+  margin-left: 5px;
   color: #4c2882;
   font-size: 19px;
   font-weight: bold;
   letter-spacing: -0.3px;
-  align-self: center;  
+  align-self: center;
+  top:-10%;  
 `
 const HeaderText = styled.Text`
   bottom: -15px;
@@ -172,16 +264,55 @@ const Avatar = styled.Image`
   border-color: #4c2882;
   border-width: 3px;
 `
+const UserLevelMarco = styled.View`
+  align-self: center;
+  border:3px;
+  border-radius:20px;
+  border-color: rgb(124, 44, 245 );
+  height: 40px;
+  width:40px;
+  left:   10%;
+  margin-top: -13%;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const UserTextLevel = styled.Text`
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: -10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const AvatarContainer = styled.View`
   flex-direction: row;
   align-items: center;
 `
+const Extra = styled.View`
+  flex: 1;
+  justify-content: flex-end; 
+  align-items: flex-end;
+  margin-top:24px;
+  margin-right:10px;
+`;
+const CircularProgressWrapper = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: absolute;
+
+`;
 const UserContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  height: 110px;
+  height: 120px;
   border: #4c2882;
-  bottom: -40px;
+  bottom: -10%;
   background-color: #d9a9c9;
 `
 const StatusIndicator = styled.View`
@@ -193,12 +324,24 @@ const StatusIndicator = styled.View`
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
+const ImageTired = styled.Image`
+  width: 72.2px;
+  height: 70px;
+  border-radius: 35px; 
+  top:-4px;
+`;
+
+const NameContainer = styled.View`
+  flex: 1; /* El nombre ocupa el espacio restante */
+  margin-right: 10px; /* Ajusta según tus preferencias */
+`;
+
+
 const ModalContent = styled.View`
   flex: 1;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background-color: #d9a9c9;
-  height:1350px;
 `
 const DetailAvatar = styled.Image`
   width: 90px;
@@ -211,9 +354,55 @@ const DetailAvatar = styled.Image`
 `
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  top: -30px;
   marginLeft: 300px;
 `
+const ProgressBarRow = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  width:100%;
+`;
+
+const ProgressBarTitle = styled.Text`
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  right:15px;
+`;
+const ProgressBarColumn = styled.View`
+  align-items: center;
+  top: 15px;
+`;
+
+const Statsbackground = styled.ImageBackground`
+  height: 64%;
+  width:100%;
+  overflow: hidden;
+  justify-content: flex-start;
+  border:3px; 
+  border-color: black;
+`
+const Rest = styled.TouchableOpacity`
+  flex-direction: row; 
+  height: 60px;
+  width: 120px;
+  justify-content: center;
+  align-items: center;
+  border: 2px;
+  border-radius: 40px;
+  background-color: gray;
+  opacity: 0.7;
+  left: 25%;
+  top: 5%;
+  
+`;
+
+const RestText = styled.Text`
+  font-size: 20px;
+  text-align: center;
+  align-self: center;
+`;
+
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',

@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../context/Context';
 import MapStyle from '../components/MapStyle.json'
 import { socket } from '../socket/socketConnect';
+import Roseta from './Roseta';
 
 const GeolocationUser = () => {
   //GLOBALES
@@ -28,6 +29,7 @@ const GeolocationUser = () => {
   const [userId, setuserId] = useState([]);
   const [mapVisible, setMapVisible] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
   // const [socket, setSocket] = useState(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
@@ -50,7 +52,7 @@ const GeolocationUser = () => {
       }).start();
     }
   }, [showPendingText, scaleAnim]);
-
+  
   //EFFECT INICIAL
   useEffect(() => {
     requestLocationPermission();
@@ -58,6 +60,7 @@ const GeolocationUser = () => {
     loadArtifacts();
     getID();
     //emitPositionServer();
+    console.log(showButton);
   }, []);
 
   useEffect(() => {
@@ -73,16 +76,29 @@ const GeolocationUser = () => {
   }, [userLocation]);
   
   useEffect(() => {
-    checkState();
-  }, [pendingTextGlobalState]);
+     checkState();
+     getSearchesFromDataBase();
+     console.log(pendingTextGlobalState);
+    }, [pendingTextGlobalState]);
+    
+    useEffect(() => {
+      if (userLocation != undefined) {
+        // console.log("Localizacion")
+        // console.log(userLocation);
+        checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
+      }
+    }, [userLocation, artifactsGlobalState]); 
+    
 
+  //CUANDO recoges un artefacto se llama a este effect
   useEffect(() => {
-    if (userLocation != undefined) {
-      // console.log("Localizacion")
-      // console.log(userLocation);
-      checkIfUserNearMarker(userLocation.latitude, userLocation.longitude);
+    if (collectedArtifacts === 4) {
+      setShowAnotherButton(true);
+      setShowButton(false);
+    } else {
+      setShowAnotherButton(false);
     }
-  }, [userLocation, artifactsGlobalState]); 
+  }, [collectedArtifacts]);
   
   const checkIfUserNearMarker = (latitude, longitude) => {
     if(artifactsGlobalState !== undefined)
@@ -93,7 +109,7 @@ const GeolocationUser = () => {
           // console.log("Distancia: ");
           // console.log(distance);
           if (distance < 1000000) {
-            //console.log('Estás cerca del marcador:', artifact.name);
+            // //console.log('Estás cerca del marcador:', artifact.name);
             setShowButton(true); // Establece el estado del botón a true si el usuario está cerca del artefacto
             setSelectedArtifact(artifact);
           } else {
@@ -144,6 +160,7 @@ const GeolocationUser = () => {
       console.error('Error al cargar los artefactos:', error);
     }
   };
+  
   const updateFoundedArtifact = async (artifact) => {
     try {
       const selectedArtifact = { 
@@ -184,20 +201,10 @@ const GeolocationUser = () => {
   };
   
 
-  //CUANDO recoges un artefacto se llama a este effect
-  useEffect(() => {
-    if (collectedArtifacts === 4) {
-      setShowAnotherButton(true);
-      setShowButton(false);
-    } else {
-      setShowAnotherButton(false);
-    }
-  }, [collectedArtifacts]);
 
   // Función para contar los artefactos encontrados
  const countFoundArtifacts = () => {
   const foundArtifacts = artifactsGlobalState != null && artifactsGlobalState && artifactsGlobalState.filter((artifact) => artifact.found);
-  console.log("lenght artefactos", foundArtifacts.length)
   return foundArtifacts.length;
 };
 
@@ -205,15 +212,14 @@ const GeolocationUser = () => {
 useEffect(() => {
   const foundCount = countFoundArtifacts();
   setShowAnotherButton(foundCount === 4);
-  setShowButton(foundCount < 4);
+  setShowButton(false);
 }, [artifactsGlobalState]);
 
 
-  const requestLocationPermission = async () => {
+const requestLocationPermission = async () => {
     try {
       if (Platform.OS === 'ios') {
         Geolocation.requestAuthorization();
-        console.log("Entra en OS")
         Geolocation.watchPosition(
           position => {
             setUserLocation({
@@ -257,20 +263,36 @@ useEffect(() => {
       const response = await axios.get(url);
       const searches = response.data.data;
       setSearches(searches);
-      console.log(searches[0].state);
 
-       if (searches[0].state === 'completed') {
-        Alert.alert(
-          'BUSQUEDA VALIDADA',
-          '',
-          [
-            {
-              text: 'OK',
-              onPress: () => openModal(),
-            },
-          ],
-          { cancelable: false }
-        );
+      if (firstLoad) {
+        setFirstLoad(false); // Establecer la bandera para futuras cargas
+      } else {
+        // Lógica de alerta para búsquedas después del inicio de sesión
+        if (searches[0].state === 'completed') {
+          Alert.alert(
+            'BUSQUEDA VALIDADA',
+            '',
+            [
+              {
+                text: 'OK',
+                onPress: () => openModal(),
+              },
+            ],
+            { cancelable: false }
+          );
+        } else if (searches[0].state != 'completed') {
+          Alert.alert(
+            'BUSQUEDA PENDIENTE',
+            '',
+            [
+              {
+                text: 'OK',
+                onPress: () => closeModal(),
+              },
+            ],
+            { cancelable: false }
+          );
+        }
       }
     } catch (error) {
       console.error('Error al obtener búsquedas:', error);
@@ -279,10 +301,7 @@ useEffect(() => {
 
   const updateSearch = async (search) => {
     try {
-      console.log('busqueda:', search);
       const finishedSearch = { state: "pending" };
-      console.log('modificar estado state', finishedSearch);
-      console.log('ID de la busqueda :', search[0]._id);
       socket.emit('verifyArtifact', search[0]._id,finishedSearch);
 
      
@@ -363,7 +382,7 @@ useEffect(() => {
           />
         </Marker>
 
-          {artifactsGlobalState != null && artifactsGlobalState &&
+          {mapVisible && artifactsGlobalState != null && artifactsGlobalState &&
             artifactsGlobalState
               .filter(artifact => !artifact.found) // Filtrar solo artefactos no encontrados
               .map((artifact, index) => (
@@ -391,13 +410,13 @@ useEffect(() => {
 
       <BackgroundImage source={img}>
 
-        {showButton && (
+        {showButton && mapVisible &&  (
           <Buttons onPress={() => updateFoundedArtifact(selectedArtifact)}>
             <ButtonsText>RECOGER</ButtonsText>
           </Buttons>
         )}
 
-        {showAnotherButton && (
+        {mapVisible && showAnotherButton && !pendingTextGlobalState && (
           <>
             <SendButton onPress={() => updateSearch(search)}>
               <ButtonsText>CHECK</ButtonsText>
@@ -406,7 +425,7 @@ useEffect(() => {
         )}
 
         <View>
-          {pendingTextGlobalState === "pending" && (
+          {mapVisible && pendingTextGlobalState === "pending" && (
             <>
               <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
                 <PendingText style={styles.pendingText}>PENDING</PendingText>
@@ -416,7 +435,7 @@ useEffect(() => {
           )}
         </View>
 
-        {!pendingTextGlobalState && (
+        {mapVisible && !pendingTextGlobalState && (
           <>
             <Title>ARTIFACTS</Title>
             <View style={styles.artifactsContainer}>
@@ -444,6 +463,12 @@ useEffect(() => {
             </View>
           </>
         )}
+
+        {showModal && !mapVisible && (
+      
+        <Roseta />
+      
+    )}
 
       </BackgroundImage>
     </Container>

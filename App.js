@@ -106,6 +106,7 @@ const App = () => {
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
+
   }, [userGlobalState, usersGlobalState, artifactsGlobalState])
 
 
