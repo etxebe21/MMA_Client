@@ -73,7 +73,7 @@ const GeolocationUser = () => {
   
     // Limpieza del intervalo cuando se desmonta el componente
     return () => clearInterval(interval);
-  }, [userLocation]);
+  }, []);
   
   useEffect(() => {
      checkState();

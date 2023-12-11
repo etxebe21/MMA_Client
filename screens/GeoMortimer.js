@@ -9,7 +9,6 @@ import { Context } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io, { Socket } from 'socket.io-client';
 import { socket } from '../socket/socketConnect';
-import { socket } from '../socket/socketConnect';
 
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -50,25 +49,25 @@ const GeolocationUser = () => {
   }, [artifactsGlobalState]);
 
 
-  // useEffect(() => {
-  //   const getID = async () => {
-  //     try {
-  //       const newSocket = io('https://mmaproject-app.fly.dev');
-  //       // Escuchar la respuesta del servidor al evento 'responseEvent'
-  //       newSocket.on('receiveUserLocation', (responseData) => {
-  //         console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
+  useEffect(() => {
+    const getID = async () => {
+      try {
+        const newSocket = io('https://mmaproject-app.fly.dev');
+        // Escuchar la respuesta del servidor al evento 'responseEvent'
+        newSocket.on('receiveUserLocation', (responseData) => {
+          console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
 
-  //       });
-  //       const userId = await AsyncStorage.getItem('userID')
-  //       setuserId(userId);
-  //       return jsonValue != null ? JSON.parse(jsonValue) : null;
+        });
+        const userId = await AsyncStorage.getItem('userID')
+        setuserId(userId);
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
 
-  //     } catch (e) {
-  //     }
-  //   };
+      } catch (e) {
+      }
+    };
 
-  //   getID();
-  // }, []);
+    getID();
+  }, []);
 
 
 
