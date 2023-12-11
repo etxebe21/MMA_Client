@@ -11,20 +11,34 @@ const Profile = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { usersGlobalState, setUsersGlobalState } = useContext(Context);
-
-
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
 
-  const restartAtributes = userGlobalState;
+  const [initialAtributes, setInitialAtributes] = useState({
+    resistencia: 0,
+    agilidad: 0,
+    cansancio: 0,
+    fuerza: 0
+  });
+
   const userId = userGlobalState._id;
 
-  const initialAtributes = {
-    resistencia: restartAtributes.resistencia,
-    agilidad: restartAtributes.agilidad,
-    cansancio: restartAtributes.cansancio,
-    fuerza: restartAtributes.fuerza
-  }
+  useEffect(() => {
+    setInitialAtributes({
+      resistencia: userGlobalState.resistencia,
+      agilidad: userGlobalState.agilidad,
+      cansancio: userGlobalState.cansancio,
+      fuerza: userGlobalState.fuerza
+    });
+
+    // Guardar los valores iniciales en AsyncStorage
+    AsyncStorage.setItem('initialAtributes', JSON.stringify({
+      resistencia: userGlobalState.resistencia,
+      agilidad: userGlobalState.agilidad,
+      cansancio: userGlobalState.cansancio,
+      fuerza: userGlobalState.fuerza
+    }));
+  }, []);
 
   useEffect(() => {
     console.log("RESISTENCIA", userGlobalState.resistencia)
