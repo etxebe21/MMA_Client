@@ -27,7 +27,7 @@ const Roseta = () => {
     const radius = 135;
 
     const centerX = Dimensions.get('window').width / 2.6;
-    const centerY = Dimensions.get('window').height / 3;
+    const centerY = Dimensions.get('window').height / 2.4;
     
     
     const angle = (((index * (360 / numArtifacts)) + 270) * (Math.PI / 180));
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: Dimensions.get('window').width, 
+    height: Dimensions.get('window').height, 
     justifyContent: 'center',
     alignItems: 'center',
   },

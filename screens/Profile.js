@@ -31,6 +31,18 @@ const Profile = () => {
     }
   }, [userGlobalState]);
 
+
+  const restAcolite = () => {
+    openRestModal();
+    const userMaxStat = userGlobalState.maxStat;
+    console.log(userMaxStat);
+    socket.emit('resetUserAtributes',userGlobalState._id,userMaxStat);
+    setTimeout(() => {
+      closeRestModal();
+    }, 4000);
+  
+  };
+
   const restStats = () => {
     socket.emit('resetUserAtributes', { userId, initialAtributes });
   
@@ -69,7 +81,7 @@ const Profile = () => {
         {userGlobalState && (
           <Content>
             <AvatarBox>
-              <RestButton onPress={restStats}>
+              <RestButton onPress={restAcolite}>
                 <ImageTired source={require('../assets/TiredBed.png')} />
               </RestButton>
               <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />

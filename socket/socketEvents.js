@@ -17,8 +17,7 @@ function SocketListener(props) {
 	useEffect(() => {
 		if (currentEvent !== null) {
 			const handler = handlers[currentEvent.event];
-			if (handler)
-			{
+			if (handler) {
 				handler(currentEvent.value);
 			}
 		}
@@ -37,7 +36,7 @@ function SocketListener(props) {
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
 	}
-	
+
 	const handleUserGlobalState = (data) => {
 		setUserGlobalState(data)
 	}
@@ -46,23 +45,25 @@ function SocketListener(props) {
 	const handleStats = (users) => {
 		console.log("Datos recibidos del servidor del usuario: ")
 		console.log(users);
-		if(users !== null || users !== undefined){
+		if (users !== null || users !== undefined) {
 			console.log("Entra en seteo de usuario")
 			setUsersGlobalState(users);
 
-			if(users._id === userGlobalState._id){
+			if (users._id === userGlobalState._id) {
 				console.log("Entra en seteo de usuario especifico")
 				setUserGlobalState(users);
 			}
 		}
-	
+
 	}
-	const handleReset = (data) => {setArtefactsGlobalState(data)};
-	
+	const handleReset = (data) => { setArtefactsGlobalState(data) };
+
 	const handleTired = (data) => {
 		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
 		setUsersGlobalState(acolitosData);
-	  };
+	};
+
+	const handleRestAcolite = (data) => { setUserGlobalState(data)};
 
 
 	const handlers = {
@@ -77,6 +78,7 @@ function SocketListener(props) {
 		resetArtifact: handleReset,
 		UpdatedTired: handleTired,
 		receiveUserAtributes: handleUserGlobalState,
+		restAcolite: handleRestAcolite,
 	}
 
 	return null;
