@@ -52,13 +52,13 @@ const Profile = () => {
   const getIdFromAsyncStorage = async () => {
     const storedId = await AsyncStorage.getItem('userID');
     console.log(storedId);
-    if (usersGlobalState != null)
-    {
+    
+    if (Array.isArray(usersGlobalState)) { // Verificar si usersGlobalState es un array
       const foundUser = usersGlobalState.find(user => user._id === storedId); 
       handleUserGlobalState(foundUser);
     }
-
   };
+  
 
   useEffect (() => {
     getIdFromAsyncStorage();
