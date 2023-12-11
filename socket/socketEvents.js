@@ -37,13 +37,11 @@ function SocketListener(props) {
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
 	}
-	const handleUserLocation = (data) => {
-		setUserLocation(data);
-	}
+	
 	const handleUserGlobalState = (data) => {
 		setUserGlobalState(data)
 	}
-	
+
 	// Socket de escucha que recibe los datos de cambio de vida del cron
 	const handleStats = (users) => {
 		console.log("Datos recibidos del servidor del usuario: ")
@@ -78,7 +76,6 @@ function SocketListener(props) {
 		returnStat: handleStats,
 		resetArtifact: handleReset,
 		UpdatedTired: handleTired,
-		receiveUserLocation: handleUserLocation,
 		receiveUserAtributes: handleUserGlobalState,
 	}
 
