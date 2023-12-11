@@ -31,10 +31,10 @@ const Mortimer = () => {
     setModalVisible(true);
   };
 
-  const getColorForResistencia = (cansancio) => {
-    if (cansancio >= 70) {
+  const getColorForResistencia = (resistence) => {
+    if (resistence >= 70) {
       return 'green';
-    } else if (cansancio >= 40) {
+    } else if (resistence >= 40) {
       return 'yellow';
     } else {
       return 'red';
@@ -86,7 +86,7 @@ const Mortimer = () => {
                   <NameText>{user.username}</NameText>
                 </NameContainer>
                 <CenteredIconContainer>
-                  {user.resistencia > 20 && (
+                  {user.resistencia < 20 && (
 
                     <Image source={require('../assets/iconTired.png')} />
                   )}
@@ -97,8 +97,8 @@ const Mortimer = () => {
                     <AnimatedCircularProgress
                       size={80}
                       width={8}
-                      fill={user.cansancio}
-                      tintColor={getColorForResistencia(user.cansancio)}
+                      fill={user.resistencia}
+                      tintColor={getColorForResistencia(user.resistencia)}
                       backgroundColor="black"
                     />
                   </CircularProgressWrapper>
@@ -153,13 +153,16 @@ const Mortimer = () => {
                     <StyledProgressBar progress={selectedUser.inteligencia / 100} />
                   </ProgressBarColumn>
                 </ProgressBarRow>
-                <Rest onPress={() => updateRest(selectedUser)}>
-                  {loading && (
+                {selectedUser.resistencia < 20 && (
 
+                  <Rest onPress={() => updateRest(selectedUser)}>
+                  {loading && (
+                    
                     <ActivityIndicator size="small" color="#3498db" animating={true} />
                   )}
                   <RestText>REST</RestText>
                 </Rest>
+                  )}
               </Statsbackground>
             </ImageBackground>
 
