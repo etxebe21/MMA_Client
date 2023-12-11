@@ -5,6 +5,7 @@ import { StyledProgressBar } from '../components/ProgressBar';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
 import { Modal } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
 
@@ -37,17 +38,18 @@ const Profile = () => {
   const getIdFromAsyncStorage = async () => {
     const storedId = await AsyncStorage.getItem('userID');
     console.log(storedId);
-
-    const foundUser = usersGlobalState.find(user => user._id === storedId);
-
-    handleUserGlobalState(foundUser);
+    if (usersGlobalState != null)
+    {
+      const foundUser = usersGlobalState.find(user => user._id === storedId); 
+      handleUserGlobalState(foundUser);
+    }
 
   };
 
   useEffect (() => {
     getIdFromAsyncStorage();
 
-  },[userGlobalState])
+  },[usersGlobalState])
 
 
   const restStats = () => {
