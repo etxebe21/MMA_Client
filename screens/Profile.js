@@ -5,22 +5,40 @@ import { StyledProgressBar } from '../components/ProgressBar';
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
 import { Modal } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  const { usersGlobalState, setUsersGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
 
-  const restartAtributes = userGlobalState;
+  const [initialAtributes, setInitialAtributes] = useState({
+    resistencia: 0,
+    agilidad: 0,
+    cansancio: 0,
+    fuerza: 0
+  });
+
   const userId = userGlobalState._id;
 
-  const initialAtributes = {
-    resistencia: restartAtributes.resistencia,
-    agilidad: restartAtributes.agilidad,
-    cansancio: restartAtributes.cansancio,
-    fuerza: restartAtributes.fuerza
-  }
+  useEffect(() => {
+    setInitialAtributes({
+      resistencia: userGlobalState.resistencia,
+      agilidad: userGlobalState.agilidad,
+      cansancio: userGlobalState.cansancio,
+      fuerza: userGlobalState.fuerza
+    });
+
+    // Guardar los valores iniciales en AsyncStorage
+    AsyncStorage.setItem('initialAtributes', JSON.stringify({
+      resistencia: userGlobalState.resistencia,
+      agilidad: userGlobalState.agilidad,
+      cansancio: userGlobalState.cansancio,
+      fuerza: userGlobalState.fuerza
+    }));
+  }, []);
 
   useEffect(() => {
     console.log("RESISTENCIA", userGlobalState.resistencia)
@@ -30,6 +48,23 @@ const Profile = () => {
       setModal(true);
     }
   }, [userGlobalState]);
+
+  const getIdFromAsyncStorage = async () => {
+    const storedId = await AsyncStorage.getItem('userID');
+    console.log(storedId);
+    
+    if (Array.isArray(usersGlobalState)) { // Verificar si usersGlobalState es un array
+      const foundUser = usersGlobalState.find(user => user._id === storedId); 
+      handleUserGlobalState(foundUser);
+    }
+  };
+  
+
+  useEffect (() => {
+    getIdFromAsyncStorage();
+
+  },[usersGlobalState])
+
 
   const restStats = () => {
     socket.emit('resetUserAtributes', { userId, initialAtributes });

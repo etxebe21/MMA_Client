@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, ActivityIndicator,ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
+import { Modal, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -74,38 +74,38 @@ const Mortimer = () => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
           <HeaderText>ACÓLITOS</HeaderText>
-          {usersGlobalState.map((user) => (
-            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-              <UserContainer>
-                <AvatarContainer>
-                  <Avatar source={{ uri: user.picture }} />
-                  <StatusIndicator isInsideTower={user.insideTower} />
-                </AvatarContainer>
-                <NameContainer>
+          {usersGlobalState != null && usersGlobalState.map((user) => (
+              <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+                <UserContainer>
+                  <AvatarContainer>
+                    <Avatar source={{ uri: user.picture }} />
+                    <StatusIndicator isInsideTower={user.insideTower} />
+                  </AvatarContainer>
+                  <NameContainer>
 
-                  <NameText>{user.username}</NameText>
-                </NameContainer>
-                <CenteredIconContainer>
-                  {user.resistencia < 20 && (
+                    <NameText>{user.username}</NameText>
+                  </NameContainer>
+                  <CenteredIconContainer>
+                    {user.resistencia < 20 && (
 
-                    <Image source={require('../assets/iconTired.png')} />
-                  )}
-                </CenteredIconContainer>
-                <Extra>
-                  <ImageTired source={require('../assets/cansado.png')} />
-                  <CircularProgressWrapper>
-                    <AnimatedCircularProgress
-                      size={80}
-                      width={8}
-                      fill={user.resistencia}
-                      tintColor={getColorForResistencia(user.resistencia)}
-                      backgroundColor="black"
-                    />
-                  </CircularProgressWrapper>
-                </Extra>
-              </UserContainer>
-            </TouchableOpacity>
-          ))}
+                      <Image source={require('../assets/iconTired.png')} />
+                    )}
+                  </CenteredIconContainer>
+                  <Extra>
+                    <ImageTired source={require('../assets/cansado.png')} />
+                    <CircularProgressWrapper>
+                      <AnimatedCircularProgress
+                        size={80}
+                        width={8}
+                        fill={user.resistencia}
+                        tintColor={getColorForResistencia(user.resistencia)}
+                        backgroundColor="black"
+                      />
+                    </CircularProgressWrapper>
+                  </Extra>
+                </UserContainer>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
       </ImageBackground>
 
@@ -156,13 +156,13 @@ const Mortimer = () => {
                 {selectedUser.resistencia < 20 && (
 
                   <Rest onPress={() => updateRest(selectedUser)}>
-                  {loading && (
-                    
-                    <ActivityIndicator size="small" color="#3498db" animating={true} />
-                  )}
-                  <RestText>REST</RestText>
-                </Rest>
-                  )}
+                    {loading && (
+
+                      <ActivityIndicator size="small" color="#3498db" animating={true} />
+                    )}
+                    <RestText>REST</RestText>
+                  </Rest>
+                )}
               </Statsbackground>
             </ImageBackground>
 
