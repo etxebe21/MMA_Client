@@ -60,8 +60,17 @@ const GeolocationUser = () => {
     //emitPositionServer();
   }, []);
 
-   //EFFECT conprobar estado busqueda
-   useEffect(() => {
+  // Emitir la posición cada 10 segundos (10000 milisegundos)
+useEffect(() => {
+  const interval = setInterval(() => {
+    emitPositionServer();
+  }, 10000);
+
+  // Limpieza del intervalo cuando se desmonta el componente
+  return () => clearInterval(interval);
+}, []);
+
+  useEffect(() => {
     checkState();
   }, [pendingTextGlobalState]);
 
@@ -209,20 +218,21 @@ useEffect(() => {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
+            // Emitir la ubicación al servidor
+        emitPositionServer(position.coords.latitude, position.coords.longitude);
           });
       } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios') {
+        if (granted === PermissionsAndroid.RESULTS.GRANTED || Platform.OS === 'ios' || latitude === null || longitude === null) {
           Geolocation.watchPosition(
             position => {
               setUserLocation({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               });
-              console.log(position.coords.latitude);
             },
             (error) => {
               console.error('Error al obtener la ubicación:', error);
@@ -301,10 +311,10 @@ useEffect(() => {
     setMapVisible(true);
   };
 
-  const emitPositionServer = () => {
+  const emitPositionServer = (latitude, longitude) => {
     const positions = {
-      latitude: 43.309534,
-      longitude: -2.00203,
+      latitude: latitude,
+      longitude: longitude,
       
     }
     socket.emit('sendUserLocation', { 
