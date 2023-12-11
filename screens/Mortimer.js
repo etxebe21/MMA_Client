@@ -14,14 +14,14 @@ const Mortimer = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { usersGlobalState, setUsersGlobalState } = useContext(Context);
-
+  
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-
+  
   useEffect(() => {
     console.log(usersGlobalState);
   }, [usersGlobalState]);
@@ -30,7 +30,7 @@ const Mortimer = () => {
     setSelectedUser(user);
     setModalVisible(true);
   };
-
+  
   const getColorForResistencia = (resistence) => {
     if (resistence >= 70) {
       return 'green';
@@ -40,99 +40,100 @@ const Mortimer = () => {
       return 'red';
     }
   };
-
+  
   const updateRest = (data) => {
-
+    
     setLoading(true);
-
+    
     const tiredData = {
       id: data._id,
       tired: data.resistencia + 20,
     };
-
-
+    
+    
     // if (tiredData.tired > 100) {
-    //   tiredData.tired = 100;
-    // }
-    data.resistencia = tiredData.tired;
-    setSelectedUser(data);
-    console.log(tiredData);
-    socket.emit('RestStat', tiredData);
-    ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
-    setLoading(false);
-  };
-
-  if (usersGlobalState === null)
+      //   tiredData.tired = 100;
+      // }
+      data.resistencia = tiredData.tired;
+      setSelectedUser(data);
+      console.log(tiredData);
+      socket.emit('RestStat', tiredData);
+      ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
+      setLoading(false);
+    };
+    
+    if (usersGlobalState === null)
     return null;
-
+  
   return (
-
+  
     <View style={styles.container}>
       <ImageBackground
         source={require('../assets/wallpaper_profile.png')}
         style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
-      >
+        >
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
           <HeaderText>ACÓLITOS</HeaderText>
-          {usersGlobalState.map((user) => (
-            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+
+            {usersGlobalState.map((user) => (
+              <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
               <UserContainer>
-                <AvatarContainer>
-                  <Avatar source={{ uri: user.picture }} />
-                  <StatusIndicator isInsideTower={user.insideTower} />
-                </AvatarContainer>
-                <NameContainer>
-
-                  <NameText>{user.username}</NameText>
-                </NameContainer>
-                <CenteredIconContainer>
-                  {user.resistencia < 20 && (
-
-                    <Image source={require('../assets/iconTired.png')} />
-                  )}
+              <AvatarContainer>
+              <Avatar source={{ uri: user.picture }} />
+              <StatusIndicator isInsideTower={user.insideTower} />
+              </AvatarContainer>
+              <NameContainer>
+              
+              <NameText>{user.username}</NameText>
+              </NameContainer>
+              <CenteredIconContainer>
+              {user.resistencia < 20 && (
+                
+                <Image source={require('../assets/iconTired.png')} />
+                )}
                 </CenteredIconContainer>
                 <Extra>
-                  <ImageTired source={require('../assets/cansado.png')} />
-                  <CircularProgressWrapper>
-                    <AnimatedCircularProgress
-                      size={80}
-                      width={8}
-                      fill={user.resistencia}
-                      tintColor={getColorForResistencia(user.resistencia)}
-                      backgroundColor="black"
-                    />
-                  </CircularProgressWrapper>
+                <ImageTired source={require('../assets/cansado.png')} />
+                <CircularProgressWrapper>
+                <AnimatedCircularProgress
+                size={80}
+                width={8}
+                fill={user.resistencia}
+                tintColor={getColorForResistencia(user.resistencia)}
+                backgroundColor="black"
+                />
+                </CircularProgressWrapper>
                 </Extra>
-              </UserContainer>
-            </TouchableOpacity>
-          ))}
+                </UserContainer>
+                </TouchableOpacity>
+                ))}
         </ScrollView>
       </ImageBackground>
 
 
       {selectedUser && (
         <Modal visible={modalVisible}>
-          <ModalContent>
-            <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
-
-              <AvatarBox>
-                <CloseButton onPress={() => setModalVisible(false)}>
-                  <Icon name="times" size={50} color="#4c2882" />
-                </CloseButton>
-                <DetailAvatarContainer>
-                  <DetailAvatar source={{ uri: selectedUser.picture }} />
+        <ModalContent>
+        <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
+        
+        <AvatarBox>
+        <CloseButton onPress={() => setModalVisible(false)}>
+        <Icon name="times" size={50} color="#4c2882" />
+        </CloseButton>
+        <DetailAvatarContainer>
+        <DetailAvatar source={{ uri: selectedUser.picture }} />
                   <MarcoFoto source={require("../assets/marcoEpico.png")} />
                 </DetailAvatarContainer>
                 <UserLevelMarco>
-                  <UserTextLevel> {selectedUser.level}</UserTextLevel>
+                <UserTextLevel> {selectedUser.level}</UserTextLevel>
                 </UserLevelMarco>
                 <UserText>{selectedUser.username}</UserText>
-              </AvatarBox>
-
-              <Statsbackground>
+                </AvatarBox>
+                
+                <Statsbackground>
                 <ProgressBarRow>
-                  <ProgressBarColumn>
-                    <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
+                <ProgressBarColumn>
+                <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
                     <StyledProgressBar progress={selectedUser.level / 20} />
                     <ProgressBarTitle>HITPOINTS:   {selectedUser.hitPoints}</ProgressBarTitle>
                     <StyledProgressBar progress={selectedUser.hitPoints / 100} />
@@ -140,9 +141,9 @@ const Mortimer = () => {
                     <StyledProgressBar progress={selectedUser.fuerza / 100} />
                     <ProgressBarTitle>GOLD:  {selectedUser.dinero}</ProgressBarTitle>
                     <StyledProgressBar progress={selectedUser.dinero / 100} />
-                  </ProgressBarColumn>
-
-                  <ProgressBarColumn>
+                    </ProgressBarColumn>
+                    
+                    <ProgressBarColumn>
                     <ProgressBarTitle>TIRED: {selectedUser.cansancio} </ProgressBarTitle>
                     <StyledProgressBar progress={selectedUser.cansancio / 100} />
                     <ProgressBarTitle>RESISTENCE: {selectedUser.resistencia} </ProgressBarTitle>
@@ -154,21 +155,21 @@ const Mortimer = () => {
                   </ProgressBarColumn>
                 </ProgressBarRow>
                 {selectedUser.resistencia < 20 && (
-
+                  
                   <Rest onPress={() => updateRest(selectedUser)}>
                   {loading && (
                     
                     <ActivityIndicator size="small" color="#3498db" animating={true} />
-                  )}
-                  <RestText>REST</RestText>
-                </Rest>
-                  )}
-              </Statsbackground>
-            </ImageBackground>
-
-          </ModalContent>
-        </Modal>
-      )}
+                    )}
+                    <RestText>REST</RestText>
+                    </Rest>
+                    )}
+                    </Statsbackground>
+                    </ImageBackground>
+                    
+                    </ModalContent>
+                    </Modal>
+                    )}
     </View>
   );
 };

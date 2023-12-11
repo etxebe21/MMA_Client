@@ -9,6 +9,9 @@ import { Modal } from "react-native";
 const Profile = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
+  const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+
+
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
 
@@ -30,6 +33,22 @@ const Profile = () => {
       setModal(true);
     }
   }, [userGlobalState]);
+
+  const getIdFromAsyncStorage = async () => {
+    const storedId = await AsyncStorage.getItem('userID');
+    console.log(storedId);
+
+    const foundUser = usersGlobalState.find(user => user._id === storedId);
+
+    handleUserGlobalState(foundUser);
+
+  };
+
+  useEffect (() => {
+    getIdFromAsyncStorage();
+
+  },[userGlobalState])
+
 
   const restStats = () => {
     socket.emit('resetUserAtributes', { userId, initialAtributes });
