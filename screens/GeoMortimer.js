@@ -253,7 +253,7 @@ const GeolocationUser = () => {
         </Marker>
 
         <Marker
-          coordinate={{ latitude: 43.309801, longitude: -2.003381,}}
+          coordinate={{ latitude: usersGlobalState[1].latitude, longitude: usersGlobalState[1].longitude,}}
         >
           <Image
             source={{ uri: usersGlobalState[1].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
@@ -261,7 +261,7 @@ const GeolocationUser = () => {
         </Marker>
 
         <Marker
-          coordinate={{ latitude: 43.309134, longitude: -2.00303,}}
+          coordinate={{ latitude: usersGlobalState[2].latitude, longitude: usersGlobalState[2].longitude,}}
         >
           <Image
             source={{ uri: usersGlobalState[2].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
