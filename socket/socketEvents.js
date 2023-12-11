@@ -7,7 +7,7 @@ function SocketListener(props) {
 	const { handleGlobalState } = useContext(Context);
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
-	const { userGlobalState, setUserGlobalState, handleUserGlobalState } = useContext(Context);
+	const { userGlobalState, setUserGlobalState } = useContext(Context);
 	const { usersGlobalState, setUsersGlobalState } = useContext(Context);
 
 	useEffect(() => {
@@ -37,7 +37,13 @@ function SocketListener(props) {
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
 	}
-
+	const handleUserLocation = (data) => {
+		setUserLocation(data);
+	}
+	const handleUserGlobalState = (data) => {
+		setUserGlobalState(data)
+	}
+	
 	// Socket de escucha que recibe los datos de cambio de vida del cron
 	const handleStats = (users) => {
 		console.log("Datos recibidos del servidor del usuario: ")
@@ -72,6 +78,8 @@ function SocketListener(props) {
 		returnStat: handleStats,
 		resetArtifact: handleReset,
 		UpdatedTired: handleTired,
+		receiveUserLocation: handleUserLocation,
+		receiveUserAtributes: handleUserGlobalState,
 	}
 
 	return null;
