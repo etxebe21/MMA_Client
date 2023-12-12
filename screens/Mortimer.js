@@ -62,7 +62,7 @@ const Mortimer = () => {
     setLoading(false);
   };
 
-  if (usersGlobalState === null)
+  if (usersGlobalState === null || usersGlobalState === undefined)
     return null;
 
   return (
@@ -74,7 +74,7 @@ const Mortimer = () => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
           <HeaderText>ACÓLITOS</HeaderText>
-          {usersGlobalState != null && usersGlobalState.map((user) => (
+          {usersGlobalState.map((user) => (
               <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                 <UserContainer>
                   <AvatarContainer>
