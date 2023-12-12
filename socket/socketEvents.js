@@ -49,10 +49,6 @@ function SocketListener(props) {
 			console.log("Entra en seteo de usuario")
 			setUsersGlobalState(users);
 
-			if (users._id === userGlobalState._id) {
-				console.log("Entra en seteo de usuario especifico")
-				setUserGlobalState(users);
-			}
 		}
 
 	}
@@ -61,9 +57,10 @@ function SocketListener(props) {
 	const handleTired = (data) => {
 		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
 		setUsersGlobalState(acolitosData);
+	
 	};
 
-	const handleRestAcolite = (data) => { setUserGlobalState(data)};
+	const handleRestAcolite = (data) => { setUsersGlobalState(data)};
 
 
 	const handlers = {
