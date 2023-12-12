@@ -31,6 +31,7 @@ const Mortimer = () => {
         }
       });
     }
+    else return;
   }, [usersGlobalState]);
 
   const handleUserPress = (user) => {
