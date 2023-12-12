@@ -32,7 +32,7 @@ const Mortimer = () => {
       });
     }
     else return;
-  }, [usersGlobalState]);
+  }, [usersGlobalState,selectedUser]);
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
