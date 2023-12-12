@@ -60,7 +60,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-    //emitPositionServer();
+    emitPositionServer();
     console.log(showButton);
   }, []);
 
@@ -376,7 +376,7 @@ const requestLocationPermission = async () => {
           customMapStyle={MapStyle}
         >
          <Marker
-          coordinate={{ latitude: 43.30972753944833, longitude: -2.002748937230638,}}
+          coordinate={{ latitude: userGlobalState.latitude, longitude: userGlobalState.longitude,}}
         >
           <Image
             source={{ uri: userGlobalState.picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
