@@ -169,29 +169,17 @@ const GeolocationUser = () => {
         }}
         showsUserLocation={true}
       >
-       <Marker
-          coordinate={{ latitude: usersGlobalState[0].latitude, longitude: usersGlobalState[0].longitude,}}
-        >
-          <Image
-            source={{ uri: usersGlobalState[0].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        </Marker>
-
-        <Marker
-          coordinate={{ latitude: usersGlobalState[1].latitude, longitude: usersGlobalState[1].longitude,}}
-        >
-          <Image
-            source={{ uri: usersGlobalState[1].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        </Marker>
-
-        <Marker
-          coordinate={{ latitude: usersGlobalState[2].latitude, longitude: usersGlobalState[2].longitude,}}
-        >
-          <Image
-            source={{ uri: usersGlobalState[2].picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
-          />
-        </Marker>
+       {usersGlobalState != null && usersGlobalState.map((user, index) => (
+  <Marker
+    key={index}
+    coordinate={{ latitude: user.latitude, longitude: user.longitude }}
+  >
+    <Image
+      source={{ uri: user.picture }}
+      style={{ width: 40, height: 40, borderRadius: 20 }}
+    />
+  </Marker>
+))}
 
 
  {artifactsGlobalState != null && artifactsGlobalState &&
