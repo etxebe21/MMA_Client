@@ -23,7 +23,14 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-    console.log(usersGlobalState);
+    if (usersGlobalState != null)
+    {
+      usersGlobalState.forEach((element) => {
+        if (element._id === selectedUser._id) {
+          setSelectedUser(element);
+        }
+      });
+    }
   }, [usersGlobalState]);
 
   const handleUserPress = (user) => {

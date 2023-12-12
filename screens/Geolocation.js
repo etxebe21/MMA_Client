@@ -60,7 +60,7 @@ const GeolocationUser = () => {
     getSearchesFromDataBase();
     loadArtifacts();
     getID();
-    emitPositionServer();
+    //emitPositionServer();
     console.log(showButton);
   }, []);
 
