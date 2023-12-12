@@ -74,7 +74,7 @@ const GeolocationUser = () => {
   
     // Limpieza del intervalo cuando se desmonta el componente
     return () => clearInterval(interval);
-  }, []);
+  }, [userLocation]);
   
   useEffect(() => {
      checkState();
@@ -228,10 +228,8 @@ const requestLocationPermission = async () => {
               longitude: position.coords.longitude,
             });
             // Emitir la ubicación al servidor
-        emitPositionServer(position.coords.latitude, position.coords.longitude);
-        console.log(position.coords.latitude);
           });
-      } else {
+        } else {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
@@ -243,6 +241,8 @@ const requestLocationPermission = async () => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               });
+              emitPositionServer(position.coords.latitude, position.coords.longitude);
+              console.log(position.coords.latitude);
             },
             (error) => {
               console.error('Error al obtener la ubicación:', error);
@@ -375,13 +375,13 @@ const requestLocationPermission = async () => {
           showsUserLocation={true}
           customMapStyle={MapStyle}
         >
-         <Marker
+         {/* <Marker
           coordinate={{ latitude: userGlobalState.latitude, longitude: userGlobalState.longitude,}}
         >
           <Image
             source={{ uri: userGlobalState.picture }} style={{ width: 40, height: 40, borderRadius: 20 }}
           />
-        </Marker>
+        </Marker> */}
 
           {mapVisible && artifactsGlobalState != null && artifactsGlobalState &&
             artifactsGlobalState

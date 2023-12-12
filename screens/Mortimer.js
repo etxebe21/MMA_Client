@@ -23,7 +23,7 @@ const Mortimer = () => {
   const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-    if (usersGlobalState != null)
+    if (usersGlobalState != null && selectedUser != null)
     {
       usersGlobalState.forEach((element) => {
         if (element._id === selectedUser._id) {

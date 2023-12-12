@@ -167,7 +167,6 @@ const GeolocationUser = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        showsUserLocation={true}
       >
        {usersGlobalState != null && usersGlobalState.map((user, index) => (
   <Marker
