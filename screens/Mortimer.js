@@ -8,7 +8,7 @@ import { StyledProgressBar } from "../components/ProgressBar";
 import { Context } from "../context/Context";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { socket } from '../socket/socketConnect';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Mortimer = () => {
 
@@ -21,6 +21,7 @@ const Mortimer = () => {
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
+  const storedId = AsyncStorage.getItem('userID');
 
   useEffect(() => {
     if (usersGlobalState != null && selectedUser != null)
@@ -65,9 +66,10 @@ const Mortimer = () => {
     data.resistencia = tiredData.tired;
     setSelectedUser(data);
     console.log(tiredData);
-    socket.emit('RestStat', tiredData);
+    socket.emit('RestStat', tiredData,storedId);
     ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
     setLoading(false);
+
   };
 
   if (usersGlobalState === null || usersGlobalState === undefined)
@@ -161,7 +163,7 @@ const Mortimer = () => {
                     <StyledProgressBar progress={selectedUser.inteligencia / 100} />
                   </ProgressBarColumn>
                 </ProgressBarRow>
-                {selectedUser.resistencia < 20 && (
+                {selectedUser.resistencia <= 20 && (
 
                   <Rest onPress={() => updateRest(selectedUser)}>
                     {loading && (

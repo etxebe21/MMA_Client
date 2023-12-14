@@ -42,7 +42,7 @@ const Profile = () => {
 
   useEffect(() => {
     console.log("RESISTENCIA", userGlobalState.resistencia)
-    if (userGlobalState.resistencia > 20) {
+    if (userGlobalState.resistencia >= 20) {
       setModal(false);
     } else  {
       setModal(true);

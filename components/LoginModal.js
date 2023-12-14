@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import axios from "axios";
 import { Context } from "../context/Context";
+import { socket } from '../socket/socketConnect';
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     
@@ -87,7 +88,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             
             await AsyncStorage.setItem('userID', id)
             .then(() => {
-            // console.log('Crole guardado en AsyncStorage:', id);
+            socket.emit('setUsername', id);
             })
                 handleSuccessfulLogin();
            
@@ -104,6 +105,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
         setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
         getArtifactsFromDataBase()
+      
       };
 
       const getArtifactsFromDataBase = async () => {

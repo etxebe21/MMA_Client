@@ -41,27 +41,28 @@ function SocketListener(props) {
 		setUserGlobalState(data)
 	}
 
-	// // Socket de escucha que recibe los datos de cambio de vida del cron
-	// const handleStats = (users) => {
-	// 	console.log("Datos recibidos del servidor del usuario: ")
-	// 	console.log(users);
-	// 	if (users !== null || users !== undefined) {
-	// 		console.log("Entra en seteo de usuario")
-	// 		setUsersGlobalState(users);
+	// Socket de escucha que recibe los datos de cambio de vida del cron
+	const handleStats = (users) => {
+		console.log("Datos recibidos del servidor del usuario: ")
+		console.log(users);
+		if (users !== null || users !== undefined) {
+			console.log("Entra en seteo de usuario")
+			handleUsersGlobalState(users);
 
-	// 	}
+		}
 
-	// }
+	}
 	const handleReset = (data) => { setArtefactsGlobalState(data) };
 
 	const handleTired = (data) => {
 		// const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
 		// setUsersGlobalState(acolitosData);
-		handleUserGlobalState(data);
+		console.log("recibimos el dato");
+		handleUsersGlobalState(data);
 	
 	};
 
-	// const handleRestAcolite = (data) => { setUsersGlobalState(data)};
+	const handleRestAcolite = (data) => { handleUsersGlobalState(data)};
 
 
 	const handlers = {
@@ -72,11 +73,11 @@ function SocketListener(props) {
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
 		responseVerify: handleVerify,
-		// returnStat: handleStats,
+		returnStat: handleStats,
 		resetArtifact: handleReset,
 		UpdatedTired: handleTired,
 		receiveUserAtributes: handleUserGlobalState,
-		// restAcolite: handleRestAcolite,
+		restAcolite: handleRestAcolite,
 	}
 
 	return null;
