@@ -8,7 +8,7 @@ function SocketListener(props) {
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
 	const { userGlobalState, setUserGlobalState } = useContext(Context);
-	const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+	const { usersGlobalState, handleUsersGlobalState} = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -41,26 +41,27 @@ function SocketListener(props) {
 		setUserGlobalState(data)
 	}
 
-	// Socket de escucha que recibe los datos de cambio de vida del cron
-	const handleStats = (users) => {
-		console.log("Datos recibidos del servidor del usuario: ")
-		console.log(users);
-		if (users !== null || users !== undefined) {
-			console.log("Entra en seteo de usuario")
-			setUsersGlobalState(users);
+	// // Socket de escucha que recibe los datos de cambio de vida del cron
+	// const handleStats = (users) => {
+	// 	console.log("Datos recibidos del servidor del usuario: ")
+	// 	console.log(users);
+	// 	if (users !== null || users !== undefined) {
+	// 		console.log("Entra en seteo de usuario")
+	// 		setUsersGlobalState(users);
 
-		}
+	// 	}
 
-	}
+	// }
 	const handleReset = (data) => { setArtefactsGlobalState(data) };
 
 	const handleTired = (data) => {
-		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
-		setUsersGlobalState(acolitosData);
+		// const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
+		// setUsersGlobalState(acolitosData);
+		handleUserGlobalState(data);
 	
 	};
 
-	const handleRestAcolite = (data) => { setUsersGlobalState(data)};
+	// const handleRestAcolite = (data) => { setUsersGlobalState(data)};
 
 
 	const handlers = {
@@ -71,11 +72,11 @@ function SocketListener(props) {
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
 		responseVerify: handleVerify,
-		returnStat: handleStats,
+		// returnStat: handleStats,
 		resetArtifact: handleReset,
 		UpdatedTired: handleTired,
 		receiveUserAtributes: handleUserGlobalState,
-		restAcolite: handleRestAcolite,
+		// restAcolite: handleRestAcolite,
 	}
 
 	return null;
