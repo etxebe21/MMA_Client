@@ -41,7 +41,7 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    console.log("RESISTENCIA", userGlobalState.resistencia)
+    // console.log("RESISTENCIA", userGlobalState.resistencia)
     if (userGlobalState.resistencia >= 20) {
       setModal(false);
     } else  {
@@ -51,7 +51,7 @@ const Profile = () => {
 
   const getIdFromAsyncStorage = async () => {
     const storedId = await AsyncStorage.getItem('userID');
-    console.log(storedId);
+    // console.log(storedId);
     
     if (Array.isArray(usersGlobalState)) { // Verificar si usersGlobalState es un array
       const foundUser = usersGlobalState.find(user => user._id === storedId); 
@@ -69,7 +69,7 @@ const Profile = () => {
   const restAcolite = () => {
     openRestModal();
     const userMaxStat = userGlobalState.maxStat;
-    console.log(userMaxStat);
+    // console.log(userMaxStat);
     socket.emit('resetUserAtributes',userGlobalState._id,userMaxStat);
     setTimeout(() => {
       closeRestModal();
@@ -83,7 +83,7 @@ const Profile = () => {
     openRestModal();
   
     const handleUserAttributes = (responseData) => {
-      console.log('usuario actual recibido desde el servidor:', responseData);
+      // console.log('usuario actual recibido desde el servidor:', responseData);
       handleUserGlobalState(responseData);
       ToastAndroid.showWithGravity('Atributos restablecidos', ToastAndroid.SHORT, ToastAndroid.CENTER);
     };

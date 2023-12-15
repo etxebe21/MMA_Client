@@ -39,7 +39,7 @@ const GeolocationUser = () => {
   //EFFECT INICIAL
   useEffect(() => {
     getSearchesFromDataBase();
-    console.log(usersGlobalState[0].latitude, usersGlobalState[0].longitude, usersGlobalState[0].picture );
+    // console.log(usersGlobalState[0].latitude, usersGlobalState[0].longitude, usersGlobalState[0].picture );
     loadArtifacts();
     hasFoundArtifacts();
   }, []);
@@ -55,7 +55,7 @@ const GeolocationUser = () => {
         const newSocket = io('https://mmaproject-app.fly.dev');
         // Escuchar la respuesta del servidor al evento 'responseEvent'
         newSocket.on('receiveUserLocation', (responseData) => {
-          console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
+          // console.log('POsicion usuarios actuales recibidos desde el servidor:', responseData);
 
         });
         const userId = await AsyncStorage.getItem('userID')

@@ -31,7 +31,7 @@ const Home = () => {
 
   const getRoleFromAsyncStorage = async () => {
     const storedRole = await AsyncStorage.getItem('userRole');
-    console.log(storedRole);
+    // console.log(storedRole);
     setRole(storedRole);
 
   };

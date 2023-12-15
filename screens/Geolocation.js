@@ -13,10 +13,10 @@ import Roseta from './Roseta';
 const GeolocationUser = () => {
   //GLOBALES
   // const { userGlobalState, handleUserGlobalState } = useContext(Context);
-   const { userGlobalState, setUserGlobalState } = useContext(Context);
-  const {usersGlobalState,   handleUsersGlobalState}  = useContext(Context);
+  const { userGlobalState, setUserGlobalState } = useContext(Context);
+  const { usersGlobalState,   handleUsersGlobalState}  = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
-  const {pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
+  const { pendingTextGlobalState, setPendingTextGlobalState} = useContext(Context);
 
   //LOCALES
   //const [artifactsGlobalStat, handleArtefactsGlobalState] = useState([]);
@@ -61,7 +61,6 @@ const GeolocationUser = () => {
     loadArtifacts();
     getID();
     //emitPositionServer();
-    console.log(showButton);
   }, []);
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const GeolocationUser = () => {
   useEffect(() => {
      checkState();
      getSearchesFromDataBase();
-     console.log(pendingTextGlobalState);
     }, [pendingTextGlobalState]);
     
     useEffect(() => {
@@ -242,7 +240,7 @@ const requestLocationPermission = async () => {
                 longitude: position.coords.longitude,
               });
               emitPositionServer(position.coords.latitude, position.coords.longitude);
-              console.log(position.coords.latitude);
+              // console.log(position.coords.latitude);
             },
             (error) => {
               console.error('Error al obtener la ubicación:', error);
@@ -335,7 +333,6 @@ const requestLocationPermission = async () => {
   };
 
   const emitPositionServer = (latitude, longitude) => {
-    console.log(latitude);
     const positions = {
       latitude,
       longitude
@@ -347,7 +344,7 @@ const requestLocationPermission = async () => {
      
       // Escuchar la respuesta del servidor al evento 'responseEvent'
       socket.on('receiveUserLocation', (responseData) => {
-        console.log('Posicion usuario actual recibida desde el servidor:', responseData);  
+        // console.log('Posicion usuario actual recibida desde el servidor:', responseData);  
     });
   };
 

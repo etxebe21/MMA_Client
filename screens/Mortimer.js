@@ -65,7 +65,7 @@ const Mortimer = () => {
     // }
     data.resistencia = tiredData.tired;
     setSelectedUser(data);
-    console.log(tiredData);
+    // console.log(tiredData);
     socket.emit('RestStat', tiredData,storedId);
     ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
     setLoading(false);
