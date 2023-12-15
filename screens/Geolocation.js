@@ -539,7 +539,7 @@ const BackgroundImage = styled(ImageBackground)`
   resizeMode: cover;
   justify-content: center;
   opacity:0.99
-  `
+`
   
 const Buttons = styled.TouchableOpacity`
   background: #A3A2A2;
@@ -551,7 +551,7 @@ const Buttons = styled.TouchableOpacity`
   border: #0B0B0B;
   bottom:25px;
   background-color:#ffffff
-  `
+`
 
 const ButtonsText = styled.Text`
   fontSize: 28px;
@@ -559,22 +559,24 @@ const ButtonsText = styled.Text`
   color: #4c2882; 
   align-self: center;
   top:17px;
-  `
+`
 
 const SendButton = styled.TouchableOpacity`
-background: #A3A2A2;
-opacity: 0.95;
-width: 180px;
-height: 65px;
-align-self: center;
-border-radius: 30px;
-border: #0B0B0B;
-bottom:25px;
-background-color:#ffffff
+  background: #A3A2A2;
+  opacity: 0.95;
+  width: 180px;
+  height: 65px;
+  align-self: center;
+  border-radius: 30px;
+  border: #0B0B0B;
+  bottom:25px;
+  background-color:#ffffff
 `
+
 const Container = styled.View`
   flex: 1;
-  `
+`
+
 const Title = styled.Text`
 font-size: 40px; 
 align-self:center;
@@ -583,23 +585,25 @@ font-family: 'Tealand';
 bottom:20px;
 text-shadow: 2px 2px 7px black;
 `
+
 const PendingText = styled.Text`
   fontSize: 65px;
   font-family: 'Creepster';
   color: #49CFDF; 
   align-self: center;
   top: -30px;
-  `
+`
+
 const UpdateButton = styled.TouchableOpacity`
-background: #A3A2A2;
-opacity: 0.95;
-width: 180px;
-height: 65px;
-align-self: center;
-border-radius: 30px;
-border: #0B0B0B;
-bottom:25px;
-background-color:#ffffff
+  background: #A3A2A2;
+  opacity: 0.95;
+  width: 180px;
+  height: 65px;
+  align-self: center;
+  border-radius: 30px;
+  border: #0B0B0B;
+  bottom:25px;
+  background-color:#ffffff
 `
 
 export default GeolocationUser;
