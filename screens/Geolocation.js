@@ -578,12 +578,12 @@ const Container = styled.View`
 `
 
 const Title = styled.Text`
-font-size: 40px; 
-align-self:center;
-color:#49CFDF;
-font-family: 'Tealand';
-bottom:20px;
-text-shadow: 2px 2px 7px black;
+  font-size: 40px; 
+  align-self: center;
+  color: #d139ca;
+  font-family: 'Tealand';
+  bottom: 20px;
+  text-shadow: 3px 3px 8px black;
 `
 
 const PendingText = styled.Text`
