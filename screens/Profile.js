@@ -130,13 +130,13 @@ const Profile = () => {
             <Statsbackground>
               <ProgressBarRow>
                 <ProgressBarColumn>
-                  <ProgressBarTitle>LEVEL:   {userGlobalState.level}</ProgressBarTitle>
+                  <ProgressBarTitle>LEVEL: {userGlobalState.level}</ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.level / 20} />
-                  <ProgressBarTitle>HITPOINTS:   {userGlobalState.hitPoints}</ProgressBarTitle>
+                  <ProgressBarTitle>HITPOINTS: {userGlobalState.hitPoints}</ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.hitPoints / 100} />
                   <ProgressBarTitle>STRENGTH: {userGlobalState.fuerza}  </ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.fuerza / 100} />
-                  <ProgressBarTitle>GOLD:  {userGlobalState.dinero}</ProgressBarTitle>
+                  <ProgressBarTitle>GOLD: {userGlobalState.dinero}</ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.dinero / 100} />
                 </ProgressBarColumn>
 
@@ -145,7 +145,7 @@ const Profile = () => {
                   <StyledProgressBar progress={userGlobalState.cansancio / 100} />
                   <ProgressBarTitle>RESISTENCE: {userGlobalState.resistencia} </ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.resistencia / 100} />
-                  <ProgressBarTitle>AGILITY:  {userGlobalState.agilidad}</ProgressBarTitle>
+                  <ProgressBarTitle>AGILITY: {userGlobalState.agilidad}</ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.agilidad / 100} />
                   <ProgressBarTitle>INTELLIGENCE: {userGlobalState.inteligencia}</ProgressBarTitle>
                   <StyledProgressBar progress={userGlobalState.inteligencia / 100} />
@@ -288,10 +288,16 @@ export const Switch = styled.Switch.attrs(({ value }) => ({
 const ProgressBarRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
+  padding: 0 10px
+  justify-content: space-around;
+  display: flex;
 `;
 
 const ProgressBarColumn = styled.View`
   align-items: center;
+  justify-content: center;
+  display: flex;
   top:25px;
 `;
 
@@ -301,6 +307,7 @@ const ProgressBarTitle = styled.Text`
   font-weight: bold;
   margin-bottom: 10px;
   right:15px;
+  font-family: 'Tealand';
 `;
 
 const RestButton = styled.TouchableOpacity`
