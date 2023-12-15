@@ -538,7 +538,7 @@ const BackgroundImage = styled(ImageBackground)`
   flex: 1;
   resizeMode: cover;
   justify-content: center;
-  opacity:0.8
+  opacity:0.99
   `
   
 const Buttons = styled.TouchableOpacity`
