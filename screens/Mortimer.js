@@ -245,7 +245,7 @@ const MarcoFoto = styled.Image`
 const NameText = styled.Text`
   margin-left: 5px;
   color: #4c2882;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: bold;
   letter-spacing: -0.3px;
   font-family: 'Tealand';
@@ -348,11 +348,10 @@ const ImageTired = styled.Image`
 `
 
 const NameContainer = styled.View`
-  justify-content: flex-start;
+  justify-content: center;
   align-items: start;
   display: flex; 
   margin-left: -10%;
-  margin-top: -10%;
   width: 45%;
 `
 
