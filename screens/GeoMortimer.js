@@ -9,6 +9,7 @@ import { Context } from '../context/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import io, { Socket } from 'socket.io-client';
 import { socket } from '../socket/socketConnect';
+import MapStyle from '../components/MapStyle.json'
 
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -167,6 +168,7 @@ const GeolocationUser = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        customMapStyle={MapStyle}
       >
        {usersGlobalState != null && usersGlobalState.map((user, index) => (
   <Marker
