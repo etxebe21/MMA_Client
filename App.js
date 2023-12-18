@@ -10,7 +10,6 @@ import Profile from './screens/Profile';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
 import Qr from './screens/Qr';
-import ProfileMortimer from './screens/ProfileMortimer';
 import Villano from './screens/Villano';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
@@ -142,7 +141,6 @@ const App = () => {
         break;
       case 'Profile': iconName = 'person';
       break;
-      case 'ProfileMortimer':
       case 'ProfileVillano':
         iconName = 'person';
         break;
@@ -186,7 +184,6 @@ const App = () => {
           <>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Mortimer" component={Mortimer} />
-            <Tab.Screen name="ProfileMortimer" component={ProfileMortimer} />
             <Tab.Screen name="GeolocationMortimer" component={GeolocationMortimer} />
           </>
         );
