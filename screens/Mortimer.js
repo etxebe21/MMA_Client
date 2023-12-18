@@ -191,29 +191,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const Margin = styled.View`
-right:10px;
-`
 
 const CenteredIconContainer = styled.View`
   position: absolute;
   left: ${Dimensions.get('window').width * 0.63}px;
   top: ${Dimensions.get('window').height * 0.1}px;
 
-`;
+`
 
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-const Text = styled.Text`
-  bottom: -5px;
-  color: #4c2882;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
-`
+
 const UserText = styled.Text`
   top: 0px;
   color: #4c2882;
@@ -236,10 +226,11 @@ const Image = styled.Image`
   width: 37px;
   height: 37px;
   border-radius: 30px;
-`;
+`
+
 const DetailAvatarContainer = styled.View`
   position: relative;
-`;
+`
 
 const MarcoFoto = styled.Image`
   position: absolute;
@@ -248,6 +239,7 @@ const MarcoFoto = styled.Image`
   width: ${Dimensions.get('window').width * 0.32}px;
   height: ${Dimensions.get('window').height * 0.2}px;
 `;
+
 const NameText = styled.Text`
   margin-left: 5px;
   color: #4c2882;
@@ -257,6 +249,7 @@ const NameText = styled.Text`
   align-self: center;
   top:-10%;  
 `
+
 const HeaderText = styled.Text`
   bottom: -15px;
   color: #4c2882;
@@ -265,6 +258,7 @@ const HeaderText = styled.Text`
   letter-spacing: -0.3px;
   align-self: center;  
 `
+
 const Avatar = styled.Image`
   width: 80px;
   height: 80px;
@@ -274,6 +268,7 @@ const Avatar = styled.Image`
   border-color: #4c2882;
   border-width: 3px;
 `
+
 const UserLevelMarco = styled.View`
   align-self: center;
   border:3px;
@@ -303,28 +298,35 @@ const AvatarContainer = styled.View`
   flex-direction: row;
   align-items: center;
 `
+
 const Extra = styled.View`
   flex: 1;
   justify-content: flex-end; 
   align-items: flex-end;
   margin-top:24px;
   margin-right:10px;
-`;
+`
+
 const CircularProgressWrapper = styled.View`
   flex: 1;
   justify-content: flex-end;
   align-items: flex-end;
   position: absolute;
 
-`;
+`
+
 const UserContainer = styled.View`
+  justify-content: center;
+  display: flex;
+  align-items: center;
   flex-direction: row;
   align-items: center;
   height: 120px;
   border: #4c2882;
   bottom: -10%;
-  background-color: #d9a9c9;
+  background-color: rgba(255, 255, 255, 0.5);
 `
+
 const StatusIndicator = styled.View`
   width: 14px;
   height: 14px;
@@ -334,17 +336,18 @@ const StatusIndicator = styled.View`
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
+
 const ImageTired = styled.Image`
   width: 72.2px;
   height: 70px;
   border-radius: 35px; 
   top:-4px;
-`;
+`
 
 const NameContainer = styled.View`
   flex: 1; /* El nombre ocupa el espacio restante */
   margin-right: 10px; /* Ajusta según tus preferencias */
-`;
+`
 
 
 const ModalContent = styled.View`
@@ -353,6 +356,7 @@ const ModalContent = styled.View`
   align-items: center;
   background-color: #d9a9c9;
 `
+
 const DetailAvatar = styled.Image`
   width: 90px;
   height: 90px;
@@ -362,15 +366,17 @@ const DetailAvatar = styled.Image`
   border-width: 3px;
   top: -25px;
 `
+
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 300px;
 `
+
 const ProgressBarRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
   width:100%;
-`;
+`
 
 const ProgressBarTitle = styled.Text`
   color: red;
@@ -378,11 +384,12 @@ const ProgressBarTitle = styled.Text`
   font-weight: bold;
   margin-bottom: 10px;
   right:15px;
-`;
+`
+
 const ProgressBarColumn = styled.View`
   align-items: center;
   top: 15px;
-`;
+`
 
 const Statsbackground = styled.ImageBackground`
   height: 64%;
@@ -392,6 +399,7 @@ const Statsbackground = styled.ImageBackground`
   border:3px; 
   border-color: black;
 `
+
 const Rest = styled.TouchableOpacity`
   flex-direction: row; 
   height: 60px;
@@ -404,14 +412,13 @@ const Rest = styled.TouchableOpacity`
   opacity: 0.7;
   left: 25%;
   top: 5%;
-  
-`;
+`
 
 const RestText = styled.Text`
   font-size: 20px;
   text-align: center;
   align-self: center;
-`;
+`
 
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
