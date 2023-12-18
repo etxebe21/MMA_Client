@@ -83,18 +83,20 @@ const Mortimer = () => {
         style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-          <HeaderText>ACÓLITOS</HeaderText>
+          <HeaderText>ACOLITOS</HeaderText>
           {usersGlobalState.map((user) => (
               <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                 <UserContainer>
+
                   <AvatarContainer>
                     <Avatar source={{ uri: user.picture }} />
                     <StatusIndicator isInsideTower={user.insideTower} />
                   </AvatarContainer>
-                  <NameContainer>
 
+                  <NameContainer>
                     <NameText>{user.username}</NameText>
                   </NameContainer>
+
                   <CenteredIconContainer>
                     {user.resistencia < 20 && (
 
@@ -246,24 +248,23 @@ const NameText = styled.Text`
   font-size: 19px;
   font-weight: bold;
   letter-spacing: -0.3px;
-  align-self: center;
-  top:-10%;  
+  font-family: 'Tealand';
 `
 
 const HeaderText = styled.Text`
-  bottom: -15px;
+  margin-top: 5%;
+  margin-bottom: 5%;
   color: #4c2882;
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
+  font-family: 'Tealand';
 `
 
 const Avatar = styled.Image`
-  width: 80px;
+  width: 43%;
   height: 80px;
-  margin-left: 10px;
-  padding:1px;
   border-radius: 40px;
   border-color: #4c2882;
   border-width: 3px;
@@ -295,8 +296,10 @@ const UserTextLevel = styled.Text`
 `
 
 const AvatarContainer = styled.View`
+  justify-content: center;
   flex-direction: row;
   align-items: center;
+  margin-left: -8%;
 `
 
 const Extra = styled.View`
@@ -320,10 +323,10 @@ const UserContainer = styled.View`
   display: flex;
   align-items: center;
   flex-direction: row;
-  align-items: center;
-  height: 120px;
+  border-radius: 60px;
+  margin-bottom: 5%;
+  height: 110px;
   border: #4c2882;
-  bottom: -10%;
   background-color: rgba(255, 255, 255, 0.5);
 `
 
@@ -345,8 +348,12 @@ const ImageTired = styled.Image`
 `
 
 const NameContainer = styled.View`
-  flex: 1; /* El nombre ocupa el espacio restante */
-  margin-right: 10px; /* Ajusta según tus preferencias */
+  justify-content: flex-start;
+  align-items: start;
+  display: flex; 
+  margin-left: -10%;
+  margin-top: -10%;
+  width: 45%;
 `
 
 
