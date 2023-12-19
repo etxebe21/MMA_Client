@@ -98,11 +98,9 @@ const Mortimer = () => {
                   </NameContainer>
 
                   <CenteredIconContainer>
-                    {user.resistencia < 20 && (
-
-                      <Image source={require('../assets/iconTired.png')} />
-                    )}
+                    {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
                   </CenteredIconContainer>
+
                   <Extra>
                     <ImageTired source={require('../assets/cansado.jpeg')} />
                     <CircularProgressWrapper>
@@ -115,6 +113,7 @@ const Mortimer = () => {
                       />
                     </CircularProgressWrapper>
                   </Extra>
+
                 </UserContainer>
               </TouchableOpacity>
             ))}
@@ -196,8 +195,8 @@ const styles = StyleSheet.create({
 
 const CenteredIconContainer = styled.View`
   position: absolute;
-  left: ${Dimensions.get('window').width * 0.63}px;
-  top: ${Dimensions.get('window').height * 0.1}px;
+  left: ${Dimensions.get('window').width * 0.65}px;
+  top: ${Dimensions.get('window').height * 0.07}px;
 
 `
 
@@ -225,8 +224,8 @@ const AvatarBox = styled.View`
 
 `
 const Image = styled.Image`
-  width: 37px;
-  height: 37px;
+  width: 40px;
+  height: 40px;
   border-radius: 30px;
 `
 
@@ -306,8 +305,8 @@ const Extra = styled.View`
   flex: 1;
   justify-content: flex-end; 
   align-items: flex-end;
-  margin-top:24px;
-  margin-right:10px;
+  margin-right: 5%;
+  margin-top: 1%;
 `
 
 const CircularProgressWrapper = styled.View`
@@ -331,11 +330,11 @@ const UserContainer = styled.View`
 `
 
 const StatusIndicator = styled.View`
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  margin-left: -15px;
-  bottom: -20px;
+  width: 17px;
+  height: 17px;
+  border-radius: 15px;
+  margin-left: -18px;
+  bottom: -26px;
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
