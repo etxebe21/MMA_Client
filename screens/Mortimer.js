@@ -104,11 +104,11 @@ const Mortimer = () => {
                     )}
                   </CenteredIconContainer>
                   <Extra>
-                    <ImageTired source={require('../assets/cansado.png')} />
+                    <ImageTired source={require('../assets/cansado2.jpeg')} />
                     <CircularProgressWrapper>
                       <AnimatedCircularProgress
-                        size={80}
-                        width={8}
+                        size={73}
+                        width={5}
                         fill={user.resistencia}
                         tintColor={getColorForResistencia(user.resistencia)}
                         backgroundColor="black"
