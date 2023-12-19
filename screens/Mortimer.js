@@ -104,7 +104,7 @@ const Mortimer = () => {
                     )}
                   </CenteredIconContainer>
                   <Extra>
-                    <ImageTired source={require('../assets/cansado2.jpeg')} />
+                    <ImageTired source={require('../assets/cansado.jpeg')} />
                     <CircularProgressWrapper>
                       <AnimatedCircularProgress
                         size={73}
