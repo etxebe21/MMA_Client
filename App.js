@@ -72,7 +72,13 @@ const App = () => {
   }
 
 
-
+  //Para cargar por primera vez todos los datos necesaios
+  useEffect(() => {
+    if (userGlobalState != null)
+    {
+      setRole(userGlobalState.role);
+    }
+  }, [userGlobalState]);
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -120,7 +126,6 @@ const App = () => {
   //Renderiza los iconos del navegador
   const renderTabIcon = (route, role, color) => {
     let iconName;
-
     switch (route.name) {
       case 'Home':
         iconName = 'home';
