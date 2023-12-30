@@ -127,17 +127,23 @@ const Mortimer = () => {
             <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
 
               <AvatarBox>
+
                 <CloseButton onPress={() => setModalVisible(false)}>
                   <Icon name="times" size={50} color="#4c2882" />
                 </CloseButton>
+
                 <DetailAvatarContainer>
                   <DetailAvatar source={{ uri: selectedUser.picture }} />
                   <MarcoFoto source={require("../assets/marcoEpico.png")} />
                 </DetailAvatarContainer>
+
                 <UserLevelMarco>
                   <UserTextLevel> {selectedUser.level}</UserTextLevel>
                 </UserLevelMarco>
-                <UserText>{selectedUser.username}</UserText>
+
+                <UserTextBackground>
+                  <UserText>{selectedUser.username}</UserText>
+                </UserTextBackground>
               </AvatarBox>
 
               <Statsbackground>
@@ -206,23 +212,31 @@ const View = styled.View`
 `
 
 const UserText = styled.Text`
-  top: 0px;
-  color: #4c2882;
+  top: 5%; 
+  color: rgba(137, 59, 255,1)
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
+  font-family: 'Tealand';
 `
+
+const UserTextBackground = styled.View`
+  background-color: rgba(255,255,255, 0.8);
+  border-radius: 10px;
+`
+
 const AvatarBox = styled.View`
-  border: 3px;
-  border-color: transparent;
-  height: 36%;
-  width:100%
   display: flex;
   justify-content: center;
   align-items: center;
-
+  margin: auto;
+  
+  border-color: transparent;
+  height: 30%;
+  width:100%;
 `
+
 const Image = styled.Image`
   width: 40px;
   height: 40px;
@@ -230,15 +244,16 @@ const Image = styled.Image`
 `
 
 const DetailAvatarContainer = styled.View`
-  position: relative;
+  justify-content: center;
+  align-items: center; 
+  display: flex;
 `
 
 const MarcoFoto = styled.Image`
   position: absolute;
-  top: -57%;
-  left: -4%;
-  width: ${Dimensions.get('window').width * 0.32}px;
-  height: ${Dimensions.get('window').height * 0.2}px;
+  top: -38%;
+  width: ${Dimensions.get('window').width * 0.36}px;
+  height: ${Dimensions.get('window').height * 0.14}px;
 `;
 
 const NameText = styled.Text`
@@ -356,20 +371,19 @@ const NameContainer = styled.View`
 
 
 const ModalContent = styled.View`
-  flex: 1;
-  justify-content: flex-start;
+  display: flex;
+  justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
 `
 
 const DetailAvatar = styled.Image`
-  width: 90px;
-  height: 90px;
-  padding:1px;
-  border-radius: 45px;
-  border-color: #4c2882;
-  border-width: 3px;
+  width: 105px;
+  height: 101px;
+  border-radius: 90px;
+  margin-left: 1%;
   top: -25px;
+
 `
 
 const CloseButton = styled.TouchableOpacity`
@@ -393,14 +407,15 @@ const ProgressBarTitle = styled.Text`
 
 const ProgressBarColumn = styled.View`
   align-items: center;
-  top: 15px;
 `
 
 const Statsbackground = styled.ImageBackground`
-  height: 64%;
-  width:100%;
+  height: 70%;
+  width: 100%;
   overflow: hidden;
-  justify-content: flex-start;
+  display:flex; 
+  justify-content: center;
+  align-items: center;
   border:3px; 
   border-color: black;
 `
