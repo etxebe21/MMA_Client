@@ -20,3 +20,25 @@ export const setSecureValue = async (key, value) => {
     await Keychain.resetInternetCredentials(key)
  }
  
+
+ const onJwtTestButtonPress = async () => {
+    const token = await Keychain.getSecureValue('JWT');
+    console.log(token)
+    axios.get('URL Servidor Heroku', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      console.log("RESPONSE TESTING JWT TOKEN FROM EXPRESS");
+      console.log(response.data.message);  
+    })
+    .catch(error => {
+      console.log("RESPONSE ERROR TOKEN VERIFICATION");
+      console.log(error);
+    })
+    .then(() => {
+      setIsLoading(false)
+    })
+  }
+ 
