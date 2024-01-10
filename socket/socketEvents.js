@@ -8,7 +8,7 @@ function SocketListener(props) {
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
 	const { userGlobalState, setUserGlobalState } = useContext(Context);
-	const { usersGlobalState, handleUsersGlobalState} = useContext(Context);
+	const { usersGlobalState, setUsersGlobalState} = useContext(Context);
 
 	useEffect(() => {
 		setEvent(currentSocketEvent);
@@ -47,22 +47,19 @@ function SocketListener(props) {
 		// console.log(users);
 		if (users !== null || users !== undefined) {
 			// console.log("Entra en seteo de usuario")
-			handleUsersGlobalState(users);
-
+			setUsersGlobalState(users);
 		}
 
 	}
 	const handleReset = (data) => { setArtefactsGlobalState(data) };
 
 	const handleTired = (data) => {
-		// const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
-		// setUsersGlobalState(acolitosData);
-		// console.log("recibimos el dato");
-		handleUsersGlobalState(data);
+		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
+		setUsersGlobalState(acolitosData);
 	
 	};
 
-	const handleRestAcolite = (data) => { handleUsersGlobalState(data)};
+	const handleRestAcolite = (data) => { setUsersGlobalState(data)};
 
 
 	const handlers = {
