@@ -5,6 +5,8 @@ import { ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import * as Keychain from 'react-native-keychain';
+import { KEYCHAIN_SECRET } from '@env';
 import axios from "axios";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
@@ -52,9 +54,12 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
             
             const response = await axios.post(url, {idToken:checkToken});
-            const jsonAcessToken = response.data.accessToken;
+            const jsonAccessToken = response.data.accessToken;
             console.log(response);
-            console.log(jsonAcessToken);
+            console.log(jsonAccessToken);
+             // Guardar el jsonAccessToken en el Keychain
+            await setSecureValue('accessToken', jsonAccessToken);
+
             const responseUsers = await axios.get(urlUsers);
             
             const {validToken, user }= response.data;
@@ -147,7 +152,17 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         console.error('Error al obtener la imagen del usuario:', error);
       }
     };
-    
+
+
+  // Función para guardar el valor en el Keychain
+  const setSecureValue = async (key, value) => {
+    try {
+      await Keychain.setInternetCredentials('appName:' + key, KEYCHAIN_SECRET, value);
+      console.log('Token guardado en Keychain');
+    } catch (error) {
+      console.error('Error al guardar el token en Keychain:', error);
+    }
+}
 
       return (
         <ImageBackground source={require("../assets/wallpaper_login.png")} style={styles.imageBackground}>
