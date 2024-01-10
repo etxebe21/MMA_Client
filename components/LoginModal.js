@@ -52,6 +52,9 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
             
             const response = await axios.post(url, {idToken:checkToken});
+            const jsonAcessToken = response.data.accessToken;
+            console.log(response);
+            console.log(jsonAcessToken);
             const responseUsers = await axios.get(urlUsers);
             
             const {validToken, user }= response.data;
