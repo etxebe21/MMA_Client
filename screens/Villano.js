@@ -27,22 +27,34 @@ const Villano = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
 
+  const acolitos = users.filter(user => user.role === "ACÓLITO");
 
-  // const acolitos = users.filter(user => user.role === "ACÓLITO");
+  const getUsersFromDatabase = async () => {
+    try {
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const url = 'https://mmaproject-app.fly.dev/api/users';
 
-  // const getUsersFromDatabase = async () => {
-  //   try {
-  //     const url = 'https://mmaproject-app.fly.dev/api/users';
-  //     const response = await axios.get(url);
-  //     const users= response.data.data;
-  //     setUsers(users);
-  //     setSelectedUser(selectedUser);
-  //     // console.log('Usuarios:', users);
-  //   } catch (error) {
-  //     console.error('Error al obtener usuarios:', error);
-  //   }
-  // };
-
+        // Realizar la solicitud al servidor con el token en el encabezado de autorización
+        const response = await axios.get(url, {
+          headers: {'authorization': `Bearer ${token}`}
+        });
+  
+        const users = response.data.data;
+        setUsers(users);
+        setSelectedUser(selectedUser); 
+        console.log('Usuarios Recibidos:', users);
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
+    } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+    } 
+  };
+  
   useEffect(() => {
     // getUsersFromDatabase();
   }, [selectedUser]); 
