@@ -158,21 +158,29 @@ const GeolocationUser = () => {
     socket.emit('verifyArtifact', search[0]._id, finishedSearch);
   };
 
-
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
-      const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
-      const userPicture = user.data.data.picture;
-      // console.log(userPicture);
-      return userPicture; // Devolvemos la URL de la imagen del usuario
-
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`, {
+          headers: {'authorization': `Bearer ${token}` }
+        });
+  
+        const userPicture = user.data.data.picture;
+        console.log('Recibimos imagen de usuario');
+        return userPicture; // Devolvemos la URL de la imagen del usuario
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
     } catch (error) {
       console.error('Error al obtener la imagen del usuario:', error);
-    }
+    } 
   };
-
-
+  
   return (
     <Container>
       <MapView
