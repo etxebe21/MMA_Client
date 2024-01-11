@@ -121,7 +121,6 @@ const GeolocationUser = () => {
     socket.emit('verifyArtifact', search[0]._id, finishedSearch);
     setVerify("");
     // console.log(pendingTextGlobalState);
-
   };
 
   const getSearchesFromDataBase = async () => {
@@ -144,7 +143,7 @@ const GeolocationUser = () => {
         const searches = response.data.data;
         setSearches(searches);
         setVerify(searches[0].state);
-        console.log('Búsquedas Recibidas:');
+        console.log('Búsquedas Recibidas');
       } else {
         console.log('No se encontró un token en el Keychain.');
       }

@@ -3,8 +3,7 @@ import styled from "styled-components/native";
 import { useEffect } from "react";
 import axios from 'axios';
 import { FlatList } from "react-native";
-
-
+import * as Keychain from 'react-native-keychain';
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
@@ -12,24 +11,36 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [ingredients, setIngredients] = useState([]);
   const [selectedPotion, setSelectedPotion] = useState(null);
 
-
   useEffect(() => {
     getIngredientsFromDatabase();
   }, []);
+  
   const getIngredientsFromDatabase = async () => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/ingredients';
-      const response = await axios.get(url);
-      const ingredients = response.data.data;
-      setIngredients(ingredients);
- 
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const url = 'https://mmaproject-app.fly.dev/api/ingredients';
+  
+        // Realizar la solicitud al servidor con el token en el encabezado de autorización
+        const response = await axios.get(url, {
+          headers: {
+            'authorization': `Bearer ${token}`
+          }
+        });
+        const ingredients = response.data.data;
+        setIngredients(ingredients);
+        console.log('Ingredientes Recibidos');
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
     } catch (error) {
       console.error('Error al obtener ingredientes:', error);
     }
   };
-
-
-
+  
   //SELECCIONA LOS INGREDIENTES HASTA UN MAX DE 2
   const selectIngredient = (ingredient) => {
     if (selectedIngredients.length < 2) {
@@ -57,15 +68,12 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       });
 
       const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
-  
 
       if (cantidadCleanseParchment === 2) {
         setIsPotionCreated(true);
       }
     }
   };
-
-
 
 
   return (
@@ -110,7 +118,6 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
         </>
       )}
 
-
       {createdPotion && (
         <PotionView>
           <TextTitle style={{ fontSize: 24, fontWeight: "bold", marginTop: 15 }}>CREATED POTION:</TextTitle>
@@ -123,7 +130,6 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       )}
       <Spacer></Spacer>
     </Container>
-
   );
 };
 
@@ -132,11 +138,9 @@ const Container = styled.View`
   padding: 0px;
 `;
 
-
 const IngredientsContainer = styled.View`
   flexDirection: row;
   marginTop: 30px;
-  
 `;
 
 const PotionEffectText = styled.Text`
