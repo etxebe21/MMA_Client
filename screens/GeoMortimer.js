@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import io, { Socket } from 'socket.io-client';
 import { socket } from '../socket/socketConnect';
 import MapStyle from '../components/MapStyle.json'
+import * as Keychain from 'react-native-keychain';
 
 const GeolocationUser = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -125,17 +126,33 @@ const GeolocationUser = () => {
 
   const getSearchesFromDataBase = async () => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/searches';
-      const response = await axios.get(url);
-      const searches = response.data.data;
-      setSearches(searches);
-      setVerify(searches[0].state)
-      // console.log('BUsquedas:', searches);
+     
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const url = 'https://mmaproject-app.fly.dev/api/searches';
+  
+        // Realizar la solicitud al servidor con el token en el encabezado de autorización
+        const response = await axios.get(url, {
+          headers: {
+            'authorization': `Bearer ${token}`
+          }
+        });
+  
+        const searches = response.data.data;
+        setSearches(searches);
+        setVerify(searches[0].state);
+        console.log('Búsquedas Recibidas:');
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
     } catch (error) {
-      console.error('Error al obtener busquedas:', error);
-    }
+      console.error('Error al obtener búsquedas:', error);
+    } 
   };
-
+  
   const updateSearch = async (search) => {
     const finishedSearch = { state: "completed" };
     // console.log(search[0].state);
