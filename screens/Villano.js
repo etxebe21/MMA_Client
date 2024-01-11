@@ -27,37 +27,7 @@ const Villano = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
 
-  const acolitos = users.filter(user => user.role === "ACÓLITO");
-
-  const getUsersFromDatabase = async () => {
-    try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
-        const url = 'https://mmaproject-app.fly.dev/api/users';
-
-        // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const response = await axios.get(url, {
-          headers: {'authorization': `Bearer ${token}`}
-        });
-  
-        const users = response.data.data;
-        setUsers(users);
-        setSelectedUser(selectedUser); 
-        console.log('Usuarios Recibidos:', users);
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
-    } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-    } 
-  };
-  
-  useEffect(() => {
-    // getUsersFromDatabase();
-  }, [selectedUser]); 
+  const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
@@ -171,7 +141,7 @@ const Villano = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
         <HeaderText>ACÓLITOS</HeaderText>
-        {usersGlobalState.map((user) => (
+        {acolitos.map((user) => (
           <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
             <UserContainer>
               <AvatarContainer>
@@ -210,15 +180,15 @@ const Villano = () => {
               />
 
               <Icon name="money" size={20} color="blue" />
-              <Text>GOLD: {globalState.dinero} </Text>
+              <Text>GOLD: {userGlobalState.dinero} </Text>
               {/* <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
               /> */}
 
-              <StyledSlider value={globalState.dinero} label={`${globalState.dinero}`}
+              <StyledSlider value={userGlobalState.dinero} label={`${userGlobalState.dinero}`}
               />
 
               <Icon name="github-alt" size={20} color="blue" />
-              <Text>FATIGUE: {globalState.fatigue}</Text>
+              <Text>FATIGUE: {userGlobalState.fatigue}</Text>
               <StyledProgressBar progress={selectedUser.cansancio/100} />
 
               <Icon name="bomb" size={20} color="blue" />
