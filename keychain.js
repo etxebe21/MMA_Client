@@ -1,10 +1,10 @@
 import * as Keychain from 'react-native-keychain';
 import {KEYCHAIN_SECRET} from '@env'
 import auth from '@react-native-firebase/auth';
-
+import axios from 'axios';
 
 export const setSecureValue = async (jsonAccessToken) => {
-              
+           
   const key = KEYCHAIN_SECRET;
   const value = jsonAccessToken.accessToken;
   try {
@@ -41,11 +41,34 @@ export const setSecureValue = async (jsonAccessToken) => {
     console.log("REMOVING SECURE VALUE")
     await Keychain.resetInternetCredentials(key)
  }
+
+ export const refreshToken = async (token) => {
+   try {
+     const resp = await axios.get('https://mmaproject-app.fly.dev/auth/refresh', {
+       headers: {
+         Authorization: `Bearer ${token}`
+       },
+     });
  
+     if (resp.status === 200) {
+       const data = resp.data;
+       console.log('Refresh token:', data);
+       return data;
+     } else {
+       console.error('Error al refrescar el token:', resp.statusText);
+       throw new Error(`Error: ${resp.status}`);
+     }
+   } catch (error) {
+     console.error('Error al refrescar el token:', error);
+     throw error;
+   }
+ };
+ 
+
 // Función para manejar la actualización del token
 export const handleTokenRefresh = async () => {
   try {
-    // Lógica para actualizar el token (similar a lo que ya has implementado)
+    // Lógica para actualizar el token 
     const refreshedToken = await user.getIdToken(true);
     console.log('Token refrescado', refreshedToken)
 
@@ -75,18 +98,15 @@ export const handleTokenRefresh = async () => {
         // Enviar el correo electrónico y el token actualizado al servidor
         await sendDataToServer(userEmail, refreshedToken);
   
-        // Manejar el token actualizado según sea necesario
       }
     }
   });
   
   async function sendDataToServer(email, token) {
-    // Realizar la lógica para enviar el correo electrónico y el token al servidor
-    // Puedes usar axios u otra biblioteca para hacer la solicitud al servidor
     const urlServidor = 'https://mmaproject-app.fly.dev/';
     const respuestaServidor = await axios.post(urlServidor, { email, token });
     console.log(respuestaServidor);
-    // Manejar la respuesta del servidor según sea necesario
   }
   
+
   
