@@ -58,23 +58,17 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             const jsonAccessToken = response.data.accessToken;
             //console.log(response);
             console.log('Tokens de acceso: ', jsonAccessToken);
-            console.log('AccesToken: ', jsonAccessToken.accessToken);
+            //console.log('AccesToken: ', jsonAccessToken.accessToken);
             
              // Guardar el jsonAccessToken en el Keychain
             setSecureValue(jsonAccessToken);
-            //getSecureValue();
-            onJwtTestButtonPress();
-
-            const responseUsers = await axios.get(urlUsers);
+            getAllUsersFromDataBase(urlUsers);
             
             const {validToken, user }= response.data;
             console.log('Iniciado sesión con Google!');
 
             // Seteamos el usuario el cual ha iniciado sesion al estado global del user
             setUserGlobalState(user);
-            
-            // Seleccionamos todos los usuarios y los seteamos 
-            setUsersGlobalState(responseUsers.data.data.filter(user => user.role === "ACÓLITO"))
             
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
@@ -157,7 +151,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
       }
     };
     
-    const onJwtTestButtonPress = async () => {
+    const getAllUsersFromDataBase = async (urlUsers) => {
       try {
         setIsLoading(true);
     
@@ -167,14 +161,18 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         
         if (token) {
           // Realizar la solicitud al servidor con el token en el encabezado de autorización
-          const response = await axios.post('URL Servidor Heroku', {
+          const responseUsers = await axios.get(urlUsers, {
             headers: {
-              'Authorization': `Bearer ${token}`
+              'authorization': `Bearer ${token}`
             }
           });
           
           console.log("RESPONSE TESTING JWT TOKEN FROM EXPRESS");
-          console.log(response.data.message);
+          console.log('USUARIOS RECIBIDOS');
+
+           // Seleccionamos todos los usuarios y los seteamos 
+           setUsersGlobalState(responseUsers.data.data.filter(user => user.role === "ACÓLITO"))
+
         } else {
           console.log('No se encontró un token en el Keychain.');
         }
