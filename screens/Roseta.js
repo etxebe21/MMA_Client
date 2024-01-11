@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { ImageBackground, Image, Dimensions, StyleSheet} from 'react-native';
 import axios from 'axios';
+import * as Keychain from 'react-native-keychain';
 
 const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
@@ -12,12 +13,48 @@ const Roseta = () => {
 
   const getArtifactsFromDataBase = async () => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-      const response = await axios.get(url);
-      const artifacts = response.data.data;
-      setArtifactImages(artifacts.map((artifact) => artifact.image));
+  
+      setIsLoading(true);
+  
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const url = 'https://mmaproject-app.fly.dev/api/artifacts';
+  
+        // Realizar la solicitud al servidor con el token en el encabezado de autorización
+        const response = await axios.get(url, {
+          headers: {
+            'authorization': `Bearer ${token}`
+          }
+        });
+  
+        const artifactsData = response.data.data;
+  
+        // Actualizar los artefactos con la información de las imágenes del usuario
+        const updatedArtifacts = await Promise.all(
+          artifactsData.map(async (artifact) => {
+            if (artifact.found) {
+              const userImage = await getUserImageById(artifact.who);
+              return { ...artifact, userImage };
+            }
+            return artifact;
+          })
+        );
+  
+        setArtefactsGlobalState(updatedArtifacts);
+  
+        // Log if needed
+        console.log('Artefactos guardados en artifactsGlobalState:');
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
     } catch (error) {
-      console.error('Error al obtener imágenes de artefactos:', error);
+      console.error('Error al obtener artefactos:', error);
+    } finally {
+      // Set isLoading to false if needed
+      setIsLoading(false);
     }
   };
 
