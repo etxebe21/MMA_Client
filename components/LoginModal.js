@@ -10,6 +10,7 @@ import { KEYCHAIN_SECRET } from '@env';
 import axios from "axios";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
+import { setSecureValue, onJwtTestButtonPress, getSecureValue } from "../keychain"
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     
@@ -55,10 +56,14 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             
             const response = await axios.post(url, {idToken:checkToken});
             const jsonAccessToken = response.data.accessToken;
-            console.log(response);
-            console.log(jsonAccessToken);
+            //console.log(response);
+            console.log('Tokens de acceso: ', jsonAccessToken);
+            console.log('AccesToken: ', jsonAccessToken.accessToken);
+            
              // Guardar el jsonAccessToken en el Keychain
-            await setSecureValue('accessToken', jsonAccessToken);
+            setSecureValue(jsonAccessToken);
+            //getSecureValue();
+            onJwtTestButtonPress();
 
             const responseUsers = await axios.get(urlUsers);
             
@@ -70,7 +75,6 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             
             // Seleccionamos todos los usuarios y los seteamos 
             setUsersGlobalState(responseUsers.data.data.filter(user => user.role === "ACÓLITO"))
-            
             
             // El servidor debe responder con el resultado de la verificación
             //console.log('Resultado de la verificación:', validToken);
@@ -152,18 +156,42 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         console.error('Error al obtener la imagen del usuario:', error);
       }
     };
-
-
-  // Función para guardar el valor en el Keychain
-  const setSecureValue = async (key, value) => {
-    try {
-      await Keychain.setInternetCredentials('appName:' + key, KEYCHAIN_SECRET, value);
-      console.log('Token guardado en Keychain');
-    } catch (error) {
-      console.error('Error al guardar el token en Keychain:', error);
-    }
-}
-
+    
+    const onJwtTestButtonPress = async () => {
+      try {
+        setIsLoading(true);
+    
+        // Obtener el token JWT del almacenamiento seguro
+        const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+        const token = credentials?.password;
+        
+        if (token) {
+          // Realizar la solicitud al servidor con el token en el encabezado de autorización
+          const response = await axios.post('URL Servidor Heroku', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          console.log("RESPONSE TESTING JWT TOKEN FROM EXPRESS");
+          console.log(response.data.message);
+        } else {
+          console.log('No se encontró un token en el Keychain.');
+        }
+      } catch (error) {
+        console.log("RESPONSE ERROR TOKEN VERIFICATION");
+        console.log(error);
+    
+        // Manejar el error, por ejemplo, verificar si es un error de token expirado
+        if (error.response && error.response.status === 401) {
+          // Token expirado, manejar la actualización del token aquí
+          await handleTokenRefresh();
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
       return (
         <ImageBackground source={require("../assets/wallpaper_login.png")} style={styles.imageBackground}>
             <View>
