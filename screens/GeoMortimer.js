@@ -71,32 +71,40 @@ const GeolocationUser = () => {
     getID();
   }, []);
 
-
-
   const loadArtifacts = async () => {
     try {
-      const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts');
-      const artifacts = artifactsData.data.data;
-      // console.log("ARTEFACTOS", artifacts);
-
-      // Actualizar los artefactos con la imagen del usuario
-      const updatedArtifacts = await Promise.all(
-        artifacts.map(async (artifact) => {
-          if (artifact.found) {
-            const userImage = await getUserImageById(artifact.who);
-            // console.log("imagen del usuario", userImage);
-            return { ...artifact, userImage };
-          }
-          return artifact;
-        })
-      );
-
-      setArtefactsGlobalState(updatedArtifacts);
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts', {
+          headers: {'authorization': `Bearer ${token}`}
+        });
+  
+        const artifacts = artifactsData.data.data;
+        // console.log("ARTEFACTOS", artifacts);
+  
+        // Actualizar los artefactos con la imagen del usuario
+        const updatedArtifacts = await Promise.all(
+          artifacts.map(async (artifact) => {
+            if (artifact.found) {
+              const userImage = await getUserImageById(artifact.who);
+              // console.log("imagen del usuario", userImage);
+              return { ...artifact, userImage };
+            }
+            return artifact;
+          })
+        );
+        setArtefactsGlobalState(updatedArtifacts);
+      } else {
+        console.log('No se encontró un token en el Keychain.');
+      }
     } catch (error) {
-      // console.error('Error al cargar los artefactos:', error);
-    }
+      console.error('Error al cargar los artefactos:', error);
+    } 
   };
-
+  
   const resetSearch = async () => {
 
     const artifactData = {

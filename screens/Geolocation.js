@@ -323,7 +323,7 @@ const requestLocationPermission = async () => {
         });
   
         const userPicture = user.data.data.picture;
-        console.log('Recibimos imagen de usuario');
+        console.log('Recibimos imagen de usuario que recoje artefacto');
         return userPicture; // Devolvemos la URL de la imagen del usuario
       } else {
         console.log('No se encontró un token en el Keychain.');
