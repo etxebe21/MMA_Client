@@ -86,11 +86,14 @@ const App = () => {
     // COGERLO CUANDO SE INICE SESION
 
     getInitialData();
-    socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
-    return () => {
-      socket.removeAllListeners();
-    };
-  }, []);
+    if(isAuthenticated){
+      console.log("Conexion con Socket En cliente Mediante Auth correcta")
+      socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
+      return () => {
+        socket.removeAllListeners();
+      };
+    }
+  }, [isAuthenticated]);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
