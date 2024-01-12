@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import axios from 'axios';
 import { FlatList } from "react-native";
 import * as Keychain from 'react-native-keychain';
+import { refreshToken } from "../keychain";
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
@@ -38,6 +39,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       }
     } catch (error) {
       console.error('Error al obtener ingredientes:', error);
+      refreshToken();
     }
   };
   

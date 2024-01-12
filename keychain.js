@@ -42,28 +42,30 @@ export const setSecureValue = async (jsonAccessToken) => {
     await Keychain.resetInternetCredentials(key)
  }
 
- export const refreshToken = async (token) => {
-   try {
-     const resp = await axios.get('https://mmaproject-app.fly.dev/auth/refresh', {
-       headers: {
-         Authorization: `Bearer ${token}`
-       },
-     });
- 
-     if (resp.status === 200) {
-       const data = resp.data;
-       console.log('Refresh token:', data);
-       return data;
-     } else {
-       console.error('Error al refrescar el token:', resp.statusText);
-       throw new Error(`Error: ${resp.status}`);
-     }
-   } catch (error) {
-     console.error('Error al refrescar el token:', error);
-     throw error;
-   }
- };
- 
+ export const refreshToken = async (checkToken) => {
+  const url = 'https://mmaproject-app.fly.dev/api/users/verify-data';
+  try {
+    const response = await axios.post(url, { idToken: checkToken });
+    console.log('Valor de checkToken en refreshToken:', checkToken);
+
+    if (response.status === 200) {
+      const jsonAccessToken = response.data.accessToken;
+      console.log('Token actualizado:', jsonAccessToken);
+
+      // Guardar el nuevo token en el Keychain
+      setSecureValue(jsonAccessToken);
+
+      return jsonAccessToken;
+    } else {
+      console.error('Error al refrescar el token:', response.statusText);
+      throw new Error(`Error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error al refrescar el token:', error);
+    throw error;
+  }
+};
+
 
 // Función para manejar la actualización del token
 export const handleTokenRefresh = async () => {
