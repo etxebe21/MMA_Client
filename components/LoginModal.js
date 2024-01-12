@@ -56,12 +56,14 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             
             const response = await axios.post(url, {idToken:checkToken});
             const jsonAccessToken = response.data.accessToken;
-            //console.log(response);
-            console.log('Tokens de acceso: ', jsonAccessToken);
+            const jsonRefreshToken = response.data.refreshToken;
+            console.log(response.data);
+            console.log('Token de acceso: ', jsonAccessToken);
+            console.log('Token de refresco: ', jsonRefreshToken);
             //console.log('AccesToken: ', jsonAccessToken.accessToken);
             
              // Guardar el jsonAccessToken en el Keychain
-            setSecureValue(jsonAccessToken);
+            setSecureValue(jsonAccessToken, jsonRefreshToken);
             getAllUsersFromDataBase(urlUsers);
             
             const {validToken, user }= response.data;
