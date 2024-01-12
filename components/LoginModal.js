@@ -52,46 +52,45 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
           // COMPROBACION JWT
           if (( jsonAccessToken === undefined || jsonAccessToken === 'error') && console.error.length > 0) {
             console.log('Token Caducado');
-          } else;
+          } else {
+            console.log('Token de acceso válido:', jsonAccessToken);
 
-          console.log('Token de acceso válido:', jsonAccessToken);
-
-          // Guardar el jsonAccessToken en el Keychain
-          setSecureValue(jsonAccessToken);
-          getAllUsersFromDataBase(urlUsers);
-          
-          const {validToken, user }= response.data;
-          console.log('Iniciado sesión con Google!');
-
-          // Seteamos usuario que ha iniciado sesion
-          setUserGlobalState(user);
-          
-          // Constantes del usuario
-          const email = user.email;
-          const role = user.role;
-          const id = user._id;
-
-
-          //ASYNC STORAGE
-          await AsyncStorage.setItem('userEmail', email)
-          .then(() => {
-          // console.log('Correo electrónico guardado en AsyncStorage:', email);
-          })
-          .catch(error => {
-          console.error('Error al guardar el correo electrónico en AsyncStorage:', error);
-          });
-
-          await AsyncStorage.setItem('userRole', role)
-          .then(() => {
-          // console.log('Crole guardado en AsyncStorage:', role);
-          })
-          
-          await AsyncStorage.setItem('userID', id)
-          .then(() => {
-          socket.emit('setUsername', id);
-          })
-          handleSuccessfulLogin();
+            // Guardar el jsonAccessToken en el Keychain
+            setSecureValue(jsonAccessToken);
+            getAllUsersFromDataBase(urlUsers);
             
+            const {validToken, user }= response.data;
+            console.log('Iniciado sesión con Google!');
+
+            // Seteamos usuario que ha iniciado sesion
+            setUserGlobalState(user);
+            
+            // Constantes del usuario
+            const email = user.email;
+            const role = user.role;
+            const id = user._id;
+
+
+            //ASYNC STORAGE
+            await AsyncStorage.setItem('userEmail', email)
+            .then(() => {
+            // console.log('Correo electrónico guardado en AsyncStorage:', email);
+            })
+            .catch(error => {
+            console.error('Error al guardar el correo electrónico en AsyncStorage:', error);
+            });
+
+            await AsyncStorage.setItem('userRole', role)
+            .then(() => {
+            // console.log('Crole guardado en AsyncStorage:', role);
+            })
+            
+            await AsyncStorage.setItem('userID', id)
+            .then(() => {
+            socket.emit('setUsername', id);
+            })
+            handleSuccessfulLogin();
+          }  
         } catch (error) {
           // Manejar errores aquí
           console.error(error);

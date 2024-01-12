@@ -79,38 +79,17 @@ const App = () => {
     }
   }, [userGlobalState]);
 
-  //Datos iniciales email role e id
-  const getInitialData = async () => {
-    try {
-      const email = await AsyncStorage.getItem('userEmail');
-      const role = await AsyncStorage.getItem('userRole');
-      const id = await AsyncStorage.getItem('userID');
-
-      setRole(role);
-      return { email, role, id };
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      return null;
-    }
-  };
-
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
-
-    // COMPROBAR LOGIN DE INCIO DE SESION - CONEXION SOCKET
-
     
     // EN VEZ DE COGER LOS ITEMS O TODOS LOS DATOS CUANDO SE INICIE EL COMPONENTE 
     // COGERLO CUANDO SE INICE SESION
-
 
     getInitialData();
     socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
     return () => {
       socket.removeAllListeners();
     };
-    //getArtifactsFromDataBase()
-
   }, []);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
@@ -121,6 +100,21 @@ const App = () => {
     // console.log(artifactsGlobalState);
 
   }, [userGlobalState, usersGlobalState, artifactsGlobalState])
+
+  //Datos iniciales email role e id
+  const getInitialData = async () => {
+  try {
+    const email = await AsyncStorage.getItem('userEmail');
+    const role = await AsyncStorage.getItem('userRole');
+    const id = await AsyncStorage.getItem('userID');
+
+    setRole(role);
+    return { email, role, id };
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    return null;
+  }
+  };
 
 
   // Maneja el login
