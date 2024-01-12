@@ -55,8 +55,18 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
           } else {
             console.log('Token de acceso válido:', jsonAccessToken);
 
+            const url = 'https://mmaproject-app.fly.dev/api/users/verify-data'; //FLY 
+            const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
+            
+            const response = await axios.post(url, {idToken:checkToken});
+            const jsonAccessToken = response.data.accessToken;
+            const jsonRefreshToken = response.data.refreshToken;
+
+            console.log('Token de acceso: ', jsonAccessToken);
+            console.log('Token de refresco: ', jsonRefreshToken);
+            
             // Guardar el jsonAccessToken en el Keychain
-            setSecureValue(jsonAccessToken);
+            setSecureValue(jsonAccessToken, jsonRefreshToken);
             getAllUsersFromDataBase(urlUsers);
             
             const {validToken, user }= response.data;

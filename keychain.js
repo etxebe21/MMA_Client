@@ -26,44 +26,65 @@ export const setSecureValue = async (jsonAccessToken) => {
   }
 };
  
-  export const getSecureValue = async (key) => {
-  console.log("GETTING SECURE VALUE")
-  const result = await Keychain.getInternetCredentials(key)
-  if (result) {
-    console.log(password);
-    console.log(result);
-    return result.password 
+export const getSecureValue = async (key) => {
+  console.log("GETTING SECURE VALUE");
+  try {
+    const result = await Keychain.getInternetCredentials(key);
+    if (result) {
+      console.log(result.password);
+      console.log(result);
+      return result.password;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error al obtener valor seguro:', error);
+    throw error;
   }
-  return false
- }
- 
- export const removeSecureValue = async (key) => {
-    console.log("REMOVING SECURE VALUE")
-    await Keychain.resetInternetCredentials(key)
- }
+};
 
- export const refreshToken = async (token) => {
-   try {
-     const resp = await axios.get('https://mmaproject-app.fly.dev/auth/refresh', {
-       headers: {
-         Authorization: `Bearer ${token}`
-       },
-     });
- 
-     if (resp.status === 200) {
-       const data = resp.data;
-       console.log('Refresh token:', data);
-       return data;
-     } else {
-       console.error('Error al refrescar el token:', resp.statusText);
-       throw new Error(`Error: ${resp.status}`);
-     }
-   } catch (error) {
-     console.error('Error al refrescar el token:', error);
-     throw error;
-   }
- };
- 
+export const removeSecureValue = async (key) => {
+  console.log("REMOVING SECURE VALUE");
+  try {
+    await Keychain.resetInternetCredentials(key);
+  } catch (error) {
+    console.error('Error al remover valor seguro:', error);
+    throw error;
+  }
+};
+
+export const refreshToken = async (userEmail) => {
+  const url = 'https://mmaproject-app.fly.dev/api/users/verify';
+  try {
+    // Obtener el token almacenado en el Keychain
+    const storedToken = await getSecureValue('myApp');
+    console.log('Valor de token almacenado en refreshToken:', storedToken);
+
+    const headers = {
+      Authorization: `Bearer ${storedToken}`,
+      // Otros encabezados si es necesario
+    };
+
+    const response = await axios.post(url, { email: userEmail }, { headers });
+
+    if (response.status === 200) {
+      const jsonAccessToken = response.data.accessToken;
+      console.log('Token actualizado:', jsonAccessToken);
+
+      // Guardar el nuevo token en el Keychain
+      await setSecureValue('myApp', jsonAccessToken);
+
+      return jsonAccessToken;
+    } else {
+      console.error('Error al refrescar el token:', response.statusText);
+      throw new Error(`Error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error al refrescar el token:', error);
+    throw error;
+  }
+};
+
+
 
 // Función para manejar la actualización del token
 export const handleTokenRefresh = async () => {
