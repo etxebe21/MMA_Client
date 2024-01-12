@@ -39,11 +39,11 @@ console.log('Key:', key);
 console.log('Value:', valueR);
 
 // Utiliza setGenericPassword con el valor y el nombre de usuario (username)
-await Keychain.setGenericPassword(key, valueR, { service: 'myApp1', username: 'refreshToken' });
+await Keychain.setGenericPassword(key, valueR, { service: 'myAppRefresh', username: 'refreshToken' });
 console.log('Token refresh guardado en Keychain');
 
 // Obtén las credenciales utilizando getGenericPassword
-const credentialsR = await Keychain.getGenericPassword({ service: 'myApp1', username: 'refreshToken' });
+const credentialsR = await Keychain.getGenericPassword({ service: 'myAppRefresh', username: 'refreshToken' });
 console.log('Credenciales:', credentialsR);
 
 const refreshToken = credentialsR?.password;
@@ -78,7 +78,7 @@ export const getSecureValueRefresh = async () => {
 const key = KEYCHAIN_SECRET;
 try {
 // Utiliza getGenericPassword para obtener las credenciales
-const credentials = await Keychain.getGenericPassword({ service: 'myApp', username: 'refreshToken' });
+const credentials = await Keychain.getGenericPassword({ service: 'myAppRefresh', username: 'refreshToken' });
 
 if (credentials) {
 console.log('Valor refresh obtenido:', credentials.password);
@@ -107,7 +107,7 @@ export const refreshToken = async (userEmail) => {
 const url = 'https://mmaproject-app.fly.dev/api/users/verify';
 try {
 // Obtener el token almacenado en el Keychain
-const storedToken = await getSecureValueRefresh('myApp');
+const storedToken = await getSecureValueRefresh('myAppRefresh');
 console.log('Valor de token almacenado en refreshToken:', storedToken);
 
 const headers = {
@@ -122,7 +122,7 @@ const jsonAccessToken = response.data.refreshToken;
 console.log('Token actualizado:', jsonAccessToken);
 
 // Guardar el nuevo token en el Keychain
-await setSecureValueRefresh('myApp', jsonAccessToken);
+await setSecureValueRefresh('myAppRefresh', jsonAccessToken);
 
 return jsonAccessToken;
 } else {
