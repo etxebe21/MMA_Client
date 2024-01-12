@@ -24,6 +24,7 @@ const GeolocationUser = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [selectedArtifact, setSelectedArtifact] = useState([]);
   const [search, setSearches] = useState([]);
+  const [verify, setVerify] = useState(null);
   const [showButton, setShowButton] = useState();
   const [collectedArtifacts, setCollectedArtifacts] = useState();
   const [showAnotherButton, setShowAnotherButton] = useState(true);
@@ -271,45 +272,64 @@ const requestLocationPermission = async () => {
 
   const getSearchesFromDataBase = async () => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/searches';
-      const response = await axios.get(url);
-      const searches = response.data.data;
-      setSearches(searches);
-
-      if (firstLoad) {
-        setFirstLoad(false); // Establecer la bandera para futuras cargas
-      } else {
+      // Obtener el token JWT del almacenamiento seguro
+      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+      const token = credentials?.password;
+  
+      if (token) {
+        const url = 'https://mmaproject-app.fly.dev/api/searches';
+  
+        // Realizar la solicitud al servidor con el token en el encabezado de autorización
+        const response = await axios.get(url, {
+          headers: {
+            'authorization': `Bearer ${token}`
+          }
+        });
+  
+        const searches = response.data.data;
+        setSearches(searches);
+        setVerify(searches[0].state);
+        console.log('Búsquedas Recibidas');
+  
         // Lógica de alerta para búsquedas después del inicio de sesión
-        if (searches[0].state === 'completed') {
-          Alert.alert(
-            'BUSQUEDA VALIDADA',
-            '',
-            [
-              {
-                text: 'OK',
-                onPress: () => openModal(),
-              },
-            ],
-            { cancelable: false }
-          );
-        } else if (searches[0].state != 'completed') {
-          Alert.alert(
-            'BUSQUEDA PENDIENTE',
-            '',
-            [
-              {
-                text: 'OK',
-                onPress: () => closeModal(),
-              },
-            ],
-            { cancelable: false }
-          );
+        if (firstLoad) {
+          setFirstLoad(false); // Establecer la bandera para futuras cargas
+        } else {
+          if (searches[0].state === 'completed') {
+            Alert.alert(
+              'BUSQUEDA VALIDADA',
+              '',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => openModal(),
+                },
+              ],
+              { cancelable: false }
+            );
+          } else if (searches[0].state !== 'completed') {
+            Alert.alert(
+              'BUSQUEDA PENDIENTE',
+              '',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => closeModal(),
+                },
+              ],
+              { cancelable: false }
+            );
+          }
         }
+      } else {
+        console.log('No se encontró un token en el Keychain.');
       }
     } catch (error) {
       console.error('Error al obtener búsquedas:', error);
     }
   };
+  
+  
 
   const updateSearch = async (search) => {
     try {
