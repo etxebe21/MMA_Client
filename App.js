@@ -81,10 +81,6 @@ const App = () => {
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
-    
-    // EN VEZ DE COGER LOS ITEMS O TODOS LOS DATOS CUANDO SE INICIE EL COMPONENTE 
-    // COGERLO CUANDO SE INICE SESION
-
     getInitialData();
     if(isAuthenticated){
       console.log("Conexion con Socket En cliente Mediante Auth correcta")
