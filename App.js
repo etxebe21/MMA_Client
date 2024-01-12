@@ -96,6 +96,14 @@ const App = () => {
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
+
+    // COMPROBAR LOGIN DE INCIO DE SESION - CONEXION SOCKET
+
+    
+    // EN VEZ DE COGER LOS ITEMS O TODOS LOS DATOS CUANDO SE INICIE EL COMPONENTE 
+    // COGERLO CUANDO SE INICE SESION
+
+
     getInitialData();
     socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
     return () => {
