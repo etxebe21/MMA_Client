@@ -10,7 +10,7 @@ import { KEYCHAIN_SECRET } from '@env';
 import axios from "axios";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
-import { setSecureValue, onJwtTestButtonPress, getSecureValue } from "../keychain"
+import { setSecureValue, onJwtTestButtonPress, getSecureValue, setSecureValueRefresh } from "../keychain"
 
 const LoginModal = ({ onLogin, setLoginModalVisible}) => {
     
@@ -55,19 +55,17 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
           } else {
             console.log('Token de acceso válido:', jsonAccessToken);
 
-            const url = 'https://mmaproject-app.fly.dev/api/users/verify-data'; //FLY 
-            const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
-            
-            const response = await axios.post(url, {idToken:checkToken});
-            const jsonAccessToken = response.data.accessToken;
-            const jsonRefreshToken = response.data.refreshToken;
-
-            console.log('Token de acceso: ', jsonAccessToken);
-            console.log('Token de refresco: ', jsonRefreshToken);
-            
-            // Guardar el jsonAccessToken en el Keychain
-            setSecureValue(jsonAccessToken, jsonRefreshToken);
-            getAllUsersFromDataBase(urlUsers);
+          const response = await axios.post(url, {idToken:checkToken});
+          const jsonAccessToken = response.data.accessToken;
+          //const jsonRefreshToken = response.data.accessToken.refreshToken;
+          //console.log(response.data);
+          console.log('Token de acceso: ', jsonAccessToken);
+          //console.log('Token de refresco: ', jsonRefreshToken);
+          //console.log('AccesToken: ', jsonAccessToken.accessToken);
+          // Guardar el jsonAccessToken en el Keychain
+          setSecureValue(jsonAccessToken);
+          setSecureValueRefresh(jsonAccessToken);
+          getAllUsersFromDataBase(urlUsers);
             
             const {validToken, user }= response.data;
             console.log('Iniciado sesión con Google!');
@@ -79,7 +77,6 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
             const email = user.email;
             const role = user.role;
             const id = user._id;
-
 
             //ASYNC STORAGE
             await AsyncStorage.setItem('userEmail', email)
@@ -110,6 +107,85 @@ const LoginModal = ({ onLogin, setLoginModalVisible}) => {
         }
     }
     
+    async function onGoogleButtonPress() {
+      setIsLoading(true);
+      try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const { idToken } = await GoogleSignin.signIn();
+      // console.log("PASO 1 token");
+      // console.log(idToken);
+      
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // Sign-in the user with the credential
+      // console.log("PASO 2 credenciales google")
+      // console.log(googleCredential);
+      
+      // console.log("PASO 3 credenciales");
+      await auth().signInWithCredential(googleCredential);
+      
+      // console.log("PASO 4 autenticar usuario actual");
+      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      // console.log(idTokenResult);
+      const checkToken = idTokenResult.token;
+      
+      // console.log("CHEEECK TOKEEEN");
+      // console.log(checkToken);
+      
+      //const url = 'http://192.168.1.170:3000/api/users/verify-token';
+      //const url = 'http://192.168.1.169:3000/api/users/verify-token'; //ETXEBE-CLASE
+      //const url = 'http://192.168.0.12:3000/api/users/verify-token'; //ETXEBE-HOME
+      const url = 'https://mmaproject-app.fly.dev/api/users/verify-data'; //FLY 
+      const urlUsers = 'https://mmaproject-app.fly.dev/api/users';
+      const response = await axios.post(url, {idToken:checkToken});
+      const jsonAccessToken = response.data.accessToken;
+      //const jsonRefreshToken = response.data.accessToken.refreshToken;
+      //console.log(response.data);
+      console.log('Token de acceso: ', jsonAccessToken);
+      //console.log('Token de refresco: ', jsonRefreshToken);
+      //console.log('AccesToken: ', jsonAccessToken.accessToken);
+      // Guardar el jsonAccessToken en el Keychain
+      setSecureValue(jsonAccessToken);
+      setSecureValueRefresh(jsonAccessToken);
+      getAllUsersFromDataBase(urlUsers);
+      const {validToken, user }= response.data;
+      console.log('Iniciado sesión con Google!');
+      
+      // Seteamos el usuario el cual ha iniciado sesion al estado global del user
+      setUserGlobalState(user);
+      // El servidor debe responder con el resultado de la verificación
+      //console.log('Resultado de la verificación:', validToken);
+      // console.log('Usuario:', user);
+      const email = user.email;
+      // console.log(email);
+      const role = user.role;
+      // console.log(role);
+      const id = user._id;
+      
+      // Guarda el correo electrónico en AsyncStorage
+      await AsyncStorage.setItem('userEmail', email)
+      .then(() => {
+      // console.log('Correo electrónico guardado en AsyncStorage:', email);
+      })
+      .catch(error => {
+      console.error('Error al guardar el correo electrónico en AsyncStorage:', error);
+      });
+      await AsyncStorage.setItem('userRole', role)
+      .then(() => {
+      // console.log('Crole guardado en AsyncStorage:', role);
+      })
+      await AsyncStorage.setItem('userID', id)
+      .then(() => {
+      socket.emit('setUsername', id);
+      })
+      handleSuccessfulLogin();
+      } catch (error) {
+      // Manejar errores aquí
+      console.error(error);
+      } finally {
+      setIsLoading(false);
+      }
+      }
+      
     const handleSuccessfulLogin = () => {  
         //setIsAuthenticated(true);
         onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
