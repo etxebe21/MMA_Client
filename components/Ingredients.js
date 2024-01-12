@@ -7,41 +7,40 @@ import * as Keychain from 'react-native-keychain';
 import { refreshToken } from "../keychain";
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
-  const [selectedIngredients, setSelectedIngredients] = React.useState([]);
-  const [createdPotion, setCreatedPotion] = React.useState(null);
-  const [ingredients, setIngredients] = useState([]);
-  const [selectedPotion, setSelectedPotion] = useState(null);
+const [selectedIngredients, setSelectedIngredients] = React.useState([]);
+const [createdPotion, setCreatedPotion] = React.useState(null);
+const [ingredients, setIngredients] = useState([]);
+const [selectedPotion, setSelectedPotion] = useState(null);
 
-  useEffect(() => {
-    getIngredientsFromDatabase();
-  }, []);
-  
-  const getIngredientsFromDatabase = async () => {
-    try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
-        const url = 'https://mmaproject-app.fly.dev/api/ingredients';
-  
-        // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const response = await axios.get(url, {
-          headers: {
-            'authorization': `Bearer ${token}`
-          }
-        });
-        const ingredients = response.data.data;
-        setIngredients(ingredients);
-        console.log('Ingredientes Recibidos');
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
-    } catch (error) {
-      console.error('Error al obtener ingredientes:', error);
-      refreshToken();
-    }
-  };
+useEffect(() => {
+getIngredientsFromDatabase();
+}, []);
+const getIngredientsFromDatabase = async () => {
+try {
+// Obtener el token JWT del almacenamiento seguro
+const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
+const token = credentials?.password;
+if (token) {
+const url = 'https://mmaproject-app.fly.dev/api/ingredients';
+// Realizar la solicitud al servidor con el token en el encabezado de autorización
+const response = await axios.get(url, {
+headers: {
+'authorization': `Bearer ${token}`
+}
+});
+const ingredients = response.data.data;
+setIngredients(ingredients);
+console.log('Ingredientes Recibidos');
+} else {
+console.log('No se encontró un token en el Keychain.');
+}
+} catch (error) {
+console.error('Error al obtener ingredientes:', error);
+refreshToken();
+}
+};
+
+
   
   //SELECCIONA LOS INGREDIENTES HASTA UN MAX DE 2
   const selectIngredient = (ingredient) => {

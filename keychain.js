@@ -1,133 +1,136 @@
 import * as Keychain from 'react-native-keychain';
 import {KEYCHAIN_SECRET} from '@env'
-import auth from '@react-native-firebase/auth';
 import axios from 'axios';
 
 export const setSecureValue = async (jsonAccessToken) => {
-           
-  const key = KEYCHAIN_SECRET;
-  const value = jsonAccessToken.accessToken;
-  try {
-    if (value !== undefined && value !== null) {
-      console.log('Key:', key);
-      console.log('Value:', value);
+const key = KEYCHAIN_SECRET;
+const value = jsonAccessToken.accessToken;
 
-      await Keychain.setGenericPassword(key, value, { service: 'myApp' });
-      console.log('Token guardado en Keychain');
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      console.log('Credenciales', credentials)
-      const token = credentials?.password;
-      console.log('Recibimos token de keyChain', token)
-;                } else {
-      console.error('Error: Valor de token vacío o nulo');
-    }
-  } catch (error) {
-    console.error('Error al guardar el token en Keychain:', error);
-  }
+try {
+if (value !== undefined && value !== null) {
+console.log('Key:', key);
+console.log('Value:', value);
+
+// Utiliza setGenericPassword con el valor y el nombre de usuario (username)
+await Keychain.setGenericPassword(key, value, { service: 'myApp', username: 'accessToken' });
+//console.log('Token guardado en Keychain');
+
+// Obtén las credenciales utilizando getGenericPassword
+const credentials = await Keychain.getGenericPassword({ service: 'myApp', username: 'accessToken' });
+//console.log('Credenciales:', credentials);
+
+const token = credentials?.password;
+//console.log('Recibimos token de KeyChain:', token);
+
+} else {
+console.error('Error: Valor de token vacío o nulo');
+}
+} catch (error) {
+console.error('Error al guardar el token en Keychain:', error);
+}
 };
- 
-export const getSecureValue = async (key) => {
-  console.log("GETTING SECURE VALUE");
-  try {
-    const result = await Keychain.getInternetCredentials(key);
-    if (result) {
-      console.log(result.password);
-      console.log(result);
-      return result.password;
-    }
-    return false;
-  } catch (error) {
-    console.error('Error al obtener valor seguro:', error);
-    throw error;
-  }
+
+export const setSecureValueRefresh = async (jsonAccessToken) => {
+const key = KEYCHAIN_SECRET;
+const valueR = jsonAccessToken.refreshToken;
+try {
+if (valueR !== undefined && valueR !== null) {
+console.log('Key:', key);
+console.log('Value:', valueR);
+
+// Utiliza setGenericPassword con el valor y el nombre de usuario (username)
+await Keychain.setGenericPassword(key, valueR, { service: 'myApp1', username: 'refreshToken' });
+console.log('Token refresh guardado en Keychain');
+
+// Obtén las credenciales utilizando getGenericPassword
+const credentialsR = await Keychain.getGenericPassword({ service: 'myApp1', username: 'refreshToken' });
+console.log('Credenciales:', credentialsR);
+
+const refreshToken = credentialsR?.password;
+console.log('Recibimos refreshtoken de KeyChain:', refreshToken);
+} else {
+console.error('Error: Valor de token vacío o nulo');
+}
+} catch (error) {
+console.error('Error al guardar el token en Keychain:', error);
+}
 };
+
+export const getSecureValue = async () => {
+const key = KEYCHAIN_SECRET;
+try {
+// Utiliza getGenericPassword para obtener las credenciales
+const credentials = await Keychain.getGenericPassword({ service: 'myApp', username: 'accessToken' });
+
+if (credentials) {
+console.log('Valor accesToken obtenido:', credentials.password);
+return credentials.password;
+}
+
+return false;
+} catch (error) {
+console.error('Error al obtener valor seguro:', error);
+throw error;
+}
+};
+
+export const getSecureValueRefresh = async () => {
+const key = KEYCHAIN_SECRET;
+try {
+// Utiliza getGenericPassword para obtener las credenciales
+const credentials = await Keychain.getGenericPassword({ service: 'myApp', username: 'refreshToken' });
+
+if (credentials) {
+console.log('Valor refresh obtenido:', credentials.password);
+return credentials.password;
+}
+
+return false;
+} catch (error) {
+console.error('Error al obtener valor seguro:', error);
+throw error;
+}
+};
+
 
 export const removeSecureValue = async (key) => {
-  console.log("REMOVING SECURE VALUE");
-  try {
-    await Keychain.resetInternetCredentials(key);
-  } catch (error) {
-    console.error('Error al remover valor seguro:', error);
-    throw error;
-  }
+console.log("REMOVING SECURE VALUE");
+try {
+await Keychain.resetInternetCredentials(key);
+} catch (error) {
+console.error('Error al remover valor seguro:', error);
+throw error;
+}
 };
 
 export const refreshToken = async (userEmail) => {
-  const url = 'https://mmaproject-app.fly.dev/api/users/verify';
-  try {
-    // Obtener el token almacenado en el Keychain
-    const storedToken = await getSecureValue('myApp');
-    console.log('Valor de token almacenado en refreshToken:', storedToken);
+const url = 'https://mmaproject-app.fly.dev/api/users/verify';
+try {
+// Obtener el token almacenado en el Keychain
+const storedToken = await getSecureValueRefresh('myApp');
+console.log('Valor de token almacenado en refreshToken:', storedToken);
 
-    const headers = {
-      Authorization: `Bearer ${storedToken}`,
-      // Otros encabezados si es necesario
-    };
-
-    const response = await axios.post(url, { email: userEmail }, { headers });
-
-    if (response.status === 200) {
-      const jsonAccessToken = response.data.accessToken;
-      console.log('Token actualizado:', jsonAccessToken);
-
-      // Guardar el nuevo token en el Keychain
-      await setSecureValue('myApp', jsonAccessToken);
-
-      return jsonAccessToken;
-    } else {
-      console.error('Error al refrescar el token:', response.statusText);
-      throw new Error(`Error: ${response.status}`);
-    }
-  } catch (error) {
-    console.error('Error al refrescar el token:', error);
-    throw error;
-  }
+const headers = {
+Authorization: `Bearer ${storedToken}`,
+// Otros encabezados si es necesario
 };
 
+const response = await axios.post(url, { email: userEmail }, { headers });
 
+if (response.status === 200) {
+const jsonAccessToken = response.data.refreshToken;
+console.log('Token actualizado:', jsonAccessToken);
 
-// Función para manejar la actualización del token
-export const handleTokenRefresh = async () => {
-  try {
-    // Lógica para actualizar el token 
-    const refreshedToken = await user.getIdToken(true);
-    console.log('Token refrescado', refreshedToken)
+// Guardar el nuevo token en el Keychain
+await setSecureValueRefresh('myApp', jsonAccessToken);
 
-    // Actualizar el token en el almacenamiento seguro
-    await Keychain.setSecureValue('JWT', refreshedToken);
-
-    // Volver a intentar la solicitud con el nuevo token
-    await onJwtTestButtonPress();
-  } catch (error) {
-    console.error('Error al intentar actualizar el token:', error);
-    // Manejar el error de actualización del token según sea necesario
-  }
+return jsonAccessToken;
+} else {
+console.error('Error al refrescar el token:', response.statusText);
+throw new Error(`Error: ${response.status}`);
+}
+} catch (error) {
+console.error('Error al refrescar el token:', error);
+throw error;
+}
 };
-
-  //MANEJAR LA EXPIRACIÓN DEL TOKEN
-  auth().onUserChanged(async (user) => {
-    if (user) {
-      const idTokenResult = await user.getIdTokenResult();
-  
-      // Verificar si el token ha caducado y actualizar si es necesario
-      if (idTokenResult.expirationTime < Date.now()) {
-        const refreshedToken = await user.getIdToken(true);
-        console.log("Nuevo token", refreshedToken);
-        // Obtener el correo electrónico del usuario
-        const userEmail = user.email;
-  
-        // Enviar el correo electrónico y el token actualizado al servidor
-        await sendDataToServer(userEmail, refreshedToken);
-  
-      }
-    }
-  });
-  
-  async function sendDataToServer(email, token) {
-    const urlServidor = 'https://mmaproject-app.fly.dev/';
-    const respuestaServidor = await axios.post(urlServidor, { email, token });
-    console.log(respuestaServidor);
-  }
-  
-
-  
