@@ -3,7 +3,7 @@ import {KEYCHAIN_SECRET} from '@env'
 import axios from 'axios';
 
 export const setSecureValue = async (jsonAccessToken) => {
-const key = KEYCHAIN_SECRET;
+const key = process.env.KEYCHAIN_SECRET;
 const value = jsonAccessToken.accessToken;
 
 try {
@@ -31,7 +31,7 @@ console.error('Error al guardar el token en Keychain:', error);
 };
 
 export const setSecureValueRefresh = async (jsonAccessToken) => {
-const key = KEYCHAIN_SECRET;
+const key = process.env.KEYCHAIN_SECRET;
 const valueR = jsonAccessToken.refreshToken;
 try {
 if (valueR !== undefined && valueR !== null) {

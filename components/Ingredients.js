@@ -23,11 +23,14 @@ const token = credentials?.password;
 if (token) {
 const url = 'https://mmaproject-app.fly.dev/api/ingredients';
 // Realizar la solicitud al servidor con el token en el encabezado de autorización
-const response = await axios.get(url, {
-headers: {
-'authorization': `Bearer ${token}`
-}
-});
+
+// const response = await axios.get(url, {
+// headers: {
+// 'authorization': `Bearer ${token}`
+// }
+// });
+const response = await axios.get(url
+);
 const ingredients = response.data.data;
 setIngredients(ingredients);
 console.log('Ingredientes Recibidos');
