@@ -18,7 +18,7 @@ const axiosInit = async () => {
     axiosInstance.interceptors.response.use(
         (response) => response,
         async (error) => {
-            if (error.response && error.response.status === 401) {
+            if (error.response && error.response.status === 401 || error.response && error.response.status === 403) {
                 // Access token has expired, refresh it
                 try {
                     const credentials = await Keychain.getGenericPassword({ service: 'myApp' });

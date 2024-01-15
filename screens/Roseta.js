@@ -9,6 +9,7 @@ import { axiosInstance } from '../axios/axiosInstance';
 const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
   const [gravesVisible, setGravesVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getArtifactsFromDataBase();
