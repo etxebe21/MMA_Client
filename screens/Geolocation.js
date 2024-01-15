@@ -325,7 +325,7 @@ const requestLocationPermission = async () => {
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
-        const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+        const user = await axiosInstance.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
   
         const userPicture = user.data.data.picture;
         console.log('Recibimos imagen de usuario que recoje artefacto');

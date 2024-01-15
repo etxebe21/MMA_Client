@@ -202,19 +202,8 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
   const getArtifactsFromDataBase = async () => {
     try {
       setIsLoading(true);
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-
-      if (token) {
+     
         const url = 'https://mmaproject-app.fly.dev/api/artifacts';
-
-        // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        // const response = await axios.get(url, {
-        //   headers: {
-        //     'authorization': `Bearer ${token}`
-        //   }
-        // });
 
         const response = await axiosInstance.get(url);
         console.log("RESPONSE DATA: ", response);
@@ -235,9 +224,6 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
 
         // Log if needed
         console.log('Artefactos guardados en artifactsGlobalState:');
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     } finally {
@@ -249,21 +235,12 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-
-      if (token) {
-        const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`, {
-          headers: { 'authorization': `Bearer ${token}` }
-        });
+     
+        const user = await axiosInstance.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
 
         const userPicture = user.data.data.picture;
         console.log('Recibimos imagen de usuario logeado');
         return userPicture; // Devolvemos la URL de la imagen del usuario
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al obtener la imagen del usuario:', error);
     }
@@ -273,27 +250,17 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
     try {
       setIsLoading(true);
 
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-
-      if (token) {
         // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const responseUsers = await axios.get(urlUsers, {
+        const responseUsers = await axiosInstance.get(urlUsers, {
           headers: {
             'authorization': `Bearer ${token}`
           }
         });
-
         console.log("RESPONSE TESTING JWT TOKEN FROM EXPRESS");
         console.log('USUARIOS RECIBIDOS');
-
         // Seleccionamos todos los usuarios y los seteamos 
         setUsersGlobalState(responseUsers.data.data.filter(user => user.role === "ACÓLITO"))
 
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.log("RESPONSE ERROR TOKEN VERIFICATION");
       console.log(error);

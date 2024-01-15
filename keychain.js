@@ -103,34 +103,4 @@ throw error;
 }
 };
 
-export const refreshToken = async (userEmail) => {
-const url = 'https://mmaproject-app.fly.dev/api/users/verify';
-try {
-// Obtener el token almacenado en el Keychain
-const storedToken = await getSecureValueRefresh('myAppRefresh');
-console.log('Valor de token almacenado en refreshToken:', storedToken);
 
-const headers = {
-Authorization: `Bearer ${storedToken}`,
-// Otros encabezados si es necesario
-};
-
-const response = await axios.post(url, { email: userEmail }, { headers });
-
-if (response.status === 200) {
-const jsonAccessToken = response.data.refreshToken;
-console.log('Token actualizado:', jsonAccessToken);
-
-// Guardar el nuevo token en el Keychain
-await setSecureValueRefresh('myAppRefresh', jsonAccessToken);
-
-return jsonAccessToken;
-} else {
-console.error('Error al refrescar el token:', response.statusText);
-throw new Error(`Error: ${response.status}`);
-}
-} catch (error) {
-console.error('Error al refrescar el token:', error);
-throw error;
-}
-};
