@@ -4,6 +4,7 @@ import { ImageBackground, Image, Dimensions, StyleSheet} from 'react-native';
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
 import Graves from './Graves'
+import { axiosInstance } from '../axios/axiosInstance';
 
 const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
@@ -15,22 +16,12 @@ const Roseta = () => {
 
   const getArtifactsFromDataBase = async () => {
     try {
-  
       setIsLoading(true);
-  
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
+
         const url = 'https://mmaproject-app.fly.dev/api/artifacts';
   
         // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const response = await axios.get(url, {
-          headers: {
-            'authorization': `Bearer ${token}`
-          }
-        });
+        const response = await axiosInstance.get(url);
   
         const artifactsData = response.data.data;
   
@@ -44,14 +35,11 @@ const Roseta = () => {
             return artifact;
           })
         );
-  
+
         setArtefactsGlobalState(updatedArtifacts);
   
         // Log if needed
         console.log('Artefactos guardados en artifactsGlobalState:');
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
     } finally {

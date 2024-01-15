@@ -24,6 +24,8 @@ import GeolocationMortimer from './screens/GeoMortimer';
 import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
+import axiosInit from './axios/axiosInstance';
+
 
 const App = () => {
 
@@ -33,6 +35,7 @@ const App = () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({ dinero: 20, fatigue: 40 });
+  const [data, setData] = useState([]);
 
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
@@ -73,8 +76,7 @@ const App = () => {
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
-    if (userGlobalState != null)
-    {
+    if (userGlobalState != null) {
       setRole(userGlobalState.role);
     }
   }, [userGlobalState]);
@@ -82,14 +84,21 @@ const App = () => {
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
-    if(isAuthenticated){
+    if (isAuthenticated) {
       console.log("Conexion con Socket En cliente Mediante Auth correcta")
       socket.onAny((event, ...args) => setCurrentEvent({ event, value: args[0] }));
       return () => {
         socket.removeAllListeners();
       };
     }
+
+
   }, [isAuthenticated]);
+
+  //AXIOS INTERCEPTORS
+  useEffect ( () => { 
+    axiosInit();
+  }, []); 
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
@@ -102,17 +111,18 @@ const App = () => {
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
-  try {
-    const email = await AsyncStorage.getItem('userEmail');
-    const role = await AsyncStorage.getItem('userRole');
-    const id = await AsyncStorage.getItem('userID');
+    try {
+      const email = await AsyncStorage.getItem('userEmail');
+      const role = await AsyncStorage.getItem('userRole');
+      const id = await AsyncStorage.getItem('userID');
+      
 
-    setRole(role);
-    return { email, role, id };
-  } catch (error) {
-    console.error('Error retrieving data:', error);
-    return null;
-  }
+      setRole(role);
+      return { email, role, id };
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
   };
 
 
@@ -146,7 +156,7 @@ const App = () => {
         iconName = 'castle';
         break;
       case 'Profile': iconName = 'person';
-      break;
+        break;
       case 'ProfileVillano':
         iconName = 'person';
         break;
@@ -208,9 +218,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState,pendingTextGlobalState,
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState,
       handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState,setPendingTextGlobalState
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState
 
     }}>
       <SafeAreaProvider>

@@ -10,6 +10,7 @@ import MapStyle from '../components/MapStyle.json'
 import { socket } from '../socket/socketConnect';
 import Roseta from './Roseta';
 import * as Keychain from 'react-native-keychain';
+import { axiosInstance } from '../axios/axiosInstance';
 
 const GeolocationUser = () => {
   //GLOBALES
@@ -144,14 +145,7 @@ const GeolocationUser = () => {
 
   const loadArtifacts = async () => {
     try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
-        const artifactsData = await axios.get('https://mmaproject-app.fly.dev/api/artifacts', {
-          headers: {'authorization': `Bearer ${token}`}
-        });
+        const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
   
         const artifacts = artifactsData.data.data;
         // console.log("ARTEFACTOS", artifacts);
@@ -168,9 +162,6 @@ const GeolocationUser = () => {
           })
         );
         setArtefactsGlobalState(updatedArtifacts);
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al cargar los artefactos:', error);
     } 
@@ -274,19 +265,10 @@ const requestLocationPermission = async () => {
 
   const getSearchesFromDataBase = async () => {
     try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
         const url = 'https://mmaproject-app.fly.dev/api/searches';
   
         // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const response = await axios.get(url, {
-          headers: {
-            'authorization': `Bearer ${token}`
-          }
-        });
+        const response = await axiosInstance.get(url);
   
         const searches = response.data.data;
         setSearches(searches);
@@ -323,9 +305,6 @@ const requestLocationPermission = async () => {
             );
           }
         }
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al obtener búsquedas:', error);
     }
@@ -348,21 +327,11 @@ const requestLocationPermission = async () => {
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
-      // Obtener el token JWT del almacenamiento seguro
-      const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-      const token = credentials?.password;
-  
-      if (token) {
-        const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`, {
-          headers: {'authorization': `Bearer ${token}` }
-        });
+        const user = await axios.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
   
         const userPicture = user.data.data.picture;
         console.log('Recibimos imagen de usuario que recoje artefacto');
         return userPicture; // Devolvemos la URL de la imagen del usuario
-      } else {
-        console.log('No se encontró un token en el Keychain.');
-      }
     } catch (error) {
       console.error('Error al obtener la imagen del usuario:', error);
     } 
