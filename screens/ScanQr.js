@@ -7,6 +7,7 @@ import { Alert } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
 import { useNavigation } from '@react-navigation/native';
 import { Context } from '../context/Context';
+import { axiosInstance } from '../axios/axiosInstance';
 
 
 PERMISSIONS.IOS.CAMERA;
@@ -33,7 +34,7 @@ const ScanQr = () => {
       };
       // console.log(event);
 
-      const response = await axios.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${event}`, data);
+      const response = await axiosInstance.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${event}`, data);
 
       setTimeout(() => {
         this.scanner.reactivate();

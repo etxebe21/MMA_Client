@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FlatList } from "react-native";
 import * as Keychain from 'react-native-keychain';
 import { refreshToken } from "../keychain";
+import { axiosInstance } from "../axios/axiosInstance";
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
 const [selectedIngredients, setSelectedIngredients] = React.useState([]);
@@ -15,38 +16,23 @@ const [selectedPotion, setSelectedPotion] = useState(null);
 useEffect(() => {
 getIngredientsFromDatabase();
 }, []);
+
 const getIngredientsFromDatabase = async () => {
 try {
-// Obtener el token JWT del almacenamiento seguro
-const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
-const token = credentials?.password;
-if (token) {
-const url = 'https://mmaproject-app.fly.dev/api/ingredients';
-// Realizar la solicitud al servidor con el token en el encabezado de autorización
+  const url = 'https://mmaproject-app.fly.dev/api/ingredients';
 
-// const response = await axios.get(url, {
-// headers: {
-// 'authorization': `Bearer ${token}`
-// }
-// });
-const response = await axios.get(url
-);
-const ingredients = response.data.data;
-setIngredients(ingredients);
-console.log('Ingredientes Recibidos');
-} else {
-console.log('No se encontró un token en el Keychain.');
-}
-} catch (error) {
-console.error('Error al obtener ingredientes:', error);
-refreshToken();
-}
+  const response = await axiosInstance.get(url
+  );
+  const ingredients = response.data.data;
+  setIngredients(ingredients);
+  console.log('Ingredientes Recibidos');
+  } catch (error) {
+    console.error('Error al obtener ingredientes:', error);
+  }
 };
 
-
-  
   //SELECCIONA LOS INGREDIENTES HASTA UN MAX DE 2
-  const selectIngredient = (ingredient) => {
+const selectIngredient = (ingredient) => {
     if (selectedIngredients.length < 2) {
       setSelectedIngredients([...selectedIngredients, ingredient]);
     } else {
@@ -55,30 +41,29 @@ refreshToken();
   };
 
   //CREAR POCIONES
-  const createPotion = () => {
+const createPotion = () => {
   
-    if (selectedIngredients.length === 2) {
-      const poción = {
-        name: 'EPIC POTION',
-        effects: [
-          ...selectedIngredients[0].effects,
-          ...selectedIngredients[1].effects,
-        ],
-      };
-      setCreatedPotion(poción);
+  if (selectedIngredients.length === 2) {
+    const poción = {
+      name: 'EPIC POTION',
+      effects: [
+        ...selectedIngredients[0].effects,
+        ...selectedIngredients[1].effects,
+      ],
+    };
+    setCreatedPotion(poción);
 
-      const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
-        return ingrediente.effects.includes("cleanse_parchment");
-      });
+    const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
+      return ingrediente.effects.includes("cleanse_parchment");
+    });
 
-      const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
+    const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
 
-      if (cantidadCleanseParchment === 2) {
-        setIsPotionCreated(true);
-      }
+    if (cantidadCleanseParchment === 2) {
+      setIsPotionCreated(true);
     }
-  };
-
+  }
+};
 
   return (
 
