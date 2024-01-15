@@ -206,7 +206,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
         const url = 'https://mmaproject-app.fly.dev/api/artifacts';
 
         const response = await axiosInstance.get(url);
-        console.log("RESPONSE DATA: ", response);
+        //console.log("RESPONSE DATA: ", response);
         const artifactsData = response.data.data;
 
         // Actualizar los artefactos con la información de las imágenes del usuario
@@ -251,11 +251,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
       setIsLoading(true);
 
         // Realizar la solicitud al servidor con el token en el encabezado de autorización
-        const responseUsers = await axiosInstance.get(urlUsers, {
-          headers: {
-            'authorization': `Bearer ${token}`
-          }
-        });
+        const responseUsers = await axiosInstance.get(urlUsers);
         console.log("RESPONSE TESTING JWT TOKEN FROM EXPRESS");
         console.log('USUARIOS RECIBIDOS');
         // Seleccionamos todos los usuarios y los seteamos 

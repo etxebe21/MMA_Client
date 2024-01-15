@@ -34,7 +34,7 @@ const axiosInit = async () => {
                     setSecureValueRefresh(newAccessToken.data.newToken);
                     const credentials1 = await Keychain.getGenericPassword({ service: 'myApp' });
                     const token1 = credentials1?.password;
-                    console.log("TOKEN DESPUES DE LOGIN", token1);
+                    //console.log("TOKEN DESPUES DE LOGIN", token1);
                     // Update the request headers with the new access token
                     error.config.headers['Authorization'] = `Bearer ${token1}`;
                     // Retry the original request                                   
@@ -55,7 +55,7 @@ const axiosInit = async () => {
 
             const credentials = await Keychain.getGenericPassword({ service: 'myApp' });
             const token = credentials?.password;
-            console.log("TOKEN DESPUES DE LOGIN", token);
+            //console.log("TOKEN DESPUES DE LOGIN", token);
             if (token != null) {
                 // Modify request config here, e.g., add headers
                 config.headers['Authorization'] = `Bearer ${token}`;

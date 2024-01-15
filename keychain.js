@@ -8,8 +8,8 @@ const value = jsonAccessToken.accessToken;
 
 try {
 if (value !== undefined && value !== null) {
-console.log('Key:', key);
-console.log('Value:', value);
+// console.log('Key:', key);
+// console.log('Value:', value);
 
 // Utiliza setGenericPassword con el valor y el nombre de usuario (username)
 await Keychain.setGenericPassword(key, value, { service: 'myApp', username: 'accessToken' });
@@ -35,8 +35,8 @@ const key = process.env.KEYCHAIN_SECRET;
 const valueR = jsonAccessToken.refreshToken;
 try {
 if (valueR !== undefined && valueR !== null) {
-console.log('Key:', key);
-console.log('Value:', valueR);
+// console.log('Key:', key);
+// console.log('Value:', valueR);
 
 // Utiliza setGenericPassword con el valor y el nombre de usuario (username)
 await Keychain.setGenericPassword(key, valueR, { service: 'myAppRefresh', username: 'refreshToken' });

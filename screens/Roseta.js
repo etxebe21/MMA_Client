@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { ImageBackground, Image, Dimensions, StyleSheet} from 'react-native';
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
+import { Context } from '../context/Context';
 import Graves from './Graves'
 import { axiosInstance } from '../axios/axiosInstance';
 
@@ -10,6 +11,7 @@ const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
   const [gravesVisible, setGravesVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
+  const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 
   useEffect(() => {
     getArtifactsFromDataBase();
@@ -69,6 +71,19 @@ const Roseta = () => {
   const gravesButton = () => {
     console.log("boton pulsado");
     setGravesVisible(true);
+  };
+
+  // función para obtener la imagen del usuario por su ID
+  const getUserImageById = async (userId) => {
+    try {
+        const user = await axiosInstance.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+  
+        const userPicture = user.data.data.picture;
+        console.log('Recibimos imagen de usuario');
+        return userPicture; // Devolvemos la URL de la imagen del usuario
+    } catch (error) {
+      console.error('Error al obtener la imagen del usuario:', error);
+    } 
   };
 
 
