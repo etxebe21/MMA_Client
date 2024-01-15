@@ -3,9 +3,11 @@ import styled from 'styled-components/native';
 import { ImageBackground, Image, Dimensions, StyleSheet} from 'react-native';
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
+import Graves from './Graves'
 
 const Roseta = () => {
   const [artifactImages, setArtifactImages] = useState([]);
+  const [gravesVisible, setGravesVisible] = useState(false)
 
   useEffect(() => {
     getArtifactsFromDataBase();
@@ -73,32 +75,72 @@ const Roseta = () => {
     const y = centerY + radius * Math.sin(angle);
 
     return { left: x, top: y };
-};
+  };
+
+  const gravesButton = () => {
+    console.log("boton pulsado");
+    setGravesVisible(true);
+  };
 
 
   return (
-      <ImageBackground source={require("../assets/wallpaper_roseta.png")} style={styles.imageBackground}>
-        {artifactImages.length === 4 &&
-          artifactImages.map((image, index) => {
-            const position = calculateArtifactPosition(index);
-            const styles = {
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              borderWidth: 1,
-              borderColor: 'blue', 
-              position: 'absolute',
-              ...position,
-            };
-            return <ArtifactImage key={index} source={{ uri: image }} style={styles} />;
-          })}
-          </ImageBackground>
+    <ImageBackground source={require("../assets/wallpaper_roseta.png")} style={styles.imageBackground}>
+      {artifactImages.length === 4 &&
+        artifactImages.map((image, index) => {
+          const position = calculateArtifactPosition(index);
+          const styles = {
+            width: 80,
+            height: 80,
+            borderRadius: 40,
+            borderWidth: 1,
+            borderColor: 'blue', 
+            position: 'absolute',
+            ...position,
+          };
+          return <ArtifactImage key={index} source={{ uri: image }} style={styles} />;
+        })}
+
+
+      < GravesButton  onPress={gravesButton}> 
+        <GravesButtonText> Go to Cementery </GravesButtonText>
+      </GravesButton>
+
+      {gravesVisible && (
+
+        <Graves />
+        
+      )}
+
+    </ImageBackground>
   );
 };
 
-const BackgroundContainer = styled.View`
-  flex: 1;
-  background-color: #c8a2c8;
+const GravesButtonText = styled.Text`
+  color: white;
+  font-family: Tealand;
+  text-shadow: 3px 3px 4px black;
+  font-size: 20px;
+  margin-top: 1%;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const GravesButton = styled.TouchableOpacity`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20px; 
+  left: 20px; 
+  background: #A3A2A2;
+  opacity: 0.65;
+  width: 40%;
+  height: 50px;
+  border-radius: 30px;
+  border: #0B0B0B;
+  background-color: rgba(255, 255, 255, 0.2);
 `;
 
 const styles = StyleSheet.create({
