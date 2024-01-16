@@ -23,22 +23,22 @@ const Graves = () => {
     <StyledView style={{ flex: 1 }}>
       {/* Sección superior */}
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square onPress={() => handleSquareClick('Componente 1')} disabled={inventory.includes('Componente 1')}>
+        <Square onPress={() => handleSquareClick('Celestial Etherweave')} disabled={inventory.includes('Componente 1')}>
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
 
-        <Square onPress={() => handleSquareClick('Componente 2')} disabled={inventory.includes('Componente 2')}>
+        <Square onPress={() => handleSquareClick('Dragonheart Crystals')} disabled={inventory.includes('Componente 2')}>
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
       </StyledView>
 
       {/* Sección inferior */}
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square onPress={() => handleSquareClick('Componente 3')} disabled={inventory.includes('Componente 3')}>
+        <Square onPress={() => handleSquareClick('Sylvan Moonshard Essence')} disabled={inventory.includes('Componente 3')}>
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
 
-        <Square onPress={() => handleSquareClick('Componente 4')} disabled={inventory.includes('Componente 4')}>
+        <Square onPress={() => handleSquareClick('Abyssal Voidsteel Ingots')} disabled={inventory.includes('Componente 4')}>
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
       </StyledView>
