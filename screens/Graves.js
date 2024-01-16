@@ -37,7 +37,7 @@ const Graves = () => {
   
       console.log('Datos de materiales obtenidos:', materials);
   
-      setMaterials(materials);
+      //setMaterials(materials);
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -45,7 +45,7 @@ const Graves = () => {
   
   const saveMaterialToDatabase = async (material) => {
     try {
-      const url = `https://mmaproject-app.fly.dev/api/materials/save/${material.id}`;
+      const url = `https://mmaproject-app.fly.dev/api/materials/updateMaterial/${material.id}`;
       
       const response = await axiosInstance.patch(url, {
         founded: true,
