@@ -5,17 +5,17 @@ import { axiosInstance } from '../axios/axiosInstance';
 
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
+  const [userId, setuserId] = useState([]);
 
   useEffect(() => {
     console.log(inventory);
   }, [inventory]);
 
-  const handleSquareClick = (component) => {
+  const handleSquareClick = async (component) => {
     setInventory((prevInventory) => {
       if (prevInventory.length < 4 && !prevInventory.includes(component)) {
         const newInventory = [...prevInventory, component];
-
-        saveMaterialToDatabase(newInventory);
+        saveMaterialToDatabase(component); 
         return newInventory;
       }
       return prevInventory;
@@ -23,17 +23,21 @@ const Graves = () => {
   };
   
 
-  const saveMaterialToDatabase = async (items) => {
+  const saveMaterialToDatabase = async (material) => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/materials/save';
+      const url = `https://mmaproject-app.fly.dev/api/materials/save/${material.id}`;
       
-      const response = await axiosInstance.post(url, { items });
+      const response = await axiosInstance.patch(url, {
+        found: true,
+        who: userId, 
+      });
   
-      console.log('Response from server:', response.data);
+      console.log('Estado del material modificado en BD', response.data);
     } catch (error) {
-      console.error('Error saving to database:', error);
+      console.error('Error al guardar en la base de datos:', error);
     }
   };
+  
   
 
   return (
