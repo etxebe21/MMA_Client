@@ -6,8 +6,10 @@ import { axiosInstance } from '../axios/axiosInstance';
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
+  const [materials, setMaterials] = useState([]);
 
   useEffect(() => {
+    getMaterialsFromDatabase();
     console.log(inventory);
   }, [inventory]);
 
@@ -22,13 +24,28 @@ const Graves = () => {
     });
   };
   
-
+  const getMaterialsFromDatabase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/materials';
+  
+      const response = await axiosInstance.get(url);
+  
+      const materials = response.data;
+  
+      console.log('Datos de materiales obtenidos:', materials);
+  
+      setMaterials(materials);
+    } catch (error) {
+      console.error('Error al obtener datos de materiales:', error);
+    }
+  };
+  
   const saveMaterialToDatabase = async (material) => {
     try {
       const url = `https://mmaproject-app.fly.dev/api/materials/save/${material.id}`;
       
       const response = await axiosInstance.patch(url, {
-        found: true,
+        founded: true,
         who: userId, 
       });
   
@@ -38,8 +55,6 @@ const Graves = () => {
     }
   };
   
-  
-
   return (
     <StyledView style={{ flex: 1 }}>
       {/* Sección superior */}
