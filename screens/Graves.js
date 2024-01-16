@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { axiosInstance } from '../axios/axiosInstance';
 
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
-
-  
-  const handleSquareClick = (component) => {
-    setInventory((prevInventory) => {
-      if (prevInventory.length < 4 && !prevInventory.includes(component)) {
-        return [...prevInventory, component];
-      }
-      return prevInventory;
-    });
-  };
 
   useEffect(() => {
     console.log(inventory);
   }, [inventory]);
 
+  const handleSquareClick = (component) => {
+    setInventory((prevInventory) => {
+      if (prevInventory.length < 4 && !prevInventory.includes(component)) {
+        const newInventory = [...prevInventory, component];
+
+        saveMaterialToDatabase(newInventory);
+        return newInventory;
+      }
+      return prevInventory;
+    });
+  };
+  
+
+  const saveMaterialToDatabase = async (items) => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/materials/save';
+      
+      const response = await axiosInstance.post(url, { items });
+  
+      console.log('Response from server:', response.data);
+    } catch (error) {
+      console.error('Error saving to database:', error);
+    }
+  };
+  
 
   return (
     <StyledView style={{ flex: 1 }}>
