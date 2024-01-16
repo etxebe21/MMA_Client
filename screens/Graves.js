@@ -5,6 +5,7 @@ import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
 
+  
   const handleSquareClick = (component) => {
     setInventory((prevInventory) => {
       if (prevInventory.length < 4 && !prevInventory.includes(component)) {
@@ -23,22 +24,34 @@ const Graves = () => {
     <StyledView style={{ flex: 1 }}>
       {/* Sección superior */}
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square onPress={() => handleSquareClick('Celestial Etherweave')} disabled={inventory.includes('Componente 1')}>
+        <Square
+          onPress={() => handleSquareClick('Celestial Etherweave')}
+          disabled={inventory.includes('Celestial Etherweave')}
+        >
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
 
-        <Square onPress={() => handleSquareClick('Dragonheart Crystals')} disabled={inventory.includes('Componente 2')}>
+        <Square
+          onPress={() => handleSquareClick('Dragonheart Crystals')}
+          disabled={inventory.includes('Dragonheart Crystals')}
+        >
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
       </StyledView>
 
       {/* Sección inferior */}
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square onPress={() => handleSquareClick('Sylvan Moonshard Essence')} disabled={inventory.includes('Componente 3')}>
+        <Square
+          onPress={() => handleSquareClick('Sylvan Moonshard Essence')}
+          disabled={inventory.includes('Sylvan Moonshard Essence')}
+        >
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
 
-        <Square onPress={() => handleSquareClick('Abyssal Voidsteel Ingots')} disabled={inventory.includes('Componente 4')}>
+        <Square
+          onPress={() => handleSquareClick('Abyssal Voidsteel Ingots')}
+          disabled={inventory.includes('Abyssal Voidsteel Ingots')}
+        >
           <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
         </Square>
       </StyledView>
@@ -50,8 +63,11 @@ const Square = styled(TouchableOpacity)`
   flex: 1;
   margin: 10px;
   border: 2px solid black;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // Ajustar la opacidad si está deshabilitado
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; 
+  background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')}; 
+  height: 80px; 
 `;
+
 const styles = StyleSheet.create({
   image: {
     width: '100%',
@@ -61,24 +77,13 @@ const styles = StyleSheet.create({
 });
 
 const StyledView = styled.View`
-  background-color: rgba(255,255,255,1)
+  background-color: rgba(255, 255, 255, 1);
   flex: 1;
   justify-content: center;
   align-items: center;
-  height: 100%; 
+  height: 100%;
   width: 100%;
-`
+`;
 
-const GravesText = styled.Text`
-  color: white;
-  font-family: Tealand;
-  text-shadow: 3px 3px 4px black;
-  font-size: 20px;
-  margin-top: 1%;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
 
-export default Graves
+export default Graves;
