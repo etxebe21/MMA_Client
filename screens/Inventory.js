@@ -1,27 +1,62 @@
 import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import styled from 'styled-components/native';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { View } from 'react-native-reanimated/lib/typescript/Animated';
 
 const Inventory = () => {
     const [inventory, setInventory] = useState([]);
 
-
     return (
         <StyledView>
-            <Text>
+            <TextStyled>
                 Entramos en inventario
-            </Text>
+            </TextStyled>
+            <Row>
+                <Square disabled={true}>
+                    <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+                </Square>
+                <Square>
+                    <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+                </Square>
+            </Row>
+            <Row>
+                <Square>
+                    <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+                </Square>
+                <Square>
+                    <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+                </Square>
+            </Row>
         </StyledView>
     );
 };
 
-const Square = styled(TouchableOpacity)`
+const Row = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;  
+`;
+
+const Square = styled.View`
   flex: 1;
   margin: 10px;
   border: 2px solid black;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; // Ajustar la opacidad si está deshabilitado
+  opacity: 1};
 `;
+
+const TextStyled = styled.Text`
+  font-size: 25px;
+  color: black;
+`;
+
+const StyledView = styled.View`
+  background-color: purple;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+`;
+
 const styles = StyleSheet.create({
     image: {
         width: '100%',
@@ -30,29 +65,4 @@ const styles = StyleSheet.create({
     },
 });
 
-const Text = styled.Text`
-font-size:25px;
-color: black;
-`
-const StyledView = styled.View`
-  background-color: "red";
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  height: 100%; 
-  width: 100%;
-`
-
-const GravesText = styled.Text`
-  color: white;
-  font-family: Tealand;
-  text-shadow: 3px 3px 4px black;
-  font-size: 20px;
-  margin-top: 1%;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-export default Inventory
+export default Inventory;
