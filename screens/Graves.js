@@ -9,9 +9,12 @@ const Graves = () => {
   const [materials, setMaterials] = useState([]);
 
   useEffect(() => {
-    getMaterialsFromDatabase();
     console.log(inventory);
   }, [inventory]);
+
+  useEffect(() => {
+    getMaterialsFromDatabase();
+  }, [])
 
   const handleSquareClick = async (component) => {
     setInventory((prevInventory) => {
