@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, Image} from 'react-native';
 import { axiosInstance } from '../axios/axiosInstance';
 
 const Graves = () => {
@@ -33,11 +33,11 @@ const Graves = () => {
   
       const response = await axiosInstance.get(url);
   
-      const materials = response.data;
+      const materials = response.data.data;
   
       console.log('Datos de materiales obtenidos:', materials);
   
-      //setMaterials(materials);
+      setMaterials(materials);
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -58,48 +58,44 @@ const Graves = () => {
     }
   };
   
+// Agregar la propiedad 'image' a cada objeto en el array 'materials'
+const materialsWithImages = materials.map((material) => ({
+  ...material,
+  image: require('../assets/descansoAcolito.png'),
+}));
+
   return (
     <StyledView style={{ flex: 1 }}>
-      {/* Sección superior */}
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square
-          onPress={() => handleSquareClick('Celestial Etherweave')}
-          disabled={inventory.includes('Celestial Etherweave')}
-        >
-          <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
-        </Square>
-
-        <Square
-          onPress={() => handleSquareClick('Dragonheart Crystals')}
-          disabled={inventory.includes('Dragonheart Crystals')}
-        >
-          <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
-        </Square>
+        {materialsWithImages.slice(0, 2).map((material) => (
+          <Square
+            key={material.id}
+            onPress={() => handleSquareClick(material.name)}
+            disabled={inventory.includes(material.name)}
+          >
+            <Image source={material.image} style={styles.image} />
+          </Square>
+        ))}
       </StyledView>
-
-      {/* Sección inferior */}
+  
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-        <Square
-          onPress={() => handleSquareClick('Sylvan Moonshard Essence')}
-          disabled={inventory.includes('Sylvan Moonshard Essence')}
-        >
-          <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
-        </Square>
-
-        <Square
-          onPress={() => handleSquareClick('Abyssal Voidsteel Ingots')}
-          disabled={inventory.includes('Abyssal Voidsteel Ingots')}
-        >
-          <Image source={require('../assets/descansoAcolito.png')} style={styles.image} />
-        </Square>
+        {materialsWithImages.slice(2, 4).map((material) => (
+          <Square
+            key={material.id}
+            onPress={() => handleSquareClick(material.name)}
+            disabled={inventory.includes(material.name)}
+          >
+            <Image source={material.image} style={styles.image} />
+          </Square>
+        ))}
       </StyledView>
     </StyledView>
   );
-};
-
+  
+}
 const Square = styled(TouchableOpacity)`
   flex: 1;
-  margin: 30px;
+  margin: 35px;
   width: 100px;
   border: 2px solid black;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)}; 
@@ -124,6 +120,5 @@ const StyledView = styled.View`
   height: 100%;
   width: 100%;
 `;
-
 
 export default Graves;
