@@ -61,11 +61,13 @@ const Graves = () => {
 
 const Square = styled(TouchableOpacity)`
   flex: 1;
-  margin: 10px;
+  margin: 30px;
+  width: 100px;
   border: 2px solid black;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)}; 
   background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')}; 
-  height: 80px; 
+  height: 200px; 
+  width: 100px;
 `;
 
 const styles = StyleSheet.create({
