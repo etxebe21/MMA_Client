@@ -20,7 +20,7 @@ const Graves = () => {
     setInventory((prevInventory) => {
       if (prevInventory.length < 4 && !prevInventory.includes(component)) {
         const newInventory = [...prevInventory, component];
-        saveMaterialToDatabase(component); 
+        //saveMaterialToDatabase(component); 
         return newInventory;
       }
       return prevInventory;
