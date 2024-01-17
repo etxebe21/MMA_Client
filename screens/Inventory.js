@@ -3,35 +3,40 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from
 import styled from 'styled-components/native';
 
 const Inventory = () => {
-    const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState([]);
 
-    return (
-        <ImageBackground
-            source={require('../assets/wallpaper_inventory.png')}
-            style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
-        >
-            <StyledView>
-                <TextStyled>
-                    Entramos en inventario
-                </TextStyled>
+  return (
+    <ImageBackground 
+      source={require('../assets/wallpaper_inventory.png')}
+      style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
+    >
+      <StyledView>
+        {/* <TextStyled>
+            Entramos en inventario
+        </TextStyled> */}
 
-                <Row1>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                </Row1>
-            </StyledView>
-        </ImageBackground>
-    );
+        <DivCentral>
+          <TextStyled> Entramos dentro deeeeee </TextStyled>
+
+          <CajaMateriales>
+            <Square>
+                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+            </Square>
+            <Square>
+                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+            </Square>
+            <Square>
+                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+            </Square>
+            <Square>
+                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+            </Square>
+          </CajaMateriales>
+
+        </DivCentral>
+      </StyledView>
+    </ImageBackground>
+  );
 };
 
 const Row = styled.View`
@@ -42,9 +47,36 @@ const Row = styled.View`
   padding:2%;
 `;
 
-const Row1 = styled.View`
+const CajaMateriales = styled.View`
   flex-direction: row;
   justify-content: space-around;
+  width: 95%;
+  height: 100px;
+  background-color: red;
+`;
+
+const DivCentral = styled.View`
+  display: flex
+  align-items: center
+  justify-content: center;
+  width: 95%;
+  height: 50%;
+  background-color: blue;
+`;
+
+const Div2 = styled.View`
+  display: flex
+  align-items: center
+  justify-content: center;
+  width: 95%;
+  height: 40px;
+  background-color: pink;
+`;
+
+const Div3 = styled.View`
+  display: flex
+  align-items: center
+  justify-content: center;
   width: 95%;
   height: 10px;
 `;
@@ -71,7 +103,6 @@ const StyledView = styled.View`
   align-items: center;
   height: 100%;
   width: 100%;
-  margin-top:5%;
 `;
 
 
