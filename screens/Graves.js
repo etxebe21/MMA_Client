@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacity, StyleSheet, Image, ToastAndroid, ImageBackground} from 'react-native';
+import { TouchableOpacity, StyleSheet, Image, Text, ToastAndroid, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
@@ -13,6 +13,7 @@ const Graves = () => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
   const [localMaterials, setLocalMaterials] = useState([]); // Nuevo estado local
+  const [initialMaterials, setInitialMaterials] = useState([]);
 
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
@@ -29,6 +30,7 @@ const Graves = () => {
 
   useEffect(() => {
     console.log(localMaterials);
+    setInitialMaterials(localMaterials);
   }, [localMaterials]);
   
   const handleSquareClick = async (material) => {
@@ -121,9 +123,16 @@ const Graves = () => {
     } 
   };
 
+  const restablecerValores = () => {
+    setInventory([]); // Restablecer el inventario
+    setLocalMaterials(initialMaterials); // Restablecer los materiales locales
+  };
+
+
 return (
   <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
-    <StyledView style={{ flex: 1 }}>
+  <TextStyled> LAS CUATRO TUMBAS </TextStyled>
+    <StyledView style={{ flex: 1, justifyContent: 'space-between'  }}>
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
       {localMaterials != null &&
         localMaterials.slice(0, 2).map((material) => (
@@ -150,6 +159,11 @@ return (
         ))}
       </StyledView>
     </StyledView>
+    
+        <Buttons onPress={restablecerValores}>
+          <ButtonsText>RESET</ButtonsText>
+        </Buttons>
+      
   </ImageBackground>
 );
 }
@@ -181,4 +195,30 @@ height: 100%;
 width: 100%;
 `;
 
+const ButtonsText = styled.Text`
+  fontSize: 28px;
+  font-family: 'Tealand';
+  color: #4c2882; 
+  align-self: center;
+  top:17px;
+`
+const Buttons = styled.TouchableOpacity`
+  background: #A3A2A2;
+  opacity: 0.95;
+  width: 180px;
+  height: 65px;
+  align-self: center;
+  border-radius: 30px;
+  border: #0B0B0B;
+  bottom:10px;
+  background-color:#ffffff
+`
+const TextStyled = styled.Text`
+  font-size: 30px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  left: 10%;
+  bottom: -2%;
+`;
 export default Graves;
