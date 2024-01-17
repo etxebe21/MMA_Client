@@ -1,34 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
+import { axiosInstance } from '../axios/axiosInstance';
 
 const Inventory = () => {
-    const [inventory, setInventory] = useState([]);
 
+    // Images routes
+    const Image_background = require('../assets/wallpaper_inventory.png');
+    const Image_siluette = require('../assets/siluette.png');
+    const [profileInventory, setProfileInventory] = useState([]);
+
+    const getMaterials = async () => {
+        try {
+            const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
+            console.log(artifactsData.data.data);
+            const materials = artifactsData.data.data;
+
+            const newProfileInventory = materials.map(element => ({ ...element }));
+
+            setProfileInventory(newProfileInventory);
+        } catch (error) {
+            console.error("Error al obtener los materiales:", error);
+        }
+    }
+
+    const moveMats = (item) => {
+        // Lógica de eventos cuando se presiona un Square
+        console.log('Square presionado:', item);
+        // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
+    };
+    useEffect(() => {
+        console.log("PROFILE INVENTORY");
+        console.log(profileInventory);
+    }, [profileInventory]);
+
+    useEffect(() => {
+        getMaterials();
+    }, []);
     return (
         <ImageBackground
-            source={require('../assets/modal_NonEncriptedParchment.png')}
-            style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
+            source={Image_background}
+            style={styles.background}
         >
             <StyledView>
-                <TextStyled>
-                    Entramos en inventario
-                </TextStyled>
+                {/* <TextStyled>
+            Entramos en inventario
+        </TextStyled> */}
+                <EquipmentMainContainer>
 
-                <Row1>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                    <Square>
-                        <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-                    </Square>
-                </Row1>
+                    <TextStyled> Equipamiento </TextStyled>
+                    <ImageBackground source={Image_siluette} style={styles.siluette}>
+                        <EquipmentContainer>
+
+                            {/* Silueta del Jugador */}
+
+
+                            {/* <Siluette> */}
+                            {/* <Image source={Image_siluette} style={styles.siluette} /> */}
+                            {/* </Siluette> */}
+
+                            {/* Casco */}
+                            <Helmet>
+
+                            </Helmet>
+
+                            {/* Pechera */}
+                            <Breastplate>
+
+                            </Breastplate>
+
+                            {/* Guantes */}
+                            <Gloves>
+
+                            </Gloves>
+
+
+                            {/* Pantalones */}
+                            <Trousers>
+
+                            </Trousers>
+
+                        </EquipmentContainer>
+                    </ImageBackground>
+                </EquipmentMainContainer>
+
+
+                <CajaMateriales>
+                    {/* Aquí habrá un ScrollView para los materiales */}
+                        {profileInventory.map((item, index) => (
+                            <TouchableOpacity key={index} onPress={() => moveMats(item)}>
+                                <Square>
+                                    <Image source={{ uri: item.image }} style={styles.image} />
+                                </Square>
+                            </TouchableOpacity>
+                        ))}
+                </CajaMateriales>
+
             </StyledView>
         </ImageBackground>
     );
@@ -42,21 +109,49 @@ const Row = styled.View`
   padding:2%;
 `;
 
-const Row1 = styled.View`
+const CajaMateriales = styled.View`
   flex-direction: row;
   justify-content: space-around;
   width: 95%;
-  height: 10px;
+  height: 100px;
+  background-color: red;
 `;
 
-const Square = styled.TouchableOpacity`
+const StyledView = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  // background-color: pink;
+`;
+
+const EquipmentContainer = styled.View`
+  display: flex;
+  align-items: left;
+  justify-content: start;
+  height: 90%;
+  width: 100%;
+  // background-color: blue;
+`;
+
+const EquipmentMainContainer = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 80%;
+  width: 100%;
+  // background-color: yellow;
+`;
+
+
+const Square = styled.View`
   flex: 1;
   margin: 2px;
   border: 3px solid purple;
   height:80px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-
 `;
 
 const TextStyled = styled.Text`
@@ -66,15 +161,6 @@ const TextStyled = styled.Text`
   text-shadow: 3px 3px 8px white;
 `;
 
-const StyledView = styled.View`
-  flex: 1;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  margin-top:5%;
-`;
-
-
 
 const styles = StyleSheet.create({
     image: {
@@ -82,6 +168,73 @@ const styles = StyleSheet.create({
         height: '100%',
         resizeMode: 'cover',
     },
+
+    siluette: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%'
+    },
+
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%'
+    }
 });
+
+// ==============================================
+//                Equipamiento
+// ==============================================
+
+// Este no tiene que ser un boton, tiene que ser una imagen de silueta 
+const Siluette = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 50%;
+  width: 100%;
+  background-color: pink;
+`;
+
+const Helmet = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Breastplate = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Gloves = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Trousers = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
 
 export default Inventory;
