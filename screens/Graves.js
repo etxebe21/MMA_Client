@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
 import { socket } from '../socket/socketConnect';
-import io from 'socket.io-client';
+
+import descansoAcolitoImage from '../assets/descansoAcolito.png';
 
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
@@ -14,7 +15,6 @@ const Graves = () => {
 
   useEffect(() => {
     console.log(inventory);
-    getMaterialsFromDatabase();
   }, [inventory]);
 
   useEffect(() => {
@@ -92,12 +92,6 @@ const Graves = () => {
       }
     };
 
-// // Agregar la propiedad 'image' a cada objeto en el array 'materials'
-// const materialsWithImages = materialsGlobalState.map((material) => ({
-//   ...material,
-//   image: require('../assets/descansoAcolito.png'),
-// }));
-
 return (
   <StyledView style={{ flex: 1 }}>
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
@@ -107,7 +101,7 @@ return (
           onPress={() => handleSquareClick(material)}
           disabled={inventory.includes(material)}
         >
-          <Image image={material.image} style={styles.image} />
+          <Image source={descansoAcolitoImage} style={styles.image} />
         </Square>
       ))}
     </StyledView>
@@ -119,41 +113,40 @@ return (
           onPress={() => handleSquareClick(material)}
           disabled={inventory.includes(material)}
         >
-          <Image image={material.image} style={styles.image} />
+          <Image source={descansoAcolitoImage} style={styles.image} />
         </Square>
       ))}
     </StyledView>
   </StyledView>
 );
-
-  
 }
+
 const Square = styled(TouchableOpacity)`
-  flex: 1;
-  margin: 35px;
-  width: 100px;
-  border: 2px solid black;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)}; 
-  background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')}; 
-  height: 200px; 
-  width: 100px;
+flex: 1;
+margin: 35px;
+width: 100px;
+border: 2px solid black;
+opacity: ${(props) => (props.disabled ? 0.3 : 1)};
+background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')};
+height: 200px;
+width: 100px;
 `;
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
+image: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'cover',
+},
 });
 
 const StyledView = styled.View`
-  background-color: rgba(255, 255, 255, 1);
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
+background-color: rgba(255, 255, 255, 1);
+flex: 1;
+justify-content: center;
+align-items: center;
+height: 100%;
+width: 100%;
 `;
 
 export default Graves;
