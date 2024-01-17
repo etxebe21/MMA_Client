@@ -4,80 +4,94 @@ import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 
 const Inventory = () => {
-  
-  // Images routes
-  const Image_background = require('../assets/wallpaper_inventory.png');
-  const Image_siluette = require('../assets/siluette.png');
-  
-  const [inventory, setInventory] = useState([]);
 
-  return (
-    <ImageBackground 
-      source={Image_background}
-      style={styles.background}
-    >
-      <StyledView>
-        {/* <TextStyled>
+    // Images routes
+    const Image_background = require('../assets/wallpaper_inventory.png');
+    const Image_siluette = require('../assets/siluette.png');
+    const [profileInventory, setProfileInventory] = useState([]);
+
+    const getMaterials = async () => {
+        try {
+            const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
+            console.log(artifactsData.data.data);
+            const materials = artifactsData.data.data;
+
+            const newProfileInventory = materials.map(element => ({ ...element }));
+
+            setProfileInventory(newProfileInventory);
+        } catch (error) {
+            console.error("Error al obtener los materiales:", error);
+        }
+    }
+
+    useEffect(() => {
+        console.log("PROFILE INVENTORY");
+        console.log(profileInventory);
+    }, [profileInventory]);
+
+    useEffect(() => {
+        getMaterials();
+    }, []);
+    return (
+        <ImageBackground
+            source={Image_background}
+            style={styles.background}
+        >
+            <StyledView>
+                {/* <TextStyled>
             Entramos en inventario
         </TextStyled> */}
-        <EquipmentMainContainer>
+                <EquipmentMainContainer>
 
-          <TextStyled> Equipamiento </TextStyled>
-          <ImageBackground source={Image_siluette} style={styles.siluette}>
-            <EquipmentContainer>
-            
-            {/* Silueta del Jugador */}
+                    <TextStyled> Equipamiento </TextStyled>
+                    <ImageBackground source={Image_siluette} style={styles.siluette}>
+                        <EquipmentContainer>
 
-            
-            {/* <Siluette> */}
-              {/* <Image source={Image_siluette} style={styles.siluette} /> */}
-            {/* </Siluette> */}
-
-            {/* Casco */}
-            <Helmet>
-
-            </Helmet>
-
-            {/* Pechera */}
-            <Breastplate>
-            
-            </Breastplate>
-
-            {/* Guantes */}
-            <Gloves>
-
-            </Gloves>
+                            {/* Silueta del Jugador */}
 
 
-            {/* Pantalones */}
-            <Trousers>
+                            {/* <Siluette> */}
+                            {/* <Image source={Image_siluette} style={styles.siluette} /> */}
+                            {/* </Siluette> */}
 
-            </Trousers>
+                            {/* Casco */}
+                            <Helmet>
 
-            </EquipmentContainer>
-          </ImageBackground>
-        </EquipmentMainContainer>
-        
+                            </Helmet>
 
-        <CajaMateriales>
-          {/* Aqui Habra un scroll view para los materiales */}
-          <Square>
-              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-          </Square>
-          <Square>
-              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-          </Square>
-          <Square>
-              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-          </Square>
-          <Square>
-              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-          </Square>
-        </CajaMateriales>
+                            {/* Pechera */}
+                            <Breastplate>
 
-      </StyledView>
-    </ImageBackground>
-  );
+                            </Breastplate>
+
+                            {/* Guantes */}
+                            <Gloves>
+
+                            </Gloves>
+
+
+                            {/* Pantalones */}
+                            <Trousers>
+
+                            </Trousers>
+
+                        </EquipmentContainer>
+                    </ImageBackground>
+                </EquipmentMainContainer>
+
+
+                <CajaMateriales>
+                    {/* Aqui Habra un scroll view para los materiales */}
+                    {profileInventory.map((item, index) => (
+                        <Square key={index}>
+                            <Image source={{ uri: item.image }} style={styles.image} />
+                        </Square>
+                    ))}
+                </CajaMateriales>
+
+            </StyledView>
+        </ImageBackground>
+    );
 };
 
 const Row = styled.View`
@@ -149,19 +163,19 @@ const styles = StyleSheet.create({
     },
 
     siluette: {
-      flex: 1, 
-      resizeMode: 'cover', 
-      justifyContent: 'center', 
-      width: '100%', 
-      height: '100%'
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%'
     },
 
     background: {
-      flex: 1, 
-      resizeMode: 'cover', 
-      justifyContent: 'center', 
-      width: '100%', 
-      height: '100%' 
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%'
     }
 });
 
