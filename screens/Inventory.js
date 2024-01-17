@@ -2,103 +2,104 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
+import Profile from './Profile';
 
 const Inventory = () => {
 
-    // Images routes
-    const Image_background = require('../assets/wallpaper_inventory.png');
-    const Image_siluette = require('../assets/siluette.png');
-    const [profileInventory, setProfileInventory] = useState([]);
+  // Images routes
+  const Image_background = require('../assets/wallpaper_inventory.png');
+  const Image_siluette = require('../assets/siluette.png');
+  const [profileInventory, setProfileInventory] = useState([]);
+  const [profileEquipment, setProfileEquipment] = useState([]);
+  const [item, setItem] = useState();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-    const getMaterials = async () => {
-        try {
-            const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-            console.log(artifactsData.data.data);
-            const materials = artifactsData.data.data;
+  const getMaterials = async () => {
+    try {
+      const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
+      console.log(artifactsData.data.data);
+      const materials = artifactsData.data.data;
 
-            const newProfileInventory = materials.map(element => ({ ...element }));
+      const newProfileInventory = materials.map(element => ({ ...element }));
 
-            setProfileInventory(newProfileInventory);
-        } catch (error) {
-            console.error("Error al obtener los materiales:", error);
-        }
+      setProfileInventory(newProfileInventory);
+    } catch (error) {
+      console.error("Error al obtener los materiales:", error);
     }
+  }
 
-    const moveMats = (item) => {
-        // Lógica de eventos cuando se presiona un Square
-        console.log('Square presionado:', item);
-        // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
-    };
-    useEffect(() => {
-        console.log("PROFILE INVENTORY");
-        console.log(profileInventory);
-    }, [profileInventory]);
+  const moveMats = (item) => {
+    // Lógica de eventos cuando se presiona un Square
+    console.log('Square presionado:', item);
+    setItem(item);
 
-    useEffect(() => {
-        getMaterials();
-    }, []);
-    return (
-        <ImageBackground
-            source={Image_background}
-            style={styles.background}
-        >
-            <StyledView>
-                {/* <TextStyled>
+    // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
+  };
+  const moveMats1 = () => {
+    console.log('Square presionado:');
+    console.log(item);
+    setProfileEquipment((prevProfileEquipment) => [...prevProfileEquipment, item]);
+    console.log("INVENTARIOOOOOO");
+    console.log(profileEquipment);
+
+    setCurrentIndex((prevIndex) => prevIndex + 1);
+
+  };
+  useEffect(() => {
+    console.log("PROFILE INVENTORY");
+    console.log(profileInventory);
+  }, [profileInventory]);
+
+  useEffect(() => {
+    getMaterials();
+  }, []);
+  return (
+    <ImageBackground
+      source={Image_background}
+      style={styles.background}
+    >
+      <StyledView>
+        {/* <TextStyled>
             Entramos en inventario
         </TextStyled> */}
-                <EquipmentMainContainer>
+        <EquipmentMainContainer>
 
-                    <TextStyled> Equipamiento </TextStyled>
-                    <ImageBackground source={Image_siluette} style={styles.siluette}>
-                        <EquipmentContainer>
+          <TextStyled> Equipamiento </TextStyled>
+          <ImageBackground source={Image_siluette} style={styles.siluette}>
 
-                            {/* Silueta del Jugador */}
-
-
-                            {/* <Siluette> */}
-                            {/* <Image source={Image_siluette} style={styles.siluette} /> */}
-                            {/* </Siluette> */}
-
-                            {/* Casco */}
-                            <Helmet>
-
-                            </Helmet>
-
-                            {/* Pechera */}
-                            <Breastplate>
-
-                            </Breastplate>
-
-                            {/* Guantes */}
-                            <Gloves>
-
-                            </Gloves>
+            <EquipmentContainer>
+              <Helmet onPress={() => moveMats1()}>
+                {profileInventory.map((item, index) => (
+                  index === 1 && (
+                    <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                  )
+                ))}
+              </Helmet>
+              <Breastplate onPress={() => moveMats1()}>
+              </Breastplate>
+              <Gloves onPress={() => moveMats1()}>
+              </Gloves>
+              <Trousers onPress={() => moveMats1()}>
+              </Trousers>
+            </EquipmentContainer>
+          </ImageBackground>
+        </EquipmentMainContainer>
 
 
-                            {/* Pantalones */}
-                            <Trousers>
+        <CajaMateriales>
+          {/* Aquí habrá un ScrollView para los materiales */}
+          {profileInventory.map((item, index) => (
+            <TouchableOpacity key={index} onPress={() => moveMats(item)}>
+              <Square>
+                <Image source={{ uri: item.image }} style={styles.image} />
+              </Square>
+            </TouchableOpacity>
+          ))}
+        </CajaMateriales>
 
-                            </Trousers>
-
-                        </EquipmentContainer>
-                    </ImageBackground>
-                </EquipmentMainContainer>
-
-
-                <CajaMateriales>
-                    {/* Aquí habrá un ScrollView para los materiales */}
-                        {profileInventory.map((item, index) => (
-                            <TouchableOpacity key={index} onPress={() => moveMats(item)}>
-                                <Square>
-                                    <Image source={{ uri: item.image }} style={styles.image} />
-                                </Square>
-                            </TouchableOpacity>
-                        ))}
-                </CajaMateriales>
-
-            </StyledView>
-        </ImageBackground>
-    );
+      </StyledView>
+    </ImageBackground>
+  );
 };
 
 const Row = styled.View`
@@ -163,27 +164,27 @@ const TextStyled = styled.Text`
 
 
 const styles = StyleSheet.create({
-    image: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
 
-    siluette: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%'
-    },
+  siluette: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
 
-    background: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%'
-    }
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  }
 });
 
 // ==============================================
