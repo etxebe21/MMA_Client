@@ -3,11 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from
 import styled from 'styled-components/native';
 
 const Inventory = () => {
+  
+  // Images routes
+  const Image_background = require('../assets/wallpaper_inventory.png');
+  const Image_siluette = require('../assets/siluette.png');
+  
   const [inventory, setInventory] = useState([]);
 
   return (
     <ImageBackground 
-      source={require('../assets/wallpaper_inventory.png')}
+      source={Image_background}
       style={styles.background}
     >
       <StyledView>
@@ -17,14 +22,15 @@ const Inventory = () => {
         <EquipmentMainContainer>
 
           <TextStyled> Equipamiento </TextStyled>
-          <EquipmentContainer>
+          <ImageBackground source={Image_siluette} style={styles.siluette}>
+            <EquipmentContainer>
             
             {/* Silueta del Jugador */}
-            <Image source={require('../assets/wallpaper_inventory.png')} style={styles.siluette} />
-            
-            <Siluette>
 
-            </Siluette>
+            
+            {/* <Siluette> */}
+              {/* <Image source={Image_siluette} style={styles.siluette} /> */}
+            {/* </Siluette> */}
 
             {/* Casco */}
             <Helmet>
@@ -47,7 +53,8 @@ const Inventory = () => {
 
             </Trousers>
 
-          </EquipmentContainer>
+            </EquipmentContainer>
+          </ImageBackground>
         </EquipmentMainContainer>
         
 
@@ -102,35 +109,19 @@ const EquipmentContainer = styled.View`
   align-items: left;
   justify-content: start;
   height: 90%;
-  width: 90%;
-  background-color: blue;
+  width: 100%;
+  // background-color: blue;
 `;
 
 const EquipmentMainContainer = styled.View`
   display: flex;
   align-items: center;
   justify-content: start;
-  height: 50%;
+  height: 80%;
   width: 100%;
-  background-color: pink;
+  // background-color: yellow;
 `;
 
-const Div2 = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 95%;
-  height: 40px;
-  background-color: pink;
-`;
-
-const Div3 = styled.View`
-  display: flex
-  align-items: center
-  justify-content: center;
-  width: 95%;
-  height: 10px;
-`;
 
 const Square = styled.TouchableOpacity`
   flex: 1;
@@ -160,7 +151,7 @@ const styles = StyleSheet.create({
       flex: 1, 
       resizeMode: 'cover', 
       justifyContent: 'center', 
-      width: '50%', 
+      width: '100%', 
       height: '100%'
     },
 
@@ -178,13 +169,13 @@ const styles = StyleSheet.create({
 // ==============================================
 
 // Este no tiene que ser un boton, tiene que ser una imagen de silueta 
-const Siluette = styled.TouchableOpacity`
-  flex: 1;
-  margin: 2px;
-  border: 3px solid purple;
-  height:80px;
-  width:80px;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+const Siluette = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 50%;
+  width: 100%;
+  background-color: pink;
 `;
 
 const Helmet = styled.TouchableOpacity`
