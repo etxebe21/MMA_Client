@@ -16,16 +16,19 @@ const Graves = () => {
     getMaterialsFromDatabase();
   }, [])
 
-  const handleSquareClick = async (component) => {
-    setInventory((prevInventory) => {
-      if (prevInventory.length < 4 && !prevInventory.includes(component)) {
-        const newInventory = [...prevInventory, component];
-        //saveMaterialToDatabase(component); 
-        return newInventory;
-      }
-      return prevInventory;
-    });
+  const handleSquareClick = async (material) => {
+    if (material && material._id) {
+      setInventory((prevInventory) => {
+        if (prevInventory.length < 4 && !prevInventory.includes(material)) {
+          const newInventory = [...prevInventory, material];
+          saveMaterialToDatabase(material);
+          return newInventory;
+        }
+        return prevInventory;
+      });
+    }
   };
+  
   
   const getMaterialsFromDatabase = async () => {
     try {
@@ -34,8 +37,11 @@ const Graves = () => {
       const response = await axiosInstance.get(url);
   
       const materials = response.data.data;
-  
-      console.log('Datos de materiales obtenidos:', materials);
+      console.log('Material:', materials[0]._id);
+      //console.log('Datos de materiales obtenidos:', materials);
+      // materials.forEach(material => {
+      //   console.log('Material:', material._id);
+      // });
   
       setMaterials(materials);
     } catch (error) {
@@ -45,11 +51,12 @@ const Graves = () => {
   
   const saveMaterialToDatabase = async (material) => {
     try {
-      const url = `https://mmaproject-app.fly.dev/api/materials/updateMaterial/${material.id}`;
+      const url = `https://mmaproject-app.fly.dev/api/materials/updateMaterial/${material._id}`;
       
       const response = await axiosInstance.patch(url, {
         founded: true,
         who: userId, 
+        id: material._id,
       });
   
       console.log('Estado del material modificado en BD', response.data);
@@ -69,9 +76,9 @@ const materialsWithImages = materials.map((material) => ({
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
         {materialsWithImages.slice(0, 2).map((material) => (
           <Square
-            key={material.id}
-            onPress={() => handleSquareClick(material.name)}
-            disabled={inventory.includes(material.name)}
+            key={material._id}
+            onPress={() => handleSquareClick(material) }
+            disabled={inventory.includes(material)}
           >
             <Image source={material.image} style={styles.image} />
           </Square>
@@ -81,8 +88,8 @@ const materialsWithImages = materials.map((material) => ({
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
         {materialsWithImages.slice(2, 4).map((material) => (
           <Square
-            key={material.id}
-            onPress={() => handleSquareClick(material.name)}
+            key={material._id}
+            onPress={() => handleSquareClick(material)}
             disabled={inventory.includes(material.name)}
           >
             <Image source={material.image} style={styles.image} />
