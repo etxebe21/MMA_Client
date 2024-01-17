@@ -18,6 +18,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
   const { userGlobalState, setUserGlobalState } = useContext(Context);
   const { usersGlobalState, setUsersGlobalState } = useContext(Context);
   const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
+  const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
 
   GoogleSignin.configure({
@@ -195,7 +196,8 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
     //setIsAuthenticated(true);
     onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
     setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
-    getArtifactsFromDataBase()
+    getArtifactsFromDataBase();
+    //getMaterialsFromDatabase();
 
   };
 
@@ -231,6 +233,35 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
       setIsLoading(false);
     }
   };
+
+  const getMaterialsFromDatabase = async () => {
+    try {
+      const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
+  
+        const materials = materialsData.data.data;
+        console.log('MATERIAAAAAAAA', materials)
+        console.log('Material:', materials[0]._id);
+      setMaterialsGlobalState(materials);
+      //setArtefactsGlobalState(materials);
+        // Actualizar los artefactos con la imagen del usuario
+        const updatedMaterials = await Promise.all(
+          materials.map(async (material) => {
+            if (material.found) {
+              const userImage = await getUserImageById(material.who);
+              return { ...material, userImage };
+            }
+            return material;
+          })
+        );
+        // setMaterialsGlobalState(updatedMaterials);
+        console.log('Materiales guardados en materialsglobalState', materialsGlobalState);
+        //console.log('Materiales guardados en globalState', artifactsGlobalState);
+
+    } catch (error) {
+      console.error('Error al obtener datos de materiales:', error);
+    }
+  };
+  
 
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {

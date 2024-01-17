@@ -11,7 +11,10 @@ import descansoAcolitoImage from '../assets/descansoAcolito.png';
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
+  const [localMaterials, setLocalMaterials] = useState([]); // Nuevo estado local
+
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
+  const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
 
   useEffect(() => {
     console.log(inventory);
@@ -22,6 +25,10 @@ const Graves = () => {
     getID();
     console.log(userId);
   }, [])
+
+  useEffect(() => {
+    console.log(localMaterials);
+  }, [localMaterials]);
   
   const handleSquareClick = async (material) => {
     if (material && material._id) {
@@ -41,8 +48,11 @@ const Graves = () => {
       const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
   
         const materials = materialsData.data.data;
+        console.log('MATERIAAAAAAAA', materials)
         console.log('Material:', materials[0]._id);
-
+      //setMaterialsGlobalState(materials);
+      setLocalMaterials(materials); 
+      //setArtefactsGlobalState(materials);
         // Actualizar los artefactos con la imagen del usuario
         const updatedMaterials = await Promise.all(
           materials.map(async (material) => {
@@ -53,9 +63,10 @@ const Graves = () => {
             return material;
           })
         );
-        setMaterialsGlobalState(updatedMaterials);
-        console.log('Materiales guardados en globalState', materialsGlobalState);
-      
+        // setMaterialsGlobalState(updatedMaterials);
+        console.log('Materiales guardados en localMaterials', localMaterials);
+        //console.log('Materiales guardados en globalState', artifactsGlobalState);
+
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -76,7 +87,7 @@ const Graves = () => {
       // socket.on('responseMaterial', (responseData) => {
       // console.log('Material modificado:', responseData);
       // });
-      console.log('Materiales guardados en globalState', materialsGlobalState)
+      console.log('Materiales guardados en globalState', localMaterials)
       
       ToastAndroid.showWithGravity('Material recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
@@ -112,7 +123,7 @@ const Graves = () => {
 return (
   <StyledView style={{ flex: 1 }}>
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      { materialsGlobalState != null && materialsGlobalState.slice(0, 2).map((material) => (
+      { localMaterials != null && localMaterials.slice(0, 2).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
@@ -124,7 +135,7 @@ return (
     </StyledView>
 
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      { materialsGlobalState != null && materialsGlobalState.slice(2, 4).map((material) => (
+      { localMaterials != null && localMaterials.slice(2, 4).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
