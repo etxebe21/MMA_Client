@@ -30,7 +30,7 @@ const Qr = () => {
   
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get('window');
+  const { width1, height1 } = Dimensions.get('window');
 
   useEffect(() => {
     if (scanned && userGlobalState.insideTower !== null) {
@@ -68,7 +68,7 @@ const Qr = () => {
     return (
       <ImageBackground
         source={require("../assets/wallpaper_QR.png")}
-        style={[styles.imageBackground, { width, height }]}
+        style={[styles.imageBackground]}
       >
         <View>
           <QrView>
@@ -101,8 +101,8 @@ const Text = styled.Text`
 `;
 
 const QrView = styled.View`
-  width: ${Dimensions.get('window').width * 0.50}px;
-  height: ${Dimensions.get('window').height * 0.97}px;
+  width: ${Dimensions.get('window').width * 0.5}px;
+  height: ${Dimensions.get('window').height * 0.79}px;
   justify-content: center;
   background: rgba(76, 40, 130, 0);
 `;
@@ -121,6 +121,8 @@ const styles = StyleSheet.create({
   imageBackground: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
+    height: '100%', 
   },
 });
 
