@@ -39,7 +39,8 @@ const App = () => {
 
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
-  const [artifactsGlobalState, setArtefactsGlobalState] = useState()
+  const [artifactsGlobalState, setArtefactsGlobalState] = useState();
+  const [materialsGlobalState, setMaterialsGlobalState] = useState();
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
 
@@ -70,9 +71,13 @@ const App = () => {
       ...globalState,
       ...data
     }));
-
   }
-
+    const handleMaterialsGlobalState = (data) => {
+      setMaterialsGlobalState(globalState => ({
+        ...globalState,
+        ...data
+      }));
+    }
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -107,7 +112,7 @@ const App = () => {
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
 
-  }, [userGlobalState, usersGlobalState, artifactsGlobalState])
+  }, [userGlobalState, usersGlobalState, artifactsGlobalState, materialsGlobalState])
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -218,9 +223,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState
 
     }}>
       <SafeAreaProvider>
@@ -267,4 +272,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default App
+export default App;
