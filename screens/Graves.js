@@ -21,11 +21,9 @@ const Graves = () => {
     getMaterialsFromDatabase();
     getID();
     console.log(userId);
-    console.log(materialsGlobalState);
   }, [])
-
+  
   const handleSquareClick = async (material) => {
-    
     if (material && material._id) {
       setInventory((prevInventory) => {
         if (prevInventory.length < 4 && !prevInventory.some(item => item._id === material._id)) {
@@ -40,19 +38,24 @@ const Graves = () => {
   
   const getMaterialsFromDatabase = async () => {
     try {
-      const url = 'https://mmaproject-app.fly.dev/api/materials';
+      const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
   
-      const response = await axiosInstance.get(url);
-  
-      const materials = response.data.data;
-      console.log('Material:', materials[0]._id);
-      //console.log('Datos de materiales obtenidos:', materials);
-      // materials.forEach(material => {
-      //   console.log('Material:', material._id);
-      // });
-  
-      setMaterialsGlobalState(materials);
-      console.log(materialsGlobalState);
+        const materials = materialsData.data.data;
+        console.log('Material:', materials[0]._id);
+
+        // Actualizar los artefactos con la imagen del usuario
+        const updatedMaterials = await Promise.all(
+          materials.map(async (material) => {
+            if (material.found) {
+              const userImage = await getUserImageById(material.who);
+              return { ...material, userImage };
+            }
+            return material;
+          })
+        );
+        setMaterialsGlobalState(updatedMaterials);
+        console.log('Materiales guardados en globalState', materialsGlobalState);
+      
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -71,9 +74,9 @@ const Graves = () => {
       socket.emit('updateMaterial', { selectedMaterial });
       
       // socket.on('responseMaterial', (responseData) => {
-      //   console.log('Material modificado:', responseData);
-
+      // console.log('Material modificado:', responseData);
       // });
+      console.log('Materiales guardados en globalState', materialsGlobalState)
       
       ToastAndroid.showWithGravity('Material recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
@@ -92,10 +95,24 @@ const Graves = () => {
       }
     };
 
+
+  // función para obtener la imagen del usuario por su ID
+  const getUserImageById = async (userId) => {
+    try {
+        const user = await axiosInstance.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
+  
+        const userPicture = user.data.data.picture;
+        console.log('Recibimos imagen de usuario que recoje artefacto');
+        return userPicture; // Devolvemos la URL de la imagen del usuario
+    } catch (error) {
+      console.error('Error al obtener la imagen del usuario:', error);
+    } 
+  };
+
 return (
   <StyledView style={{ flex: 1 }}>
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {Array.isArray(materialsGlobalState) && materialsGlobalState.slice(0, 2).map((material) => (
+      { materialsGlobalState != null && materialsGlobalState.slice(0, 2).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
@@ -107,7 +124,7 @@ return (
     </StyledView>
 
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {Array.isArray(materialsGlobalState) && materialsGlobalState.slice(2, 4).map((material) => (
+      { materialsGlobalState != null && materialsGlobalState.slice(2, 4).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
