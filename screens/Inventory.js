@@ -14,26 +14,53 @@ const Inventory = () => {
         {/* <TextStyled>
             Entramos en inventario
         </TextStyled> */}
+        <EquipmentContainer>
+          <TextStyled> Equipamiento </TextStyled>
+          
+          {/* Silueta del Jugador */}
+          <Siluette>
 
-        <DivCentral>
-          <TextStyled> Entramos dentro deeeeee </TextStyled>
+          </Siluette>
 
-          <CajaMateriales>
-            <Square>
-                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-            </Square>
-            <Square>
-                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-            </Square>
-            <Square>
-                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-            </Square>
-            <Square>
-                <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
-            </Square>
-          </CajaMateriales>
+          {/* Casco */}
+          <Helmet>
 
-        </DivCentral>
+          </Helmet>
+
+          {/* Pechera */}
+          <Breastplate>
+          
+          </Breastplate>
+
+          {/* Guantes */}
+          <Gloves>
+
+          </Gloves>
+
+
+          {/* Pantalones */}
+          <Trousers>
+
+          </Trousers>
+
+        </EquipmentContainer>
+
+        <CajaMateriales>
+          {/* Aqui Habra un scroll view para los materiales */}
+          <Square>
+              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+          </Square>
+          <Square>
+              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+          </Square>
+          <Square>
+              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+          </Square>
+          <Square>
+              <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
+          </Square>
+        </CajaMateriales>
+
       </StyledView>
     </ImageBackground>
   );
@@ -55,12 +82,21 @@ const CajaMateriales = styled.View`
   background-color: red;
 `;
 
-const DivCentral = styled.View`
+const StyledView = styled.View`
   display: flex
   align-items: center
   justify-content: center;
-  width: 95%;
+  height: 100%;
+  width: 100%;
+  // background-color: pink;
+`;
+
+const EquipmentContainer = styled.View`
+  display: flex
+  align-items: center
+  justify-content: center;
   height: 50%;
+  width: 100%;
   background-color: blue;
 `;
 
@@ -88,7 +124,6 @@ const Square = styled.TouchableOpacity`
   height:80px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-
 `;
 
 const TextStyled = styled.Text`
@@ -98,14 +133,6 @@ const TextStyled = styled.Text`
   text-shadow: 3px 3px 8px white;
 `;
 
-const StyledView = styled.View`
-  flex: 1;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-`;
-
-
 
 const styles = StyleSheet.create({
     image: {
@@ -114,5 +141,55 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
 });
+
+// ==============================================
+//                Equipamiento
+// ==============================================
+
+const Siluette = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Helmet = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Breastplate = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Gloves = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
+const Trousers = styled.TouchableOpacity`
+  flex: 1;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+`;
+
 
 export default Inventory;
