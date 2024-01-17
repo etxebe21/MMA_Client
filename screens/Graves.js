@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacity, StyleSheet, Image, ToastAndroid} from 'react-native';
+import { TouchableOpacity, StyleSheet, Image, ToastAndroid, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
 import { socket } from '../socket/socketConnect';
 
-import descansoAcolitoImage from '../assets/descansoAcolito.png';
+import descansoAcolitoImage from '../assets/wallpaper_profile.png';
+import graveImage from '../assets/La_Hermandad_Icon.png';
 
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
@@ -121,33 +122,35 @@ const Graves = () => {
   };
 
 return (
-  <StyledView style={{ flex: 1 }}>
-    <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-    {localMaterials != null &&
-      localMaterials.slice(0, 2).map((material) => (
-        <Square
-          key={material._id}
-          onPress={() => handleSquareClick(material)}
-          disabled={material.found || inventory.includes(material)}
-        >
-          <Image source={descansoAcolitoImage} style={styles.image} />
-        </Square>
-      ))}
-    </StyledView>
+  <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
+    <StyledView style={{ flex: 1 }}>
+      <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
+      {localMaterials != null &&
+        localMaterials.slice(0, 2).map((material) => (
+          <Square
+            key={material._id}
+            onPress={() => handleSquareClick(material)}
+            disabled={material.found || inventory.includes(material)}
+          >
+            <Image source={graveImage} style={styles.image} />
+          </Square>
+        ))}
+      </StyledView>
 
-    <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-    {localMaterials != null &&
-      localMaterials.slice(2, 4).map((material) => (
-        <Square
-          key={material._id}
-          onPress={() => handleSquareClick(material)}
-          disabled={material.found || inventory.includes(material)}
-        >
-          <Image source={descansoAcolitoImage} style={styles.image} />
-        </Square>
-      ))}
+      <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
+      {localMaterials != null &&
+        localMaterials.slice(2, 4).map((material) => (
+          <Square
+            key={material._id}
+            onPress={() => handleSquareClick(material)}
+            disabled={material.found || inventory.includes(material)}
+          >
+            <Image source={graveImage} style={styles.image} />
+          </Square>
+        ))}
+      </StyledView>
     </StyledView>
-  </StyledView>
+  </ImageBackground>
 );
 }
 
@@ -171,7 +174,6 @@ image: {
 });
 
 const StyledView = styled.View`
-background-color: rgba(255, 255, 255, 1);
 flex: 1;
 justify-content: center;
 align-items: center;
