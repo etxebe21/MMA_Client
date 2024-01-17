@@ -70,8 +70,8 @@ const App = () => {
       ...globalState,
       ...data
     }));
-
   }
+   
 
 
   //Para cargar por primera vez todos los datos necesaios
@@ -96,9 +96,9 @@ const App = () => {
   }, [isAuthenticated]);
 
   //AXIOS INTERCEPTORS
-  useEffect ( () => { 
+  useEffect(() => {
     axiosInit();
-  }, []); 
+  }, []);
 
   // El use effect se llama cuando el argumento, en este caso useGlobalState, se cambia.
   useEffect(() => {
@@ -115,7 +115,7 @@ const App = () => {
       const email = await AsyncStorage.getItem('userEmail');
       const role = await AsyncStorage.getItem('userRole');
       const id = await AsyncStorage.getItem('userID');
-      
+
 
       setRole(role);
       return { email, role, id };
@@ -220,7 +220,7 @@ const App = () => {
     <Context.Provider value={{
       globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState,
       handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState,
 
     }}>
       <SafeAreaProvider>

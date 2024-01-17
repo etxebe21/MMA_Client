@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
+import { axiosInstance } from '../axios/axiosInstance';
 
 const Inventory = () => {
   
