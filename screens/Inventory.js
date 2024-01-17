@@ -24,6 +24,11 @@ const Inventory = () => {
         }
     }
 
+    const moveMats = (item) => {
+        // Lógica de eventos cuando se presiona un Square
+        console.log('Square presionado:', item);
+        // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
+    };
     useEffect(() => {
         console.log("PROFILE INVENTORY");
         console.log(profileInventory);
@@ -81,12 +86,14 @@ const Inventory = () => {
 
 
                 <CajaMateriales>
-                    {/* Aqui Habra un scroll view para los materiales */}
-                    {profileInventory.map((item, index) => (
-                        <Square key={index}>
-                            <Image source={{ uri: item.image }} style={styles.image} />
-                        </Square>
-                    ))}
+                    {/* Aquí habrá un ScrollView para los materiales */}
+                        {profileInventory.map((item, index) => (
+                            <TouchableOpacity key={index} onPress={() => moveMats(item)}>
+                                <Square>
+                                    <Image source={{ uri: item.image }} style={styles.image} />
+                                </Square>
+                            </TouchableOpacity>
+                        ))}
                 </CajaMateriales>
 
             </StyledView>
@@ -138,7 +145,7 @@ const EquipmentMainContainer = styled.View`
 `;
 
 
-const Square = styled.TouchableOpacity`
+const Square = styled.View`
   flex: 1;
   margin: 2px;
   border: 3px solid purple;
