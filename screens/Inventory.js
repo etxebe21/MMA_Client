@@ -8,42 +8,48 @@ const Inventory = () => {
   return (
     <ImageBackground 
       source={require('../assets/wallpaper_inventory.png')}
-      style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
+      style={styles.background}
     >
       <StyledView>
         {/* <TextStyled>
             Entramos en inventario
         </TextStyled> */}
-        <EquipmentContainer>
+        <EquipmentMainContainer>
+
           <TextStyled> Equipamiento </TextStyled>
-          
-          {/* Silueta del Jugador */}
-          <Siluette>
+          <EquipmentContainer>
+            
+            {/* Silueta del Jugador */}
+            <Image source={require('../assets/wallpaper_inventory.png')} style={styles.siluette} />
+            
+            <Siluette>
 
-          </Siluette>
+            </Siluette>
 
-          {/* Casco */}
-          <Helmet>
+            {/* Casco */}
+            <Helmet>
 
-          </Helmet>
+            </Helmet>
 
-          {/* Pechera */}
-          <Breastplate>
-          
-          </Breastplate>
+            {/* Pechera */}
+            <Breastplate>
+            
+            </Breastplate>
 
-          {/* Guantes */}
-          <Gloves>
+            {/* Guantes */}
+            <Gloves>
 
-          </Gloves>
+            </Gloves>
 
 
-          {/* Pantalones */}
-          <Trousers>
+            {/* Pantalones */}
+            <Trousers>
 
-          </Trousers>
+            </Trousers>
 
-        </EquipmentContainer>
+          </EquipmentContainer>
+        </EquipmentMainContainer>
+        
 
         <CajaMateriales>
           {/* Aqui Habra un scroll view para los materiales */}
@@ -83,8 +89,8 @@ const CajaMateriales = styled.View`
 `;
 
 const StyledView = styled.View`
-  display: flex
-  align-items: center
+  display: flex;
+  align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
@@ -92,17 +98,26 @@ const StyledView = styled.View`
 `;
 
 const EquipmentContainer = styled.View`
-  display: flex
-  align-items: center
-  justify-content: center;
-  height: 50%;
-  width: 100%;
+  display: flex;
+  align-items: left;
+  justify-content: start;
+  height: 90%;
+  width: 90%;
   background-color: blue;
 `;
 
+const EquipmentMainContainer = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 50%;
+  width: 100%;
+  background-color: pink;
+`;
+
 const Div2 = styled.View`
-  display: flex
-  align-items: center
+  display: flex;
+  align-items: center;
   justify-content: center;
   width: 95%;
   height: 40px;
@@ -140,12 +155,29 @@ const styles = StyleSheet.create({
         height: '100%',
         resizeMode: 'cover',
     },
+
+    siluette: {
+      flex: 1, 
+      resizeMode: 'cover', 
+      justifyContent: 'center', 
+      width: '50%', 
+      height: '100%'
+    },
+
+    background: {
+      flex: 1, 
+      resizeMode: 'cover', 
+      justifyContent: 'center', 
+      width: '100%', 
+      height: '100%' 
+    }
 });
 
 // ==============================================
 //                Equipamiento
 // ==============================================
 
+// Este no tiene que ser un boton, tiene que ser una imagen de silueta 
 const Siluette = styled.TouchableOpacity`
   flex: 1;
   margin: 2px;
