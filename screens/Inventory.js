@@ -8,22 +8,20 @@ const Inventory = () => {
     return (
         <ImageBackground
             source={require('../assets/modal_NonEncriptedParchment.png')}
-            style={{resizeMode: 'cover', justifyContent: 'center'}}
+            style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
         >
             <StyledView>
                 <TextStyled>
                     Entramos en inventario
                 </TextStyled>
-                <Row>
-                    <Square disabled={true}>
+
+                <Row1>
+                    <Square>
                         <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
                     </Square>
                     <Square>
                         <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
                     </Square>
-                </Row>
-                <Siluete source={require('../assets/cansado.jpeg')} />
-                <Row1>
                     <Square>
                         <Image source={require('../assets/cansado.jpeg')} style={styles.image} />
                     </Square>
@@ -47,16 +45,18 @@ const Row = styled.View`
 const Row1 = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  width: 60%;
-  height: 20%;
+  width: 95%;
+  height: 10px;
 `;
 
-const Square = styled.View`
+const Square = styled.TouchableOpacity`
   flex: 1;
-  margin: 20px;
-  border: 2px solid black;
-  height:70px;
-  width:60px;
+  margin: 2px;
+  border: 3px solid purple;
+  height:80px;
+  width:80px;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+
 `;
 
 const TextStyled = styled.Text`
@@ -66,16 +66,12 @@ const TextStyled = styled.Text`
 
 const StyledView = styled.View`
   flex: 1;
-  justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
 `;
 
-const Siluete = styled.Image`
-  height:40%;
-  width: 30%;
-`;
+
 
 const styles = StyleSheet.create({
     image: {
