@@ -61,7 +61,9 @@ const Square = styled.TouchableOpacity`
 
 const TextStyled = styled.Text`
   font-size: 25px;
-  color: black;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
 `;
 
 const StyledView = styled.View`
@@ -69,6 +71,7 @@ const StyledView = styled.View`
   align-items: center;
   height: 100%;
   width: 100%;
+  margin-top:5%;
 `;
 
 
