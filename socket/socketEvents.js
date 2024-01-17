@@ -6,6 +6,7 @@ function SocketListener(props) {
 	const [currentEvent, setEvent] = useState(currentSocketEvent);
 	const { handleGlobalState } = useContext(Context);
 	const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
+	const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
 	const { pendingTextGlobalState, setPendingTextGlobalState } = useContext(Context);
 	const { userGlobalState, setUserGlobalState } = useContext(Context);
 	const { usersGlobalState, setUsersGlobalState} = useContext(Context);
@@ -32,6 +33,10 @@ function SocketListener(props) {
 	const handleArtifacts = (data) => {
 		setArtefactsGlobalState(data);
 		// console.log(artifactsGlobalState);
+	};
+	const handleMaterials = (data) => {
+		setMaterialsGlobalState(data);
+		// console.log(materialsGlobalState);
 	};
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
@@ -69,6 +74,7 @@ function SocketListener(props) {
 		xp: handleAcoliteXperience,
 		new_user: handleNewAcolite,
 		responseEvent: handleArtifacts,
+		responseMaterial: handleMaterials,
 		responseVerify: handleVerify,
 		returnStat: handleStats,
 		resetArtifact: handleReset,

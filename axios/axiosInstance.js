@@ -25,11 +25,11 @@ const axiosInit = async () => {
                 try {
                     console.log("Entramos una vez ha caducado el token");
                     const credentials = await Keychain.getGenericPassword({ service: 'myAppRefresh' });
-                    console.log("CREDENTIALS", credentials);
+                    //console.log("CREDENTIALS", credentials);
                     const token = credentials?.password;
-                    console.log("TOKEN interceptors" + token);
+                    //console.log("TOKEN interceptors" + token);
                     const newAccessToken = await refreshAccessToken(token);
-                    console.log("NEW ACCESS TOKEN", newAccessToken.data.newToken.accessToken);
+                    //console.log("NEW ACCESS TOKEN", newAccessToken.data.newToken.accessToken);
                     setSecureValue(newAccessToken.data.newToken);
                     setSecureValueRefresh(newAccessToken.data.newToken);
                     const credentials1 = await Keychain.getGenericPassword({ service: 'myApp' });
