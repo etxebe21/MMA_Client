@@ -75,7 +75,7 @@ const Graves = () => {
   const updateFoundedMaterial = async (material) => {
     try {
       const selectedMaterial = { 
-        found: !material.found, 
+        found: true, 
         who: userId,
         id: material._id,
         userImage: '',
@@ -123,11 +123,12 @@ const Graves = () => {
 return (
   <StyledView style={{ flex: 1 }}>
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      { localMaterials != null && localMaterials.slice(0, 2).map((material) => (
+    {localMaterials != null &&
+      localMaterials.slice(0, 2).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
-          disabled={inventory.includes(material)}
+          disabled={material.found || inventory.includes(material)}
         >
           <Image source={descansoAcolitoImage} style={styles.image} />
         </Square>
@@ -135,11 +136,12 @@ return (
     </StyledView>
 
     <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      { localMaterials != null && localMaterials.slice(2, 4).map((material) => (
+    {localMaterials != null &&
+      localMaterials.slice(2, 4).map((material) => (
         <Square
           key={material._id}
           onPress={() => handleSquareClick(material)}
-          disabled={inventory.includes(material)}
+          disabled={material.found || inventory.includes(material)}
         >
           <Image source={descansoAcolitoImage} style={styles.image} />
         </Square>
