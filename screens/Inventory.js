@@ -7,7 +7,7 @@ const Inventory = () => {
 
     return (
         <ImageBackground
-            source={require('../assets/modal_NonEncriptedParchment.png')}
+            source={require('../assets/wallpaper_inventory.png')}
             style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', width: '100%', height: '100%' }}
         >
             <StyledView>
