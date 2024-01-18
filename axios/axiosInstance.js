@@ -60,8 +60,6 @@ const axiosInit = async () => {
                 // Modify request config here, e.g., add headers
                 config.headers['Authorization'] = `Bearer ${token}`;
             }
-
-
             return config;
         },
         (error) => {
