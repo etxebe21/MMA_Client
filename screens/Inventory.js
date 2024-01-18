@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Profile from './Profile';
@@ -13,7 +13,24 @@ const Inventory = () => {
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
-  const [inventoryIndex,setInventoryIndex] = useState();
+  const [inventoryIndex, setInventoryIndex] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    getMaterials();
+  }, []);
+
+  useEffect(() => {
+    const arrayIsFull = profileEquipment.every((element) => element !== null);
+
+    if (arrayIsFull) {
+      setIsModalVisible(true);
+      console.log(isModalVisible);
+    }
+  }, [profileEquipment]);
+  // Luego, puedes cambiar el estado para mostrar u ocultar el modal según tus necesidades
+  // Ejemplo: setIsModalVisible(true) para mostrar el modal
+
 
   const getMaterials = async () => {
     try {
@@ -28,12 +45,12 @@ const Inventory = () => {
     }
   }
 
-  const moveMats = (item,position) => {
+  const moveMats = (item, position) => {
     // Lógica de eventos cuando se presiona un Square
     console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
-
+    console.log(profileEquipment);
     // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
   };
 
@@ -58,72 +75,95 @@ const Inventory = () => {
     }
   };
 
-  useEffect(() => {
-    getMaterials();
-  }, []);
   return (
+
     <ImageBackground
       source={Image_background}
       style={styles.background}
     >
       <StyledView>
         {/* <TextStyled>
-            Entramos en inventario
+      Entramos en inventario
         </TextStyled> */}
-        <EquipmentMainContainer>
+        {!isModalVisible && (
 
-          <TextStyled> Equipamiento </TextStyled>
-          <ImageBackground source={Image_siluette} style={styles.siluette}>
+          <EquipmentMainContainer>
 
-            <EquipmentContainer>
-              <Helmet onPress={() => moveMats1(0)}>
-                {profileEquipment.map((item, index) => (
-                  index === 0 && item != null && (
-                    <Image key={index} source={{ uri: item.image }} style={styles.image} />
-                  )
-                ))}
-              </Helmet>
-              <Breastplate onPress={() => moveMats1(1)}>
-                {profileEquipment.map((item, index) => (
-                  index === 1 && item != null && (
-                    <Image key={index} source={{ uri: item.image }} style={styles.image} />
-                  )
-                ))}
-              </Breastplate>
-              <Gloves onPress={() => moveMats1(2)}>
-                {profileEquipment.map((item, index) => (
-                  index === 2 && item != null && (
-                    <Image key={index} source={{ uri: item.image }} style={styles.image} />
-                  )
-                ))}
-              </Gloves>
-              <Trousers onPress={() => moveMats1(3)}>
-                {profileEquipment.map((item, index) => (
-                  index === 3 && item != null && (
-                    <Image key={index} source={{ uri: item.image }} style={styles.image} />
-                  )
-                ))}
-              </Trousers>
-            </EquipmentContainer>
-          </ImageBackground>
-        </EquipmentMainContainer>
+            <TextStyled> Equipamiento </TextStyled>
+            <ImageBackground source={Image_siluette} style={styles.siluette}>
 
+              <EquipmentContainer>
+                <Helmet onPress={() => moveMats1(0)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 0 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Helmet>
+                <Breastplate onPress={() => moveMats1(1)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 1 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Breastplate>
+                <Gloves onPress={() => moveMats1(2)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 2 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Gloves>
+                <Trousers onPress={() => moveMats1(3)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 3 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Trousers>
+              </EquipmentContainer>
+            </ImageBackground>
+          </EquipmentMainContainer>
+        )}
 
-        <CajaMateriales>
-          {/* Aquí habrá un ScrollView para los materiales */}
-          {profileInventory.map((item, index) => (
-            <Square>
-              <TouchableOpacity key={index} onPress={() => moveMats(item,index)}>
-                {item != null &&(
-                <Image source={{ uri: item.image }} style={styles.image} />
-                )}
-              </TouchableOpacity>
-            </Square>
-          ))}
-        </CajaMateriales>
+        {!isModalVisible && (
 
+          <CajaMateriales>
+            {/* Aquí habrá un ScrollView para los materiales */}
+            {profileInventory.map((item, index) => (
+              <Square>
+                <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
+                  {item != null && (
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                  )}
+                </TouchableOpacity>
+              </Square>
+            ))}
+          </CajaMateriales>
+        )}
+
+        {isModalVisible && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+          >
+            <View style={styles.modalContainer}>
+              <ImageBackground
+                source={require('../assets/descansoAcolito.png')}
+                style={styles.imageBackground}
+              >
+                <View style={styles.modalContent}>
+                  <TextStyled>RESTING...</TextStyled>
+                </View>
+              </ImageBackground>
+            </View>
+          </Modal>
+        )}
       </StyledView>
     </ImageBackground>
+
+
   );
 };
 
@@ -209,7 +249,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     height: '100%'
-  }
+  },
+
+  imageBackgrounds: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 // ==============================================
