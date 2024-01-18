@@ -105,8 +105,8 @@ const Roseta = () => {
         })}
 
 
-      < GravesButton  onPress={gravesButton}> 
-        <GravesButtonText> Go to Cementery </GravesButtonText>
+      <GravesButton  onPress={gravesButton}> 
+        <GravesButtonText> CEMENTERY </GravesButtonText>
       </GravesButton>
 
       {gravesVisible && (
