@@ -46,10 +46,13 @@ const Graves = () => {
         return prevInventory;
       });
   
+      // Actualizar el campo 'found' del material antes de llamar a foundedMaterial
+      material.found = true;
+  
       console.log('material recogido', material);
-      foundedMaterial(material); // Llamamos a foundedMaterial después de que material se haya definido
-    }
+      foundedMaterial(material); 
   };
+}
   
   const getMaterialsFromDatabase = async () => {
     try {
