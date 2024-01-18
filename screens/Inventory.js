@@ -22,7 +22,6 @@ const Inventory = () => {
       const materials = artifactsData.data.data;
 
       const newProfileInventory = materials.map(element => ({ ...element }));
-      console.log(profileEquipment);
       setProfileInventory(newProfileInventory);
     } catch (error) {
       console.error("Error al obtener los materiales:", error);
@@ -54,21 +53,10 @@ const Inventory = () => {
         return newArray;
       });
 
-
-
-      // Imprime el inventario actualizado
-      console.log("INVENTARIOOOOOO");
-      console.log(profileEquipment);
-
       setCurrentIndex((prevIndex) => prevIndex + 1);
       setItem(null);
     }
   };
-
-  useEffect(() => {
-    console.log("PROFILE INVENTORY");
-    console.log(profileInventory);
-  }, [profileInventory]);
 
   useEffect(() => {
     getMaterials();
