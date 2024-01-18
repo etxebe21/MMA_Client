@@ -156,7 +156,7 @@ const Inventory = () => {
           >
             <View style={styles.modalContainer}>
               <ImageBackground
-                source={require('../assets/descansoAcolito.png')}
+                source={require('../assets/fondoViejaEscuela.png')}
                 style={styles.imageBackgrounds}
               >
                 <View style={styles.modalContent}>
