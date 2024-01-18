@@ -32,8 +32,8 @@ const GeolocationUser = () => {
   const [showPendingText, setShowPendingText] = useState(false);
   const [userId, setuserId] = useState([]);
 
-  const [mapVisible, setMapVisible] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [mapVisible, setMapVisible] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
   const [firstLoad, setFirstLoad] = useState(true);
   // const [socket, setSocket] = useState(null);
