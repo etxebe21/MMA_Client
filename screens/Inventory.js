@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
-import Profile from './Profile';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Inventory = () => {
 
@@ -54,6 +54,8 @@ const Inventory = () => {
     // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
   };
 
+  
+
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
       setProfileEquipment((prevProfileEquipment) => {
@@ -74,6 +76,10 @@ const Inventory = () => {
       setItem(null);
     }
   };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  }
 
   return (
 
@@ -151,18 +157,24 @@ const Inventory = () => {
             <View style={styles.modalContainer}>
               <ImageBackground
                 source={require('../assets/descansoAcolito.png')}
-                style={styles.imageBackground}
+                style={styles.imageBackgrounds}
               >
                 <View style={styles.modalContent}>
-                  <TextStyled>RESTING...</TextStyled>
+                  <CloseButton onPress={() => closeModal()}>
+                    <Icon name="times" size={60} color="#4c2882" />
+                  </CloseButton>
                 </View>
+                <ShowText>
+                <ModalText>VIAJANDO A LA </ModalText>
+                <ModalText>VIEJA ESCUELA</ModalText>
+
+                </ShowText>
               </ImageBackground>
             </View>
           </Modal>
         )}
       </StyledView>
     </ImageBackground>
-
 
   );
 };
@@ -228,6 +240,30 @@ const TextStyled = styled.Text`
 `;
 
 
+const ModalText = styled.Text`
+  font-size: 35px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  marginLeft: 80%;
+  marginTop: 10%;
+  align-items:center;
+`
+
+
+const ShowText= styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  // background-color: pink;
+`;
+
 const styles = StyleSheet.create({
   image: {
     width: '100%',
@@ -252,12 +288,16 @@ const styles = StyleSheet.create({
   },
 
   imageBackgrounds: {
-    flex: 1,
     width: '100%',
     height: '100%',
+    resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  modalContent: {
+    position: 'absolute',
+    top: 10,  // Ajusta la posición vertical del contenedor del ícono
+  }
 });
 
 // ==============================================
