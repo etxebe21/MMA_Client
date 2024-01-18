@@ -25,17 +25,27 @@ const Inventory = () => {
 
     if (arrayIsFull) {
       setIsModalVisible(true);
-      console.log(isModalVisible);
     }
   }, [profileEquipment]);
-  // Luego, puedes cambiar el estado para mostrar u ocultar el modal según tus necesidades
-  // Ejemplo: setIsModalVisible(true) para mostrar el modal
+
+  const removeEquipment = () => {
+
+    setProfileInventory((prevProfileInventory) => {
+      const newArray = [...prevProfileInventory];
+      console.log("entramos");
+      if (inventoryIndex < newArray.length) {
+        newArray.splice(inventoryIndex, 1);
+      }
+
+      return newArray;
+    });
+  };
+
 
 
   const getMaterials = async () => {
     try {
       const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-      console.log(artifactsData.data.data);
       const materials = artifactsData.data.data;
 
       const newProfileInventory = materials.map(element => ({ ...element }));
@@ -46,33 +56,30 @@ const Inventory = () => {
   }
 
   const moveMats = (item, position) => {
-    // Lógica de eventos cuando se presiona un Square
     console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
     console.log(profileEquipment);
-    // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
+
   };
 
-  
+
 
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
 
-        // Verifica si la posición está dentro del rango del array
         if (position < newArray.length) {
           newArray[position] = item;
         } else {
-          // Si la posición está fuera del rango, agrega el elemento al final
           newArray.push(item);
         }
 
         return newArray;
       });
-
       setCurrentIndex((prevIndex) => prevIndex + 1);
+      removeEquipment();
       setItem(null);
     }
   };
@@ -88,9 +95,6 @@ const Inventory = () => {
       style={styles.background}
     >
       <StyledView>
-        {/* <TextStyled>
-      Entramos en inventario
-        </TextStyled> */}
         {!isModalVisible && (
 
           <EquipmentMainContainer>
@@ -165,8 +169,8 @@ const Inventory = () => {
                   </CloseButton>
                 </View>
                 <ShowText>
-                <ModalText>VIAJANDO A LA </ModalText>
-                <ModalText>VIEJA ESCUELA</ModalText>
+                  <ModalText>VIAJANDO A LA </ModalText>
+                  <ModalText>VIEJA ESCUELA</ModalText>
 
                 </ShowText>
               </ImageBackground>
@@ -255,7 +259,7 @@ const CloseButton = styled.TouchableOpacity`
 `
 
 
-const ShowText= styled.View`
+const ShowText = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
