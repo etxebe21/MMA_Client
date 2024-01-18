@@ -138,7 +138,7 @@ const Graves = () => {
 
   const foundedMaterial = async (material) => {
     try {
-      const updatedInventory = [...inventory, material];
+      const updatedInventory = inventory.concat(material);
   
       const newData = {
         inventory: updatedInventory,
@@ -146,14 +146,14 @@ const Graves = () => {
   
       const response = await axiosInstance.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${userId}`, newData);
   
-      // Actualizar el estado local con la respuesta del servidor (si es necesario)
-      setUserGlobalState((prevUserGlobalState) => ({
-        ...prevUserGlobalState,
-        insideTower: !prevUserGlobalState.insideTower,
-      }));
+      // // Actualizar el estado local con la respuesta del servidor (si es necesario)
+      // setUserGlobalState((prevUserGlobalState) => ({
+      //   ...prevUserGlobalState,
+      //   inventory: !prevUserGlobalState.inventory,
+      // }));
   
-      // Actualizar el estado local del inventario
-      setInventory(updatedInventory);
+      // // Actualizar el estado local del inventario
+      // setInventory(updatedInventory);
   
       console.log('Usuario actualizado:', response.data);
     } catch (error) {
