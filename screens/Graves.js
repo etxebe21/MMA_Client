@@ -36,7 +36,6 @@ const Graves = () => {
   }, [localMaterials]);
   
   const handleSquareClick = async (material) => {
-    foundedMaterial();
     if (material && material._id) {
       setInventory((prevInventory) => {
         if (prevInventory.length < 4 && !prevInventory.some(item => item._id === material._id)) {
@@ -46,6 +45,9 @@ const Graves = () => {
         }
         return prevInventory;
       });
+  
+      console.log('material recogido', material);
+      foundedMaterial(material); // Llamamos a foundedMaterial después de que material se haya definido
     }
   };
   
@@ -131,25 +133,31 @@ const Graves = () => {
     setLocalMaterials(initialMaterials); // Restablecer los materiales locales
   };
 
-  const foundedMaterial = async () => {
+  const foundedMaterial = async (material) => {
     try {
+      const updatedInventory = [...inventory, material];
+  
       const newData = {
-        insideTower: !userGlobalState.insideTower,
+        inventory: updatedInventory,
       };
-
+  
       const response = await axiosInstance.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${userId}`, newData);
-
+  
       // Actualizar el estado local con la respuesta del servidor (si es necesario)
       setUserGlobalState((prevUserGlobalState) => ({
         ...prevUserGlobalState,
         insideTower: !prevUserGlobalState.insideTower,
       }));
-
+  
+      // Actualizar el estado local del inventario
+      setInventory(updatedInventory);
+  
       console.log('Usuario actualizado:', response.data);
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }
   };
+  
 
 return (
   <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
