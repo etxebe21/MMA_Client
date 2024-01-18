@@ -86,6 +86,14 @@ const App = () => {
     }
   }, [userGlobalState]);
 
+    //Para cargar por primera vez todos los datos necesaios
+    useEffect(() => {
+      if (materialsGlobalState != null) {
+        console.log('APP', materialsGlobalState);
+        setMaterialsGlobalState(materialsGlobalState);
+      }
+    }, [materialsGlobalState]);
+
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();

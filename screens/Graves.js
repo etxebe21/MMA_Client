@@ -12,13 +12,9 @@ import graveImage from '../assets/La_Hermandad_Icon.png';
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
-  const [localMaterials, setLocalMaterials] = useState([]); // Nuevo estado local
-  const [initialMaterials, setInitialMaterials] = useState([]);
-
+  
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
-  const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
-    const { userGlobalState, setUserGlobalState } = useContext(Context);
-
+  const { userGlobalState, setUserGlobalState } = useContext(Context);
 
   useEffect(() => {
     console.log(inventory);
@@ -29,11 +25,6 @@ const Graves = () => {
     getID();
     console.log(userId);
   }, [])
-
-  useEffect(() => {
-    console.log(localMaterials);
-    setInitialMaterials(localMaterials);
-  }, [localMaterials]);
   
   const handleSquareClick = async (material) => {
     if (material && material._id) {
@@ -53,17 +44,16 @@ const Graves = () => {
       foundedMaterial(material); 
   };
 }
-  
   const getMaterialsFromDatabase = async () => {
     try {
       const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
   
-        const materials = materialsData.data.data;
-        console.log('MATERIAAAAAAAA', materials)
-        console.log('Material:', materials[0]._id);
-      //setMaterialsGlobalState(materials);
-      setLocalMaterials(materials); 
-      //setArtefactsGlobalState(materials);
+      const materials = materialsData.data.data;
+      //console.log('MATERIAAAAAAAA', materials)
+      console.log('Material:', materials[0]._id);
+      setMaterialsGlobalState(materials);
+      console.log('ENTRA', materialsGlobalState);
+      
         // Actualizar los artefactos con la imagen del usuario
         const updatedMaterials = await Promise.all(
           materials.map(async (material) => {
@@ -74,10 +64,9 @@ const Graves = () => {
             return material;
           })
         );
-        // setMaterialsGlobalState(updatedMaterials);
-        console.log('Materiales guardados en localMaterials', localMaterials);
-        //console.log('Materiales guardados en globalState', artifactsGlobalState);
-
+        setMaterialsGlobalState(updatedMaterials);
+        console.log('Materiales guardados en MaterialsGlobalState', updatedMaterials);
+        
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -91,14 +80,32 @@ const Graves = () => {
         id: material._id,
         userImage: '',
       };
+      // Obtener la imagen del usuario actual
+      const userImage = await getUserImageById(userId);
+  
+      // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      const updatedMaterials = materialsGlobalState.map(mat => {
+        if (mat._id === material._id) {
+          return { ...mat, found: !material.found, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+        } else if (mat.found) {
+          // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+          return { ...mat, userImage: mat.userImage };
+        }
+        return mat;
+      });
+
+      setMaterialsGlobalState(updatedMaterials);
+
+       // Incluir la imagen del usuario en selectedArtifact
+       selectedMaterial.userImage = userImage;
   
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
       socket.emit('updateMaterial', { selectedMaterial });
       
-      // socket.on('responseMaterial', (responseData) => {
-      // console.log('Material modificado:', responseData);
-      // });
-      console.log('Materiales guardados en globalState', localMaterials)
+      socket.on('responseMaterial', (responseData) => {
+      console.log('Material modificadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:', responseData);
+      setMaterialsGlobalState(responseData);
+      });
       
       ToastAndroid.showWithGravity('Material recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
@@ -117,7 +124,6 @@ const Graves = () => {
       }
     };
 
-
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
@@ -133,7 +139,7 @@ const Graves = () => {
 
   const restablecerValores = () => {
     setInventory([]); // Restablecer el inventario
-    setLocalMaterials(initialMaterials); // Restablecer los materiales locales
+    setMaterialsGlobalState(initialMaterials); // Restablecer los materiales locales
   };
 
   const foundedMaterial = async (material) => {
@@ -146,29 +152,21 @@ const Graves = () => {
   
       const response = await axiosInstance.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${userId}`, newData);
   
-      // // Actualizar el estado local con la respuesta del servidor (si es necesario)
-      // setUserGlobalState((prevUserGlobalState) => ({
-      //   ...prevUserGlobalState,
-      //   inventory: !prevUserGlobalState.inventory,
-      // }));
-  
-      // // Actualizar el estado local del inventario
-      // setInventory(updatedInventory);
-  
       console.log('Usuario actualizado:', response.data);
+      const updatedUser = response.data.data;
+      setUserGlobalState(updatedUser);
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }
   };
   
-
 return (
   <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
   <TextStyled> LAS CUATRO TUMBAS </TextStyled>
     <StyledView style={{ flex: 1, justifyContent: 'space-between'  }}>
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {localMaterials != null &&
-        localMaterials.slice(0, 2).map((material) => (
+      {materialsGlobalState != null &&
+        materialsGlobalState.slice(0, 2).map((material) => (
           <Square
             key={material._id}
             onPress={() => handleSquareClick(material)}
@@ -180,8 +178,8 @@ return (
       </StyledView>
 
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {localMaterials != null &&
-        localMaterials.slice(2, 4).map((material) => (
+      {materialsGlobalState != null &&
+        materialsGlobalState.slice(2, 4).map((material) => (
           <Square
             key={material._id}
             onPress={() => handleSquareClick(material)}

@@ -35,8 +35,9 @@ function SocketListener(props) {
 		// console.log(artifactsGlobalState);
 	};
 	const handleMaterials = (data) => {
+		console.log('ENTRA EN LA FUNCION ', materialsGlobalState);
 		setMaterialsGlobalState(data);
-		// console.log(materialsGlobalState);
+		
 	};
 	const handleVerify = (data) => {
 		setPendingTextGlobalState(data.state);
