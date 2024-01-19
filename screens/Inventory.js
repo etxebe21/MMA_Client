@@ -188,7 +188,7 @@ const Row = styled.View`
 const CajaMateriales = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  width: 100%;
+  width: 95%;
   height: 100px;
 `;
 
@@ -318,6 +318,7 @@ const Helmet = styled.TouchableOpacity`
   border: 3px solid purple;
   height:80px;
   width:80px;
+  border-radius: 15px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
@@ -326,6 +327,7 @@ const Breastplate = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.2 : 1)};
 `;
@@ -335,6 +337,7 @@ const Gloves = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
@@ -344,6 +347,7 @@ const Trousers = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
