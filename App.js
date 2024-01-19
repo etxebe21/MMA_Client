@@ -43,6 +43,8 @@ const App = () => {
   const [materialsGlobalState, setMaterialsGlobalState] = useState();
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
+  const [inventorySlot, setInventorySlot] = useState([]);
+
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -74,6 +76,13 @@ const App = () => {
   }
     const handleMaterialsGlobalState = (data) => {
       setMaterialsGlobalState(globalState => ({
+        ...globalState,
+        ...data
+      }));
+    }
+
+    const handleInventorySlot = (data) => {
+      setInventorySlot(globalState => ({
         ...globalState,
         ...data
       }));
@@ -231,9 +240,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,inventorySlot,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,handleInventorySlot,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState,setInventorySlot
 
     }}>
       <SafeAreaProvider>

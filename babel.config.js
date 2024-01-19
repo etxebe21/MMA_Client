@@ -7,9 +7,11 @@ module.exports = {
       "path": ".env",
       "blacklist": null,
       "whitelist": null,
-      "safe": true,
+      "safe": true, 
       "allowUndefined": true
+      
     }]
+    
   ]
  };
  
