@@ -40,8 +40,11 @@ const Roseta = () => {
         );
 
         setArtefactsGlobalState(updatedArtifacts);
+        // Guardar las URLs de las imágenes en artifactImages
+        const artifactImages = updatedArtifacts.map(artifact => artifact.image);
+        setArtifactImages(artifactImages);
+        //console.log('Urls de las imágenes de los artefactos:', artifactImages)
   
-        // Log if needed
         console.log('Artefactos guardados en artifactsGlobalState:');
     } catch (error) {
       console.error('Error al obtener artefactos:', error);
@@ -102,7 +105,7 @@ const Roseta = () => {
             height: 80,
             borderRadius: 40,
             borderWidth: 1,
-            borderColor: 'blue', 
+            borderColor: 'purple', 
             position: 'absolute',
             ...position,
           };
