@@ -155,7 +155,7 @@ return (
                   onPress={() => handleSquareClick(material)}
                   disabled={material.found || inventory.includes(material)}
                 >
-                  <Image source={Image_tombClosed} style={styles.image} />
+                  <Image source={material.found || inventory.includes(material) ? Image_tombOpened : Image_tombClosed} style={styles.image} />
                 </Square>
               ))}
             </GravesView>
@@ -168,7 +168,7 @@ return (
                   onPress={() => handleSquareClick(material)}
                   disabled={material.found || inventory.includes(material)}
                 >
-                  <Image source={Image_tombClosed} style={styles.image} />
+                  <Image source={material.found || inventory.includes(material) ? Image_tombOpened : Image_tombClosed} style={styles.image} />
                 </Square>
               ))}
             </GravesView2>
