@@ -1,24 +1,34 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView,ToastAndroid} from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Context } from "../context/Context";
 
 const Inventory = () => {
 
-  // Images routes
-  const Image_background = require('../assets/wallpaper_inventory.png');
-  const Image_siluette = require('../assets/siluette.png');
-  const [profileInventory, setProfileInventory] = useState(Array(4).fill(null));
+  // GLOBALES
+  const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
+
+  // LOCALES
+  const [profileInventory, setProfileInventory] = useState(materialsGlobalState);
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [descriptionIndex, setDescriptionIndex] = useState(0);
+
+  // Images routes
+  const Image_background = require('../assets/wallpaper_inventory.png');
+  const Image_siluette = require('../assets/siluette.png');
+  
 
   useEffect(() => {
-    getMaterials();
-  }, []);
+    console.log("El Estado global Seteado")
+    console.log(materialsGlobalState)
+    // getMaterials();
+  }, [materialsGlobalState]);
 
   useEffect(() => {
     const arrayIsFull = profileEquipment.every((element) => element !== null);
@@ -41,48 +51,32 @@ const Inventory = () => {
     });
   };
 
-
-
-  const getMaterials = async () => {
-    try {
-      const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-      const materials = artifactsData.data.data;
-
-      const newProfileInventory = materials.map(element => ({ ...element }));
-      setProfileInventory(newProfileInventory);
-    } catch (error) {
-      console.error("Error al obtener los materiales:", error);
-    }
-  }
-
   const moveMats = (item, position) => {
     console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
     console.log(profileEquipment);
-
   };
-
-
 
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
-
-        if (position < newArray.length) {
-          newArray[position] = item;
+  
+        if (position < newArray.length && newArray[position] !== null) {
+          ToastAndroid.showWithGravity('Ya hay un objeto equipado', ToastAndroid.SHORT, ToastAndroid.CENTER);
         } else {
-          newArray.push(item);
+          newArray[position] = item;
+          removeEquipment();
+          setCurrentIndex((prevIndex) => prevIndex + 1);
         }
-
+  
         return newArray;
       });
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-      removeEquipment();
       setItem(null);
     }
   };
+  
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -139,16 +133,17 @@ const Inventory = () => {
         {!isModalVisible && (
 
           <CajaMateriales>
-            {/* Aquí habrá un ScrollView para los materiales */}
-            {profileInventory.map((item, index) => (
-              <Square>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {profileInventory.map((item, index) => (
                 <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
-                  {item != null && (
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                  )}
+                  <Square>
+                    {item != null && (
+                      <Image source={{ uri: item.image }} style={styles.image} />
+                    )}
+                  </Square>
                 </TouchableOpacity>
-              </Square>
-            ))}
+              ))}
+            </ScrollView>
           </CajaMateriales>
         )}
 
@@ -196,7 +191,6 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
-
 `;
 
 const StyledView = styled.View`
@@ -228,11 +222,11 @@ const EquipmentMainContainer = styled.View`
 
 
 const Square = styled.View`
-  flex: 1;
   margin: 2px;
   border: 3px solid purple;
-  height:100px;
-  width:80 px;
+  height:97px;
+  width:100px;
+  border-radius: 15px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
@@ -273,6 +267,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+    borderRadius: 13,
   },
 
   siluette: {
@@ -324,6 +319,7 @@ const Helmet = styled.TouchableOpacity`
   border: 3px solid purple;
   height:80px;
   width:80px;
+  border-radius: 15px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
@@ -332,6 +328,7 @@ const Breastplate = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.2 : 1)};
 `;
@@ -341,6 +338,7 @@ const Gloves = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
@@ -350,6 +348,7 @@ const Trousers = styled.TouchableOpacity`
   margin: 2px;
   border: 3px solid purple;
   height:80px;
+  border-radius: 15px;
   width:80px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;

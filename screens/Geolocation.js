@@ -330,7 +330,7 @@ const requestLocationPermission = async () => {
         const user = await axiosInstance.get(`https://mmaproject-app.fly.dev/api/users/${userId}`);
   
         const userPicture = user.data.data.picture;
-        console.log('Recibimos imagen de usuario que recoje artefacto');
+        // console.log('Recibimos imagen de usuario que recoje artefacto');
         return userPicture; // Devolvemos la URL de la imagen del usuario
     } catch (error) {
       console.error('Error al obtener la imagen del usuario:', error);

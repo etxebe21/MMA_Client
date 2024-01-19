@@ -1,5 +1,5 @@
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/native";
 import { ActivityIndicator, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -197,7 +197,7 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
     onLogin(); // Llama a la función onLogin proporcionada por el componente padre (App) para establecer isAuthenticated como true
     setLoginModalVisible(false); // Cierra el modal después del inicio de sesión exitoso 
     getArtifactsFromDataBase();
-    //getMaterialsFromDatabase();
+    getMaterialsFromDatabase();
 
   };
 
@@ -239,10 +239,9 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
       const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
   
         const materials = materialsData.data.data;
-        console.log('MATERIAAAAAAAA', materials)
-        console.log('Material:', materials[0]._id);
-      setMaterialsGlobalState(materials);
-      //setArtefactsGlobalState(materials);
+        // console.log('MATERIAAAAAAAA', materials)
+        // console.log('Material:', materials[0]._id);
+        setMaterialsGlobalState(materials);
         // Actualizar los artefactos con la imagen del usuario
         const updatedMaterials = await Promise.all(
           materials.map(async (material) => {
@@ -253,7 +252,10 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
             return material;
           })
         );
-        // setMaterialsGlobalState(updatedMaterials);
+
+        // Seteamos los materiales no necontrados
+        foundedMaterials(updatedMaterials);
+
         console.log('Materiales guardados en materialsglobalState', materialsGlobalState);
         //console.log('Materiales guardados en globalState', artifactsGlobalState);
 
@@ -262,6 +264,22 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
     }
   };
   
+  const foundedMaterials = (updatedMaterials) => {
+    const foundedMaterials = [];
+    console.log("Entra en founded Material");
+    updatedMaterials.forEach(foundedMaterial => {
+      if(foundedMaterial.found){
+        foundedMaterials.push(foundedMaterial)
+      }
+    });
+    console.log("Founded Materials:");
+    console.log(foundedMaterials)
+
+    // Seteamos los materiales
+    if(foundedMaterials !== undefined || foundedMaterials !== null ) {
+      setMaterialsGlobalState(foundedMaterials);
+    }
+  }
 
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
