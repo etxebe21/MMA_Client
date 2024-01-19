@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView,ToastAndroid} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal, ScrollView, ToastAndroid } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,11 +18,13 @@ const Inventory = () => {
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [descriptionIndex, setDescriptionIndex] = useState(0);
+  const [descriptionModal, setDescriptionModal] = useState(false);
+  const [firstItem, setFirstItem] = useState();
 
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
-  
+
 
   useEffect(() => {
     console.log("El Estado global Seteado")
@@ -38,6 +40,10 @@ const Inventory = () => {
     }
   }, [profileEquipment]);
 
+  useEffect(() => {
+   setDescriptionModal(true)
+  }, [firstItem]);
+
   const removeEquipment = () => {
 
     setProfileInventory((prevProfileInventory) => {
@@ -52,17 +58,28 @@ const Inventory = () => {
   };
 
   const moveMats = (item, position) => {
-    console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
-    console.log(profileEquipment);
+    setDescriptionIndex((prevIndex) => prevIndex + 1);
+    console.log(descriptionIndex, descriptionModal)
+    if (descriptionIndex === 1 && descriptionModal === false) {
+      setFirstItem(item);
+      console.log("Entramos");
+      setDescriptionIndex(0);
+    }
+    else if (descriptionIndex > 1)
+    {
+      setDescriptionIndex(0);
+    }
+   
+
   };
 
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
-  
+
         if (position < newArray.length && newArray[position] !== null) {
           ToastAndroid.showWithGravity('Ya hay un objeto equipado', ToastAndroid.SHORT, ToastAndroid.CENTER);
         } else {
@@ -70,13 +87,13 @@ const Inventory = () => {
           removeEquipment();
           setCurrentIndex((prevIndex) => prevIndex + 1);
         }
-  
+
         return newArray;
       });
       setItem(null);
     }
   };
-  
+
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -128,6 +145,29 @@ const Inventory = () => {
               </EquipmentContainer>
             </ImageBackground>
           </EquipmentMainContainer>
+        )}
+
+        {descriptionModal && (
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={descriptionModal}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.smallModalContent}>
+                <CloseButton1 onPress={() => closeModal()}>
+                  <Icon name="times" size={60} color="#4c2882" />
+                </CloseButton1>
+                {firstItem != null || firstItem != undefined (
+                  <Image source={firstItem[0].image} style={styles.image} />
+                )}
+                <ShowText>
+                  
+                </ShowText>
+              </View>
+            </View>
+          </Modal>
         )}
 
         {!isModalVisible && (
@@ -251,7 +291,11 @@ const CloseButton = styled.TouchableOpacity`
   marginTop: 10%;
   align-items:center;
 `
-
+const CloseButton1 = styled.TouchableOpacity`
+  position: 'absolute';            
+  marginLeft: 70%;
+  align-items:center;
+`
 
 const ShowText = styled.View`
   display: flex;
@@ -286,6 +330,14 @@ const styles = StyleSheet.create({
     height: '100%'
   },
 
+  descriptionBackgrounds: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   imageBackgrounds: {
     width: '100%',
     height: '100%',
@@ -295,8 +347,19 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     position: 'absolute',
-    top: 10,  // Ajusta la posición vertical del contenedor del ícono
-  }
+    top: 10,
+  },
+
+  smallModalContent: {
+    backgroundColor: 'rgba(170, 161, 170, 0.5)',
+    borderRadius: 10,
+    padding: 20,
+    width: '70%',
+    height: '60%',
+    marginTop: 200,
+    left:90,
+    
+  },
 });
 
 // ==============================================
