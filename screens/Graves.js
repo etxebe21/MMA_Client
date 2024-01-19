@@ -169,14 +169,10 @@ const Graves = ({returnButton}) => {
 return (
   
   <MainContainer>
-    <ImageBackground source={Image_graves} style={{width: '100%'}}>
+    <ImageBackground source={Image_graves} style={{width: '100%', marginTop: '-55%' }}>
       <MainContainer2>
         
-        {/* <TextStyled> LAS CUATRO TUMBAS </TextStyled> */}
-
-        {/* <ResetButton onPress={restablecerValores}>
-          <Icon name="trash" size={60} color="#9c2882" />
-        </ResetButton> */}
+        <TextStyled> LAS CUATRO TUMBAS </TextStyled>
 
           <GravesMainContainer>
             <GravesView >
@@ -206,8 +202,16 @@ return (
             </GravesView2>
           </GravesMainContainer>
   
+          <CloseButton onPress={returnButtonInternal}>
+            <Icon name="arrow-circle-left" size={60} color= '#888'/>
+          </CloseButton>
+
+          <ResetButton onPress={restablecerValores}>
+            <Icon name="trash" size={60} color=  '#888' />
+          </ResetButton>
 
       </MainContainer2>
+      
     </ImageBackground>
   </MainContainer>
 );
@@ -229,20 +233,15 @@ const MainContainer2 = styled.View`
   height: 100%;
 `;
 
-
 const Square = styled(TouchableOpacity)`
-
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  margin: -4%;
   opacity: ${(props) => (props.disabled ? 0.8 : 1)};
   background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0)' : 'transparent')};
   height: 65%;
   width: 40%;
-
-  // border: 2px solid black;
-  // background-color: yellow;
 `;
 
 const styles = StyleSheet.create({
@@ -262,14 +261,15 @@ const GravesMainContainer = styled.View`
 `;
 
 const GravesView = styled.View`
-  padding: 5px;
+  padding: 2px;
   display: flex;
   flex-direction: row;
-  top: 10%;
+  top: 30%;
   height: 25%;
-  width: 72%;
+  width: 65%;
   justify-content: space-between;
   align-content: center;
+  marginLeft:-1%;
 `;
 
 const GravesView2 = styled.View`
@@ -277,46 +277,29 @@ const GravesView2 = styled.View`
   align-content: center;
   justify-content: space-between;
   flex-direction: row;
-  padding: 4px;
+  padding: 5px;
   height: 30%;
-  width: 100%;
-  top: 5%;
-`;
-
-const ButtonsText = styled.Text`
-  fontSize: 28px;
-  font-family: 'Tealand';
-  color: #4c2882; 
-  align-self: center;
-  top:17px;
-`
-const Buttons = styled.TouchableOpacity`
-  background: #A3A2A2;
-  opacity: 0.95;
-  width: 180px;
-  height: 65px;
-  align-self: center;
-  border-radius: 30px;
-  border: #0B0B0B;
-  bottom:10px;
-  background-color:#ffffff
-`
-
-const TextStyled = styled.Text`
-  font-size: 30px;
-  color: #9c2882;
-  font-family: 'Tealand';
-  text-shadow: 3px 3px 8px white;
+  width: 90%;
+  top: 10%;
 `;
 
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  top: 6%;
-  marginLeft: 18%;
+  bottom:-5%;
+  marginLeft: -65%;
 `
 const ResetButton = styled.TouchableOpacity`
   position: 'absolute';            
-  top: -4%;
-  marginLeft: 70%;
+  bottom: 2%;
+  marginLeft: 60%;
 `
+const TextStyled = styled.Text`
+  font-size: 30px;
+  color: #999;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px black;
+  left: 2%;
+  bottom: -30%;
+`;
+
 export default Graves;
