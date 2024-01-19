@@ -165,6 +165,48 @@ const Graves = ({returnButton}) => {
     // Llama a la función proporcionada por las props para cerrar el modal
     returnButton();
   };
+
+  const resetSearch = async () => {
+
+    const materialData = {
+      id: [],
+      found: [],
+      who: [],
+    };
+
+    materialsGlobalState.forEach((material) => {
+      materialData.id.push(material._id);
+      if (material.found === true) {
+        materialData.found.push(!material.found);
+      }
+      else materialData.found.push(material.found);
+      materialData.who.push('');
+    });
+
+    socket.emit('resetMaterial', materialData.id, materialData.found, materialData.who);
+    //getMaterialsFromDatabase();
+  };
+
+  // const resetSearch = async () => {
+  //   const materialData = {
+  //     id: [],
+  //     found: [],
+  //     who: [],
+  //   };
+  
+  //   materialsGlobalState.forEach((material) => {
+  //     materialData.id.push(material._id);
+  //     materialData.found.push('false'); 
+  //     materialData.who.push('');
+  //   });
+  
+  //   // Emitir un solo evento con un objeto que contiene las tres propiedades
+  //   socket.emit('resetMaterial', materialData);
+  //   console.log('MATERIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//////////////////////////', materialData)
+  
+  //   // Actualizar los materiales desde la base de datos después de emitir el evento
+  //   getMaterialsFromDatabase();
+  // };
   
 return (
   
@@ -206,7 +248,7 @@ return (
             <Icon name="arrow-circle-left" size={50} color= '#888'/>
           </CloseButton>
 
-          <ResetButton onPress={restablecerValores}>
+          <ResetButton onPress={resetSearch}>
             <Icon name="trash" size={50} color=  '#888' />
           </ResetButton>
 

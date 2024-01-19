@@ -58,6 +58,8 @@ function SocketListener(props) {
 
 	}
 	const handleReset = (data) => { setArtefactsGlobalState(data) };
+	
+	const handleMaterialReset = (data) => { setMaterialsGlobalState(data);  console.log('MATERIALES RESETEADOS', data) };
 
 	const handleTired = (data) => {
 		const acolitosData = data.filter(dataRole => dataRole.role === "ACÓLITO");
@@ -79,6 +81,7 @@ function SocketListener(props) {
 		responseVerify: handleVerify,
 		returnStat: handleStats,
 		resetArtifact: handleReset,
+		resetMaterialResponse : handleMaterialReset,
 		UpdatedTired: handleTired,
 		receiveUserAtributes: handleUserGlobalState,
 		restAcolite: handleRestAcolite,
