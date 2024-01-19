@@ -5,19 +5,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
 import { socket } from '../socket/socketConnect';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Image_graves from '../assets/wallpaper_graves.png';
 import Image_tombClosed from '../assets/TumbaCerrada.png';
 import Image_tombOpened from '../assets/TumbaAbierta.png';
 
-const Graves = () => {
+const Graves = ({returnButton}) => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
-  const [localMaterials, setLocalMaterials] = useState([]); // Nuevo estado local
-  const [initialMaterials, setInitialMaterials] = useState([]);
-
+  
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
-  const { artifactsGlobalState, setArtefactsGlobalState } = useContext(Context);
+  const { userGlobalState, setUserGlobalState } = useContext(Context);
 
   useEffect(() => {
     console.log(inventory);
@@ -28,11 +27,6 @@ const Graves = () => {
     getID();
     console.log(userId);
   }, [])
-
-  useEffect(() => {
-    console.log(localMaterials);
-    setInitialMaterials(localMaterials);
-  }, [localMaterials]);
   
   const handleSquareClick = async (material) => {
     if (material && material._id) {
@@ -44,19 +38,24 @@ const Graves = () => {
         }
         return prevInventory;
       });
-    }
-  };
   
+      // Actualizar el campo 'found' del material antes de llamar a foundedMaterial
+      material.found = true;
+  
+      console.log('material recogido', material);
+      foundedMaterial(material); 
+  };
+}
   const getMaterialsFromDatabase = async () => {
     try {
       const materialsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/materials');
   
-        const materials = materialsData.data.data;
-        console.log('MATERIAAAAAAAA', materials)
-        console.log('Material:', materials[0]._id);
-      //setMaterialsGlobalState(materials);
-      setLocalMaterials(materials); 
-      //setArtefactsGlobalState(materials);
+      const materials = materialsData.data.data;
+      //console.log('MATERIAAAAAAAA', materials)
+      console.log('Material:', materials[0]._id);
+      setMaterialsGlobalState(materials);
+      console.log('ENTRA', materialsGlobalState);
+      
         // Actualizar los artefactos con la imagen del usuario
         const updatedMaterials = await Promise.all(
           materials.map(async (material) => {
@@ -67,10 +66,9 @@ const Graves = () => {
             return material;
           })
         );
-        // setMaterialsGlobalState(updatedMaterials);
-        console.log('Materiales guardados en localMaterials', localMaterials);
-        //console.log('Materiales guardados en globalState', artifactsGlobalState);
-
+        setMaterialsGlobalState(updatedMaterials);
+        console.log('Materiales guardados en MaterialsGlobalState', updatedMaterials);
+        
     } catch (error) {
       console.error('Error al obtener datos de materiales:', error);
     }
@@ -84,14 +82,32 @@ const Graves = () => {
         id: material._id,
         userImage: '',
       };
+      // Obtener la imagen del usuario actual
+      const userImage = await getUserImageById(userId);
+  
+      // Actualizar el estado de artefactos localmente con la imagen del usuario que lo recogió
+      const updatedMaterials = materialsGlobalState.map(mat => {
+        if (mat._id === material._id) {
+          return { ...mat, found: !material.found, userImage }; // Actualizar el artefacto recién recolectado con la nueva imagen
+        } else if (mat.found) {
+          // Mantener la información de la imagen de usuario para los artefactos previamente recolectados
+          return { ...mat, userImage: mat.userImage };
+        }
+        return mat;
+      });
+
+      setMaterialsGlobalState(updatedMaterials);
+
+       // Incluir la imagen del usuario en selectedArtifact
+       selectedMaterial.userImage = userImage;
   
       // Emitir el evento 'clientEvent' al servidor con los datos actualizados del artefacto
       socket.emit('updateMaterial', { selectedMaterial });
       
-      // socket.on('responseMaterial', (responseData) => {
-      // console.log('Material modificado:', responseData);
-      // });
-      console.log('Materiales guardados en globalState', localMaterials)
+      socket.on('responseMaterial', (responseData) => {
+      console.log('Material modificadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:', responseData);
+      setMaterialsGlobalState(responseData);
+      });
       
       ToastAndroid.showWithGravity('Material recogido', ToastAndroid.SHORT, ToastAndroid.CENTER);
     } catch (error) {
@@ -110,7 +126,6 @@ const Graves = () => {
       }
     };
 
-
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
@@ -125,31 +140,48 @@ const Graves = () => {
   };
 
   const restablecerValores = () => {
-    setInventory([]); // Restablecer el inventario
-    setLocalMaterials(initialMaterials); // Restablecer los materiales locales
+    setInventory([]); 
   };
 
-  const handleTombCover = () => {
-    console.log("Se Llama a la funcion handleTomCover");
-  }
+  const foundedMaterial = async (material) => {
+    try {
+      const updatedInventory = inventory.concat(material);
+  
+      const newData = {
+        inventory: updatedInventory,
+      };
+  
+      const response = await axiosInstance.patch(`https://mmaproject-app.fly.dev/api/users/updateUser/${userId}`, newData);
+  
+      console.log('Usuario actualizado:', response.data);
+      const updatedUser = response.data.data;
+      setUserGlobalState(updatedUser);
+    } catch (error) {
+      console.error('Error al actualizar el usuario:', error);
+    }
+  };
 
-
+  const returnButtonInternal = () => {
+    // Llama a la función proporcionada por las props para cerrar el modal
+    returnButton();
+  };
+  
 return (
   
   <MainContainer>
     <ImageBackground source={Image_graves} style={{width: '100%'}}>
       <MainContainer2>
         
-        <TextStyled> LAS CUATRO TUMBAS </TextStyled>
+        {/* <TextStyled> LAS CUATRO TUMBAS </TextStyled> */}
 
-        {/* <Buttons onPress={restablecerValores}>
-          <ButtonsText>RESET</ButtonsText>
-        </Buttons> */}
+        {/* <ResetButton onPress={restablecerValores}>
+          <Icon name="trash" size={60} color="#9c2882" />
+        </ResetButton> */}
 
           <GravesMainContainer>
             <GravesView >
-            {localMaterials != null &&
-              localMaterials.slice(0, 2).map((material) => (
+            {materialsGlobalState != null &&
+              materialsGlobalState.slice(0, 2).map((material) => (
                 <Square
                   key={material._id}
                   onPress={() => handleSquareClick(material)}
@@ -161,8 +193,8 @@ return (
             </GravesView>
 
             <GravesView2>
-            {localMaterials != null &&
-              localMaterials.slice(2, 4).map((material) => (
+            {materialsGlobalState != null &&
+              materialsGlobalState.slice(2, 4).map((material) => (
                 <Square
                   key={material._id}
                   onPress={() => handleSquareClick(material)}
@@ -272,9 +304,19 @@ const Buttons = styled.TouchableOpacity`
 
 const TextStyled = styled.Text`
   font-size: 30px;
-  color: purple;
+  color: #9c2882;
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
 `;
 
+const CloseButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  top: 6%;
+  marginLeft: 18%;
+`
+const ResetButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  top: -4%;
+  marginLeft: 70%;
+`
 export default Graves;

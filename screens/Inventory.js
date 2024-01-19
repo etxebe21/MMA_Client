@@ -1,104 +1,186 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Inventory = () => {
 
-    // Images routes
-    const Image_background = require('../assets/wallpaper_inventory.png');
-    const Image_siluette = require('../assets/siluette.png');
-    const [profileInventory, setProfileInventory] = useState([]);
+  // Images routes
+  const Image_background = require('../assets/wallpaper_inventory.png');
+  const Image_siluette = require('../assets/siluette.png');
+  const [profileInventory, setProfileInventory] = useState(Array(4).fill(null));
+  const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [item, setItem] = useState();
+  const [inventoryIndex, setInventoryIndex] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const getMaterials = async () => {
-        try {
-            const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-            console.log(artifactsData.data.data);
-            const materials = artifactsData.data.data;
+  useEffect(() => {
+    getMaterials();
+  }, []);
 
-            const newProfileInventory = materials.map(element => ({ ...element }));
+  useEffect(() => {
+    const arrayIsFull = profileEquipment.every((element) => element !== null);
 
-            setProfileInventory(newProfileInventory);
-        } catch (error) {
-            console.error("Error al obtener los materiales:", error);
-        }
+    if (arrayIsFull) {
+      setIsModalVisible(true);
     }
+  }, [profileEquipment]);
 
-    const moveMats = (item) => {
-        // Lógica de eventos cuando se presiona un Square
-        console.log('Square presionado:', item);
-        // Agrega aquí cualquier otra lógica que desees ejecutar al presionar un Square
-    };
-    useEffect(() => {
-        console.log("PROFILE INVENTORY");
-        console.log(profileInventory);
-    }, [profileInventory]);
+  const removeEquipment = () => {
 
-    useEffect(() => {
-        getMaterials();
-    }, []);
-    return (
-        <ImageBackground
-            source={Image_background}
-            style={styles.background}
-        >
-            <StyledView>
-                {/* <TextStyled>
-            Entramos en inventario
-        </TextStyled> */}
-                <EquipmentMainContainer>
+    setProfileInventory((prevProfileInventory) => {
+      const newArray = [...prevProfileInventory];
+      console.log("entramos");
+      if (inventoryIndex < newArray.length) {
+        newArray.splice(inventoryIndex, 1);
+      }
 
-                    <TextStyled> Equipamiento </TextStyled>
-                    <ImageBackground source={Image_siluette} style={styles.siluette}>
-                        <EquipmentContainer>
-
-                            {/* Silueta del Jugador */}
+      return newArray;
+    });
+  };
 
 
-                            {/* <Siluette> */}
-                            {/* <Image source={Image_siluette} style={styles.siluette} /> */}
-                            {/* </Siluette> */}
 
-                            {/* Casco */}
-                            <Helmet>
+  const getMaterials = async () => {
+    try {
+      const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
+      const materials = artifactsData.data.data;
 
-                            </Helmet>
+      const newProfileInventory = materials.map(element => ({ ...element }));
+      setProfileInventory(newProfileInventory);
+    } catch (error) {
+      console.error("Error al obtener los materiales:", error);
+    }
+  }
 
-                            {/* Pechera */}
-                            <Breastplate>
+  const moveMats = (item, position) => {
+    console.log('Square presionado:', item);
+    setItem(item);
+    setInventoryIndex(position);
+    console.log(profileEquipment);
 
-                            </Breastplate>
-
-                            {/* Guantes */}
-                            <Gloves>
-
-                            </Gloves>
-
-
-                            {/* Pantalones */}
-                            <Trousers>
-
-                            </Trousers>
-
-                        </EquipmentContainer>
-                    </ImageBackground>
-                </EquipmentMainContainer>
+  };
 
 
-                <CajaMateriales>
-                    {/* Aquí habrá un ScrollView para los materiales */}
-                        {profileInventory.map((item, index) => (
-                            <TouchableOpacity key={index} onPress={() => moveMats(item)}>
-                                <Square>
-                                    <Image source={{ uri: item.image }} style={styles.image} />
-                                </Square>
-                            </TouchableOpacity>
-                        ))}
-                </CajaMateriales>
 
-            </StyledView>
-        </ImageBackground>
-    );
+  const moveMats1 = (position) => {
+    if (item !== null && position >= 0) {
+      setProfileEquipment((prevProfileEquipment) => {
+        const newArray = [...prevProfileEquipment];
+
+        if (position < newArray.length) {
+          newArray[position] = item;
+        } else {
+          newArray.push(item);
+        }
+
+        return newArray;
+      });
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+      removeEquipment();
+      setItem(null);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  }
+
+  return (
+
+    <ImageBackground
+      source={Image_background}
+      style={styles.background}
+    >
+      <StyledView>
+        {!isModalVisible && (
+
+          <EquipmentMainContainer>
+
+            <TextStyled> Equipamiento </TextStyled>
+            <ImageBackground source={Image_siluette} style={styles.siluette}>
+
+              <EquipmentContainer>
+                <Helmet onPress={() => moveMats1(0)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 0 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Helmet>
+                <Breastplate onPress={() => moveMats1(1)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 1 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Breastplate>
+                <Gloves onPress={() => moveMats1(2)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 2 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Gloves>
+                <Trousers onPress={() => moveMats1(3)}>
+                  {profileEquipment.map((item, index) => (
+                    index === 3 && item != null && (
+                      <Image key={index} source={{ uri: item.image }} style={styles.image} />
+                    )
+                  ))}
+                </Trousers>
+              </EquipmentContainer>
+            </ImageBackground>
+          </EquipmentMainContainer>
+        )}
+
+        {!isModalVisible && (
+
+          <CajaMateriales>
+            {/* Aquí habrá un ScrollView para los materiales */}
+            {profileInventory.map((item, index) => (
+              <Square>
+                <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
+                  {item != null && (
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                  )}
+                </TouchableOpacity>
+              </Square>
+            ))}
+          </CajaMateriales>
+        )}
+
+        {isModalVisible && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+          >
+            <View style={styles.modalContainer}>
+              <ImageBackground
+                source={require('../assets/fondoViejaEscuela.png')}
+                style={styles.imageBackgrounds}
+              >
+                <View style={styles.modalContent}>
+                  <CloseButton onPress={() => closeModal()}>
+                    <Icon name="times" size={60} color="#4c2882" />
+                  </CloseButton>
+                </View>
+                <ShowText>
+                  <ModalText>VIAJANDO A LA </ModalText>
+                  <ModalText>VIEJA ESCUELA</ModalText>
+
+                </ShowText>
+              </ImageBackground>
+            </View>
+          </Modal>
+        )}
+      </StyledView>
+    </ImageBackground>
+
+  );
 };
 
 const Row = styled.View`
@@ -149,8 +231,8 @@ const Square = styled.View`
   flex: 1;
   margin: 2px;
   border: 3px solid purple;
-  height:80px;
-  width:80px;
+  height:100px;
+  width:80 px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
@@ -162,28 +244,64 @@ const TextStyled = styled.Text`
 `;
 
 
+const ModalText = styled.Text`
+  font-size: 35px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  marginLeft: 80%;
+  marginTop: 10%;
+  align-items:center;
+`
+
+
+const ShowText = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  // background-color: pink;
+`;
+
 const styles = StyleSheet.create({
-    image: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
 
-    siluette: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%'
-    },
+  siluette: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
 
-    background: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100%'
-    }
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
+
+  imageBackgrounds: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    position: 'absolute',
+    top: 10,  // Ajusta la posición vertical del contenedor del ícono
+  }
 });
 
 // ==============================================
@@ -215,7 +333,7 @@ const Breastplate = styled.TouchableOpacity`
   border: 3px solid purple;
   height:80px;
   width:80px;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  opacity: ${(props) => (props.disabled ? 0.2 : 1)};
 `;
 
 const Gloves = styled.TouchableOpacity`

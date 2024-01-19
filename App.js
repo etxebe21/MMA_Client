@@ -43,6 +43,8 @@ const App = () => {
   const [materialsGlobalState, setMaterialsGlobalState] = useState();
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
+  const [inventorySlot, setInventorySlot] = useState([]);
+
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -79,12 +81,27 @@ const App = () => {
       }));
     }
 
+    const handleInventorySlot = (data) => {
+      setInventorySlot(globalState => ({
+        ...globalState,
+        ...data
+      }));
+    }
+
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     if (userGlobalState != null) {
       setRole(userGlobalState.role);
     }
   }, [userGlobalState]);
+
+    //Para cargar por primera vez todos los datos necesaios
+    useEffect(() => {
+      if (materialsGlobalState != null) {
+        console.log('APP', materialsGlobalState);
+        setMaterialsGlobalState(materialsGlobalState);
+      }
+    }, [materialsGlobalState]);
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -223,9 +240,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,inventorySlot,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,handleInventorySlot,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState,setInventorySlot
 
     }}>
       <SafeAreaProvider>
