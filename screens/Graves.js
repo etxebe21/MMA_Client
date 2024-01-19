@@ -203,11 +203,11 @@ return (
           </GravesMainContainer>
   
           <CloseButton onPress={returnButtonInternal}>
-            <Icon name="arrow-circle-left" size={60} color= '#888'/>
+            <Icon name="arrow-circle-left" size={50} color= '#888'/>
           </CloseButton>
 
           <ResetButton onPress={restablecerValores}>
-            <Icon name="trash" size={60} color=  '#888' />
+            <Icon name="trash" size={50} color=  '#888' />
           </ResetButton>
 
       </MainContainer2>
@@ -290,7 +290,7 @@ const CloseButton = styled.TouchableOpacity`
 `
 const ResetButton = styled.TouchableOpacity`
   position: 'absolute';            
-  bottom: 2%;
+  bottom: 1%;
   marginLeft: 60%;
 `
 const TextStyled = styled.Text`
