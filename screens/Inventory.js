@@ -3,22 +3,31 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Context } from "../context/Context";
 
 const Inventory = () => {
 
-  // Images routes
-  const Image_background = require('../assets/wallpaper_inventory.png');
-  const Image_siluette = require('../assets/siluette.png');
-  const [profileInventory, setProfileInventory] = useState(Array(4).fill(null));
+  // GLOBALES
+  const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
+
+  // LOCALES
+  const [profileInventory, setProfileInventory] = useState(materialsGlobalState);
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // Images routes
+  const Image_background = require('../assets/wallpaper_inventory.png');
+  const Image_siluette = require('../assets/siluette.png');
+  
+
   useEffect(() => {
-    getMaterials();
-  }, []);
+    console.log("El Estado global Seteado")
+    console.log(materialsGlobalState)
+    // getMaterials();
+  }, [materialsGlobalState]);
 
   useEffect(() => {
     const arrayIsFull = profileEquipment.every((element) => element !== null);
@@ -43,17 +52,17 @@ const Inventory = () => {
 
 
 
-  const getMaterials = async () => {
-    try {
-      const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-      const materials = artifactsData.data.data;
+  // const getMaterials = async () => {
+  //   try {
+  //     const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
+  //     const materials = artifactsData.data.data;
 
-      const newProfileInventory = materials.map(element => ({ ...element }));
-      setProfileInventory(newProfileInventory);
-    } catch (error) {
-      console.error("Error al obtener los materiales:", error);
-    }
-  }
+  //     const newProfileInventory = materials.map(element => ({ ...element }));
+  //     setProfileInventory(newProfileInventory);
+  //   } catch (error) {
+  //     console.error("Error al obtener los materiales:", error);
+  //   }
+  // }
 
   const moveMats = (item, position) => {
     console.log('Square presionado:', item);
