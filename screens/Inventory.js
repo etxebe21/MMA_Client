@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView,ToastAndroid} from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -62,20 +62,21 @@ const Inventory = () => {
     if (item !== null && position >= 0) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
-
-        if (position < newArray.length) {
-          newArray[position] = item;
+  
+        if (position < newArray.length && newArray[position] !== null) {
+          ToastAndroid.showWithGravity('Ya hay un objeto equipado', ToastAndroid.SHORT, ToastAndroid.CENTER);
         } else {
-          newArray.push(item);
+          newArray[position] = item;
+          removeEquipment();
+          setCurrentIndex((prevIndex) => prevIndex + 1);
         }
-
+  
         return newArray;
       });
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-      removeEquipment();
       setItem(null);
     }
   };
+  
 
   const closeModal = () => {
     setIsModalVisible(false);
