@@ -5,11 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
 import { socket } from '../socket/socketConnect';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import descansoAcolitoImage from '../assets/wallpaper_profile.png';
 import graveImage from '../assets/La_Hermandad_Icon.png';
 
-const Graves = () => {
+const Graves = ({returnButton}) => {
   const [inventory, setInventory] = useState([]);
   const [userId, setuserId] = useState([]);
   
@@ -159,9 +160,15 @@ const Graves = () => {
       console.error('Error al actualizar el usuario:', error);
     }
   };
+
+  const returnButtonInternal = () => {
+    // Llama a la función proporcionada por las props para cerrar el modal
+    returnButton();
+  };
   
 return (
   <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
+
   <TextStyled> LAS CUATRO TUMBAS </TextStyled>
     <StyledView style={{ flex: 1, justifyContent: 'space-between'  }}>
       <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
@@ -191,23 +198,28 @@ return (
       </StyledView>
     </StyledView>
     
-        <Buttons onPress={restablecerValores}>
-          <ButtonsText>RESET</ButtonsText>
-        </Buttons>
-      
+      <CloseButton onPress={returnButtonInternal}>
+          <Icon name="arrow-circle-left" size={60} color="#9c2882" />
+      </CloseButton>
+          
+      <ResetButton onPress={restablecerValores}>
+        <Icon name="trash" size={60} color="#9c2882" />
+      </ResetButton>
+        
   </ImageBackground>
 );
 }
 
 const Square = styled(TouchableOpacity)`
 flex: 1;
-margin: 35px;
+margin: 7%;
 width: 100px;
 border: 2px solid black;
 opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')};
 height: 200px;
 width: 100px;
+top: 7%;
 `;
 
 const styles = StyleSheet.create({
@@ -226,30 +238,23 @@ height: 100%;
 width: 100%;
 `;
 
-const ButtonsText = styled.Text`
-  fontSize: 28px;
-  font-family: 'Tealand';
-  color: #4c2882; 
-  align-self: center;
-  top:17px;
-`
-const Buttons = styled.TouchableOpacity`
-  background: #A3A2A2;
-  opacity: 0.95;
-  width: 180px;
-  height: 65px;
-  align-self: center;
-  border-radius: 30px;
-  border: #0B0B0B;
-  bottom:10px;
-  background-color:#ffffff
-`
 const TextStyled = styled.Text`
   font-size: 30px;
-  color: purple;
+  color: #9c2882;
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
   left: 10%;
-  bottom: -2%;
+  bottom: -3%;
 `;
+
+const CloseButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  top: 6%;
+  marginLeft: 18%;
+`
+const ResetButton = styled.TouchableOpacity`
+  position: 'absolute';            
+  top: -4%;
+  marginLeft: 70%;
+`
 export default Graves;

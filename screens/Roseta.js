@@ -73,6 +73,11 @@ const Roseta = () => {
     setGravesVisible(true);
   };
 
+  const returnButton = () => {
+    // Actualiza el estado para ocultar el modal
+    setGravesVisible(false);
+  };
+
   // función para obtener la imagen del usuario por su ID
   const getUserImageById = async (userId) => {
     try {
@@ -109,11 +114,7 @@ const Roseta = () => {
         <GravesButtonText> CEMENTERY </GravesButtonText>
       </GravesButton>
 
-      {gravesVisible && (
-
-        <Graves />
-        
-      )}
+      {gravesVisible && <Graves returnButton={returnButton} />}
 
     </ImageBackground>
   );
