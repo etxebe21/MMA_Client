@@ -204,11 +204,12 @@ const Square = styled(TouchableOpacity)`
   justify-content: center;
   align-items: center;
   
-  border: 2px solid black;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  opacity: ${(props) => (props.disabled ? 0.8 : 1)};
   background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0)' : 'transparent')};
   height: 65%;
   width: 40%;
+
+  // border: 2px solid black;
   // background-color: yellow;
 `;
 
