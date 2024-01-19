@@ -139,8 +139,7 @@ const Graves = ({returnButton}) => {
   };
 
   const restablecerValores = () => {
-    setInventory([]); // Restablecer el inventario
-    setMaterialsGlobalState(initialMaterials); // Restablecer los materiales locales
+    setInventory([]); 
   };
 
   const foundedMaterial = async (material) => {
