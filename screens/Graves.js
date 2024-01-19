@@ -6,8 +6,9 @@ import { axiosInstance } from '../axios/axiosInstance';
 import { Context } from '../context/Context';
 import { socket } from '../socket/socketConnect';
 
-import descansoAcolitoImage from '../assets/wallpaper_profile.png';
-import graveImage from '../assets/La_Hermandad_Icon.png';
+import Image_graves from '../assets/wallpaper_graves.png';
+import Image_tombClosed from '../assets/TumbaCerrada.png';
+import Image_tombOpened from '../assets/TumbaAbierta.png';
 
 const Graves = () => {
   const [inventory, setInventory] = useState([]);
@@ -128,71 +129,125 @@ const Graves = () => {
     setLocalMaterials(initialMaterials); // Restablecer los materiales locales
   };
 
+  const handleTombCover = () => {
+    console.log("Se Llama a la funcion handleTomCover");
+  }
+
 
 return (
-  <ImageBackground source={descansoAcolitoImage} style={{ flex: 1 }}>
-  <TextStyled> LAS CUATRO TUMBAS </TextStyled>
-    <StyledView style={{ flex: 1, justifyContent: 'space-between'  }}>
-      <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {localMaterials != null &&
-        localMaterials.slice(0, 2).map((material) => (
-          <Square
-            key={material._id}
-            onPress={() => handleSquareClick(material)}
-            disabled={material.found || inventory.includes(material)}
-          >
-            <Image source={graveImage} style={styles.image} />
-          </Square>
-        ))}
-      </StyledView>
+  
+  <MainContainer>
+    <ImageBackground source={Image_graves} style={{width: '100%'}}>
+      <MainContainer2>
+        
+        <TextStyled> LAS CUATRO TUMBAS </TextStyled>
 
-      <StyledView style={{ flex: 0.5, flexDirection: 'row' }}>
-      {localMaterials != null &&
-        localMaterials.slice(2, 4).map((material) => (
-          <Square
-            key={material._id}
-            onPress={() => handleSquareClick(material)}
-            disabled={material.found || inventory.includes(material)}
-          >
-            <Image source={graveImage} style={styles.image} />
-          </Square>
-        ))}
-      </StyledView>
-    </StyledView>
-    
-        <Buttons onPress={restablecerValores}>
+        {/* <Buttons onPress={restablecerValores}>
           <ButtonsText>RESET</ButtonsText>
-        </Buttons>
-      
-  </ImageBackground>
+        </Buttons> */}
+
+          <GravesMainContainer>
+            <GravesView >
+            {localMaterials != null &&
+              localMaterials.slice(0, 2).map((material) => (
+                <Square
+                  key={material._id}
+                  onPress={() => handleSquareClick(material)}
+                  disabled={material.found || inventory.includes(material)}
+                >
+                  <Image source={Image_tombClosed} style={styles.image} />
+                </Square>
+              ))}
+            </GravesView>
+
+            <GravesView2>
+            {localMaterials != null &&
+              localMaterials.slice(2, 4).map((material) => (
+                <Square
+                  key={material._id}
+                  onPress={() => handleSquareClick(material)}
+                  disabled={material.found || inventory.includes(material)}
+                >
+                  <Image source={Image_tombClosed} style={styles.image} />
+                </Square>
+              ))}
+            </GravesView2>
+          </GravesMainContainer>
+  
+
+      </MainContainer2>
+    </ImageBackground>
+  </MainContainer>
 );
 }
 
+const MainContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const MainContainer2 = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+
 const Square = styled(TouchableOpacity)`
-flex: 1;
-margin: 35px;
-width: 100px;
-border: 2px solid black;
-opacity: ${(props) => (props.disabled ? 0.3 : 1)};
-background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.2)' : 'transparent')};
-height: 200px;
-width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  border: 2px solid black;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  background-color: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0)' : 'transparent')};
+  height: 65%;
+  width: 40%;
+  // background-color: yellow;
 `;
 
 const styles = StyleSheet.create({
-image: {
-  width: '100%',
-  height: '100%',
-  resizeMode: 'cover',
-},
+  image: {
+    width: '120%',
+    height: '120%',
+    resizeMode: 'cover',
+  },
 });
 
-const StyledView = styled.View`
-flex: 1;
-justify-content: center;
-align-items: center;
-height: 100%;
-width: 100%;
+const GravesMainContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  top: 25%;
+  height: 80%;
+  width: 100%;
+`;
+
+const GravesView = styled.View`
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  top: 10%;
+  height: 25%;
+  width: 72%;
+  justify-content: space-between;
+  align-content: center;
+`;
+
+const GravesView2 = styled.View`
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 4px;
+  height: 30%;
+  width: 100%;
+  top: 5%;
 `;
 
 const ButtonsText = styled.Text`
@@ -213,12 +268,12 @@ const Buttons = styled.TouchableOpacity`
   bottom:10px;
   background-color:#ffffff
 `
+
 const TextStyled = styled.Text`
   font-size: 30px;
   color: purple;
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
-  left: 10%;
-  bottom: -2%;
 `;
+
 export default Graves;
