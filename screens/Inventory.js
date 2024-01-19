@@ -114,7 +114,7 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
-  background-color: red;
+
 `;
 
 const StyledView = styled.View`
