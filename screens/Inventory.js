@@ -50,29 +50,12 @@ const Inventory = () => {
     });
   };
 
-
-
-  // const getMaterials = async () => {
-  //   try {
-  //     const artifactsData = await axiosInstance.get('https://mmaproject-app.fly.dev/api/artifacts');
-  //     const materials = artifactsData.data.data;
-
-  //     const newProfileInventory = materials.map(element => ({ ...element }));
-  //     setProfileInventory(newProfileInventory);
-  //   } catch (error) {
-  //     console.error("Error al obtener los materiales:", error);
-  //   }
-  // }
-
   const moveMats = (item, position) => {
     console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
     console.log(profileEquipment);
-
   };
-
-
 
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
