@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,6 +15,7 @@ const Inventory = () => {
   const [item, setItem] = useState();
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [descriptionIndex, setDescriptionIndex] = useState(0);
 
   useEffect(() => {
     getMaterials();
@@ -60,6 +61,11 @@ const Inventory = () => {
     setItem(item);
     setInventoryIndex(position);
     console.log(profileEquipment);
+
+    if (descriptionIndex === 2)
+    {
+
+    }
 
   };
 
@@ -139,16 +145,17 @@ const Inventory = () => {
         {!isModalVisible && (
 
           <CajaMateriales>
-            {/* Aquí habrá un ScrollView para los materiales */}
-            {profileInventory.map((item, index) => (
-              <Square>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {profileInventory.map((item, index) => (
                 <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
-                  {item != null && (
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                  )}
+                  <Square>
+                    {item != null && (
+                      <Image source={{ uri: item.image }} style={styles.image} />
+                    )}
+                  </Square>
                 </TouchableOpacity>
-              </Square>
-            ))}
+              ))}
+            </ScrollView>
           </CajaMateriales>
         )}
 
@@ -194,9 +201,8 @@ const Row = styled.View`
 const CajaMateriales = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  width: 95%;
+  width: 100%;
   height: 100px;
-
 `;
 
 const StyledView = styled.View`
@@ -228,11 +234,11 @@ const EquipmentMainContainer = styled.View`
 
 
 const Square = styled.View`
-  flex: 1;
   margin: 2px;
   border: 3px solid purple;
-  height:100px;
-  width:80 px;
+  height:97px;
+  width:100px;
+  border-radius: 15px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
 
@@ -273,6 +279,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+    borderRadius: 13,
   },
 
   siluette: {
