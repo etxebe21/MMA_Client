@@ -17,7 +17,7 @@ const Inventory = () => {
   const [item, setItem] = useState();
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [descriptionIndex, setDescriptionIndex] = useState(0);
+  const [descriptionIndex, setDescriptionIndex] = useState(1);
   const [descriptionModal, setDescriptionModal] = useState(false);
   const [firstItem, setFirstItem] = useState();
 
@@ -40,9 +40,6 @@ const Inventory = () => {
     }
   }, [profileEquipment]);
 
-  useEffect(() => {
-   setDescriptionModal(true)
-  }, [firstItem]);
 
   const removeEquipment = () => {
 
@@ -57,23 +54,26 @@ const Inventory = () => {
     });
   };
 
+  const closeDescriptionModal = () => {
+    setDescriptionModal(false);
+    setDescriptionIndex(1);
+    setFirstItem(null);
+  }
+
   const moveMats = (item, position) => {
     setItem(item);
     setInventoryIndex(position);
+    setFirstItem(item);
     setDescriptionIndex((prevIndex) => prevIndex + 1);
     console.log(descriptionIndex, descriptionModal)
-    if (descriptionIndex === 1 && descriptionModal === false) {
-      setFirstItem(item);
+    if (descriptionIndex === 2 && item === firstItem) {
       console.log("Entramos");
-      setDescriptionIndex(0);
-    }
-    else if (descriptionIndex > 1)
-    {
-      setDescriptionIndex(0);
-    }
-   
-
-  };
+      console.log(firstItem.image);
+      if (firstItem) {
+        setDescriptionModal(true);
+      }
+    };
+  }
 
   const moveMats1 = (position) => {
     if (item !== null && position >= 0) {
@@ -148,7 +148,6 @@ const Inventory = () => {
         )}
 
         {descriptionModal && (
-
           <Modal
             animationType="slide"
             transparent={true}
@@ -156,14 +155,14 @@ const Inventory = () => {
           >
             <View style={styles.modalContainer}>
               <View style={styles.smallModalContent}>
-                <CloseButton1 onPress={() => closeModal()}>
-                  <Icon name="times" size={60} color="#4c2882" />
+                <CloseButton1 onPress={() => closeDescriptionModal()}>
+                  <Icon name="times" size={40} color="#4c2882" />
                 </CloseButton1>
-                {firstItem != null || firstItem != undefined (
-                  <Image source={firstItem[0].image} style={styles.image} />
-                )}
                 <ShowText>
-                  
+                  <DescriptionName> {firstItem.name}</DescriptionName>
+                  <ScrollView style={{ maxHeight: 230 }}>
+                    <DescriptionText > {firstItem.description} </DescriptionText>
+                  </ScrollView>
                 </ShowText>
               </View>
             </View>
@@ -285,6 +284,24 @@ const ModalText = styled.Text`
   text-shadow: 3px 3px 8px white;
 `;
 
+const DescriptionText = styled.Text`
+  font-size: 25px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  position:relative;
+`;
+
+const DescriptionName = styled.Text`
+  font-size: 25px;
+  color: blue;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  top: -10%;
+  right:10%;
+`;
+
+
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 80%;
@@ -293,8 +310,9 @@ const CloseButton = styled.TouchableOpacity`
 `
 const CloseButton1 = styled.TouchableOpacity`
   position: 'absolute';            
-  marginLeft: 70%;
+  marginLeft: 80%;
   align-items:center;
+  top:-2%;
 `
 
 const ShowText = styled.View`
@@ -303,6 +321,7 @@ const ShowText = styled.View`
   justify-content: center;
   height: 100%;
   width: 100%;
+  top:-60%;
   // background-color: pink;
 `;
 
@@ -330,6 +349,11 @@ const styles = StyleSheet.create({
     height: '100%'
   },
 
+  descriptionImage: {
+    width: '50%',
+    height: '50%',
+  },
+
   descriptionBackgrounds: {
     width: '100%',
     height: '100%',
@@ -354,11 +378,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(170, 161, 170, 0.5)',
     borderRadius: 10,
     padding: 20,
-    width: '70%',
+    width: '80%',
     height: '60%',
     marginTop: 200,
-    left:90,
-    
+    left: 90,
+
   },
 });
 
