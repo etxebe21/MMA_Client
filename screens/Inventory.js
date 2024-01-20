@@ -20,6 +20,10 @@ const Inventory = () => {
   const [descriptionIndex, setDescriptionIndex] = useState(1);
   const [descriptionModal, setDescriptionModal] = useState(false);
   const [firstItem, setFirstItem] = useState();
+  const [equiped, setEquiped] = useState(false);
+  const [unequipModal, setUnequipModal] = useState(false);
+  const [positionUnequipModal, setUnequipPositionModal] = useState();
+
 
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
@@ -64,6 +68,7 @@ const Inventory = () => {
     setItem(item);
     setInventoryIndex(position);
     setFirstItem(item);
+    setEquiped(true);
     setDescriptionIndex((prevIndex) => prevIndex + 1);
     console.log(descriptionIndex, descriptionModal)
     if (descriptionIndex === 2 && item === firstItem) {
@@ -74,9 +79,10 @@ const Inventory = () => {
       }
     };
   }
-
+  
   const moveMats1 = (position) => {
-    if (item !== null && position >= 0) {
+    setUnequipPositionModal(position);
+    if (item !== null && position >= 0 && equiped === true) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
 
@@ -91,8 +97,28 @@ const Inventory = () => {
         return newArray;
       });
       setItem(null);
+      setEquiped(false);
     }
+
+    else if (item === null && equiped === false) {
+      profileEquipment.forEach((element, index) => {
+        if (index === position && element) {
+          setUnequipModal(true);
+          console.log("entramos");
+          setFirstItem(element);
+          console.log(positionUnequipModal)
+        }
+      });
+      
+    }
+
+
   };
+
+  const openDescriptionModal = () => {
+    setDescriptionModal(true);
+    setUnequipModal(false);
+  }
 
 
   const closeModal = () => {
@@ -114,34 +140,117 @@ const Inventory = () => {
             <ImageBackground source={Image_siluette} style={styles.siluette}>
 
               <EquipmentContainer>
+
+
+                {/* casco */}
                 <Helmet onPress={() => moveMats1(0)}>
                   {profileEquipment.map((item, index) => (
                     index === 0 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal === 0 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal1}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Helmet>
+
+                {/* pechera */}
                 <Breastplate onPress={() => moveMats1(1)}>
                   {profileEquipment.map((item, index) => (
                     index === 1 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+
+                  {unequipModal === true && positionUnequipModal == 1 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal2}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Breastplate>
+
+
+                {/* //GUANTES */}
                 <Gloves onPress={() => moveMats1(2)}>
                   {profileEquipment.map((item, index) => (
                     index === 2 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal == 2 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal3}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Gloves>
+
+
+                {/* Pantalones */}
                 <Trousers onPress={() => moveMats1(3)}>
                   {profileEquipment.map((item, index) => (
                     index === 3 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal == 3 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal4}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Trousers>
+
+
+
               </EquipmentContainer>
             </ImageBackground>
           </EquipmentMainContainer>
@@ -277,6 +386,16 @@ const TextStyled = styled.Text`
 `;
 
 
+const UnequipStyled = styled.Text`
+  font-size: 25px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  border-radius: 10px;
+  border:3px solid black;
+  background-color:gray;
+`;
+
 const ModalText = styled.Text`
   font-size: 35px;
   color: purple;
@@ -314,6 +433,17 @@ const CloseButton1 = styled.TouchableOpacity`
   align-items:center;
   top:-2%;
 `
+const Unequip = styled.TouchableOpacity`
+  position: 'absolute';            
+  align-items:center;
+  top:-2%;
+`
+
+const Description = styled.TouchableOpacity`
+position: 'absolute';            
+align-items:center;
+top:4%;
+`
 
 const ShowText = styled.View`
   display: flex;
@@ -323,6 +453,8 @@ const ShowText = styled.View`
   width: 100%;
   // background-color: pink;
 `;
+
+
 
 const styles = StyleSheet.create({
   image: {
@@ -383,6 +515,47 @@ const styles = StyleSheet.create({
     left: 90,
 
   },
+
+  unEQuipModal1: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 180,
+    left: 90,
+  },
+
+  unEQuipModal2: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 275,
+    left: 90,
+  },
+
+  unEQuipModal3: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 370,
+    left: 90,
+  },
+
+  unEQuipModal4: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 465,
+    left: 90,
+  },
+
 });
 
 // ==============================================
