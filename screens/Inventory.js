@@ -321,7 +321,6 @@ const ShowText = styled.View`
   justify-content: center;
   height: 100%;
   width: 100%;
-  top:-60%;
   // background-color: pink;
 `;
 
