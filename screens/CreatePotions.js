@@ -9,7 +9,6 @@ const View = styled.View`
     flex: 1;
     background: #C8A2C8;
     heigth: '100%';
-    top:-13px;
 `
 
 const Text = styled.Text `
@@ -21,6 +20,16 @@ const Text = styled.Text `
     align-self: center;
     top: 23%; 
     
+`
+const TitleText = styled.Text`
+    bottom: -13px;
+    color: #C8A2C8;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    align-self: center;
+    font-family: 'Tealand';
+
 `
 
 const styles = StyleSheet.create({
@@ -36,7 +45,8 @@ const styles = StyleSheet.create({
         top: '-20%',
         width: '100%', 
         height: '120%',  
-      }
+      },
+
 })
 
 
@@ -47,7 +57,7 @@ const CreatePotions = () => {
     return(
         <View>
             <ImageBackground source={require(bgImage)} style={styles.container}>             
-                <Text> CREATE POTIONS </Text>
+                <TitleText> CREATE POTIONS </TitleText>
                 <IngredientesScreen></IngredientesScreen>
             </ImageBackground>
         </View>
@@ -60,7 +70,7 @@ const CreatePotionsParch = ({setIsPotionCreated}) => {
         
         <View>
             <ImageBackground source={require(bgImage)}  style={styles.potionContainer}>             
-                <Text> CREATE POTIONS </Text>
+                <TitleText> CREATE POTIONS </TitleText>
                 <IngredientesScreen setIsPotionCreated={setIsPotionCreated}></IngredientesScreen>
             </ImageBackground>
         </View>

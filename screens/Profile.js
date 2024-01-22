@@ -10,8 +10,8 @@ import Inventory from "./Inventory";
 
 const Profile = () => {
 
-  const { userGlobalState, handleUserGlobalState } = useContext(Context);
-  const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+  const {userGlobalState, handleUserGlobalState } = useContext(Context);
+  const {usersGlobalState, setUsersGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
   const [inventoryVisible, setInventoryVisible] = useState(false)

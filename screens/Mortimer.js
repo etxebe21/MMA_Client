@@ -9,6 +9,8 @@ import { Context } from "../context/Context";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { socket } from '../socket/socketConnect';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CreatePotions } from "./CreatePotions";
+
 
 const Mortimer = () => {
 
@@ -18,6 +20,8 @@ const Mortimer = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [potionSection, setPotionSection] = useState(false);
+
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -49,6 +53,10 @@ const Mortimer = () => {
     }
   };
 
+  const showPotionSection = () => {
+    setPotionSection(true);
+  }
+
   const updateRest = (data) => {
 
     setLoading(true);
@@ -72,53 +80,62 @@ const Mortimer = () => {
 
   return (
 
+
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../assets/wallpaper_profile.png')}
-        style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
-      >
 
-        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-          <HeaderText>ACOLITOS</HeaderText>
-          {usersGlobalState.map((user) => (
-            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-              <UserContainer>
+      {potionSection && (
+        <CreatePotions/>
+      )}
 
-                <AvatarContainer>
+      {!potionSection && (
 
-                  <Avatar source={{ uri: user.picture }} />
-                  <StatusIndicator isInsideTower={user.insideTower} />
-                </AvatarContainer>
+        <ImageBackground
+          source={require('../assets/wallpaper_profile.png')}
+          style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+        >
 
-                <NameContainer>
-                  <NameText>{user.username}</NameText>
-                </NameContainer>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
+            <HeaderText>ACOLITOS</HeaderText>
+            {usersGlobalState.map((user) => (
+              <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+                <UserContainer>
 
-                <CenteredIconContainer>
-                  {user.resistencia < 20 && (<Image source={require('../assets/iconTired.png')} />)}
-                </CenteredIconContainer>
+                  <AvatarContainer>
 
-                <Extra>
-                  <ImageTired source={require('../assets/cansado.jpeg')} />
-                  <CircularProgressWrapper>
-                    <AnimatedCircularProgress
-                      size={73}
-                      width={5}
-                      fill={user.resistencia}
-                      tintColor={getColorForResistencia(user.resistencia)}
-                      backgroundColor="black"
-                    />
-                  </CircularProgressWrapper>
-                </Extra>
+                    <Avatar source={{ uri: user.picture }} />
+                    <StatusIndicator isInsideTower={user.insideTower} />
+                  </AvatarContainer>
 
-              </UserContainer>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </ImageBackground>
+                  <NameContainer>
+                    <NameText>{user.username}</NameText>
+                  </NameContainer>
+
+                  <CenteredIconContainer>
+                    {user.resistencia < 20 && (<Image source={require('../assets/iconTired.png')} />)}
+                  </CenteredIconContainer>
+
+                  <Extra>
+                    <ImageTired source={require('../assets/cansado.jpeg')} />
+                    <CircularProgressWrapper>
+                      <AnimatedCircularProgress
+                        size={73}
+                        width={5}
+                        fill={user.resistencia}
+                        tintColor={getColorForResistencia(user.resistencia)}
+                        backgroundColor="black"
+                      />
+                    </CircularProgressWrapper>
+                  </Extra>
+
+                </UserContainer>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </ImageBackground>
+      )}
 
 
-      {selectedUser && (
+      {selectedUser && !potionSection && (
         <Modal visible={modalVisible}>
           <ModalContent>
             <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
@@ -173,13 +190,13 @@ const Mortimer = () => {
                   <Rest onPress={() => updateRest(selectedUser)}>
                     {loading && (
                       <ActivityIndicator size="small" color="#3498db" animating={true} />
-                      )}
-                      
-                      <Text style={styles.image}>Rest</Text>
+                    )}
+
+                    <Text style={styles.image}>Rest</Text>
                   </Rest>
                 )}
 
-                <HealDisease onPress={""}>
+                <HealDisease onPress={showPotionSection}>
                   <PotionSection source={require('../assets/potionSec.png')} />
                   <Text style={styles.image}>Potion Section</Text>
                 </HealDisease>
