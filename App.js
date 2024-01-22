@@ -11,6 +11,7 @@ import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
 import Qr from './screens/Qr';
 import Villano from './screens/Villano';
+import Angelo from './screens/Angelo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
@@ -25,6 +26,7 @@ import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
+import ProfileAngelo from './screens/ProfileAngelo';
 
 
 const App = () => {
@@ -224,6 +226,14 @@ const App = () => {
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Villano" component={Villano} />
             <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
+          </>
+        );
+        case 'ANGELO':
+        return (
+          <>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Villano" component={Angelo} />
+            <Tab.Screen name="ProfileVillano" component={ProfileAngelo} />
           </>
         );
       default:
