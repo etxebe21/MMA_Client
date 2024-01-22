@@ -25,16 +25,16 @@ const Angelo = () => {
         setModalVisible(true);
       };
 
+      const handleEthaziumButtonPress = (user) => {
+        ethazium(user);
+      };
+
       const ethazium = (data) => {
         setLoading(true);
     
         const ethaziData = {
             id: data._id,
-            hitPoints: data.hitPoints * 0.6,
-            dinero: data.dinero * 0.6,
-            cansancio: data.cansancio * 0.6,
             fuerza: data.fuerza * 0.6,
-            resistencia: data.resistencia * 0.6,
             agilidad: data.agilidad * 0.6,
             inteligencia: data.inteligencia * 0.6,
         };
@@ -60,6 +60,9 @@ const Angelo = () => {
                         <StatusIndicator isInsideTower={user.insideTower} />
                         </AvatarContainer>
                         <NameText>{user.username}</NameText>
+                        <EthaziumButton title="Ethazium" onPress={() => handleEthaziumButtonPress(user)} >
+                            <ImageEthazium source={require('../assets/TiredBed.png')} />
+                        </EthaziumButton>
                     </UserContainer>
                     </TouchableOpacity>
                 ))}
@@ -142,6 +145,25 @@ const styles = StyleSheet.create({
   bottom: -20px;
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
+`
+const EthaziumButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 30%; 
+  left: 80%; 
+  background: #A3A2A2;
+  opacity: 0.80;
+  width: 20%;
+  height: 50px;
+  border-radius: 30px;
+  border: #0B0B0B;
+  background-color: rgba(255, 255, 255, 0.2);
+`;
+
+const ImageEthazium = styled.Image`
+border-radius:40px;
+height:100%;
+width: 55px;
+left:5px;
 `
 
   export default Angelo;
