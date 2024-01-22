@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
+import { Modal, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity, Dimensions, ImageBackground, Text } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -24,8 +24,7 @@ const Mortimer = () => {
   const storedId = AsyncStorage.getItem('userID');
 
   useEffect(() => {
-    if (usersGlobalState != null && selectedUser != null)
-    {
+    if (usersGlobalState != null && selectedUser != null) {
       usersGlobalState.forEach((element) => {
         if (element._id === selectedUser._id) {
           setSelectedUser(element);
@@ -33,7 +32,7 @@ const Mortimer = () => {
       });
     }
     else return;
-  }, [usersGlobalState,selectedUser]);
+  }, [usersGlobalState, selectedUser]);
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
@@ -59,14 +58,10 @@ const Mortimer = () => {
       tired: data.resistencia + 20,
     };
 
-
-    // if (tiredData.tired > 100) {
-    //   tiredData.tired = 100;
-    // }
     data.resistencia = tiredData.tired;
     setSelectedUser(data);
     // console.log(tiredData);
-    socket.emit('RestStat', tiredData,storedId);
+    socket.emit('RestStat', tiredData, storedId);
     ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
     setLoading(false);
 
@@ -82,41 +77,43 @@ const Mortimer = () => {
         source={require('../assets/wallpaper_profile.png')}
         style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
       >
+
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
           <HeaderText>ACOLITOS</HeaderText>
           {usersGlobalState.map((user) => (
-              <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-                <UserContainer>
+            <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+              <UserContainer>
 
-                  <AvatarContainer>
-                    <Avatar source={{ uri: user.picture }} />
-                    <StatusIndicator isInsideTower={user.insideTower} />
-                  </AvatarContainer>
+                <AvatarContainer>
 
-                  <NameContainer>
-                    <NameText>{user.username}</NameText>
-                  </NameContainer>
+                  <Avatar source={{ uri: user.picture }} />
+                  <StatusIndicator isInsideTower={user.insideTower} />
+                </AvatarContainer>
 
-                  <CenteredIconContainer>
-                    {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
-                  </CenteredIconContainer>
+                <NameContainer>
+                  <NameText>{user.username}</NameText>
+                </NameContainer>
 
-                  <Extra>
-                    <ImageTired source={require('../assets/cansado.jpeg')} />
-                    <CircularProgressWrapper>
-                      <AnimatedCircularProgress
-                        size={73}
-                        width={5}
-                        fill={user.resistencia}
-                        tintColor={getColorForResistencia(user.resistencia)}
-                        backgroundColor="black"
-                      />
-                    </CircularProgressWrapper>
-                  </Extra>
+                <CenteredIconContainer>
+                  {user.resistencia < 20 && (<Image source={require('../assets/iconTired.png')} />)}
+                </CenteredIconContainer>
 
-                </UserContainer>
-              </TouchableOpacity>
-            ))}
+                <Extra>
+                  <ImageTired source={require('../assets/cansado.jpeg')} />
+                  <CircularProgressWrapper>
+                    <AnimatedCircularProgress
+                      size={73}
+                      width={5}
+                      fill={user.resistencia}
+                      tintColor={getColorForResistencia(user.resistencia)}
+                      backgroundColor="black"
+                    />
+                  </CircularProgressWrapper>
+                </Extra>
+
+              </UserContainer>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </ImageBackground>
 
@@ -133,6 +130,7 @@ const Mortimer = () => {
                 </CloseButton>
 
                 <DetailAvatarContainer>
+
                   <DetailAvatar source={{ uri: selectedUser.picture }} />
                   <MarcoFoto source={require("../assets/marcoEpico.png")} />
                 </DetailAvatarContainer>
@@ -174,12 +172,18 @@ const Mortimer = () => {
 
                   <Rest onPress={() => updateRest(selectedUser)}>
                     {loading && (
-
                       <ActivityIndicator size="small" color="#3498db" animating={true} />
-                    )}
-                    <RestText>REST</RestText>
+                      )}
+                      
+                      <Text style={styles.image}>Rest</Text>
                   </Rest>
                 )}
+
+                <HealDisease onPress={""}>
+                  <PotionSection source={require('../assets/potionSec.png')} />
+                  <Text style={styles.image}>Potion Section</Text>
+                </HealDisease>
+
               </Statsbackground>
             </ImageBackground>
 
@@ -196,6 +200,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  image: {
+    alignItems: 'center',
+    color: 'orange',
+    fontSize: 17,
+    fontFamily: 'Tealand'
+  }
 });
 
 
@@ -235,6 +245,12 @@ const AvatarBox = styled.View`
   border-color: transparent;
   height: 30%;
   width:100%;
+`
+
+const PotionSection = styled.Image`
+border-radius:40px;
+height:100%;
+width: 100%;
 `
 
 const Image = styled.Image`
@@ -375,6 +391,8 @@ const ModalContent = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
+  width:100%;
+  height:100%;
 `
 
 const DetailAvatar = styled.Image`
@@ -395,6 +413,7 @@ const ProgressBarRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
   width:100%;
+  top:-7%;
 `
 
 const ProgressBarTitle = styled.Text`
@@ -430,8 +449,19 @@ const Rest = styled.TouchableOpacity`
   border-radius: 40px;
   background-color: gray;
   opacity: 0.7;
-  left: 25%;
-  top: 5%;
+  left: 20%;
+`
+
+const HealDisease = styled.TouchableOpacity`
+  position:absolute; 
+  height: 60px;
+  width: 120px;
+  border: 2px;
+  border-radius: 40px;
+  background-color: gray;
+  opacity: 0.7;
+  left: 5%;
+  top: 77%;
 `
 
 const RestText = styled.Text`
