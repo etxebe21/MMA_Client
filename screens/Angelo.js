@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, ToastAndroid} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
+import { Context } from "../context/Context";
+import { socket } from '../socket/socketConnect';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Angelo = () => {
 
@@ -12,30 +15,54 @@ const Angelo = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     // const [users, setUsers] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
+    const storedId = AsyncStorage.getItem('userID');
 
     const handleUserPress = (user) => {
         setSelectedUser(user);
         setModalVisible(true);
       };
+
+      const ethazium = (data) => {
+        setLoading(true);
+    
+        const ethaziData = {
+            id: data._id,
+            hitPoints: data.hitPoints * 0.6,
+            dinero: data.dinero * 0.6,
+            cansancio: data.cansancio * 0.6,
+            fuerza: data.fuerza * 0.6,
+            resistencia: data.resistencia * 0.6,
+            agilidad: data.agilidad * 0.6,
+            inteligencia: data.inteligencia * 0.6,
+        };
+    
+        setSelectedUser(data);
+       
+        socket.emit('Ethazium', ethaziData, storedId);
+        ToastAndroid.showWithGravity('ETHAZIUM', ToastAndroid.SHORT, ToastAndroid.CENTER);
+        setLoading(false);
+    };
+    
     
     return(
 
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
-            <HeaderText>ACÓLITOS</HeaderText>
-            {acolitos.map((user) => (
-                <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-                <UserContainer>
-                    <AvatarContainer>
-                    <Avatar source={{ uri: user.picture }} />
-                    <StatusIndicator isInsideTower={user.insideTower} />
-                    </AvatarContainer>
-                    <NameText>{user.username}</NameText>
-                </UserContainer>
-                </TouchableOpacity>
-            ))}
+                <HeaderText>ACÓLITOS</HeaderText>
+                {acolitos.map((user) => (
+                    <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+                    <UserContainer>
+                        <AvatarContainer>
+                            <Avatar source={{ uri: user.picture }} />
+                        <StatusIndicator isInsideTower={user.insideTower} />
+                        </AvatarContainer>
+                        <NameText>{user.username}</NameText>
+                    </UserContainer>
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
         </View>
     );
@@ -107,5 +134,14 @@ const styles = StyleSheet.create({
     bottom: -40px;
     background-color: #d9a9c9;
   `
+  const StatusIndicator = styled.View`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  margin-left: -15px;
+  bottom: -20px;
+  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
+  border: #4c2882;
+`
 
   export default Angelo;

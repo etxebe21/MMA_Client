@@ -21,7 +21,6 @@ const Home = () => {
     getRoleFromAsyncStorage();
   }, []);
 
-
   const handleLogin = () => {
 
     setIsAuthenticated(true);
@@ -84,7 +83,6 @@ const Home = () => {
   );
 }
 
-
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
     width: null
   },
 });
-
 
 const View = styled.View`
     flex: 1;
@@ -128,5 +125,4 @@ const ButtonText = styled.Text`
     font-size: 20px;
     text-align: center;
 `
-
 export default Home
