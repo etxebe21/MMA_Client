@@ -1,51 +1,41 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity, ToastAndroid} from "react-native";
-import axios from "axios";
+import { StyleSheet, TouchableOpacity, ToastAndroid} from "react-native";
 import { ScrollView } from "react-native";
 import { Context } from "../context/Context";
-import { socket } from '../socket/socketConnect';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { socket } from '../socket/socketConnect'
 
 const Angelo = () => {
 
-    const { userGlobalState,   handleUserGlobalState }    = useContext(Context);
     const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
-  
+
     const [selectedUser, setSelectedUser] = useState(null);
-    // const [users, setUsers] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
-    const storedId = AsyncStorage.getItem('userID');
 
-    const handleUserPress = (user) => {
-        setSelectedUser(user);
-        setModalVisible(true);
+    // const handleUserPress = () => {
+    //     setSelectedUser();
+    //     setModalVisible(true);
+    //   };
+
+    const ethazium = (data) => {
+  
+      const ethaziData = {
+          id: data._id,
+          fuerza: Math.round(data.fuerza * 0.6),
+          agilidad: Math.round(data.agilidad * 0.6),
+          inteligencia: Math.round(data.inteligencia * 0.6),
       };
+    
+      socket.emit('Ethazium', ethaziData);
+      ToastAndroid.showWithGravity('MALDICIÓN ETHAZIUM INVOCADA', ToastAndroid.SHORT, ToastAndroid.CENTER);
 
-      const handleEthaziumButtonPress = (user) => {
-        ethazium(user);
-      };
-
-      const ethazium = (data) => {
-        setLoading(true);
-    
-        const ethaziData = {
-            id: data._id,
-            fuerza: data.fuerza * 0.6,
-            agilidad: data.agilidad * 0.6,
-            inteligencia: data.inteligencia * 0.6,
-        };
-    
-        setSelectedUser(data);
-       
-        socket.emit('Ethazium', ethaziData, storedId);
-        ToastAndroid.showWithGravity('ETHAZIUM', ToastAndroid.SHORT, ToastAndroid.CENTER);
-        setLoading(false);
-    };
-    
+      // socket.on('ethaziumUser', (responseData) => {
+      //   console.log('Usuario modificadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:', responseData);
+      //   });
+  };
     
     return(
 
@@ -60,7 +50,7 @@ const Angelo = () => {
                         <StatusIndicator isInsideTower={user.insideTower} />
                         </AvatarContainer>
                         <NameText>{user.username}</NameText>
-                        <EthaziumButton title="Ethazium" onPress={() => handleEthaziumButtonPress(user)} >
+                        <EthaziumButton title="Ethazium" onPress={() => ethazium(user)} >
                             <ImageEthazium source={require('../assets/TiredBed.png')} />
                         </EthaziumButton>
                     </UserContainer>
