@@ -8,6 +8,8 @@ import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
 import { Alert } from "react-native";
 import { Context } from "../context/Context";
+import SicknessModal from "../components/sicknessModal";
+
 
 const Villano = () => {
 
@@ -16,6 +18,7 @@ const Villano = () => {
   const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
 
   // LOCALES
+  const [sicknessModalOpened, setSicknesModalOpened] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [updateTimer, setUpdateTimer] = useState(null);
@@ -52,6 +55,7 @@ const Villano = () => {
   };
 
   const desseasModal = () => {
+    setSicknesModalOpened(true)
     console.log("Pulsado boton de Envenenamiento")
   }
   
@@ -230,10 +234,21 @@ const Villano = () => {
                     <StyledProgressBar progress={selectedUser.inteligencia / 100} />
                   </ProgressBarColumn>
                 </ProgressBarRow>
-                
+
+                <DisseasText>¡Elige el envenenamiento!</DisseasText>
+
                 <DisseasButton onPress={() => desseasModal()}>
                   <Image source={Image_disseasesIcon} style={styles.disseasIcon} />
                 </DisseasButton>
+
+
+                {/* Modal de Envenenamiento */}
+                {sicknessModalOpened && (
+                  
+                  <SicknessModal />
+
+                )}
+
 
 
               </Statsbackground>
@@ -263,6 +278,16 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
+
+const DisseasText = styled.Text`
+  top: 5%; 
+  color: rgba(137, 59, 255,1)
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+  font-family: 'Tealand';
+`
 
 const DisseasButton = styled(TouchableOpacity)`
   display: flex;
