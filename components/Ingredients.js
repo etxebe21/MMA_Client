@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
 import { FlatList, ScrollView } from "react-native";
 import * as Keychain from 'react-native-keychain';
 import { refreshToken } from "../keychain";
 import { axiosInstance } from "../axios/axiosInstance";
+import { Context } from "../context/Context";
+
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
   const [createdPotion, setCreatedPotion] = React.useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [selectedPotion, setSelectedPotion] = useState(null);
+  const { userGlobalState, setUserGlobalState } = useContext(Context);
 
   useEffect(() => {
     getIngredientsFromDatabase();
+    console.log("USER GLOBAL STATE" , userGlobalState);
   }, []);
 
   
@@ -93,7 +97,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       {selectedIngredients.length > 0 && !createdPotion && (
 
         <SelectedIngredientContainer>
-          <ScrollView style={{ maxHeight: 230 }}>
+          <ScrollView style={{ maxHeight: 260 }}>
 
             <SelectedIngredientsTitle>{selectedPotion ? selectedPotion.name : ''}</SelectedIngredientsTitle>
             {selectedIngredients.map((ingredient, index) => (
@@ -139,7 +143,6 @@ const Container = styled.View`
 
 const IngredientsContainer = styled.View`
   flexDirection: row;
-  marginTop: 13;
 `;
 
 const PotionEffectText = styled.Text`
