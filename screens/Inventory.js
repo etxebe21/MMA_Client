@@ -62,6 +62,7 @@ const Inventory = () => {
     setDescriptionModal(false);
     setDescriptionIndex(1);
     setFirstItem(null);
+    setItem(null);
   }
 
   const moveMats = (item, position) => {
@@ -72,8 +73,6 @@ const Inventory = () => {
     setDescriptionIndex((prevIndex) => prevIndex + 1);
     console.log(descriptionIndex, descriptionModal)
     if (descriptionIndex === 2 && item === firstItem) {
-      console.log("Entramos");
-      console.log(firstItem.image);
       if (firstItem) {
         setDescriptionModal(true);
       }

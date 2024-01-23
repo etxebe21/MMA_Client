@@ -1,38 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styled from "styled-components/native";
-import { useEffect } from "react";
 import axios from 'axios';
-import { FlatList } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import * as Keychain from 'react-native-keychain';
 import { refreshToken } from "../keychain";
 import { axiosInstance } from "../axios/axiosInstance";
+import { Context } from "../context/Context";
+
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
-const [selectedIngredients, setSelectedIngredients] = React.useState([]);
-const [createdPotion, setCreatedPotion] = React.useState(null);
-const [ingredients, setIngredients] = useState([]);
-const [selectedPotion, setSelectedPotion] = useState(null);
+  const [selectedIngredients, setSelectedIngredients] = React.useState([]);
+  const [createdPotion, setCreatedPotion] = React.useState(null);
+  const [ingredients, setIngredients] = useState([]);
+  const [selectedPotion, setSelectedPotion] = useState(null);
+  const { userGlobalState, setUserGlobalState } = useContext(Context);
 
-useEffect(() => {
-getIngredientsFromDatabase();
-}, []);
+  useEffect(() => {
+    getIngredientsFromDatabase();
+    console.log("USER GLOBAL STATE" , userGlobalState);
+  }, []);
 
-const getIngredientsFromDatabase = async () => {
-try {
-  const url = 'https://mmaproject-app.fly.dev/api/ingredients';
+  
+  const getIngredientsFromDatabase = async () => {
+    try {
+      const url = 'https://mmaproject-app.fly.dev/api/ingredients';
 
-  const response = await axiosInstance.get(url
-  );
-  const ingredients = response.data.data;
-  setIngredients(ingredients);
-  console.log('Ingredientes Recibidos');
-  } catch (error) {
-    console.error('Error al obtener ingredientes:', error);
-  }
-};
+      const response = await axiosInstance.get(url
+      );
+      const ingredients = response.data.data;
+      setIngredients(ingredients);
+      console.log('Ingredientes Recibidos');
+    } catch (error) {
+      console.error('Error al obtener ingredientes:', error);
+    }
+  };
 
   //SELECCIONA LOS INGREDIENTES HASTA UN MAX DE 2
-const selectIngredient = (ingredient) => {
+  const selectIngredient = (ingredient) => {
     if (selectedIngredients.length < 2) {
       setSelectedIngredients([...selectedIngredients, ingredient]);
     } else {
@@ -41,29 +45,29 @@ const selectIngredient = (ingredient) => {
   };
 
   //CREAR POCIONES
-const createPotion = () => {
-  
-  if (selectedIngredients.length === 2) {
-    const poción = {
-      name: 'EPIC POTION',
-      effects: [
-        ...selectedIngredients[0].effects,
-        ...selectedIngredients[1].effects,
-      ],
-    };
-    setCreatedPotion(poción);
+  const createPotion = () => {
 
-    const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
-      return ingrediente.effects.includes("cleanse_parchment");
-    });
+    if (selectedIngredients.length === 2) {
+      const poción = {
+        name: 'EPIC POTION',
+        effects: [
+          ...selectedIngredients[0].effects,
+          ...selectedIngredients[1].effects,
+        ],
+      };
+      setCreatedPotion(poción);
 
-    const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
+      const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
+        return ingrediente.effects.includes("cleanse_parchment");
+      });
 
-    if (cantidadCleanseParchment === 2) {
-      setIsPotionCreated(true);
+      const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
+
+      if (cantidadCleanseParchment === 2) {
+        setIsPotionCreated(true);
+      }
     }
-  }
-};
+  };
 
   return (
 
@@ -74,7 +78,7 @@ const createPotion = () => {
             data={ingredients}
             keyExtractor={(item) => item.id.toString()}
             horizontal
-            contentContainerStyle={{ paddingRight: 10 }} 
+            contentContainerStyle={{ paddingRight: 10 }}
             renderItem={({ item }) => (
               <IngredientButton onPress={() => selectIngredient(item)}>
                 <IngredientView>
@@ -87,17 +91,27 @@ const createPotion = () => {
         </IngredientsContainer>
       )}
 
+
+      {/* MODALES PARA LOS EFECTOS DE LAS POCIONES */}
+   
       {selectedIngredients.length > 0 && !createdPotion && (
-        
+
         <SelectedIngredientContainer>
-          <SelectedIngredientsTitle>{selectedPotion ? selectedPotion.name : ''}</SelectedIngredientsTitle>
-          {selectedIngredients.map((ingredient, index) => (
-            <IngredientEffect key={index}>
-              <PotionEffectText> {ingredient.name} Effects:</PotionEffectText> {ingredient.effects.join(", ")}
-            </IngredientEffect>
-          ))}
+          <ScrollView style={{ maxHeight: 260 }}>
+
+            <SelectedIngredientsTitle>{selectedPotion ? selectedPotion.name : ''}</SelectedIngredientsTitle>
+            {selectedIngredients.map((ingredient, index) => (
+              <IngredientEffect key={index}>
+                <PotionEffectText> {`${ingredient.name} `}Effects:</PotionEffectText> {ingredient.effects.join(", ")}
+                
+              </IngredientEffect>
+            ))}
+          </ScrollView>
+
         </SelectedIngredientContainer>
       )}
+
+   
 
       {selectedIngredients.length === 2 && !createdPotion && (
         <>
@@ -109,13 +123,13 @@ const createPotion = () => {
 
       {createdPotion && (
         <PotionView>
-          <TextTitle style={{ fontSize: 24, fontWeight: "bold", marginTop: 15 }}>CREATED POTION:</TextTitle>
-          <Text style={{ fontSize: 20, marginTop: 15 }}>{createdPotion.name}</Text>
-          <Text style={{ fontSize: 17, marginTop: 30 }}>Effects:</Text>
+          <TextTitle style={{ fontSize: 24, fontWeight: "bold", marginTop: 15, color: 'blue' }}>CREATED POTION:</TextTitle>
+          <Text style={{ fontSize: 20, marginTop: 15, color: 'red' }}>{createdPotion.name}</Text>
+          <Text style={{ fontSize: 25, marginTop: 30, color: 'red' }}>Effects:</Text>
           {createdPotion.effects.map((efecto, index) => (
             <TextEffects key={index}>{efecto}</TextEffects>
-            ))}
-            </PotionView>
+          ))}
+        </PotionView>
       )}
       <Spacer></Spacer>
     </Container>
@@ -129,19 +143,19 @@ const Container = styled.View`
 
 const IngredientsContainer = styled.View`
   flexDirection: row;
-  marginTop: 30px;
 `;
 
 const PotionEffectText = styled.Text`
-  color: #FFD700; /* Cambiar a tu color deseado, por ejemplo, amarillo */
+  color: yellow;
+  font-family: 'Tealand';
 `;
 
 const IngredientView = styled.View`
   width: 120px;
   height: 100px;
-  margin-bottom: 10px;
   align-items: center;
   border-radius: 50px;
+  top:15%;
 `;
 
 const EffectsBackground = styled.ImageBackground`
@@ -189,18 +203,18 @@ const PotionButtonText = styled.Text`
   font-size: 16px;
   color: #4c2882;
   text-align: center;
+  font-family:'Tealand';
 `;
 
 const PotionView = styled.View`
   align-self: center;
-  background: #FD78FF;
+  background: rgba(149, 47, 160,0.5);
   width: 250px;
   height: 400px;
   margin-top: 10px;
   padding: 20px;
   border-radius:40px;
   top:25px;
-  opacity:0.5;
   position:absolute;
   padding:25px;
   justifyContent: center,
@@ -209,7 +223,7 @@ const PotionView = styled.View`
 
 
 const SelectedIngredientsTitle = styled.Text`
-  font-size: 20px;
+  font-size: 5px;
   font-weight: bold;
   align-self: center;
   color: #CCCCCC;
@@ -217,10 +231,10 @@ const SelectedIngredientsTitle = styled.Text`
 `;
 
 const IngredientEffect = styled.Text`
-  font-size: 18px;
-  margin-top: 10px;
+  font-size: 22px;
+  margin-top: -5%;
   align-self: center;
-  color: #CCCCCC;
+  color: white;
   text-align: center;
 `;
 
@@ -246,6 +260,7 @@ const TextEffects = styled.Text`
   letter-spacing: -0.3px;
   align-self: center;
 
+
 `;
 
 const Spacer = styled.View`
@@ -257,13 +272,17 @@ const IngredientsRow = styled.View`
   margin-bottom: 5px;
 `;
 
+
+const Margen = styled.View`
+top:5%;
+`
 const SelectedIngredientContainer = styled.View`
-  width: 70%;
-  padding: 10%;
+  width: 90%;
+  padding: 5%;
   margin-top: 10%;
   display: flex;
   margin-left: 15%;
-  backgroundColor: 'rgba(124, 44, 245 , 0.5)';
+  background-color: rgba(124, 44, 245, 0.5);
   border-radius: 20px;
 `;
 
