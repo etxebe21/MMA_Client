@@ -15,20 +15,20 @@ const Angelo = () => {
 
     const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
 
-    // const handleUserPress = () => {
-    //     setSelectedUser();
-    //     setModalVisible(true);
-    //   };
+    const handleUserPress = () => {
+        // setSelectedUser();
+        // setModalVisible(true);
+      };
 
     const ethazium = (data) => {
   
       const ethaziData = {
-          id: data._id,
-          fuerza: Math.round(data.fuerza * 0.6),
-          agilidad: Math.round(data.agilidad * 0.6),
-          inteligencia: Math.round(data.inteligencia * 0.6),
+        id: data._id,
+        fuerza: Math.max(5, Math.ceil(data.fuerza * 0.6)),
+        agilidad: Math.max(5, Math.ceil(data.agilidad * 0.6)),
+        inteligencia: Math.max(5, Math.ceil(data.inteligencia * 0.6)),
       };
-    
+      
       socket.emit('Ethazium', ethaziData);
       ToastAndroid.showWithGravity('MALDICIÓN ETHAZIUM INVOCADA', ToastAndroid.SHORT, ToastAndroid.CENTER);
 
