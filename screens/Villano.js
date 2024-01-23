@@ -8,15 +8,15 @@ import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
 import { Alert } from "react-native";
 import { Context } from "../context/Context";
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 const Villano = () => {
 
+  // GLOBALES
   const { userGlobalState,   handleUserGlobalState }    = useContext(Context);
   const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
 
+  // LOCALES
   const [selectedUser, setSelectedUser] = useState(null);
-  // const [users, setUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [updateTimer, setUpdateTimer] = useState(null);
 
@@ -27,6 +27,9 @@ const Villano = () => {
   const [isMiedoEnabled, setIsMiedoEnabled] = useState();
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
+
+  // Images
+  const Image_disseasesIcon = require('../assets/Icon_Disseas.jpeg') 
 
 
   const handleUserPress = (user) => {
@@ -47,8 +50,12 @@ const Villano = () => {
   
     setUpdateTimer(newTimer);
   };
+
+  const desseasModal = () => {
+    console.log("Pulsado boton de Envenenamiento")
+  }
   
-//sliders
+  //sliders
   const handleHitPointsChange = (newValue) => {
     handleSliderChange(newValue, "hitPoints");
   };
@@ -223,15 +230,12 @@ const Villano = () => {
                     <StyledProgressBar progress={selectedUser.inteligencia / 100} />
                   </ProgressBarColumn>
                 </ProgressBarRow>
-                {selectedUser.resistencia <= 20 && (
+                
+                <DisseasButton onPress={() => desseasModal()}>
+                  <Image source={Image_disseasesIcon} style={styles.disseasIcon} />
+                </DisseasButton>
 
-                  <Rest onPress={() => updateRest(selectedUser)}>
-                    
-                      <ActivityIndicator size="small" color="#3498db" animating={true} />
-                    
-                    <RestText>REST</RestText>
-                  </Rest>
-                )}
+
               </Statsbackground>
             </ImageBackground>
 
@@ -244,13 +248,30 @@ const Villano = () => {
 
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  ModalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  disseasIcon: {
+    backgroundColor: 'rgba(255,255,255,1)',
+    width: '100%',
+    height: '100%'
+  },
+  imageBackground: {
+    width: '100%'
+  }
 });
+
+const DisseasButton = styled(TouchableOpacity)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  width:  ${Dimensions.get('window').height * 0.12}px;
+  height: ${Dimensions.get('window').height * 0.10}px;
+`;
 
 
 const CenteredIconContainer = styled.View`
@@ -446,9 +467,11 @@ const CloseButton = styled.TouchableOpacity`
 `
 
 const ProgressBarRow = styled.View`
+  display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  width:100%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `
 
 const ProgressBarTitle = styled.Text`
@@ -456,22 +479,25 @@ const ProgressBarTitle = styled.Text`
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
-  right:15px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8%;
+  display: flex;
 `
 
 const ProgressBarColumn = styled.View`
+  justify-content: center;
   align-items: center;
+  display: flex;
 `
 
 const Statsbackground = styled.ImageBackground`
-  height: 70%;
-  width: 100%;
-  overflow: hidden;
-  display:flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
-  border:3px; 
-  border-color: black;
+  
+  height: 70%;
+  width: 100%;
 `
 
 const Rest = styled.TouchableOpacity`
