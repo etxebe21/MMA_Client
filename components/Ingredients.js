@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
 import { FlatList, ScrollView } from "react-native";
@@ -17,10 +17,10 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
   useEffect(() => {
     getIngredientsFromDatabase();
-    console.log("USER GLOBAL STATE" , userGlobalState);
+    console.log("USER GLOBAL STATE", userGlobalState);
   }, []);
 
-  
+
   const getIngredientsFromDatabase = async () => {
     try {
       const url = 'https://mmaproject-app.fly.dev/api/ingredients';
@@ -93,7 +93,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
 
       {/* MODALES PARA LOS EFECTOS DE LAS POCIONES */}
-   
+
       {selectedIngredients.length > 0 && !createdPotion && (
 
         <SelectedIngredientContainer>
@@ -103,7 +103,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             {selectedIngredients.map((ingredient, index) => (
               <IngredientEffect key={index}>
                 <PotionEffectText> {`${ingredient.name} `}Effects:</PotionEffectText> {ingredient.effects.join(", ")}
-                
+
               </IngredientEffect>
             ))}
           </ScrollView>
@@ -111,9 +111,17 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
         </SelectedIngredientContainer>
       )}
 
-   
 
-      {selectedIngredients.length === 2 && !createdPotion && (
+
+      {selectedIngredients.length === 2 && !createdPotion && userGlobalState.role != "MORTIMER" &&(
+        <>
+          <CreatePotionButton onPress={() => createPotion(setIsPotionCreated)}>
+            <PotionButtonText>Create Potion</PotionButtonText>
+          </CreatePotionButton>
+        </>
+      )}
+
+      {selectedIngredients.length === 2 && !createdPotion && userGlobalState.role === "MORTIMER" && (
         <>
           <CreatePotionButton onPress={() => createPotion(setIsPotionCreated)}>
             <PotionButtonText>Create Potion</PotionButtonText>
