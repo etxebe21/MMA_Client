@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
 import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground,View } from "react-native";
-import * as Keychain from 'react-native-keychain';
-import { refreshToken } from "../keychain";
 import { axiosInstance } from "../axios/axiosInstance";
 import { Context } from "../context/Context";
 
@@ -15,13 +13,23 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedPotion, setSelectedPotion] = useState(null);
   const { userGlobalState, setUserGlobalState } = useContext(Context);
   const [potionIsCreated, setPotionIsCreated] = useState(false);
+  const [villainPotions, setVillainPotions] = useState([]);
+  const [selectedEffects, setSelectedEffects] = useState([]);
+
 
 
   useEffect(() => {
     getIngredientsFromDatabase();
     console.log("USER GLOBAL STATE", userGlobalState);
+    whitchPotion();
+
   }, []);
 
+ 
+  useEffect(() => {
+    console.log("SELEECTED EFFECTS", selectedEffects);
+    console.log(villainPotions);
+  }, [selectedEffects]);
 
   const getIngredientsFromDatabase = async () => {
     try {
@@ -48,8 +56,18 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
   const createdPotionSection = () => {
     setPotionIsCreated(true);
-    console.log(potionIsCreated);
+    console.log(selectedIngredients);
+    const combinedEffectsArray = selectedIngredients.reduce((array, ingredient) => {
+      return array.concat(ingredient.effects);
+    }, []);
+    setSelectedEffects(combinedEffectsArray);
+    
   };
+
+  const whitchPotion = async () => { 
+    const data = await axios.get('https://gist.githubusercontent.com/oscar1771/c24a8ef9fe9190c406e8219a5fd40275/raw/bd11299dd65f6607ca8756378dc36c90df4db2be/affections.json');
+    setVillainPotions(data.data.affections);
+  }
 
   //CREAR POCIONES
   const createPotion = () => {
