@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground,View } from "react-native";
 import * as Keychain from 'react-native-keychain';
 import { refreshToken } from "../keychain";
 import { axiosInstance } from "../axios/axiosInstance";
@@ -14,6 +14,8 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [ingredients, setIngredients] = useState([]);
   const [selectedPotion, setSelectedPotion] = useState(null);
   const { userGlobalState, setUserGlobalState } = useContext(Context);
+  const [potionIsCreated, setPotionIsCreated] = useState(false);
+
 
   useEffect(() => {
     getIngredientsFromDatabase();
@@ -44,9 +46,13 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     }
   };
 
+  const createdPotionSection = () => {
+    setPotionIsCreated(true);
+    console.log(potionIsCreated);
+  };
+
   //CREAR POCIONES
   const createPotion = () => {
-
     if (selectedIngredients.length === 2) {
       const poción = {
         name: 'EPIC POTION',
@@ -72,7 +78,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   return (
 
     <Container>
-      {!createdPotion && (
+      {!createdPotion && !potionIsCreated &&(
         <IngredientsContainer>
           <FlatList
             data={ingredients}
@@ -113,7 +119,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
 
 
-      {selectedIngredients.length === 2 && !createdPotion && userGlobalState.role != "MORTIMER" &&(
+      {selectedIngredients.length === 2 && !createdPotion && userGlobalState.role != "MORTIMER" && (
         <>
           <CreatePotionButton onPress={() => createPotion(setIsPotionCreated)}>
             <PotionButtonText>Create Potion</PotionButtonText>
@@ -123,7 +129,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
       {selectedIngredients.length === 2 && !createdPotion && userGlobalState.role === "MORTIMER" && (
         <>
-          <CreatePotionButton onPress={() => createPotion(setIsPotionCreated)}>
+          <CreatePotionButton onPress={() => createdPotionSection()}>
             <PotionButtonText>Create Potion</PotionButtonText>
           </CreatePotionButton>
         </>
@@ -139,10 +145,34 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
           ))}
         </PotionView>
       )}
+
+      {potionIsCreated && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={potionIsCreated}
+        >
+          <View>
+            <ImageBackground
+              source={require('../assets/modalPantano.png')}
+              style={styles.imageBackgrounds}>
+
+            </ImageBackground>
+          </View>
+
+        </Modal>
+      )}
       <Spacer></Spacer>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  imageBackgrounds: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 const Container = styled.View`
   flex: 1;
