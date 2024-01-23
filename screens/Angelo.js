@@ -8,12 +8,14 @@ import { socket } from '../socket/socketConnect'
 const Angelo = () => {
 
     const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
-
     const [selectedUser, setSelectedUser] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [acolitos, setAcolitos] = useState([]);
 
-    const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
+    useEffect(() => {
+      setAcolitos(usersGlobalState.filter(user => user.role === "ACÓLITO"));
+    }, [usersGlobalState]);
 
     const handleUserPress = () => {
         // setSelectedUser();
@@ -22,6 +24,9 @@ const Angelo = () => {
 
     const ethazium = (data) => {
   
+      if (data.ethazium) {
+        return; }
+    
       const ethaziData = {
         id: data._id,
         fuerza: Math.max(5, Math.ceil(data.fuerza * 0.6)),
@@ -30,6 +35,12 @@ const Angelo = () => {
         ethazium: true,
       };
       
+      // Actualiza el estado local antes de emitir el evento
+      const updatedAcolitos = acolitos.map(user =>
+        user._id === ethaziData.id ? { ...user, ethazium: true } : user
+      );
+      setAcolitos(updatedAcolitos);
+
       socket.emit('Ethazium', ethaziData);
       ToastAndroid.showWithGravity('MALDICIÓN ETHAZIUM INVOCADA', ToastAndroid.SHORT, ToastAndroid.CENTER);
 
@@ -51,9 +62,14 @@ const Angelo = () => {
                         <StatusIndicator isInsideTower={user.insideTower} />
                         </AvatarContainer>
                         <NameText>{user.username}</NameText>
-                        <EthaziumButton title="Ethazium" onPress={() => ethazium(user)} >
-                            <ImageEthazium source={require('../assets/TiredBed.png')} />
+                        <EthaziumButton
+                          title="Ethazium"
+                          onPress={() => ethazium(user)}
+                          disabled={user.ethazium} 
+                        >
+                          <ImageEthazium source={require('../assets/TiredBed.png')} />
                         </EthaziumButton>
+
                     </UserContainer>
                     </TouchableOpacity>
                 ))}
@@ -143,9 +159,9 @@ const EthaziumButton = styled.TouchableOpacity`
   left: 80%; 
   background: #A3A2A2;
   opacity: 0.80;
-  width: 20%;
-  height: 50px;
-  border-radius: 30px;
+  width: 18%;
+  height: 50%;
+  border-radius: 10px;
   border: #0B0B0B;
   background-color: rgba(255, 255, 255, 0.2);
 `;
