@@ -59,16 +59,16 @@ const Angelo = () => {
                     <UserContainer>
                         <AvatarContainer>
                             <Avatar source={{ uri: user.picture }} />
-                        <StatusIndicator isInsideTower={user.insideTower} />
+                            <StatusIndicator isInsideTower={user.insideTower} />
                         </AvatarContainer>
-                        <NameText>{user.username}</NameText>
-                        <EthaziumButton
-                          title="Ethazium"
-                          onPress={() => ethazium(user)}
-                          disabled={user.ethazium} 
-                        >
-                          <ImageEthazium source={require('../assets/TiredBed.png')} />
-                        </EthaziumButton>
+
+                        <NameContainer>
+                          <NameText>{user.username}</NameText>
+                        </NameContainer>
+
+                        <ImageEthaziumButton onPress={() => ethazium(user)}>
+                          <ImageEthazium source={require('../assets/ethazium.png')} />
+                        </ImageEthaziumButton>
 
                     </UserContainer>
                     </TouchableOpacity>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     align-self: center;  
   `
   const NameText = styled.Text`
-    margin-left: 15px;
+    margin-left: -6%;
     color: #4c2882;
     font-size: 19px;
     font-weight: bold;
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     align-self: center;  
   `
   const HeaderText = styled.Text`
-    bottom: -15px;
+    bottom: 1%;
     color: #4c2882;
     font-size: 22px;
     font-weight: bold;
@@ -124,53 +124,60 @@ const styles = StyleSheet.create({
     align-self: center;  
   `
   const Avatar = styled.Image`
-    width: 80px;
+    width: 41%;
     height: 80px;
-    margin-left: 10px;
-    padding:1px;
     border-radius: 40px;
     border-color: #4c2882;
     border-width: 3px;
-  `
+`
   const AvatarContainer = styled.View`
+    justify-content: center;
     flex-direction: row;
     align-items: center;
+    margin-left: -24%;
   `
   const UserContainer = styled.View`
-    flex-direction: row;
+    justify-content: center;
+    display: flex;
     align-items: center;
+    flex-direction: row;
+    border-radius: 60px;
+    margin-bottom: 5%;
     height: 110px;
     border: #4c2882;
-    bottom: -40px;
-    background-color: #d9a9c9;
+    background-color: rgba(255, 255, 255, 0.5);
   `
-  const StatusIndicator = styled.View`
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  margin-left: -15px;
-  bottom: -20px;
-  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
-  border: #4c2882;
-`
-const EthaziumButton = styled.TouchableOpacity`
-  position: absolute;
-  top: 30%; 
-  left: 80%; 
-  background: #A3A2A2;
-  opacity: 0.80;
-  width: 18%;
-  height: 50%;
-  border-radius: 10px;
-  border: #0B0B0B;
-  background-color: rgba(255, 255, 255, 0.2);
-`;
 
-const ImageEthazium = styled.Image`
-border-radius:40px;
-height:100%;
-width: 55px;
-left:5px;
+  const StatusIndicator = styled.View`
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    margin-left: -15px;
+    bottom: -20px;
+    background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
+    border: #4c2882;
+  `
+  const ImageEthaziumButton = styled.TouchableOpacity`
+    position: absolute;
+    top: 20%; 
+    left: 80%; 
+    width: 20%;
+    height: 50%;
+  `;
+
+  const ImageEthazium = styled.Image`
+    border-radius: 5px;
+    border: green;
+    height: 120%;
+    width: 80%;
+  `;
+
+  const NameContainer = styled.View`
+    justify-content: center;
+    align-items: start;
+    display: flex; 
+    margin-left: -10%;
+    width: 45%;
 `
 
   export default Angelo;
