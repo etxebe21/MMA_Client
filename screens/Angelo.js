@@ -27,6 +27,7 @@ const Angelo = () => {
         fuerza: Math.max(5, Math.ceil(data.fuerza * 0.6)),
         agilidad: Math.max(5, Math.ceil(data.agilidad * 0.6)),
         inteligencia: Math.max(5, Math.ceil(data.inteligencia * 0.6)),
+        ethazium: true,
       };
       
       socket.emit('Ethazium', ethaziData);
