@@ -197,7 +197,7 @@ const Villano = () => {
                 <>
                 </>
                 {/* Modal de Envenenamiento */}
-                {sicknessModalOpened && (
+                {!sicknessModalOpened && (
 
                           
                   <><AvatarBox>
@@ -256,9 +256,9 @@ const Villano = () => {
               {/* Modal de Envenenamiento */}
               {sicknessModalOpened && (
                   
-                  <SicknessModal />
+                <SicknessModal closeModal={setSicknesModalOpened}/>
 
-                )}             
+              )}             
 
 
             </ImageBackground>
