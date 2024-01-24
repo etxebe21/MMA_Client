@@ -1,24 +1,8 @@
-import React from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { Image, ImageBackground, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
-const RottingPlagueApply = () => {
-  console.log("Rotting Plague Applied");
-}
-
-const EpicWeaknessApply = () => {
-  console.log("Epic Weakness Apply Applied");
-}
-
-const MarrowApocalypseApply = () => {
-  console.log("Marrow Apocalypse Applied");
-}
-
-
 const SicknessModal = ({closeModal, selectedSicknessUser}) => {
-
-  console.log("El usuario Selccionado para ser envenenado");
-  console.log(selectedSicknessUser);
 
   const Image_background = require('../assets/fondoViejaEscuela.png');
   const Image_ClosedIcon = require('../assets/descansoAcolito.png');
@@ -27,12 +11,27 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
   const Image_EpicWeackness     = require('../assets/EpicWeackness.jpeg')
   const Image_MarrowApocalypse  = require('../assets/MarrowApocalypse.jpeg')
 
+  // Le quita 75% a la INTELIGENCIA
+  const RottingPlagueApply = () => {
+    console.log("Rotting Plague Applied to " + selectedSicknessUser.username);
+  }
+
+  // Le quita 60% a la FUERZA
+  const EpicWeaknessApply = () => {
+    console.log("Epic Weakness Apply Applied to " + selectedSicknessUser.username);
+  }
+
+  // Le quita 30% a la AGILIDAD
+  const MarrowApocalypseApply = () => {
+    console.log("Marrow Apocalypse Applied to " + selectedSicknessUser.username);
+  }
+
   return(
       
     <MainContainer>
       <ImageBackground source={Image_background} style={styles.background}>
         
-        <DisseasText>¡Elige el envenenamiento!</DisseasText>
+        <DisseasText>¡Elige el veneno que quieres aplicarle a {selectedSicknessUser.username}!</DisseasText>
 
         <ClosedButton onPress={() => closeModal(false)}>
           <Image source={Image_ClosedIcon} style={styles.disseasClosedIcon} />
@@ -40,15 +39,15 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
 
         {/* Botones de Envenenamiento */}
         <DisseasesContainer>
-          <RottingPlague onPress={() => RottingPlagueApply(false)}>
+          <RottingPlague onPress={() => RottingPlagueApply()}>
             <Image source={Image_RottingPlague} style={styles.disseasApplyIcons} />
           </RottingPlague>
 
-          <DisseasTwo onPress={() => EpicWeaknessApply(false)}>
+          <DisseasTwo onPress={() => EpicWeaknessApply()}>
             <Image source={Image_EpicWeackness} style={styles.disseasApplyIcons} />
           </DisseasTwo>
 
-          <DisseasThree onPress={() => MarrowApocalypseApply(false)}>
+          <DisseasThree onPress={() => MarrowApocalypseApply()}>
             <Image source={Image_MarrowApocalypse} style={styles.disseasApplyIcons} />
           </DisseasThree>
         </DisseasesContainer>
@@ -99,7 +98,7 @@ const ClosedButton = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10%;
+  margin-top: 14%;
   width:  ${Dimensions.get('window').height * 0.12}px;
   height: ${Dimensions.get('window').height * 0.10}px;
 `;
@@ -114,7 +113,7 @@ const MainContainer = styled.View`
 `;
 
 const DisseasText = styled.Text`
-  top: 5%; 
+  top: 10%; 
   color: rgba(137, 59, 255,1)
   font-size: 22px;
   font-weight: bold;

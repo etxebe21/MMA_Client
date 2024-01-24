@@ -36,8 +36,8 @@ const Villano = () => {
 
 
   useEffect(() => {
-    console.log("Sicknes Modal Opened? " + sicknessModalOpened)
-  }, [sicknessModalOpened]);
+    // console.log("Sicknes Modal Opened? " + sicknessModalOpened)
+  }, [sicknessModalOpened, selectedUser]);
 
 
   const handleUserPress = (user) => {
