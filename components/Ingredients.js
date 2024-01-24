@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
-import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground,View } from "react-native";
+import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground, View } from "react-native";
 import { axiosInstance } from "../axios/axiosInstance";
 import { Context } from "../context/Context";
 
@@ -15,21 +15,25 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [potionIsCreated, setPotionIsCreated] = useState(false);
   const [villainPotions, setVillainPotions] = useState([]);
   const [selectedEffects, setSelectedEffects] = useState([]);
-
-
+  const [positionObject,setPositionObject] = useState();
+  const [resultPotion,setResultPotion] = useState();
 
   useEffect(() => {
     getIngredientsFromDatabase();
     console.log("USER GLOBAL STATE", userGlobalState);
     whitchPotion();
-
   }, []);
 
- 
+
   useEffect(() => {
     console.log("SELEECTED EFFECTS", selectedEffects);
     console.log(villainPotions);
   }, [selectedEffects]);
+
+  useEffect(() => {
+   console.log(positionObject);
+  }, [positionObject]);
+
 
   const getIngredientsFromDatabase = async () => {
     try {
@@ -56,15 +60,82 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
   const createdPotionSection = () => {
     setPotionIsCreated(true);
-    console.log(selectedIngredients);
+    let data;
+
     const combinedEffectsArray = selectedIngredients.reduce((array, ingredient) => {
       return array.concat(ingredient.effects);
     }, []);
-    setSelectedEffects(combinedEffectsArray);
     
+    const hasMatchingEffects = villainPotions.some((affection,index) => {
+      setPositionObject(index);
+      console.log(index);
+      return (
+        affection.healing_effects.every((effect) => combinedEffectsArray.includes(effect))
+      );
+    });
+    console.log("DATOOOOOS ********************************");
+    console.log(hasMatchingEffects);
+
+    switch (positionObject) {
+      case 0:
+        data = {
+          name: "Anti Rotting Plague",
+          image: "",
+          healing_type: "Intelligence",
+          heal: 75,
+          description: "This potion is so powerful that it is able to play the rotten plague",
+          type: "disease"
+        }
+        setResultPotion(data);
+        break;
+    
+      case 1:
+        data = {
+          name: "Anti super Weakness",
+          image: "",
+          healing_type: "Strength",
+          heal: 60,
+          description: "The anti weakness potion is so powerful and dangerous, consuming it improves your physical condition but the side effects are unknown.",
+          type: "disease"
+        }
+        setResultPotion(data);
+        
+        break;
+    
+      case 2:
+        data = {
+          name: "Anti villains",
+          image: "",
+          healing_type: "Agility",
+          heal: 30,
+          description: "The anti villains potion is used to heal Marrow Apocalypse,can heal every kind of physical issues",
+          type: "disease"
+
+        }
+        setResultPotion(data);
+        
+        break;
+    
+      case 3:
+        const data = {
+          name: "Mortimagus",
+          image: "",
+          healing_type: "Intelligence,Agility and Strength",
+          heal: 40,
+          description: "This potion is so powerful that it is able to play the rotten plague",
+          type: "disease"
+        }
+        setResultPotion(data);
+        break;
+      
+      default: 
+      ToastAndroid.showWithGravity('No existe una poción con esas caracteristicas', ToastAndroid.SHORT, ToastAndroid.CENTER);
+    }
+    
+
   };
 
-  const whitchPotion = async () => { 
+  const whitchPotion = async () => {
     const data = await axios.get('https://gist.githubusercontent.com/oscar1771/c24a8ef9fe9190c406e8219a5fd40275/raw/bd11299dd65f6607ca8756378dc36c90df4db2be/affections.json');
     setVillainPotions(data.data.affections);
   }
@@ -96,7 +167,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   return (
 
     <Container>
-      {!createdPotion && !potionIsCreated &&(
+      {!createdPotion && !potionIsCreated && (
         <IngredientsContainer>
           <FlatList
             data={ingredients}
