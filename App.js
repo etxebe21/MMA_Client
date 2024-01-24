@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageBackground} from 'react-native';
+import styled from "styled-components/native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +10,7 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
+import { Modal } from "react-native";
 import Qr from './screens/Qr';
 import Villano from './screens/Villano';
 import Angelo from './screens/Angelo';
@@ -45,6 +47,7 @@ const App = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
+  const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
 
 
   //GLOBAL STATES
@@ -125,6 +128,22 @@ const App = () => {
 
   }, [userGlobalState, usersGlobalState, artifactsGlobalState, materialsGlobalState])
 
+  // useEffect para manejar la apertura automática del modal Ethazium
+  useEffect(() => {
+    const ethaziumUser = usersGlobalState?.find(user => user.ethazium);
+    if (ethaziumUser) {
+      openEthaziumModal();
+
+      // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
+      const timeoutId = setTimeout(() => {
+        closeEthaziumModal();
+      }, 5000);
+
+      // Limpia el timeout al desmontar el componente
+      return () => clearTimeout(timeoutId);
+    }
+  }, [usersGlobalState]);
+
   //Datos iniciales email role e id
   const getInitialData = async () => {
     try {
@@ -147,6 +166,14 @@ const App = () => {
     setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
+  };
+
+  const openEthaziumModal = () => {
+    setEthaziumModalVisible(true);
+  };
+
+  const closeEthaziumModal = () => {
+    setEthaziumModalVisible(false);
   };
 
   //Renderiza los iconos del navegador
@@ -270,12 +297,32 @@ const App = () => {
                   {renderTabScreens()}
                 </Tab.Navigator>
               </NavigationContainer>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEthaziumVisible}
+                onRequestClose={closeEthaziumModal}
+              >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('../MMA_cliente/assets/La_Hermandad_Icon.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+              </Modal>
             </>
           )}
         </View>
       </SafeAreaProvider>
       <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
+
+    
   );
 
 };
@@ -289,6 +336,13 @@ const styles = StyleSheet.create({
   },
 
 });
+
+const CloseText = styled.Text`
+  color: #3498db;
+  font-size: 60px;
+  flex-direction: row;
+  top:40%;
+`;
 
 
 export default App;

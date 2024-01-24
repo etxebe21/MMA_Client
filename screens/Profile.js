@@ -115,6 +115,15 @@ const Profile = () => {
   const closeRestModal = () => {
     setModalRestVisible(false);
   };
+
+  const openEthaziumModal = () => {
+    setEthaziumModalVisible(true);
+  };
+
+  const closeEthaziumModal = () => {
+    setEthaziumModalVisible(false);
+  };
+
   return (
 
     <View >
