@@ -256,7 +256,10 @@ const Villano = () => {
               {/* Modal de Envenenamiento */}
               {sicknessModalOpened && (
                   
-                <SicknessModal closeModal={setSicknesModalOpened}/>
+                <SicknessModal 
+                  closeModal={setSicknesModalOpened}
+                  selectedSicknessUser = {selectedUser}
+                />
 
               )}             
 

@@ -15,14 +15,17 @@ const MarrowApocalypseApply = () => {
 }
 
 
-const SicknessModal = ({closeModal}) => {
+const SicknessModal = ({closeModal, selectedSicknessUser}) => {
+
+  console.log("El usuario Selccionado para ser envenenado");
+  console.log(selectedSicknessUser);
 
   const Image_background = require('../assets/fondoViejaEscuela.png');
   const Image_ClosedIcon = require('../assets/descansoAcolito.png');
 
-  const Image_RottingPlague     = ''
-  const Image_EpicWeackness     = ''
-  const Image_MArrowApocalypse  = ''
+  const Image_RottingPlague     = require('../assets/RottingPlague.jpeg')
+  const Image_EpicWeackness     = require('../assets/EpicWeackness.jpeg')
+  const Image_MarrowApocalypse  = require('../assets/MarrowApocalypse.jpeg')
 
   return(
       
@@ -38,15 +41,15 @@ const SicknessModal = ({closeModal}) => {
         {/* Botones de Envenenamiento */}
         <DisseasesContainer>
           <RottingPlague onPress={() => RottingPlagueApply(false)}>
-            <Image source={Image_ClosedIcon} style={styles.disseasApplyIcons} />
+            <Image source={Image_RottingPlague} style={styles.disseasApplyIcons} />
           </RottingPlague>
 
           <DisseasTwo onPress={() => EpicWeaknessApply(false)}>
-            <Image source={Image_ClosedIcon} style={styles.disseasApplyIcons} />
+            <Image source={Image_EpicWeackness} style={styles.disseasApplyIcons} />
           </DisseasTwo>
 
           <DisseasThree onPress={() => MarrowApocalypseApply(false)}>
-            <Image source={Image_ClosedIcon} style={styles.disseasApplyIcons} />
+            <Image source={Image_MarrowApocalypse} style={styles.disseasApplyIcons} />
           </DisseasThree>
         </DisseasesContainer>
         
@@ -68,7 +71,8 @@ const styles = StyleSheet.create({
   disseasApplyIcons: {
     width: 80,
     height: 80,
-    backgroundColor: 'orange'
+    backgroundColor: 'orange',
+    borderRadius: 50
   }
 });
 
