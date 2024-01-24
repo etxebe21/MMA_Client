@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import axios from 'axios';
-import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground, View } from "react-native";
+import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground, View, ToastAndroid,TouchableOpacity } from "react-native";
 import { axiosInstance } from "../axios/axiosInstance";
 import { Context } from "../context/Context";
 
@@ -15,8 +15,8 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [potionIsCreated, setPotionIsCreated] = useState(false);
   const [villainPotions, setVillainPotions] = useState([]);
   const [selectedEffects, setSelectedEffects] = useState([]);
-  const [positionObject,setPositionObject] = useState();
-  const [resultPotion,setResultPotion] = useState();
+  const [positionObject, setPositionObject] = useState();
+  const [resultPotion, setResultPotion] = useState();
 
   useEffect(() => {
     getIngredientsFromDatabase();
@@ -31,8 +31,8 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   }, [selectedEffects]);
 
   useEffect(() => {
-   console.log(positionObject);
-  }, [positionObject]);
+    console.log(resultPotion);
+  }, [resultPotion]);
 
 
   const getIngredientsFromDatabase = async () => {
@@ -59,81 +59,96 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   };
 
   const createdPotionSection = () => {
-    setPotionIsCreated(true);
     let data;
+    let indexOf = -1;
 
     const combinedEffectsArray = selectedIngredients.reduce((array, ingredient) => {
       return array.concat(ingredient.effects);
     }, []);
-    
-    const hasMatchingEffects = villainPotions.some((affection,index) => {
-      setPositionObject(index);
+
+    const hasMatchingEffects = villainPotions.some((affection, index) => {
       console.log(index);
+      indexOf = index;
       return (
         affection.healing_effects.every((effect) => combinedEffectsArray.includes(effect))
-      );
-    });
-    console.log("DATOOOOOS ********************************");
+        );
+      });
+      console.log("DATOOOOOS ********************************");
     console.log(hasMatchingEffects);
+    console.log(indexOf);
+    if (hasMatchingEffects === true ) {
+      switch (indexOf) {
+        case 0:
+          data = {
+            name: "Anti Rotting Plague",
+            image: "",
+            healing_type: "Intelligence",
+            heal: 75,
+            description: "The Rotten Plague Cure Potion, created by the wise Elara, is a mystical blend of herbs and essences. Its healing glow and comforting fragrance eradicate the plague, restoring vitality to the sick and restoring lost joy to the affected people. An elixir of hope in dark times.",
+            type: "DISEASE"
+          }
+          setResultPotion(data);
+          setPotionIsCreated(true);
 
-    switch (positionObject) {
-      case 0:
-        data = {
-          name: "Anti Rotting Plague",
-          image: "",
-          healing_type: "Intelligence",
-          heal: 75,
-          description: "This potion is so powerful that it is able to play the rotten plague",
-          type: "disease"
-        }
-        setResultPotion(data);
-        break;
-    
-      case 1:
-        data = {
-          name: "Anti super Weakness",
-          image: "",
-          healing_type: "Strength",
-          heal: 60,
-          description: "The anti weakness potion is so powerful and dangerous, consuming it improves your physical condition but the side effects are unknown.",
-          type: "disease"
-        }
-        setResultPotion(data);
-        
-        break;
-    
-      case 2:
-        data = {
-          name: "Anti villains",
-          image: "",
-          healing_type: "Agility",
-          heal: 30,
-          description: "The anti villains potion is used to heal Marrow Apocalypse,can heal every kind of physical issues",
-          type: "disease"
+          break;
 
-        }
-        setResultPotion(data);
-        
-        break;
-    
-      case 3:
-        const data = {
-          name: "Mortimagus",
-          image: "",
-          healing_type: "Intelligence,Agility and Strength",
-          heal: 40,
-          description: "This potion is so powerful that it is able to play the rotten plague",
-          type: "disease"
-        }
-        setResultPotion(data);
-        break;
-      
-      default: 
+        case 1:
+          data = {
+            name: "Anti super Weakness",
+            image: "",
+            healing_type: "Strength",
+            heal: 60,
+            description: "The Anti-Weakening Potion, an invigorating elixir made from exotic ingredients, revitalizes the body and restores lost energy. Its unique formula strengthens both physically and mentally, providing a defense against fatigue and exhaustion. With a single sip, this potion stands as a shield against weakening, infusing vitality and renewing stamina.",
+            type: "DISEASE"
+          }
+          setResultPotion(data);
+          setPotionIsCreated(true);
+
+
+          break;
+
+        case 2:
+          data = {
+            name: "Anti villains",
+            image: "",
+            healing_type: "Agility",
+            heal: 30,
+            description: "The Marrow Apocalypse Healing Potion, with its revitalizing essence, stands as a beacon of hope in the midst of devastation. This unique blend of arcane ingredients not only restores physical health, but also purifies the vital core, dispelling the shadows of disease. At the epicenter of desolation, this potion emerges as a powerful antidote, breathing life and renewal into hearts affected by the catastrophe of Marrow Apocalypse.",
+            type: "DISEASE"
+
+          }
+          setResultPotion(data);
+          setPotionIsCreated(true);
+          console.log("Llegamos aqui")
+
+
+          break;
+
+        case 3:
+          data = {
+            name: "Mortimagus",
+            image: "",
+            healing_type: "Intelligence,Agility and Strength",
+            heal: 40,
+            description: "Mortimagus, la poción ancestral forjada en las profundidades de la alquimia, despliega su resplandor etéreo y fragancia envolvente. Este elixir místico no solo cura heridas físicas, sino que también restaura la armonía espiritual y otorga una fuerza renovada. Con cada gota, despierta el poder interior y desata una esencia celestial en quien la consume",
+            type: "CURSE"
+          }
+          setResultPotion(data);
+          setPotionIsCreated(true);
+          console.log("llegamos aqui")
+          break;
+      }
+    }
+    else {
       ToastAndroid.showWithGravity('No existe una poción con esas caracteristicas', ToastAndroid.SHORT, ToastAndroid.CENTER);
     }
-    
+
 
   };
+
+  const returnCreatePotion = () => {
+    setPotionIsCreated(false)
+  }
 
   const whitchPotion = async () => {
     const data = await axios.get('https://gist.githubusercontent.com/oscar1771/c24a8ef9fe9190c406e8219a5fd40275/raw/bd11299dd65f6607ca8756378dc36c90df4db2be/affections.json');
@@ -163,6 +178,8 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
       }
     }
   };
+
+  
 
   return (
 
@@ -245,7 +262,26 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             <ImageBackground
               source={require('../assets/modalPantano.png')}
               style={styles.imageBackgrounds}>
+              <PotionSection>
 
+                <Text style={styles.title}>{resultPotion.name}</Text>
+
+                <Text style={styles.typeOf}>{resultPotion.type}</Text>
+                <Text style={styles.type}>Upgrades: {resultPotion.healing_type}</Text>
+
+                <Text style={styles.description}>
+                  {resultPotion.description}
+                </Text>
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.buttonLeft}>
+                    <Text style={styles.buttonText}>Crear otra poción</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonRight}>
+                    <Text style={styles.buttonText}>Aplicar</Text>
+                  </TouchableOpacity>
+                </View>
+              </PotionSection>
             </ImageBackground>
           </View>
 
@@ -261,6 +297,49 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  title: {
+    fontSize: 50,
+    color: 'black',
+
+  },
+  type: {
+    top: '3%',
+    color: 'purple',
+    fontSize: 15,
+  },
+  typeOf: {
+    top: '2%',
+    color: 'purple',
+    fontSize: 25,
+  },
+  description: {
+    top: '10%',
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'black'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',  
+    marginTop: '30%',
+  },
+  buttonLeft: {
+    backgroundColor: 'rgba(144, 144, 144 ,0.5)',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: '10%',  
+  },
+  buttonRight: {
+    backgroundColor: 'rgba(144, 144, 144 ,0.5)',
+    padding: 10,
+    borderRadius: 5,
+    marginLeft: '10%', 
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+
 });
 
 const Container = styled.View`
@@ -276,6 +355,13 @@ const PotionEffectText = styled.Text`
   color: yellow;
   font-family: 'Tealand';
 `;
+
+const PotionSection = styled.View`
+  flex: 1;
+  justifyContent: 'center';
+  alignItems: 'center';
+  top: 15%;
+`
 
 const IngredientView = styled.View`
   width: 120px;
