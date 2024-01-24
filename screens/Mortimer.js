@@ -481,12 +481,6 @@ const HealDisease = styled.TouchableOpacity`
   top: 77%;
 `
 
-const RestText = styled.Text`
-  font-size: 20px;
-  text-align: center;
-  align-self: center;
-`
-
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',

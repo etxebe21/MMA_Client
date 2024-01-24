@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { StyleSheet, TouchableOpacity, ToastAndroid} from "react-native";
+import { StyleSheet, TouchableOpacity, ToastAndroid, ImageBackground} from "react-native";
 import { ScrollView } from "react-native";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect'
@@ -52,6 +52,10 @@ const Angelo = () => {
     return(
 
         <View style={styles.container}>
+         <ImageBackground
+          source={require('../assets/wallpaper_profile.png')}
+          style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+        >
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
                 <HeaderText>ACÓLITOS</HeaderText>
                 {acolitos.map((user) => (
@@ -63,17 +67,16 @@ const Angelo = () => {
                         </AvatarContainer>
 
                         <NameContainer>
-                          <NameText>{user.username}</NameText>
+                           <NameText maxWidth={140}>{user.username}</NameText>
                         </NameContainer>
-
-                        <ImageEthaziumButton onPress={() => ethazium(user)}>
+                        <ImageEthaziumButton onPress={() => ethazium(user)} isEthazium={user.ethazium} >
                           <ImageEthazium source={require('../assets/ethazium.png')} />
                         </ImageEthaziumButton>
-
                     </UserContainer>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
+            </ImageBackground>
         </View>
     );
 }
@@ -91,38 +94,28 @@ const styles = StyleSheet.create({
     flex: 1;
     background: #C8A2C8;
   `
-  const Text = styled.Text`
-    bottom: -5px;
-    color: #4c2882;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
-  `
-  const UserText = styled.Text`
-    top: -10px;
-    color: #4c2882;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
+
+  const HeaderText = styled.Text`
+  margin-top: 5%;
+  margin-bottom: 5%;
+  color: #4c2882;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+  font-family: 'Tealand';
   `
   const NameText = styled.Text`
-    margin-left: -6%;
-    color: #4c2882;
-    font-size: 19px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
-  `
-  const HeaderText = styled.Text`
-    bottom: 1%;
-    color: #4c2882;
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
-  `
+  margin-left: -6%;
+  color: #4c2882;
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;
+  
+  width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
+  overflow: hidden;
+`;
   const Avatar = styled.Image`
     width: 41%;
     height: 80px;
@@ -134,7 +127,7 @@ const styles = StyleSheet.create({
     justify-content: center;
     flex-direction: row;
     align-items: center;
-    margin-left: -24%;
+    margin-left: -28%;
   `
   const UserContainer = styled.View`
     justify-content: center;
@@ -147,7 +140,6 @@ const styles = StyleSheet.create({
     border: #4c2882;
     background-color: rgba(255, 255, 255, 0.5);
   `
-
   const StatusIndicator = styled.View`
     width: 14px;
     height: 14px;
@@ -159,17 +151,22 @@ const styles = StyleSheet.create({
   `
   const ImageEthaziumButton = styled.TouchableOpacity`
     position: absolute;
-    top: 20%; 
-    left: 80%; 
-    width: 20%;
+    top: 27%;
+    left: 80%;
+    width: 15%;
     height: 50%;
+    border-radius: 55px;
+    overflow: hidden;
+    border: ${(props) => (props.isEthazium ? 'none' : 'green')};
+    background-color: ${(props) => (props.isEthazium ? 'gray' : 'rgba(255, 255, 255, 0.8)')};
+    opacity: ${(props) => (props.isEthazium ? 0.5 : 1)};
+    border: darkgreen;
   `;
 
   const ImageEthazium = styled.Image`
-    border-radius: 5px;
-    border: green;
-    height: 120%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px; /* O el valor que desees */
   `;
 
   const NameContainer = styled.View`
