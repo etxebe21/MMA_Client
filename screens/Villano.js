@@ -35,6 +35,11 @@ const Villano = () => {
   const Image_disseasesIcon = require('../assets/Icon_Disseas.jpeg') 
 
 
+  useEffect(() => {
+    console.log("Sicknes Modal Opened? " + sicknessModalOpened)
+  }, [sicknessModalOpened]);
+
+
   const handleUserPress = (user) => {
     setSelectedUser(user);
     setModalVisible(true);
@@ -187,71 +192,75 @@ const Villano = () => {
 
       {selectedUser && (
         <Modal visible={modalVisible}>
-          <ModalContent>
+          <ModalContent>   
             <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
-
-              <AvatarBox>
-
-                <CloseButton onPress={() => setModalVisible(false)}>
-                  <Icon name="times" size={50} color="#4c2882" />
-                </CloseButton>
-
-                <DetailAvatarContainer>
-                  <DetailAvatar source={{ uri: selectedUser.picture }} />
-                  <MarcoFoto source={require("../assets/marcoEpico.png")} />
-                </DetailAvatarContainer>
-
-                <UserLevelMarco>
-                  <UserTextLevel> {selectedUser.level}</UserTextLevel>
-                </UserLevelMarco>
-
-                <UserTextBackground>
-                  <UserText>{selectedUser.username}</UserText>
-                </UserTextBackground>
-              </AvatarBox>
-
-              <Statsbackground>
-                <ProgressBarRow>
-                  <ProgressBarColumn>
-                    <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.level / 20} />
-                    <ProgressBarTitle>HITPOINTS:   {selectedUser.hitPoints}</ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.hitPoints / 100} />
-                    <ProgressBarTitle>STRENGTH: {selectedUser.fuerza}  </ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.fuerza / 100} />
-                    <ProgressBarTitle>GOLD:  {selectedUser.dinero}</ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.dinero / 100} />
-                  </ProgressBarColumn>
-
-                  <ProgressBarColumn>
-                    <ProgressBarTitle>TIRED: {selectedUser.cansancio} </ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.cansancio / 100} />
-                    <ProgressBarTitle>RESISTENCE: {selectedUser.resistencia} </ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.resistencia / 100} />
-                    <ProgressBarTitle>AGILITY:  {selectedUser.agilidad}</ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.agilidad / 100} />
-                    <ProgressBarTitle>INTELLIGENCE: {selectedUser.inteligencia}</ProgressBarTitle>
-                    <StyledProgressBar progress={selectedUser.inteligencia / 100} />
-                  </ProgressBarColumn>
-                </ProgressBarRow>
-
-                <DisseasText>¡Elige el envenenamiento!</DisseasText>
-
-                <DisseasButton onPress={() => desseasModal()}>
-                  <Image source={Image_disseasesIcon} style={styles.disseasIcon} />
-                </DisseasButton>
-
-
+                <>
+                </>
                 {/* Modal de Envenenamiento */}
                 {sicknessModalOpened && (
+
+                          
+                  <><AvatarBox>
+
+                  <CloseButton onPress={() => setModalVisible(false)}>
+                    <Icon name="times" size={50} color="#4c2882" />
+                  </CloseButton>
+
+                  <DetailAvatarContainer>
+                    <DetailAvatar source={{ uri: selectedUser.picture }} />
+                    <MarcoFoto source={require("../assets/marcoEpico.png")} />
+                  </DetailAvatarContainer>
+
+                  <UserLevelMarco>
+                    <UserTextLevel> {selectedUser.level}</UserTextLevel>
+                  </UserLevelMarco>
+
+                  <UserTextBackground>
+                    <UserText>{selectedUser.username}</UserText>
+                  </UserTextBackground>
+                </AvatarBox><Statsbackground>
+                    <ProgressBarRow>
+                      <ProgressBarColumn>
+                        <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.level / 20} />
+                        <ProgressBarTitle>HITPOINTS:   {selectedUser.hitPoints}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.hitPoints / 100} />
+                        <ProgressBarTitle>STRENGTH: {selectedUser.fuerza}  </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.fuerza / 100} />
+                        <ProgressBarTitle>GOLD:  {selectedUser.dinero}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.dinero / 100} />
+                      </ProgressBarColumn>
+
+                      <ProgressBarColumn>
+                        <ProgressBarTitle>TIRED: {selectedUser.cansancio} </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.cansancio / 100} />
+                        <ProgressBarTitle>RESISTENCE: {selectedUser.resistencia} </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.resistencia / 100} />
+                        <ProgressBarTitle>AGILITY:  {selectedUser.agilidad}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.agilidad / 100} />
+                        <ProgressBarTitle>INTELLIGENCE: {selectedUser.inteligencia}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.inteligencia / 100} />
+                      </ProgressBarColumn>
+                    </ProgressBarRow>
+
+                    <DisseasText>¡Elige el envenenamiento!</DisseasText>
+
+                    <DisseasButton onPress={() => desseasModal()}>
+                      <Image source={Image_disseasesIcon} style={styles.disseasIcon} />
+                    </DisseasButton>
+
+                  </Statsbackground></>
+              )}
+              <>
+              </>
+              {/* Modal de Envenenamiento */}
+              {sicknessModalOpened && (
                   
                   <SicknessModal />
 
-                )}
+                )}             
 
 
-
-              </Statsbackground>
             </ImageBackground>
 
           </ModalContent>

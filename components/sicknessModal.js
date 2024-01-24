@@ -1,17 +1,39 @@
 import React from "react"
-import { View, Text } from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 
-const SicknessModal = ({ }) => {
+const SicknessModal = () => {
 
-    return(
+  const Image_background = require('../assets/fondoViejaEscuela.png');
+
+  return(
+      
+    <MainContainer>
+      <ImageBackground source={Image_background} style={styles.background}>
         
-            <View>
-                <DisseasText>¡Elige el envenenamiento!</DisseasText>
-            </View>
+        <DisseasText>¡Elige el envenenamiento!</DisseasText>
         
-    )
+      </ImageBackground>
+    </MainContainer>
+  )
 }
+
+const styles = StyleSheet.create({
+  background: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'red'
+  }
+});
+
+const MainContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+`;
 
 const DisseasText = styled.Text`
   top: 5%; 
