@@ -164,10 +164,12 @@ const styles = StyleSheet.create({
   `;
 
   const ImageEthazium = styled.Image`
-    height: 100%;
-    width: 100%;
-    border-radius: 5px; /* O el valor que desees */
-  `;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: green;
+`;
 
   const NameContainer = styled.View`
     justify-content: center;
