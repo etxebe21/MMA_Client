@@ -48,6 +48,7 @@ const App = () => {
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
   const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
+  const [ethaziumModalShown, setEthaziumModalShown] = useState(false);
 
 
   //GLOBAL STATES
@@ -99,7 +100,6 @@ const App = () => {
     }
   }, [userGlobalState]);
 
-
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
@@ -110,8 +110,6 @@ const App = () => {
         socket.removeAllListeners();
       };
     }
-
-
   }, [isAuthenticated]);
 
   //AXIOS INTERCEPTORS
@@ -125,24 +123,27 @@ const App = () => {
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
-
   }, [userGlobalState, usersGlobalState, artifactsGlobalState, materialsGlobalState])
 
   // useEffect para manejar la apertura automática del modal Ethazium
   useEffect(() => {
-    const ethaziumUser = usersGlobalState?.find(user => user.ethazium);
+    // Verifica que el usuario actual tenga ethazium igual a true
+    const ethaziumUser = userGlobalState?.ethazium;
+
     if (ethaziumUser) {
       openEthaziumModal();
 
       // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
       const timeoutId = setTimeout(() => {
         closeEthaziumModal();
-      }, 5000);
+      }, 4000);
 
       // Limpia el timeout al desmontar el componente
       return () => clearTimeout(timeoutId);
     }
-  }, [usersGlobalState]);
+  }, [userGlobalState]);
+
+
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -151,7 +152,6 @@ const App = () => {
       const role = await AsyncStorage.getItem('userRole');
       const id = await AsyncStorage.getItem('userID');
 
-
       setRole(role);
       return { email, role, id };
     } catch (error) {
@@ -159,7 +159,6 @@ const App = () => {
       return null;
     }
   };
-
 
   // Maneja el login
   const handleLogin = async () => {
