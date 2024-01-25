@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageBackground} from 'react-native';
+import styled from "styled-components/native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,6 +10,7 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
+import { Modal } from "react-native";
 import Qr from './screens/Qr';
 import Villano from './screens/Villano';
 import Angelo from './screens/Angelo';
@@ -26,6 +28,7 @@ import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
+import Modals from './components/Modals';
 
 
 const App = () => {
@@ -45,7 +48,7 @@ const App = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
-
+  const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -96,7 +99,6 @@ const App = () => {
     }
   }, [userGlobalState]);
 
-
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
@@ -107,8 +109,6 @@ const App = () => {
         socket.removeAllListeners();
       };
     }
-
-
   }, [isAuthenticated]);
 
   //AXIOS INTERCEPTORS
@@ -122,8 +122,52 @@ const App = () => {
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
-
   }, [userGlobalState, usersGlobalState, artifactsGlobalState, materialsGlobalState])
+
+  // useEffect para manejar la apertura automática del modal Ethazium
+  useEffect(() => {
+    // Verifica que el usuario actual tenga ethazium igual a true
+    const ethaziumUser = userGlobalState?.ethazium;
+
+    if (ethaziumUser) {
+      openEthaziumModal();
+
+      // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
+      const timeoutId = setTimeout(() => {
+        closeEthaziumModal();
+      }, 4000);
+
+      // Limpia el timeout al desmontar el componente
+      return () => clearTimeout(timeoutId);
+    }
+  }, [userGlobalState]);
+
+  // useEffect para manejar la apertura automática del modal Ethazium
+useEffect(() => {
+  // Verifica que el usuario actual tenga ethazium igual a true
+  const ethaziumUser = userGlobalState?.ethazium;
+
+  if (ethaziumUser) {
+    openEthaziumModal();
+
+    // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
+    const timeoutId = setTimeout(() => {
+      closeEthaziumModal();
+    }, 4000);
+
+    // Limpia el timeout al desmontar el componente
+    return () => clearTimeout(timeoutId);
+  }
+}, [userGlobalState]);
+
+const openEthaziumModal = () => {
+  setEthaziumModalVisible(true);
+};
+
+const closeEthaziumModal = () => {
+  setEthaziumModalVisible(false);
+};
+
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -132,7 +176,6 @@ const App = () => {
       const role = await AsyncStorage.getItem('userRole');
       const id = await AsyncStorage.getItem('userID');
 
-
       setRole(role);
       return { email, role, id };
     } catch (error) {
@@ -140,7 +183,6 @@ const App = () => {
       return null;
     }
   };
-
 
   // Maneja el login
   const handleLogin = async () => {
@@ -270,14 +312,34 @@ const App = () => {
                   {renderTabScreens()}
                 </Tab.Navigator>
               </NavigationContainer>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEthaziumVisible}
+                onRequestClose={closeEthaziumModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/ethaziumAcolit.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+              {/* <Modals/> */}
+              
             </>
           )}
         </View>
       </SafeAreaProvider>
       <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
+    
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -288,7 +350,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#C8A2C8',
   },
 
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
+const CloseText = styled.Text`
+  color: darkgreen;
+  font-size: 40px;
+  flex-direction: row;
+  bottom: 65%;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+`;
 
 export default App;

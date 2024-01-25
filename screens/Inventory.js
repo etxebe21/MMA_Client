@@ -37,6 +37,7 @@ const Inventory = () => {
     console.log(materialsGlobalState)
     // getMaterials();
     console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
+    setProfileInventory(userGlobalState.inventory)
   }, [materialsGlobalState]);
 
   useEffect(() => {
