@@ -28,6 +28,7 @@ import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
+import Modals from './components/Modals';
 
 
 const App = () => {
@@ -48,8 +49,7 @@ const App = () => {
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
   const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
-  const [ethaziumModalShown, setEthaziumModalShown] = useState(false);
-
+  
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -297,23 +297,7 @@ const App = () => {
                 </Tab.Navigator>
               </NavigationContainer>
 
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalEthaziumVisible}
-                onRequestClose={closeEthaziumModal}
-              >
-                <View style={styles.modalContainer}>
-                  <ImageBackground
-                    source={require('../MMA_cliente/assets/La_Hermandad_Icon.png')}
-                    style={styles.imageBackground}
-                  >
-                    <View style={styles.modalContent}>
-                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
-                    </View>
-                  </ImageBackground>
-                </View>
-              </Modal>
+              <Modals/>
             </>
           )}
         </View>
