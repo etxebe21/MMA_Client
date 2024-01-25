@@ -15,25 +15,36 @@ const Angelo = () => {
     const [acolitos, setAcolitos] = useState([]);
 
     useEffect(() => {
-      if(usersGlobalState != undefined && usersGlobalState)
-      handleUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
-    }, []);
-
-    useEffect(() => {
-      // Muestra el modal cuando el atributo ethazium es true
-      const ethaziumUser = usersGlobalState && usersGlobalState != undefined &&  usersGlobalState.find(user => user.ethazium);
-      if (ethaziumUser) {
-        setModalVisible(true);
-  
-        // Oculta el modal después de unos segundos
-        const timeoutId = setTimeout(() => {
-          setModalVisible(false);
-        }, 5000); // Cambia este valor según la duración deseada en milisegundos
-  
-        // Limpia el timeout al desmontar el componente
-        return () => clearTimeout(timeoutId);
+      console.log('useEffect: usersGlobalState', usersGlobalState);
+    
+      if (Array.isArray(usersGlobalState)) {
+        console.log('Filtered Acolitos:', usersGlobalState.filter(user => user.role === "ACÓLITO"));
+        handleUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
       }
     }, [usersGlobalState]);
+    
+
+    useEffect(() => {
+      const showEthaziumModal = () => {
+        if (Array.isArray(usersGlobalState)) {
+          const ethaziumUser = usersGlobalState.find(user => user.ethazium);
+          if (ethaziumUser) {
+            setModalVisible(true);
+            // Oculta el modal después de unos segundos
+            const timeoutId = setTimeout(() => {
+              setModalVisible(false);
+            }, 4000); // Cambia este valor según la duración deseada en milisegundos
+    
+            // Limpia el timeout al desmontar el componente
+            return () => clearTimeout(timeoutId);
+          }
+        }
+      };
+    
+      // Llama a la función directamente al montar el componente
+      showEthaziumModal();
+    }, [usersGlobalState]);
+    
 
     const handleUserPress = () => {
         // setSelectedUser();
@@ -54,7 +65,7 @@ const Angelo = () => {
       };
       
       // Actualiza el estado local antes de emitir el evento
-      const updatedAcolitos =  usersGlobalState && usersGlobalState != undefined && usersGlobalState.map(user =>
+      const updatedAcolitos =  usersGlobalState.map(user =>
         user._id === ethaziData.id ? { ...user, ethazium: true } : user
       );
       handleUsersGlobalState(updatedAcolitos);
@@ -77,7 +88,7 @@ const Angelo = () => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
                 <HeaderText>ACÓLITOS</HeaderText>
                 
-                {usersGlobalState && usersGlobalState != null && usersGlobalState.map((user) => (
+                {usersGlobalState !== undefined && Array.isArray(usersGlobalState) && usersGlobalState.map((user) => (
                     <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                     <UserContainer>
                         <AvatarContainer>
