@@ -96,15 +96,15 @@ const Angelo = () => {
             </ScrollView>
             </ImageBackground>
              {/* Modal para mostrar cuando el atributo ethazium es true */}
-      <Modal
-        animationType="slide"
+      {/* <Modal
+        animationType="slide" 
         transparent={true}
         visible={modalVisible}
       >
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>¡HAS SIDO INFECTADO POR LA MALDICIÓN ETHAZIUM!</Text>
         </View>
-      </Modal>
+      </Modal> */}
         </View>
     );
 }

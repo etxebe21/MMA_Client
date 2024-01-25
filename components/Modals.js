@@ -1,4 +1,3 @@
-
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
 import styled from "styled-components/native";
@@ -6,7 +5,7 @@ import { View, StyleSheet, ImageBackground} from 'react-native';
 import { Modal } from "react-native";
 
 
-const App = () => {
+const Modals = () => {
 
 const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
 const [userGlobalState, setUserGlobalState] = useState();
@@ -39,12 +38,12 @@ useEffect(() => {
 
     return(
 
-        <Modal
+            <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalEthaziumVisible}
                 onRequestClose={closeEthaziumModal}
-              >
+            >
                 <View style={styles.modalContainer}>
                   <ImageBackground
                     source={require('../assets/La_Hermandad_Icon.png')}
@@ -55,7 +54,7 @@ useEffect(() => {
                     </View>
                   </ImageBackground>
                 </View>
-              </Modal>
+            </Modal>
     )
 
 }
@@ -77,4 +76,4 @@ const CloseText = styled.Text`
   top:40%;
 `;
 
-export default App;
+export default Modals;

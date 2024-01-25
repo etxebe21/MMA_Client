@@ -49,7 +49,6 @@ const App = () => {
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
   const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
-  
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -143,6 +142,31 @@ const App = () => {
     }
   }, [userGlobalState]);
 
+  // useEffect para manejar la apertura automática del modal Ethazium
+useEffect(() => {
+  // Verifica que el usuario actual tenga ethazium igual a true
+  const ethaziumUser = userGlobalState?.ethazium;
+
+  if (ethaziumUser) {
+    openEthaziumModal();
+
+    // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
+    const timeoutId = setTimeout(() => {
+      closeEthaziumModal();
+    }, 4000);
+
+    // Limpia el timeout al desmontar el componente
+    return () => clearTimeout(timeoutId);
+  }
+}, [userGlobalState]);
+
+const openEthaziumModal = () => {
+  setEthaziumModalVisible(true);
+};
+
+const closeEthaziumModal = () => {
+  setEthaziumModalVisible(false);
+};
 
 
   //Datos iniciales email role e id
@@ -165,14 +189,6 @@ const App = () => {
     setRole(role);
     setIsAuthenticated(true);
     setLoginModalVisible(false);
-  };
-
-  const openEthaziumModal = () => {
-    setEthaziumModalVisible(true);
-  };
-
-  const closeEthaziumModal = () => {
-    setEthaziumModalVisible(false);
   };
 
   //Renderiza los iconos del navegador
@@ -297,17 +313,33 @@ const App = () => {
                 </Tab.Navigator>
               </NavigationContainer>
 
-              <Modals/>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEthaziumVisible}
+                onRequestClose={closeEthaziumModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/ethaziumAcolit.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+              {/* <Modals/> */}
+              
             </>
           )}
         </View>
       </SafeAreaProvider>
       <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
-
     
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -318,14 +350,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#C8A2C8',
   },
 
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 const CloseText = styled.Text`
-  color: #3498db;
-  font-size: 60px;
+  color: darkgreen;
+  font-size: 40px;
   flex-direction: row;
-  top:40%;
+  bottom: 65%;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
 `;
-
 
 export default App;
