@@ -15,12 +15,12 @@ const Angelo = () => {
     const [acolitos, setAcolitos] = useState([]);
 
     useEffect(() => {
-      setAcolitos(usersGlobalState.filter(user => user.role === "ACÓLITO"));
+      handleUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
     }, [usersGlobalState]);
 
     useEffect(() => {
       // Muestra el modal cuando el atributo ethazium es true
-      const ethaziumUser = acolitos.find(user => user.ethazium);
+      const ethaziumUser = usersGlobalState.find(user => user.ethazium);
       if (ethaziumUser) {
         setModalVisible(true);
   
@@ -32,7 +32,7 @@ const Angelo = () => {
         // Limpia el timeout al desmontar el componente
         return () => clearTimeout(timeoutId);
       }
-    }, [acolitos]);
+    }, [usersGlobalState]);
 
     const handleUserPress = () => {
         // setSelectedUser();
@@ -53,10 +53,10 @@ const Angelo = () => {
       };
       
       // Actualiza el estado local antes de emitir el evento
-      const updatedAcolitos = acolitos.map(user =>
+      const updatedAcolitos = usersGlobalState.map(user =>
         user._id === ethaziData.id ? { ...user, ethazium: true } : user
       );
-      setAcolitos(updatedAcolitos);
+      handleUsersGlobalState(updatedAcolitos);
 
       socket.emit('Ethazium', ethaziData);
       ToastAndroid.showWithGravity('MALDICIÓN ETHAZIUM INVOCADA', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -75,7 +75,7 @@ const Angelo = () => {
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
                 <HeaderText>ACÓLITOS</HeaderText>
-                {acolitos.map((user) => (
+                {usersGlobalState.map((user) => (
                     <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                     <UserContainer>
                         <AvatarContainer>
