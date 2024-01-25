@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useContext } from "react"
 import { Image, ImageBackground, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+import { Context } from "../context/Context";
 
 const SicknessModal = ({closeModal, selectedSicknessUser}) => {
 
+  // GLOBALES
+  const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
+
+  // Images
   const Image_background = require('../assets/fondoViejaEscuela.png');
   const Image_ClosedIcon = require('../assets/descansoAcolito.png');
 
@@ -11,19 +16,32 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
   const Image_EpicWeackness     = require('../assets/EpicWeackness.jpeg')
   const Image_MarrowApocalypse  = require('../assets/MarrowApocalypse.jpeg')
 
+  // ==============================
+  //    BOTONES DE ENFERMEDADES
+  // ==============================
+
   // Le quita 75% a la INTELIGENCIA
   const RottingPlagueApply = () => {
-    console.log("Rotting Plague Applied to " + selectedSicknessUser.username);
+    const sickUser = selecUserFromGlobal();
+    sickUser.rotting_plague = true;
   }
 
   // Le quita 60% a la FUERZA
   const EpicWeaknessApply = () => {
-    console.log("Epic Weakness Apply Applied to " + selectedSicknessUser.username);
+    const sickUser = selecUserFromGlobal();
+    sickUser.epic_weakness = true;
   }
 
   // Le quita 30% a la AGILIDAD
   const MarrowApocalypseApply = () => {
-    console.log("Marrow Apocalypse Applied to " + selectedSicknessUser.username);
+    const sickUser = selecUserFromGlobal();
+    sickUser.marrow_apocalypse = true;
+  }
+
+
+  const selecUserFromGlobal = () => {
+    const   SelectedUser = usersGlobalState.filter((user) => user._id === selectedSicknessUser._id);
+    return  SelectedUser[0]
   }
 
   return(
