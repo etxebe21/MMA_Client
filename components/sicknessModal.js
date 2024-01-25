@@ -7,7 +7,8 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
 
   // GLOBALES
   const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
-
+  
+  const [appliedSicknessUser, setAppliedSicknessUser] = useState([]);
   // Images
   const Image_background = require('../assets/fondoViejaEscuela.png');
   const Image_ClosedIcon = require('../assets/descansoAcolito.png');
@@ -16,32 +17,86 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
   const Image_EpicWeackness     = require('../assets/EpicWeackness.jpeg')
   const Image_MarrowApocalypse  = require('../assets/MarrowApocalypse.jpeg')
 
+  useEffect(() => {
+    console.log("==========================") 
+    console.log(appliedSicknessUser.username)
+    console.log("Inteligencia: " + appliedSicknessUser.inteligencia)
+    console.log("Fuerza: " + appliedSicknessUser.fuerza)
+    console.log("Agilidad: " + appliedSicknessUser.agilidad)
+    console.log("==========================")
+
+
+  }, [appliedSicknessUser]);
+    
   // ==============================
   //    BOTONES DE ENFERMEDADES
   // ==============================
 
-  // Le quita 75% a la INTELIGENCIA
   const RottingPlagueApply = () => {
     const sickUser = selecUserFromGlobal();
-    sickUser.rotting_plague = true;
+    
+    if (!sickUser.rotting_plague){
+      sickUser.rotting_plague = true;
+
+      // FALTA EMITIR LA BOOLEANA DE ENFERMEDADES
+      
+      setAppliedSicknessUser(appliedSickness("rotting_plague", sickUser))
+    }  
   }
 
-  // Le quita 60% a la FUERZA
   const EpicWeaknessApply = () => {
     const sickUser = selecUserFromGlobal();
-    sickUser.epic_weakness = true;
+
+    if (!sickUser.epic_weakness){
+      sickUser.epic_weakness = true;
+
+      // FALTA EMITIR LA BOOLEANA DE ENFERMEDADES 
+      
+      setAppliedSicknessUser(appliedSickness("epic_weakness", sickUser))
+    }  
   }
 
-  // Le quita 30% a la AGILIDAD
   const MarrowApocalypseApply = () => {
     const sickUser = selecUserFromGlobal();
-    sickUser.marrow_apocalypse = true;
+    
+    if (!sickUser.marrow_apocalypse){
+      sickUser.marrow_apocalypse = true;
+
+      // FALTA EMITIR LA BOOLEANA DE ENFERMEDADES
+      setAppliedSicknessUser(appliedSickness("marrow_apocalypse", sickUser))
+    }
   }
 
 
   const selecUserFromGlobal = () => {
     const   SelectedUser = usersGlobalState.filter((user) => user._id === selectedSicknessUser._id);
     return  SelectedUser[0]
+  }
+
+  const appliedSickness = (sickness, sickUser) => {
+    switch (sickness) {
+      
+      // Le quita 75% a la INTELIGENCIA
+      case "rotting_plague":
+        sickUser.inteligencia = Math.floor((sickUser.inteligencia * 75) / 100)
+        break;
+
+      // Le quita 60% a la FUERZA
+      case "epic_weakness":
+        sickUser.fuerza = Math.floor((sickUser.fuerza * 60) / 100)
+        break;
+
+      // Le quita 30% a la AGILIDAD
+      case "marrow_apocalypse":
+        sickUser.agilidad = Math.floor((sickUser.agilidad * 30) / 100)
+        break;
+
+      default:
+        console.log("no applied")
+        break;
+    }
+
+    return sickUser
   }
 
   return(
