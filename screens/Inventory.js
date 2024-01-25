@@ -8,10 +8,11 @@ import { Context } from "../context/Context";
 const Inventory = () => {
 
   // GLOBALES
+  const {userGlobalState, handleGlobalState} = useContext(Context);
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
 
   // LOCALES
-  const [profileInventory, setProfileInventory] = useState(materialsGlobalState);
+  const [profileInventory, setProfileInventory] = useState(userGlobalState.inventory);
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
@@ -25,6 +26,7 @@ const Inventory = () => {
   const [positionUnequipModal, setUnequipPositionModal] = useState();
 
 
+
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
@@ -34,6 +36,7 @@ const Inventory = () => {
     console.log("El Estado global Seteado")
     console.log(materialsGlobalState)
     // getMaterials();
+    console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
   }, [materialsGlobalState]);
 
   useEffect(() => {
@@ -62,6 +65,7 @@ const Inventory = () => {
     setDescriptionModal(false);
     setDescriptionIndex(1);
     setFirstItem(null);
+    setItem(null);
   }
 
   const moveMats = (item, position) => {
@@ -72,8 +76,6 @@ const Inventory = () => {
     setDescriptionIndex((prevIndex) => prevIndex + 1);
     console.log(descriptionIndex, descriptionModal)
     if (descriptionIndex === 2 && item === firstItem) {
-      console.log("Entramos");
-      console.log(firstItem.image);
       if (firstItem) {
         setDescriptionModal(true);
       }

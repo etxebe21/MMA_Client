@@ -26,7 +26,6 @@ import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
-import ProfileAngelo from './screens/ProfileAngelo';
 
 
 const App = () => {
@@ -167,7 +166,8 @@ const App = () => {
 
       case 'Mortimer':
       case 'Villano':
-        iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
+      case 'Angelo':
+        iconName = role === 'MORTIMER' || role === 'ANGELO' || role === 'VILLANO' ? 'people' : null;
         break;
       case 'Torreon':
         iconName = 'castle';
@@ -233,10 +233,9 @@ const App = () => {
           <>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Villano" component={Angelo} />
-            <Tab.Screen name="ProfileVillano" component={ProfileAngelo} />
           </>
         );
-      default:
+      default:            
         return null;
     }
   };
