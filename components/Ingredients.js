@@ -88,7 +88,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             type: "DISEASE"
           }
           setResultPotion(data);
-          setPotionIsCreated(true);
+          // setPotionIsCreated(true);
 
           break;
 
@@ -102,7 +102,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             type: "DISEASE"
           }
           setResultPotion(data);
-          setPotionIsCreated(true);
+          // setPotionIsCreated(true);
 
 
           break;
@@ -118,7 +118,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
           }
           setResultPotion(data);
-          setPotionIsCreated(true);
+          // setPotionIsCreated(true);
           console.log("Llegamos aqui")
 
 
@@ -134,10 +134,10 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
             type: "CURSE"
           }
           setResultPotion(data);
-          setPotionIsCreated(true);
           console.log("llegamos aqui")
           break;
-      }
+        }
+        setPotionIsCreated(true);
     }
     else {
       ToastAndroid.showWithGravity('No existe una poción con esas caracteristicas', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -146,15 +146,12 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
 
   };
 
-  const returnCreatePotion = () => {
-    setPotionIsCreated(false)
-  }
-
+  
   const whitchPotion = async () => {
     const data = await axios.get('https://gist.githubusercontent.com/oscar1771/c24a8ef9fe9190c406e8219a5fd40275/raw/bd11299dd65f6607ca8756378dc36c90df4db2be/affections.json');
     setVillainPotions(data.data.affections);
   }
-
+  
   //CREAR POCIONES
   const createPotion = () => {
     if (selectedIngredients.length === 2) {
@@ -166,23 +163,31 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
         ],
       };
       setCreatedPotion(poción);
-
+      
       const ingredientsWithCleanseParchment = selectedIngredients.filter((ingrediente) => {
         return ingrediente.effects.includes("cleanse_parchment");
       });
-
+      
       const cantidadCleanseParchment = ingredientsWithCleanseParchment.length;
-
+      
       if (cantidadCleanseParchment === 2) {
         setIsPotionCreated(true);
       }
     }
   };
-
   
+  const returnCreatePotion = () => {
+      setPotionIsCreated(false);
+      setSelectedIngredients([]);
+  }
+  
+  
+  const applyPotion = () => {
 
+  }
+  
   return (
-
+    
     <Container>
       {!createdPotion && !potionIsCreated && (
         <IngredientsContainer>
@@ -274,7 +279,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
                 </Text>
 
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonLeft}>
+                  <TouchableOpacity  onPress={returnCreatePotion} style={styles.buttonLeft}>
                     <Text style={styles.buttonText}>Crear otra poción</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.buttonRight}>
