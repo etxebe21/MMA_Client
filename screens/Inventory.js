@@ -8,10 +8,11 @@ import { Context } from "../context/Context";
 const Inventory = () => {
 
   // GLOBALES
+  const {userGlobalState, handleGlobalState} = useContext(Context);
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
 
   // LOCALES
-  const [profileInventory, setProfileInventory] = useState(materialsGlobalState);
+  const [profileInventory, setProfileInventory] = useState(userGlobalState.inventory);
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
@@ -23,7 +24,7 @@ const Inventory = () => {
   const [equiped, setEquiped] = useState(false);
   const [unequipModal, setUnequipModal] = useState(false);
   const [positionUnequipModal, setUnequipPositionModal] = useState();
-  const {userGlobalState, handleGlobalState} = useContext(Context);
+
 
 
   // Images routes
@@ -283,7 +284,7 @@ const Inventory = () => {
 
           <CajaMateriales>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {userGlobalState.inventory.map((item, index) => (
+              {profileInventory.map((item, index) => (
                 <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
                   <Square>
                     {item != null && (
