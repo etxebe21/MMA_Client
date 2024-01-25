@@ -18,6 +18,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [positionObject, setPositionObject] = useState();
   const [resultPotion, setResultPotion] = useState();
 
+  
   useEffect(() => {
     getIngredientsFromDatabase();
     console.log("USER GLOBAL STATE", userGlobalState);
@@ -183,6 +184,20 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   
   
   const applyPotion = () => {
+    console.log(resultPotion.healing_type);
+    console.log(userGlobalState);
+    let sendData = {
+      id: userGlobalState._id,
+      intelligence: userGlobalState.inteligencia,
+      strength: userGlobalState.fuerza,
+      agility: userGlobalState.agility,
+    }
+
+
+    if (resultPotion.healing_type === "Strength")
+    {
+      sendData.strength = sendData.strength * 60 / 100
+    }
 
   }
   
@@ -282,7 +297,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
                   <TouchableOpacity  onPress={returnCreatePotion} style={styles.buttonLeft}>
                     <Text style={styles.buttonText}>Crear otra poción</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.buttonRight}>
+                  <TouchableOpacity  onPress={applyPotion} style={styles.buttonRight}>
                     <Text style={styles.buttonText}>Aplicar</Text>
                   </TouchableOpacity>
                 </View>
