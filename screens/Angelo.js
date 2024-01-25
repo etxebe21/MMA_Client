@@ -15,12 +15,13 @@ const Angelo = () => {
     const [acolitos, setAcolitos] = useState([]);
 
     useEffect(() => {
+      if(usersGlobalState != undefined && usersGlobalState)
       handleUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
-    }, [usersGlobalState]);
+    }, []);
 
     useEffect(() => {
       // Muestra el modal cuando el atributo ethazium es true
-      const ethaziumUser = usersGlobalState.find(user => user.ethazium);
+      const ethaziumUser = usersGlobalState && usersGlobalState != undefined &&  usersGlobalState.find(user => user.ethazium);
       if (ethaziumUser) {
         setModalVisible(true);
   
@@ -53,7 +54,7 @@ const Angelo = () => {
       };
       
       // Actualiza el estado local antes de emitir el evento
-      const updatedAcolitos = usersGlobalState.map(user =>
+      const updatedAcolitos =  usersGlobalState && usersGlobalState != undefined && usersGlobalState.map(user =>
         user._id === ethaziData.id ? { ...user, ethazium: true } : user
       );
       handleUsersGlobalState(updatedAcolitos);
@@ -75,7 +76,8 @@ const Angelo = () => {
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
                 <HeaderText>ACÓLITOS</HeaderText>
-                {usersGlobalState.map((user) => (
+                
+                {usersGlobalState && usersGlobalState != null && usersGlobalState.map((user) => (
                     <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                     <UserContainer>
                         <AvatarContainer>
