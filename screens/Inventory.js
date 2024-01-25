@@ -23,6 +23,7 @@ const Inventory = () => {
   const [equiped, setEquiped] = useState(false);
   const [unequipModal, setUnequipModal] = useState(false);
   const [positionUnequipModal, setUnequipPositionModal] = useState();
+  const {userGlobalState, handleGlobalState} = useContext(Context);
 
 
   // Images routes
@@ -34,6 +35,7 @@ const Inventory = () => {
     console.log("El Estado global Seteado")
     console.log(materialsGlobalState)
     // getMaterials();
+    console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
   }, [materialsGlobalState]);
 
   useEffect(() => {
@@ -281,7 +283,7 @@ const Inventory = () => {
 
           <CajaMateriales>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {profileInventory.map((item, index) => (
+              {userGlobalState.inventory.map((item, index) => (
                 <TouchableOpacity key={index} onPress={() => moveMats(item, index)}>
                   <Square>
                     {item != null && (
