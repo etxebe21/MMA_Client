@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, TouchableOpacity} from "react-native";
+import { Modal, StyleSheet, TouchableOpacity, Dimensions, ImageBackground} from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,14 +8,18 @@ import { StyledProgressBar } from "../components/ProgressBar";
 import { StyledSlider } from "../components/Slider";
 import { Alert } from "react-native";
 import { Context } from "../context/Context";
+import SicknessModal from "../components/sicknessModal";
+
 
 const Villano = () => {
 
+  // GLOBALES
   const { userGlobalState,   handleUserGlobalState }    = useContext(Context);
   const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
 
+  // LOCALES
+  const [sicknessModalOpened, setSicknesModalOpened] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  // const [users, setUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [updateTimer, setUpdateTimer] = useState(null);
 
@@ -27,7 +31,14 @@ const Villano = () => {
   const [isParalisisEnabled, setIsParalisisEnabled] = useState();
   const [isPsicosisEnabled, setIsPsicosisEnabled] = useState();
 
-  const acolitos = usersGlobalState.filter(user => user.role === "ACÓLITO");
+  // Images
+  const Image_disseasesIcon = require('../assets/Icon_Disseas.jpeg') 
+
+
+  useEffect(() => {
+    // console.log("Sicknes Modal Opened? " + sicknessModalOpened)
+  }, [sicknessModalOpened, selectedUser]);
+
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
@@ -47,8 +58,13 @@ const Villano = () => {
   
     setUpdateTimer(newTimer);
   };
+
+  const desseasModal = () => {
+    setSicknesModalOpened(true)
+    console.log("Pulsado boton de Envenenamiento")
+  }
   
-//sliders
+  //sliders
   const handleHitPointsChange = (newValue) => {
     handleSliderChange(newValue, "hitPoints");
   };
@@ -137,236 +153,414 @@ const Villano = () => {
     }
   };
 
+  if (usersGlobalState === null || usersGlobalState === undefined)
+  return null;
+
   return (
+    
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
-        <HeaderText>ACÓLITOS</HeaderText>
-        {acolitos.map((user) => (
-          <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
-            <UserContainer>
-              <AvatarContainer>
-                <Avatar source={{ uri: user.picture }} />
-                <StatusIndicator isInsideTower={user.insideTower} />
-              </AvatarContainer>
-              <NameText>{user.username}</NameText>
-            </UserContainer>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <ImageBackground
+        source={require('../assets/wallpaper_profile.png')}
+        style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
+          <HeaderText>ACOLITOS</HeaderText>
+          {usersGlobalState.map((user) => (
+              <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
+                <UserContainer>
+
+                  <AvatarContainer>
+                    <Avatar source={{ uri: user.picture }} />
+                    <StatusIndicator isInsideTower={user.insideTower} />
+                  </AvatarContainer>
+
+                  <NameContainer>
+                    <NameText>{user.username}</NameText>
+                  </NameContainer>
+
+                  <CenteredIconContainer>
+                    {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
+                  </CenteredIconContainer>
+
+
+                </UserContainer>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
+      </ImageBackground>
+
 
       {selectedUser && (
         <Modal visible={modalVisible}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <ModalContent>
-              <CloseButton onPress={() => setModalVisible(false)}>
-                <Icon name="times" size={50} color="#4c2882" />
-              </CloseButton>
-              <DetailAvatar source={{ uri: selectedUser.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
-              <UserText>{selectedUser.username}</UserText>
+          <ModalContent>   
+            <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
+                <>
+                </>
+                {/* Modal de Envenenamiento */}
+                {!sicknessModalOpened && (
 
-              <Icon name="github-alt" size={20} color="blue" />
-              <Text>LEVEL: {selectedUser.level}</Text>
-              <StyledProgressBar progress={selectedUser.level/20} />
-    
+                          
+                  <><AvatarBox>
 
-              <Icon name="legal" size={20} color="blue" />
-              <Text>HITPOINTS: {selectedUser.hitPoints} </Text>
-              <StyledSlider value={selectedUser.hitPoints} onValueChange={handleHitPointsChange}
-              />
+                  <CloseButton onPress={() => setModalVisible(false)}>
+                    <Icon name="times" size={50} color="#4c2882" />
+                  </CloseButton>
 
-              <Icon name="hand-rock-o" size={20} color="blue" />
-              <Text>STRENGTH: {selectedUser.fuerza} </Text>
-              <StyledSlider value={selectedUser.fuerza} onValueChange={handleFuerzaChange}
-              />
+                  <DetailAvatarContainer>
+                    <DetailAvatar source={{ uri: selectedUser.picture }} />
+                    <MarcoFoto source={require("../assets/marcoEpico.png")} />
+                  </DetailAvatarContainer>
 
-              <Icon name="money" size={20} color="blue" />
-              <Text>GOLD: {userGlobalState.dinero} </Text>
-              {/* <StyledSlider value={selectedUser.dinero} onValueChange={handleDineroChange}
-              /> */}
+                  <UserLevelMarco>
+                    <UserTextLevel> {selectedUser.level}</UserTextLevel>
+                  </UserLevelMarco>
 
-              <StyledSlider value={userGlobalState.dinero} label={`${userGlobalState.dinero}`}
-              />
+                  <UserTextBackground>
+                    <UserText>{selectedUser.username}</UserText>
+                  </UserTextBackground>
+                </AvatarBox><Statsbackground>
+                    <ProgressBarRow>
+                      <ProgressBarColumn>
+                        <ProgressBarTitle>LEVEL:   {selectedUser.level}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.level / 20} />
+                        <ProgressBarTitle>HITPOINTS:   {selectedUser.hitPoints}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.hitPoints / 100} />
+                        <ProgressBarTitle>STRENGTH: {selectedUser.fuerza}  </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.fuerza / 100} />
+                        <ProgressBarTitle>GOLD:  {selectedUser.dinero}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.dinero / 100} />
+                      </ProgressBarColumn>
 
-              <Icon name="github-alt" size={20} color="blue" />
-              <Text>FATIGUE: {userGlobalState.fatigue}</Text>
-              <StyledProgressBar progress={selectedUser.cansancio/100} />
+                      <ProgressBarColumn>
+                        <ProgressBarTitle>TIRED: {selectedUser.cansancio} </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.cansancio / 100} />
+                        <ProgressBarTitle>RESISTENCE: {selectedUser.resistencia} </ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.resistencia / 100} />
+                        <ProgressBarTitle>AGILITY:  {selectedUser.agilidad}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.agilidad / 100} />
+                        <ProgressBarTitle>INTELLIGENCE: {selectedUser.inteligencia}</ProgressBarTitle>
+                        <StyledProgressBar progress={selectedUser.inteligencia / 100} />
+                      </ProgressBarColumn>
+                    </ProgressBarRow>
 
-              <Icon name="bomb" size={20} color="blue" />
-              <Text>RESISTENCE: {selectedUser.resistencia} </Text>
-              <StyledProgressBar progress={selectedUser.resistencia/100} />
+                    <DisseasText>¡Elige el envenenamiento!</DisseasText>
 
-              <Icon name="motorcycle" size={20} color="blue" />
-              <Text>AGILITY: {selectedUser.agilidad} </Text>
-              <StyledProgressBar progress={selectedUser.agilidad/100} />
+                    <DisseasButton onPress={() => desseasModal()}>
+                      <Image source={Image_disseasesIcon} style={styles.disseasIcon} />
+                    </DisseasButton>
 
-              <Icon name="info" size={20} color="blue" />
-              <Text>INTELLIGENCE: {selectedUser.inteligencia} </Text>
-              <StyledProgressBar progress={selectedUser.inteligencia/100} />
-              
-              <Text style={{ fontSize: 30, color: 'blue'}}>EFFECTS:</Text>
-              <Text></Text>
+                  </Statsbackground></>
+              )}
+              <>
+              </>
+              {/* Modal de Envenenamiento */}
+              {sicknessModalOpened && (
+                  
+                <SicknessModal 
+                  closeModal={setSicknesModalOpened}
+                  selectedSicknessUser = {selectedUser}
+                />
 
-              <Text>Ceguera: {selectedUser.ceguera ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleCeguera}
-              value={selectedUser.ceguera}
-            />
-               <Text>Hambruna: {selectedUser.hambruna ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleHambruna}
-              value={selectedUser.hambruna}
-            />
+              )}             
 
-            <Text>Locura: {selectedUser.locura ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleLocura}              
-              value={selectedUser.locura}
-            />
-            <Text>Miedo: {selectedUser.miedo ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleMiedo}
-              value={selectedUser.miedo}
-            />
 
-            <Text>Parálisis: {selectedUser.parálisis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={toggleParalisis}
-              value={selectedUser.parálisis}
-            />
+            </ImageBackground>
 
-            <Text>Psicosis: {selectedUser.psicosis ? 'Sí' : 'No'}</Text>
-            <Switch
-              onValueChange={togglePsicosis}
-              value={selectedUser.psicosis}
-            />
-
-              {/* <ConfirmButton onPress={() => handleEditUserConfirm()}> */}
-              <ConfirmButton onPress={() => handleGlobalState({dinero : 100})}>
-                <ButtonText>Confirm</ButtonText>
-              </ConfirmButton>
-            </ModalContent>
-          </ScrollView>
+          </ModalContent>
         </Modal>
       )}
     </View>
   );
 };
+
+
 const styles = StyleSheet.create({
-  modalContainer: {
+  ModalContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  disseasIcon: {
+    backgroundColor: 'rgba(255,255,255,1)',
+    width: '100%',
+    height: '100%'
+  },
+  imageBackground: {
+    width: '100%'
+  }
 });
+
+const DisseasText = styled.Text`
+  top: 5%; 
+  color: rgba(137, 59, 255,1)
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  align-self: center;  
+  font-family: 'Tealand';
+`
+
+const DisseasButton = styled(TouchableOpacity)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  width:  ${Dimensions.get('window').height * 0.12}px;
+  height: ${Dimensions.get('window').height * 0.10}px;
+`;
+
+
+const CenteredIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.65}px;
+  top: ${Dimensions.get('window').height * 0.07}px;
+
+`
 
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-const Text = styled.Text`
-  bottom: -5px;
-  color: #4c2882;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;  
-`
+
 const UserText = styled.Text`
-  top: -10px;
-  color: #4c2882;
+  top: 5%; 
+  color: rgba(137, 59, 255,1)
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
+  font-family: 'Tealand';
 `
+
+const UserTextBackground = styled.View`
+  background-color: rgba(255,255,255, 0.8);
+  border-radius: 10px;
+`
+
+const AvatarBox = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  
+  border-color: transparent;
+  height: 30%;
+  width:100%;
+`
+
+const Image = styled.Image`
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+`
+
+const DetailAvatarContainer = styled.View`
+  justify-content: center;
+  align-items: center; 
+  display: flex;
+`
+
+const MarcoFoto = styled.Image`
+  position: absolute;
+  top: -38%;
+  width: ${Dimensions.get('window').width * 0.36}px;
+  height: ${Dimensions.get('window').height * 0.14}px;
+`;
+
 const NameText = styled.Text`
-  margin-left: 15px;
+  margin-left: 5px;
   color: #4c2882;
-  font-size: 19px;
+  font-size: 16px;
   font-weight: bold;
   letter-spacing: -0.3px;
-  align-self: center;  
+  font-family: 'Tealand';
 `
+
 const HeaderText = styled.Text`
-  bottom: -15px;
+  margin-top: 5%;
+  margin-bottom: 5%;
   color: #4c2882;
   font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
+  font-family: 'Tealand';
 `
+
 const Avatar = styled.Image`
-  width: 80px;
+  width: 43%;
   height: 80px;
-  margin-left: 10px;
-  padding:1px;
   border-radius: 40px;
   border-color: #4c2882;
   border-width: 3px;
 `
-const AvatarContainer = styled.View`
-  flex-direction: row;
+
+const UserLevelMarco = styled.View`
+  align-self: center;
+  border:3px;
+  border-radius:20px;
+  border-color: rgb(124, 44, 245 );
+  height: 40px;
+  width:40px;
+  left:   10%;
+  margin-top: -13%;
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
   align-items: center;
 `
-const UserContainer = styled.View`
+
+const UserTextLevel = styled.Text`
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: -10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const AvatarContainer = styled.View`
+  justify-content: center;
   flex-direction: row;
   align-items: center;
+  margin-left: -8%;
+`
+
+const Extra = styled.View`
+  flex: 1;
+  justify-content: flex-end; 
+  align-items: flex-end;
+  margin-right: 5%;
+  margin-top: 1%;
+`
+
+const CircularProgressWrapper = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: absolute;
+
+`
+
+const UserContainer = styled.View`
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 60px;
+  margin-bottom: 5%;
   height: 110px;
   border: #4c2882;
-  bottom: -40px;
-  background-color: #d9a9c9;
+  background-color: rgba(255, 255, 255, 0.5);
 `
+
 const StatusIndicator = styled.View`
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  margin-left: -15px;
-  bottom: -20px;
+  width: 17px;
+  height: 17px;
+  border-radius: 15px;
+  margin-left: -18px;
+  bottom: -26px;
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
+
+const ImageTired = styled.Image`
+  width: 72.2px;
+  height: 70px;
+  border-radius: 35px; 
+  top:-4px;
+`
+
+const NameContainer = styled.View`
+  justify-content: center;
+  align-items: start;
+  display: flex; 
+  margin-left: -10%;
+  width: 45%;
+`
+
+
 const ModalContent = styled.View`
-  flex: 1;
+  display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
-  height:1350px;
 `
+
 const DetailAvatar = styled.Image`
-  width: 90px;
-  height: 90px;
-  padding:1px;
-  border-radius: 45px;
-  border-color: #4c2882;
-  border-width: 3px;
+  width: 105px;
+  height: 101px;
+  border-radius: 90px;
+  margin-left: 1%;
   top: -25px;
+
 `
+
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  top: -30px;
   marginLeft: 300px;
 `
-const ButtonText = styled.Text`
-color: #FFFFFF;
-font-size: 25px;
-font-weight: bold;
-letter-spacing: -0.3px;
-align-self: center;  
+
+const ProgressBarRow = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `
+
+const ProgressBarTitle = styled.Text`
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8%;
+  display: flex;
+`
+
+const ProgressBarColumn = styled.View`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+`
+
+const Statsbackground = styled.ImageBackground`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  height: 70%;
+  width: 100%;
+`
+
+const Rest = styled.TouchableOpacity`
+  flex-direction: row; 
+  height: 60px;
+  width: 120px;
+  justify-content: center;
+  align-items: center;
+  border: 2px;
+  border-radius: 40px;
+  background-color: gray;
+  opacity: 0.7;
+  left: 25%;
+  top: 5%;
+`
+
+const RestText = styled.Text`
+  font-size: 20px;
+  text-align: center;
+  align-self: center;
+`
+
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
 }))``;
 
-const ConfirmButton = styled.TouchableOpacity`
-    background-color: #4c2882;
-    padding: 10px 20px;
-    bottom: -20px;
-    width: 42%;
-    height: 55px;
-    margin-left: 0px;
-    border-radius: 60px;
-    align-self: center;
-`
+
 export default Villano;
