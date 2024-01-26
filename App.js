@@ -423,8 +423,8 @@ const closeEpicModal = () => {
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalEpicVisible}
-                onRequestClose={closeEpicModal}
+                visible={modalMarrowVisible}
+                onRequestClose={closeMarrowModal}
             >
                 <View style={styles.modalContainer}>
                   <ImageBackground
