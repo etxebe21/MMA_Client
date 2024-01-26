@@ -19,7 +19,6 @@ import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
-import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
@@ -269,9 +268,6 @@ const closeEpicModal = () => {
         break;
       case 'Profile': iconName = 'person';
         break;
-      case 'ProfileVillano':
-        iconName = 'person';
-        break;
       case 'GeolocationUser':setRottingModalVisible
       case 'GeolocationMortimer':
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
@@ -320,7 +316,6 @@ const closeEpicModal = () => {
           <>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Villano" component={Villano} />
-            <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
           </>
         );
         case 'ANGELO':
