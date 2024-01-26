@@ -348,7 +348,7 @@ const closeRottingModal = () => {
             >
                 <View style={styles.modalContainer}>
                   <ImageBackground
-                    source={require('./assets/ethaziumed.png.png')}
+                    source={require('./assets/ethaziumed.png')}
                     style={styles.imageBackground}
                   >
                     <View style={styles.modalContent}>
