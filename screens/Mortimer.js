@@ -16,6 +16,7 @@ const Mortimer = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+  const {selectingUser, setSelectingUser} = useContext(Context);
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +38,16 @@ const Mortimer = () => {
     }
     else return;
   }, [usersGlobalState, selectedUser]);
+
+  useEffect(() => {
+    console.log("Entramos");
+    setSelectingUser(selectedUser);
+  }, [selectedUser])
+
+  useEffect(() => {
+    console.log(selectingUser);
+  }, [selectingUser])
+
 
   const handleUserPress = (user) => {
     setSelectedUser(user);

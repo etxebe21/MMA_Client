@@ -4,27 +4,28 @@ import axios from 'axios';
 import { FlatList, ScrollView, Modal, StyleSheet, ImageBackground, View, ToastAndroid,TouchableOpacity } from "react-native";
 import { axiosInstance } from "../axios/axiosInstance";
 import { Context } from "../context/Context";
-
+import { socket } from '../socket/socketConnect';
+import { io } from "socket.io-client";
 
 const IngredientesScreen = ({ setIsPotionCreated }) => {
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
   const [createdPotion, setCreatedPotion] = React.useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [selectedPotion, setSelectedPotion] = useState(null);
-  const { userGlobalState, setUserGlobalState } = useContext(Context);
+  const {userGlobalState, setUserGlobalState } = useContext(Context);
   const [potionIsCreated, setPotionIsCreated] = useState(false);
   const [villainPotions, setVillainPotions] = useState([]);
   const [selectedEffects, setSelectedEffects] = useState([]);
   const [positionObject, setPositionObject] = useState();
   const [resultPotion, setResultPotion] = useState();
-
+  const {selectingUser, setSelectingUser} = useContext(Context);
+  
   
   useEffect(() => {
     getIngredientsFromDatabase();
     console.log("USER GLOBAL STATE", userGlobalState);
     whitchPotion();
   }, []);
-
 
   useEffect(() => {
     console.log("SELEECTED EFFECTS", selectedEffects);
@@ -184,20 +185,46 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
   
   
   const applyPotion = () => {
-    console.log(resultPotion.healing_type);
-    console.log(userGlobalState);
+
     let sendData = {
-      id: userGlobalState._id,
-      intelligence: userGlobalState.inteligencia,
-      strength: userGlobalState.fuerza,
-      agility: userGlobalState.agility,
+      id: selectingUser._id,
+      inteligencia: selectingUser.inteligencia,
+      fuerza: selectingUser.fuerza,
+      agilidad: selectingUser.agilidad,
     }
 
 
     if (resultPotion.healing_type === "Strength")
     {
-      sendData.strength = sendData.strength * 60 / 100
+      sendData.fuerza = selectingUser.maxStat.fuerza;
+      sendData.epic_weakness= false
+
     }
+    else if (resultPotion.healing_type === "Agility")
+    {
+      sendData.agilidad = selectingUser.maxStat.agilidad;
+      sendData.marrow_apocalypse = false;
+      
+    }
+    else if (resultPotion.healing_type === "Intelligence")
+    {
+      sendData.inteligencia = selectingUser.maxStat.inteligencia;
+      sendData.rotting_plague = false;
+
+    }
+    else 
+    {
+      sendData.fuerza = selectingUser.maxStat.fuerza;
+      sendData.agilidad = selectingUser.maxStat.agilidad;
+      sendData.inteligencia = selectingUser.maxStat.inteligencia;
+      sendData.ethazium = false
+    }
+    console.log("DATAAAAAAAAAAAAAAAA")
+    console.log(sendData);
+    socket.emit('HealUser', sendData);
+    ToastAndroid.showWithGravity('Pocion aplicada satisfactoriamente', ToastAndroid.SHORT, ToastAndroid.CENTER);
+
+    set
 
   }
   
