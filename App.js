@@ -19,7 +19,6 @@ import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
-import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
@@ -51,6 +50,7 @@ const App = () => {
   const [modalRottingVisible, setRottingModalVisible] = useState(false);
   const [modalEpicVisible, setEpicModalVisible] = useState(false);
   const [modalMarrowVisible, setMarrowModalVisible] = useState(false);
+  const [selectingUser, setSelectingUser] = useState();
 
   const timerIdRef = useRef(null);
 
@@ -82,19 +82,26 @@ const App = () => {
       ...data
     }));
   }
-    const handleMaterialsGlobalState = (data) => {
-      setMaterialsGlobalState(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleMaterialsGlobalState = (data) => {
+    setMaterialsGlobalState(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
-    const handleInventorySlot = (data) => {
-      setInventorySlot(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleUserSelected = (data) => {
+    setSelectingUser(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
+
+  const handleInventorySlot = (data) => {
+    setInventorySlot(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -261,9 +268,6 @@ const closeMarrowModal = () => {
         break;
       case 'Profile': iconName = 'person';
         break;
-      case 'ProfileVillano':
-        iconName = 'person';
-        break;
       case 'GeolocationUser':setRottingModalVisible
       case 'GeolocationMortimer':
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
@@ -312,10 +316,9 @@ const closeMarrowModal = () => {
           <>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Villano" component={Villano} />
-            <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
           </>
         );
-        case 'ANGELO':
+      case 'ANGELO':
         return (
           <>
             <Tab.Screen name="Home" component={Home} />
@@ -329,9 +332,9 @@ const closeMarrowModal = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,inventorySlot,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,handleInventorySlot,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState,setInventorySlot
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState, inventorySlot,selectingUser,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState, handleInventorySlot,handleUserSelected,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState, setInventorySlot,setSelectingUser,
 
     }}>
       <SafeAreaProvider>
