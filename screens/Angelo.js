@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity, ToastAndroid, Dimensions, ImageBackground
 import { ScrollView } from "react-native";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect'
-import { Modal } from "react-native";
 
 const Angelo = () => {
 
@@ -22,32 +21,6 @@ const Angelo = () => {
       }
     }, []);
     
-
-    // useEffect(() => {
-    //   const showEthaziumModal = () => {
-    //     if (Array.isArray(usersGlobalState)) {
-    //       console.log('USUARIOOOOOOOS', usersGlobalState)
-
-    //       const ethaziumUser = usersGlobalState.find(user => user.ethazium);
-    //       console.log('ETHAZIUMUSEEEEEER', ethaziumUser)
-    //       if (ethaziumUser) {
-    //         setModalVisible(true);
-    //         // Oculta el modal después de unos segundos
-    //         const timeoutId = setTimeout(() => {
-    //           setModalVisible(false);
-    //         }, 4000); // Cambia este valor según la duración deseada en milisegundos
-    
-    //         // Limpia el timeout al desmontar el componente
-    //         return () => clearTimeout(timeoutId);
-    //       }
-    //     }
-    //   };
-    
-    //   // Llama a la función directamente al montar el componente
-    //   showEthaziumModal();
-    // }, [usersGlobalState]);
-    
-
     const handleUserPress = () => {
         // setSelectedUser();
         // setModalVisible(true);
@@ -119,16 +92,6 @@ const Angelo = () => {
                 ))}
             </ScrollView>
             </ImageBackground>
-             {/* Modal para mostrar cuando el atributo ethazium es true */}
-      {/* <Modal
-        animationType="slide" 
-        transparent={true}
-        visible={modalVisible}
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>¡HAS SIDO INFECTADO POR LA MALDICIÓN ETHAZIUM!</Text>
-        </View>
-      </Modal> */}
         </View>
     );
 }
@@ -247,6 +210,12 @@ const styles = StyleSheet.create({
     display: flex; 
     margin-left: -10%;
     width: 45%;
+`
+
+const Image = styled.Image`
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
 `
 
   export default Angelo;
