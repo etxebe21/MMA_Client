@@ -8,42 +8,44 @@ import { Modal } from "react-native";
 
 const Angelo = () => {
 
-    const { usersGlobalState,  handleUsersGlobalState }   = useContext(Context);
+    const { usersGlobalState,  setUsersGlobalState }   = useContext(Context);
     const [selectedUser, setSelectedUser] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [acolitos, setAcolitos] = useState([]);
 
     useEffect(() => {
-      console.log('useEffect: usersGlobalState', usersGlobalState);
     
       if (Array.isArray(usersGlobalState)) {
         console.log('Filtered Acolitos:', usersGlobalState.filter(user => user.role === "ACÓLITO"));
-        handleUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
+        setUsersGlobalState(usersGlobalState.filter(user => user.role === "ACÓLITO"));
       }
-    }, [usersGlobalState]);
+    }, []);
     
 
-    useEffect(() => {
-      const showEthaziumModal = () => {
-        if (Array.isArray(usersGlobalState)) {
-          const ethaziumUser = usersGlobalState.find(user => user.ethazium);
-          if (ethaziumUser) {
-            setModalVisible(true);
-            // Oculta el modal después de unos segundos
-            const timeoutId = setTimeout(() => {
-              setModalVisible(false);
-            }, 4000); // Cambia este valor según la duración deseada en milisegundos
+    // useEffect(() => {
+    //   const showEthaziumModal = () => {
+    //     if (Array.isArray(usersGlobalState)) {
+    //       console.log('USUARIOOOOOOOS', usersGlobalState)
+
+    //       const ethaziumUser = usersGlobalState.find(user => user.ethazium);
+    //       console.log('ETHAZIUMUSEEEEEER', ethaziumUser)
+    //       if (ethaziumUser) {
+    //         setModalVisible(true);
+    //         // Oculta el modal después de unos segundos
+    //         const timeoutId = setTimeout(() => {
+    //           setModalVisible(false);
+    //         }, 4000); // Cambia este valor según la duración deseada en milisegundos
     
-            // Limpia el timeout al desmontar el componente
-            return () => clearTimeout(timeoutId);
-          }
-        }
-      };
+    //         // Limpia el timeout al desmontar el componente
+    //         return () => clearTimeout(timeoutId);
+    //       }
+    //     }
+    //   };
     
-      // Llama a la función directamente al montar el componente
-      showEthaziumModal();
-    }, [usersGlobalState]);
+    //   // Llama a la función directamente al montar el componente
+    //   showEthaziumModal();
+    // }, [usersGlobalState]);
     
 
     const handleUserPress = () => {
@@ -68,7 +70,7 @@ const Angelo = () => {
       const updatedAcolitos =  usersGlobalState.map(user =>
         user._id === ethaziData.id ? { ...user, ethazium: true } : user
       );
-      handleUsersGlobalState(updatedAcolitos);
+      setUsersGlobalState(updatedAcolitos);
 
       socket.emit('Ethazium', ethaziData);
       ToastAndroid.showWithGravity('MALDICIÓN ETHAZIUM INVOCADA', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -77,6 +79,9 @@ const Angelo = () => {
       //   console.log('Usuario modificadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:', responseData);
       //   });
   };
+
+  if (usersGlobalState === null || usersGlobalState === undefined)
+    return null;
     
     return(
 
@@ -88,7 +93,7 @@ const Angelo = () => {
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
                 <HeaderText>ACÓLITOS</HeaderText>
                 
-                {usersGlobalState !== undefined && Array.isArray(usersGlobalState) && usersGlobalState.map((user) => (
+                {usersGlobalState !== undefined && usersGlobalState && usersGlobalState.map((user) => (
                     <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                     <UserContainer>
                         <AvatarContainer>
