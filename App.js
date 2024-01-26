@@ -24,12 +24,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
-import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
-import Modals from './components/Modals';
-
 
 const App = () => {
 
@@ -40,6 +37,7 @@ const App = () => {
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({ dinero: 20, fatigue: 40 });
   const [data, setData] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
@@ -132,7 +130,7 @@ const App = () => {
 
     const rottingUser = userGlobalState?.rotting_plague
 
-    if (rottingUser) {
+    if (rottingUser && usersGlobalState) {
       openRottingModal();
 
       const timeoutId = setTimeout(() => {
@@ -141,13 +139,13 @@ const App = () => {
 
       return () => clearTimeout(timeoutId);
     }
-  }, [userGlobalState]);
+  }, [userGlobalState, usersGlobalState]);
 
   // useEffect para manejar la apertura automática del modal Ethazium
 useEffect(() => {
   const ethaziumUser = userGlobalState?.ethazium;
 
-  if (ethaziumUser) {
+  if (ethaziumUser && usersGlobalState) {
     openEthaziumModal();
 
     const timeoutId = setTimeout(() => {
@@ -156,14 +154,14 @@ useEffect(() => {
 
     return () => clearTimeout(timeoutId);
   }
-}, [userGlobalState]);
+}, [userGlobalState, usersGlobalState]);
 
 // useEffect para manejar la apertura automática del modal Ethazium
 useEffect(() => {
   // Verifica que el usuario actual tenga epic igual a true
   const epicUser = userGlobalState?.epic_weakness;
 
-  if (epicUser) {
+  if (epicUser && usersGlobalState) {
     openEpicModal();
 
     const timeoutId = setTimeout(() => {
@@ -172,14 +170,14 @@ useEffect(() => {
 
     return () => clearTimeout(timeoutId);
   }
-}, [userGlobalState]);
+}, [ userGlobalState, usersGlobalState]);
 
 // useEffect para manejar la apertura automática del modal Ethazium
 useEffect(() => {
  
   const marrowUser = userGlobalState?.marrow_apocalypse;
   
-  if (marrowUser) {
+  if (marrowUser && usersGlobalState) {
     openMarrowModal();
 
     const timeoutId = setTimeout(() => {
@@ -188,7 +186,7 @@ useEffect(() => {
 
     return () => clearTimeout(timeoutId);
   }
-}, [userGlobalState]);
+}, [userGlobalState, usersGlobalState]);
 
 const openEthaziumModal = () => {
   setEthaziumModalVisible(true);
@@ -239,9 +237,10 @@ const closeEpicModal = () => {
 
   // Maneja el login
   const handleLogin = async () => {
-    setRole(role);
+    setRole(role);3
     setIsAuthenticated(true);
     setLoginModalVisible(false);
+    setIsLoggedIn(false);
   };
 
   //Renderiza los iconos del navegador
