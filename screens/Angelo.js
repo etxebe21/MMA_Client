@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { StyleSheet, TouchableOpacity, ToastAndroid, Text, ImageBackground} from "react-native";
+import { StyleSheet, TouchableOpacity, ToastAndroid, Dimensions, ImageBackground} from "react-native";
 import { ScrollView } from "react-native";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect'
@@ -100,6 +100,12 @@ const Angelo = () => {
                            <NameText maxWidth={140}>{user.username}</NameText>
                         </NameContainer>
 
+                        <CenteredSicknessIconContainer>
+                          {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                            <Image source={require('../assets/sickness.jpeg')} />
+                          )}
+                        </CenteredSicknessIconContainer>
+
                         <ImageEthaziumButton onPress={() => ethazium(user)} isEthazium={user.ethazium} >
                           <ImageEthazium source={require('../assets/ethazium.png')} />
                         </ImageEthaziumButton>
@@ -141,6 +147,13 @@ const styles = StyleSheet.create({
       fontFamily: 'Tealand',
     },
   });
+
+  const CenteredSicknessIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.45}px;
+  top: ${Dimensions.get('window').height * 0.07}px;
+
+`
   
   const View = styled.View`
     flex: 1;
