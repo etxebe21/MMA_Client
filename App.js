@@ -49,6 +49,7 @@ const App = () => {
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
   const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
+  const [modalRottingVisible, setRottingModalVisible] = useState(false);
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -126,15 +127,16 @@ const App = () => {
 
   // useEffect para manejar la apertura automática del modal Ethazium
   useEffect(() => {
-    // Verifica que el usuario actual tenga ethazium igual a true
-    const ethaziumUser = userGlobalState?.ethazium;
+    // Verifica que el usuario actual tenga rotting igual a true
+    const rottingUser = userGlobalState?.rotting_plague
+    ;
 
-    if (ethaziumUser) {
-      openEthaziumModal();
+    if (rottingUser) {
+      openRottingModal();
 
       // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
       const timeoutId = setTimeout(() => {
-        closeEthaziumModal();
+        closeRottingModal();
       }, 4000);
 
       // Limpia el timeout al desmontar el componente
@@ -168,6 +170,13 @@ const closeEthaziumModal = () => {
   setEthaziumModalVisible(false);
 };
 
+const openRottingModal = () => {
+  setRottingModalVisible(true);
+};
+
+const closeRottingModal = () => {
+  setRottingModalVisible(false);
+};
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -326,6 +335,24 @@ const closeEthaziumModal = () => {
                   >
                     <View style={styles.modalContent}>
                       <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalRottingVisible}
+                onRequestClose={closeRottingModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/ethaziumed.png.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY ROTTING_PLAGUE</CloseText>
                     </View>
                   </ImageBackground>
                 </View>
