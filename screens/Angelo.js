@@ -84,6 +84,12 @@ const Angelo = () => {
                           )}
                         </CenteredSicknessIconContainer>
 
+                        <CenteredCursedIconContainer>
+                          {(user.ethazium) && (
+                            <CursedImage source={require('../assets/ethaziumed.png')} />
+                          )}
+                        </CenteredCursedIconContainer>
+
                         <ImageEthaziumButton onPress={() => ethazium(user)} isEthazium={user.ethazium} >
                           <ImageEthazium source={require('../assets/ethazium.png')} />
                         </ImageEthaziumButton>
@@ -118,11 +124,15 @@ const styles = StyleSheet.create({
 
   const CenteredSicknessIconContainer = styled.View`
   position: absolute;
-  left: ${Dimensions.get('window').width * 0.45}px;
-  top: ${Dimensions.get('window').height * 0.07}px;
-
+  left: ${Dimensions.get('window').width * 0.68}px;
+  top: ${Dimensions.get('window').height * 0.015}px;
 `
   
+const CenteredCursedIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.68}px;
+  top: ${Dimensions.get('window').height * 0.075}px;
+`
   const View = styled.View`
     flex: 1;
     background: #C8A2C8;
@@ -149,73 +159,77 @@ const styles = StyleSheet.create({
   width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '100%')};
   overflow: hidden;
 `;
-  const Avatar = styled.Image`
-    width: 41%;
-    height: 80px;
-    border-radius: 40px;
-    border-color: #4c2882;
-    border-width: 3px;
+const Avatar = styled.Image`
+  width: 41%;
+  height: 80px;
+  border-radius: 40px;
+  border-color: #4c2882;
+  border-width: 3px;
 `
-  const AvatarContainer = styled.View`
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    margin-left: -28%;
-  `
-  const UserContainer = styled.View`
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    border-radius: 60px;
-    margin-bottom: 5%;
-    height: 110px;
-    border: #4c2882;
-    background-color: rgba(255, 255, 255, 0.5);
-  `
-  const StatusIndicator = styled.View`
-    width: 14px;
-    height: 14px;
-    border-radius: 7px;
-    margin-left: -15px;
-    bottom: -20px;
-    background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
-    border: #4c2882;
-  `
-  const ImageEthaziumButton = styled.TouchableOpacity`
-    position: absolute;
-    top: 27%;
-    left: 80%;
-    width: 15%;
-    height: 50%;
-    border-radius: 55px;
-    overflow: hidden;
-    border: ${(props) => (props.isEthazium ? 'none' : 'green')};
-    background-color: ${(props) => (props.isEthazium ? 'gray' : 'rgba(255, 255, 255, 0.8)')};
-    opacity: ${(props) => (props.isEthazium ? 0.5 : 1)};
-    border: darkgreen;
-  `;
-
-  const ImageEthazium = styled.Image`
-  height: 100%;
-  width: 100%;
-  border-radius: 5px;
-  border-width: 1px;
-  border-color: green;
+const AvatarContainer = styled.View`
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  margin-left: -28%;
+`
+const UserContainer = styled.View`
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 60px;
+  margin-bottom: 5%;
+  height: 110px;
+  border: #4c2882;
+  background-color: rgba(255, 255, 255, 0.5);
+`
+const StatusIndicator = styled.View`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  margin-left: -15px;
+  bottom: -20px;
+  background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
+  border: #4c2882;
+`
+const ImageEthaziumButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 27%;
+  left: 80%;
+  width: 15%;
+  height: 50%;
+  border-radius: 55px;
+  overflow: hidden;
+  border: ${(props) => (props.isEthazium ? 'none' : 'green')};
+  background-color: ${(props) => (props.isEthazium ? 'gray' : 'rgba(255, 255, 255, 0.8)')};
+  opacity: ${(props) => (props.isEthazium ? 0.5 : 1)};
+  border: darkgreen;
 `;
 
-  const NameContainer = styled.View`
-    justify-content: center;
-    align-items: start;
-    display: flex; 
-    margin-left: -10%;
-    width: 45%;
-`
+const ImageEthazium = styled.Image`
+height: 100%;
+width: 100%;
+border-radius: 5px;
+border-width: 1px;
+border-color: green;
+`;
 
+const NameContainer = styled.View`
+  justify-content: center;
+  align-items: start;
+  display: flex; 
+  margin-left: -10%;
+  width: 45%;
+`
 const Image = styled.Image`
-  width: 40px;
-  height: 40px;
-  border-radius: 30px;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+`
+const CursedImage = styled.Image`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
 `
 
   export default Angelo;
