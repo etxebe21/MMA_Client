@@ -37,7 +37,7 @@ const Villano = () => {
 
   useEffect(() => {
     // console.log("Sicknes Modal Opened? " + sicknessModalOpened)
-  }, [sicknessModalOpened, selectedUser]);
+  }, [sicknessModalOpened, selectedUser, usersGlobalState]);
 
 
   const handleUserPress = (user) => {
@@ -182,6 +182,12 @@ const Villano = () => {
                     {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
                   </CenteredIconContainer>
 
+                  <CenteredSicknessIconContainer>
+                    {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                      <Image source={require('../assets/sickness.jpeg')} />
+                    )}
+                  </CenteredSicknessIconContainer>
+
 
                 </UserContainer>
               </TouchableOpacity>
@@ -314,6 +320,13 @@ const DisseasButton = styled(TouchableOpacity)`
 const CenteredIconContainer = styled.View`
   position: absolute;
   left: ${Dimensions.get('window').width * 0.65}px;
+  top: ${Dimensions.get('window').height * 0.07}px;
+
+`
+
+const CenteredSicknessIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.45}px;
   top: ${Dimensions.get('window').height * 0.07}px;
 
 `
