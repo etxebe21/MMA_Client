@@ -50,6 +50,8 @@ const App = () => {
   const [inventorySlot, setInventorySlot] = useState([]);
   const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
   const [modalRottingVisible, setRottingModalVisible] = useState(false);
+  const [modalEpicVisible, setEpicModalVisible] = useState(false);
+  const [modalMarrowVisible, setMarrowModalVisible] = useState(false);
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -127,37 +129,63 @@ const App = () => {
 
   // useEffect para manejar la apertura automática del modal Ethazium
   useEffect(() => {
-    // Verifica que el usuario actual tenga rotting igual a true
+
     const rottingUser = userGlobalState?.rotting_plague
-    ;
 
     if (rottingUser) {
       openRottingModal();
 
-      // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
       const timeoutId = setTimeout(() => {
         closeRottingModal();
       }, 4000);
 
-      // Limpia el timeout al desmontar el componente
       return () => clearTimeout(timeoutId);
     }
   }, [userGlobalState]);
 
   // useEffect para manejar la apertura automática del modal Ethazium
 useEffect(() => {
-  // Verifica que el usuario actual tenga ethazium igual a true
   const ethaziumUser = userGlobalState?.ethazium;
 
   if (ethaziumUser) {
     openEthaziumModal();
 
-    // Oculta el modal después de 5 segundos (ajusta según tu necesidad)
     const timeoutId = setTimeout(() => {
       closeEthaziumModal();
     }, 4000);
 
-    // Limpia el timeout al desmontar el componente
+    return () => clearTimeout(timeoutId);
+  }
+}, [userGlobalState]);
+
+// useEffect para manejar la apertura automática del modal Ethazium
+useEffect(() => {
+  // Verifica que el usuario actual tenga epic igual a true
+  const epicUser = userGlobalState?.epic_weakness;
+
+  if (epicUser) {
+    openEpicModal();
+
+    const timeoutId = setTimeout(() => {
+      closeEpicModal();
+    }, 4000);
+
+    return () => clearTimeout(timeoutId);
+  }
+}, [userGlobalState]);
+
+// useEffect para manejar la apertura automática del modal Ethazium
+useEffect(() => {
+ 
+  const marrowUser = userGlobalState?.marrow_apocalypse;
+  
+  if (marrowUser) {
+    openMarrowModal();
+
+    const timeoutId = setTimeout(() => {
+      closeMarrowModal();
+    }, 4000);
+
     return () => clearTimeout(timeoutId);
   }
 }, [userGlobalState]);
@@ -176,6 +204,22 @@ const openRottingModal = () => {
 
 const closeRottingModal = () => {
   setRottingModalVisible(false);
+};
+
+const openMarrowModal = () => {
+  setMarrowModalVisible(true);
+};
+
+const closeMarrowModal = () => {
+  setMarrowModalVisible(false);
+};
+
+const openEpicModal = () => {
+  setEpicModalVisible(true);
+};
+
+const closeEpicModal = () => {
+  setEpicModalVisible(false);
 };
 
   //Datos iniciales email role e id
@@ -228,7 +272,7 @@ const closeRottingModal = () => {
       case 'ProfileVillano':
         iconName = 'person';
         break;
-      case 'GeolocationUser':
+      case 'GeolocationUser':setRottingModalVisible
       case 'GeolocationMortimer':
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
         break;
@@ -353,6 +397,42 @@ const closeRottingModal = () => {
                   >
                     <View style={styles.modalContent}>
                       <CloseText>YOU HAVE BEEN INFECTED BY ROTTING_PLAGUE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEpicVisible}
+                onRequestClose={closeEpicModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/epicweakness.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY EPIC_WEAKNESS</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEpicVisible}
+                onRequestClose={closeEpicModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/marrow.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY MARROW_APOCALYPSE</CloseText>
                     </View>
                   </ImageBackground>
                 </View>
