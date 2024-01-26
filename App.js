@@ -36,8 +36,6 @@ const App = () => {
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({ dinero: 20, fatigue: 40 });
   const [currentModal, setCurrentModal] = useState(null);
-  const [timerId, setTimerId] = useState(null);
-
 
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
@@ -140,65 +138,45 @@ const App = () => {
     const ethaziumUser = userGlobalState?.ethazium;
     const epicUser = userGlobalState?.epic_weakness;
     const marrowUser = userGlobalState?.marrow_apocalypse;
-
-    // Función para abrir el modal correspondiente y cerrar los demás después de 4 segundos
-    const openAndCloseModal = async (modalFunction, isOpen) => {
-      await closeAllModals(); // Cierra todos los modales primero
-      setCurrentModal(modalFunction); // Actualiza el modal actual
-      modalFunction(isOpen);
-
-      // Cerrar el modal después de 4 segundos
-  const id = setTimeout(() => {
-    modalFunction(false);
-  }, 4000);
-
-  // Actualizar el ID del temporizador usando useRef
-  timerIdRef.current = id;
-    };
-
-    const closeAllModals = async () => {
-      if (currentModal) {
-        await currentModal(false);
-        setCurrentModal(null);
-        closeEpicModal()
-        closeEpicModal()
-        closeMarrowModal()
-        closeRottingModal()
-      }
-    };
-
-    if (ethaziumUser && usersGlobalState) {
-      console.log('Opening Ethazium modal');
-      openAndCloseModal(setEthaziumModalVisible, true);
-    } else if (rottingUser && usersGlobalState) {
-      console.log('Opening Rotting modal');
-      openAndCloseModal(setRottingModalVisible, true);
-    } else if (epicUser && usersGlobalState) {
-      console.log('Opening Epic modal');
-      openAndCloseModal(setEpicModalVisible, true);
-    } else if (marrowUser && usersGlobalState) {
-      console.log('Opening Marrow modal');
-      openAndCloseModal(setMarrowModalVisible, true);
-    } else {
-      console.log('Closing all modals');
+  
+    const openAndCloseModal = (modalFunction, isOpen) => {
+      // Cerrar el modal actual si existe
       closeAllModals();
-    }
-    
-    const updateUserModal = (modalFunction, userAttribute) => {
-      if (userAttribute && userGlobalState?.[userAttribute]) {
-        openAndCloseModal(modalFunction, true);
-      }
+      // Abrir el modal correspondiente
+      modalFunction(isOpen);
+      // Cerrar el modal después de 4 segundos
+      const id = setTimeout(() => {
+        modalFunction(false);
+      }, 3000);
+      // Actualizar el ID del temporizador usando useRef
+      timerIdRef.current = id;
     };
   
-    // Verifica y actualiza el modal según el estado de cada atributo del usuario
-    updateUserModal(setEthaziumModalVisible, 'ethazium');
-    updateUserModal(setRottingModalVisible, 'rotting_plague');
-    updateUserModal(setEpicModalVisible, 'epic_weakness');
-    updateUserModal(setMarrowModalVisible, 'marrow_apocalypse');
-
+    // Verificar y abrir el modal según el estado de cada atributo del usuario
+    if (rottingUser) {
+      openAndCloseModal(openRottingModal, true);
+    } else if (ethaziumUser) {
+      openAndCloseModal(openEthaziumModal, true);
+    } else if (epicUser) {
+      openAndCloseModal(openEpicModal, true);
+    } else if (marrowUser) {
+      openAndCloseModal(openMarrowModal, true);
+    } else {
+      // Cerrar todos los modales si ningún atributo es verdadero
+      closeAllModals();
+    }
+  
     // Limpia el temporizador si el componente se desmonta o si hay un cambio en los estados de usuario
     return () => clearTimeout(timerIdRef.current);
-  }, [userGlobalState, usersGlobalState]);
+  }, [userGlobalState]);
+
+  
+  const closeAllModals = () => {
+    closeRottingModal();
+    closeEthaziumModal();
+    closeEpicModal();
+    closeMarrowModal();
+  };
 
 const closeEthaziumModal = () => {
   console.log('Closing Ethazium modal');
@@ -220,6 +198,25 @@ const closeMarrowModal = () => {
   setMarrowModalVisible(false);
 };
   
+const openEthaziumModal = () => {
+  console.log('OPening Ethazium modal');
+  setEthaziumModalVisible(true);
+};
+
+const openRottingModal = () => {
+  console.log('OPening Rotting modal');
+  setRottingModalVisible(true);
+};
+
+const openMarrowModal = () => {
+  console.log('Opening Marrow modal');
+  setMarrowModalVisible(true);
+};
+
+const openEpicModal = () => {
+  console.log('Opening Epic modal');
+  setEpicModalVisible(true);
+};
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
