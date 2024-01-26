@@ -147,6 +147,7 @@ const App = () => {
       // Cerrar el modal después de 4 segundos
       const id = setTimeout(() => {
         modalFunction(false);
+        closeAllModals();
       }, 3000);
       // Actualizar el ID del temporizador usando useRef
       timerIdRef.current = id;
@@ -154,12 +155,16 @@ const App = () => {
   
     // Verificar y abrir el modal según el estado de cada atributo del usuario
     if (rottingUser) {
+      closeAllModals();
       openAndCloseModal(openRottingModal, true);
     } else if (ethaziumUser) {
+      closeAllModals();
       openAndCloseModal(openEthaziumModal, true);
     } else if (epicUser) {
+      closeAllModals();
       openAndCloseModal(openEpicModal, true);
     } else if (marrowUser) {
+      closeAllModals();
       openAndCloseModal(openMarrowModal, true);
     } else {
       // Cerrar todos los modales si ningún atributo es verdadero
@@ -168,7 +173,7 @@ const App = () => {
   
     // Limpia el temporizador si el componente se desmonta o si hay un cambio en los estados de usuario
     return () => clearTimeout(timerIdRef.current);
-  }, [userGlobalState]);
+  }, [userGlobalState, usersGlobalState]);
 
   
   const closeAllModals = () => {
