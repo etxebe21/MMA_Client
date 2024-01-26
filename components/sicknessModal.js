@@ -14,8 +14,9 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
   const [acolitos, setAcolitos] = useState([]);
   
   // IMAGES
-  const Image_background = require('../assets/fondoViejaEscuela.png');
-  const Image_ClosedIcon = require('../assets/descansoAcolito.png');
+  const Image_background  = require('../assets/wallpaper_sicknessModal.png');
+  const Image_ClosedIcon  = require('../assets/descansoAcolito.png');
+  const Image_Marco       = require('../assets/marco_enfermedades.png');
 
   const Image_RottingPlague     = require('../assets/RottingPlague.jpeg')
   const Image_EpicWeackness     = require('../assets/EpicWeackness.jpeg')
@@ -157,17 +158,21 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
 
         {/* Botones de Envenenamiento */}
         <DisseasesContainer>
-          <RottingPlague onPress={() => RottingPlagueApply()}>
-            <Image source={Image_RottingPlague} style={styles.disseasApplyIcons} />
-          </RottingPlague>
+          <ImageBackground source={Image_Marco} style={styles.marcoPotion} >
 
-          <DisseasTwo onPress={() => EpicWeaknessApply()}>
-            <Image source={Image_EpicWeackness} style={styles.disseasApplyIcons} />
-          </DisseasTwo>
+            <RottingPlague onPress={() => RottingPlagueApply()}>
+              <Image source={Image_RottingPlague} style={styles.disseasApplyIcons} />
+            </RottingPlague>
+  
+            <DisseasTwo onPress={() => EpicWeaknessApply()}>
+              <Image source={Image_EpicWeackness} style={styles.disseasApplyIcons} />
+            </DisseasTwo>
 
-          <DisseasThree onPress={() => MarrowApocalypseApply()}>
-            <Image source={Image_MarrowApocalypse} style={styles.disseasApplyIcons} />
-          </DisseasThree>
+            <DisseasThree onPress={() => MarrowApocalypseApply()}>
+              <Image source={Image_MarrowApocalypse} style={styles.disseasApplyIcons} />
+            </DisseasThree>
+
+          </ImageBackground>
         </DisseasesContainer>
         
       </ImageBackground>
@@ -186,30 +191,39 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange'
   },
   disseasApplyIcons: {
-    width: 80,
-    height: 80,
-    backgroundColor: 'orange',
+    width: 120,
+    height: 120,
     borderRadius: 50
+  },
+  marcoPotion: {
+    marginTop: '-30%',
+    width: '100%',
+    height: '95%',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
 const RottingPlague =  styled(TouchableOpacity)`
-  background-color: yellow;
+  margin-top: -7%;
+  // background-color: yellow;
 `
 
 const DisseasTwo =  styled(TouchableOpacity)`
-  background-color: orange;
+  margin-top: 5%;
+  // background-color: orange;
 `
 
 const DisseasThree =  styled(TouchableOpacity)`
-  background-color: pink;
+  margin-top: 5%;
+  // background-color: pink;
 `
 
 const DisseasesContainer = styled.View`
-  margin-top: 10%;
   display: flex;
-  justify-content: row;
   align-items: center;
+  justify-content: center;
+  
 `
 
 const ClosedButton = styled(TouchableOpacity)`
@@ -227,17 +241,17 @@ const MainContainer = styled.View`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: red;
 `;
 
 const DisseasText = styled.Text`
   top: 10%; 
   color: rgba(137, 59, 255,1)
-  font-size: 22px;
   font-weight: bold;
   letter-spacing: -0.3px;
   align-self: center;  
   font-family: 'Tealand';
+  font-size: 22px;
+  text-shadow: 2px 2px 3px blue;
 `
 
 
