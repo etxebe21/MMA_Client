@@ -114,6 +114,13 @@ const Mortimer = () => {
                     {user.resistencia < 20 && (<Image source={require('../assets/iconTired.png')} />)}
                   </CenteredIconContainer>
 
+                  <CenteredSicknessIconContainer>
+                    {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                      <Image source={require('../assets/sickness.jpeg')} />
+                    )}
+                  </CenteredSicknessIconContainer>
+
+
                   <Extra>
                     <ImageTired source={require('../assets/cansado.jpeg')} />
                     <CircularProgressWrapper>
@@ -224,6 +231,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Tealand'
   }
 });
+
+
+const CenteredSicknessIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.45}px;
+  top: ${Dimensions.get('window').height * 0.07}px;
+
+`
 
 
 const CenteredIconContainer = styled.View`
