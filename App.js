@@ -46,7 +46,7 @@ const App = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
-
+  const [selectingUser, setSelectingUser] = useState();
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -76,19 +76,26 @@ const App = () => {
       ...data
     }));
   }
-    const handleMaterialsGlobalState = (data) => {
-      setMaterialsGlobalState(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleMaterialsGlobalState = (data) => {
+    setMaterialsGlobalState(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
-    const handleInventorySlot = (data) => {
-      setInventorySlot(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleUserSelected = (data) => {
+    setSelectingUser(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
+
+  const handleInventorySlot = (data) => {
+    setInventorySlot(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -228,7 +235,7 @@ const App = () => {
             <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
           </>
         );
-        case 'ANGELO':
+      case 'ANGELO':
         return (
           <>
             <Tab.Screen name="Home" component={Home} />
@@ -243,9 +250,9 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,inventorySlot,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,handleInventorySlot,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState,setInventorySlot
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState, inventorySlot,selectingUser,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState, handleInventorySlot,handleUserSelected,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState, setInventorySlot,setSelectingUser,
 
     }}>
       <SafeAreaProvider>
