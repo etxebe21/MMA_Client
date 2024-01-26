@@ -3,6 +3,7 @@ import { Image, ImageBackground, StyleSheet, Dimensions, TouchableOpacity, Toast
 import styled from "styled-components/native";
 import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SicknessModal = ({closeModal, selectedSicknessUser}) => {
 
@@ -153,7 +154,7 @@ const SicknessModal = ({closeModal, selectedSicknessUser}) => {
         <DisseasText>¡Elige el veneno que quieres aplicarle a {selectedSicknessUser.username}!</DisseasText>
 
         <ClosedButton onPress={() => closeModal(false)}>
-          <Image source={Image_ClosedIcon} style={styles.disseasClosedIcon} />
+          <Icon name="times" size={50} color="#4c2882" />
         </ClosedButton>
 
         {/* Botones de Envenenamiento */}
@@ -186,8 +187,8 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   disseasClosedIcon: {
-    width: 20,
-    height: 20,
+    width: 50,
+    height: 50,
     backgroundColor: 'orange'
   },
   disseasApplyIcons: {
@@ -230,7 +231,9 @@ const ClosedButton = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 14%;
+  margin-top: 25%;
+  position: 'absolute';            
+  marginLeft: 280px;
   width:  ${Dimensions.get('window').height * 0.12}px;
   height: ${Dimensions.get('window').height * 0.10}px;
 `;
