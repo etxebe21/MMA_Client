@@ -49,6 +49,10 @@ const App = () => {
   const [modalEpicVisible, setEpicModalVisible] = useState(false);
   const [modalMarrowVisible, setMarrowModalVisible] = useState(false);
   const [selectingUser, setSelectingUser] = useState();
+  const [rottingUserPrev, setRottingUserPrev] = useState();
+  const [epicUserPrev, setEpicUserPrev] = useState();
+  const [ethaziumUserPrev, setEthaziumUserPrev] = useState();
+  const [marrowUserPrev, setMarrowUserPrev] = useState();
 
   const timerIdRef = useRef(null);
 
@@ -154,16 +158,16 @@ const App = () => {
     };
   
     // Verificar y abrir el modal según el estado de cada atributo del usuario
-    if (rottingUser) {
+    if (rottingUser && !rottingUserPrev) {
       closeAllModals();
       openAndCloseModal(openRottingModal, true);
-    } else if (ethaziumUser) {
+    } else if (ethaziumUser && !ethaziumUserPrev) {
       closeAllModals();
       openAndCloseModal(openEthaziumModal, true);
-    } else if (epicUser) {
+    } else if (epicUser && !epicUserPrev) {
       closeAllModals();
       openAndCloseModal(openEpicModal, true);
-    } else if (marrowUser) {
+    } else if (marrowUser && !marrowUserPrev) {
       closeAllModals();
       openAndCloseModal(openMarrowModal, true);
     } else {
@@ -171,9 +175,16 @@ const App = () => {
       closeAllModals();
     }
   
+    // Guardar el estado actual para la próxima comparación
+    setRottingUserPrev(rottingUser);
+    setEthaziumUserPrev(ethaziumUser);
+    setEpicUserPrev(epicUser);
+    setMarrowUserPrev(marrowUser);
+  
     // Limpia el temporizador si el componente se desmonta o si hay un cambio en los estados de usuario
     return () => clearTimeout(timerIdRef.current);
-  }, [userGlobalState, usersGlobalState]);
+  }, [userGlobalState, rottingUserPrev, ethaziumUserPrev, epicUserPrev, marrowUserPrev]);
+  
 
   
   const closeAllModals = () => {
