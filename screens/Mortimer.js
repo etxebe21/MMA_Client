@@ -122,22 +122,28 @@ const Mortimer = () => {
                   </NameContainer>
 
                   <CenteredIconContainer>
-                    {user.resistencia < 20 && (<Image source={require('../assets/iconTired.png')} />)}
+                    {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
                   </CenteredIconContainer>
 
                   <CenteredSicknessIconContainer>
                     {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
-                      <Image source={require('../assets/sickness.jpeg')} />
+                      <CursedImage source={require('../assets/sickness.jpeg')} />
                     )}
                   </CenteredSicknessIconContainer>
+
+                  <CenteredCursedIconContainer>
+                    {(user.ethazium) && (
+                      <CursedImage source={require('../assets/ethaziumed.png')} />
+                    )}
+                  </CenteredCursedIconContainer>
 
 
                   <Extra>
                     <ImageTired source={require('../assets/cansado.jpeg')} />
                     <CircularProgressWrapper>
                       <AnimatedCircularProgress
-                        size={73}
-                        width={5}
+                        size={70}
+                        width={6}
                         fill={user.resistencia}
                         tintColor={getColorForResistencia(user.resistencia)}
                         backgroundColor="black"
@@ -165,7 +171,6 @@ const Mortimer = () => {
                 </CloseButton>
 
                 <DetailAvatarContainer>
-
                   <DetailAvatar source={{ uri: selectedUser.picture }} />
                   <MarcoFoto source={require("../assets/marcoEpico.png")} />
                 </DetailAvatarContainer>
@@ -243,27 +248,25 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const CenteredSicknessIconContainer = styled.View`
   position: absolute;
-  left: ${Dimensions.get('window').width * 0.45}px;
-  top: ${Dimensions.get('window').height * 0.07}px;
-
+  left: ${Dimensions.get('window').width * 0.27}px;
+  top: ${Dimensions.get('window').height * 0.08}px;
 `
-
-
 const CenteredIconContainer = styled.View`
   position: absolute;
   left: ${Dimensions.get('window').width * 0.65}px;
   top: ${Dimensions.get('window').height * 0.07}px;
-
 `
-
+const CenteredCursedIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.27}px;
+  top: ${Dimensions.get('window').height * 0.02}px;
+`
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-
 const UserText = styled.Text`
   top: 5%; 
   color: rgba(137, 59, 255,1)
@@ -273,41 +276,34 @@ const UserText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const UserTextBackground = styled.View`
   background-color: rgba(255,255,255, 0.8);
   border-radius: 10px;
 `
-
 const AvatarBox = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-  
   border-color: transparent;
   height: 30%;
   width:100%;
 `
-
 const PotionSection = styled.Image`
 border-radius:40px;
 height:100%;
 width: 100%;
 `
-
 const Image = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 30px;
 `
-
 const DetailAvatarContainer = styled.View`
   justify-content: center;
   align-items: center; 
   display: flex;
 `
-
 const MarcoFoto = styled.Image`
   position: absolute;
   top: -38%;
@@ -323,7 +319,6 @@ const NameText = styled.Text`
   letter-spacing: -0.3px;
   font-family: 'Tealand';
 `
-
 const HeaderText = styled.Text`
   margin-top: 5%;
   margin-bottom: 5%;
@@ -334,7 +329,6 @@ const HeaderText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const Avatar = styled.Image`
   width: 43%;
   height: 80px;
@@ -342,7 +336,6 @@ const Avatar = styled.Image`
   border-color: #4c2882;
   border-width: 3px;
 `
-
 const UserLevelMarco = styled.View`
   align-self: center;
   border:3px;
@@ -357,7 +350,6 @@ const UserLevelMarco = styled.View`
   justify-content: center;
   align-items: center;
 `
-
 const UserTextLevel = styled.Text`
   color: black;
   font-size: 20px;
@@ -367,14 +359,12 @@ const UserTextLevel = styled.Text`
   justify-content: center;
   align-items: center;
 `
-
 const AvatarContainer = styled.View`
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  margin-left: -8%;
+  margin-left: -10%;
 `
-
 const Extra = styled.View`
   flex: 1;
   justify-content: flex-end; 
@@ -382,15 +372,12 @@ const Extra = styled.View`
   margin-right: 5%;
   margin-top: 1%;
 `
-
 const CircularProgressWrapper = styled.View`
   flex: 1;
   justify-content: flex-end;
   align-items: flex-end;
   position: absolute;
-
 `
-
 const UserContainer = styled.View`
   justify-content: center;
   display: flex;
@@ -402,7 +389,6 @@ const UserContainer = styled.View`
   border: #4c2882;
   background-color: rgba(255, 255, 255, 0.5);
 `
-
 const StatusIndicator = styled.View`
   width: 17px;
   height: 17px;
@@ -412,23 +398,19 @@ const StatusIndicator = styled.View`
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
-
 const ImageTired = styled.Image`
-  width: 72.2px;
-  height: 70px;
-  border-radius: 35px; 
+  width: 66px;
+  height: 66px;
+  border-radius: 33px; 
   top:-4px;
 `
-
 const NameContainer = styled.View`
   justify-content: center;
   align-items: start;
   display: flex; 
-  margin-left: -10%;
-  width: 45%;
+  margin-left: 1%;
+  width: 30%;
 `
-
-
 const ModalContent = styled.View`
   display: flex;
   justify-content: center;
@@ -437,28 +419,23 @@ const ModalContent = styled.View`
   width:100%;
   height:100%;
 `
-
 const DetailAvatar = styled.Image`
   width: 105px;
   height: 101px;
   border-radius: 90px;
   margin-left: 1%;
   top: -25px;
-
 `
-
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 300px;
 `
-
 const ProgressBarRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
   width:100%;
   top:-7%;
 `
-
 const ProgressBarTitle = styled.Text`
   color: red;
   font-size: 20px;
@@ -466,11 +443,9 @@ const ProgressBarTitle = styled.Text`
   margin-bottom: 10px;
   right:15px;
 `
-
 const ProgressBarColumn = styled.View`
   align-items: center;
 `
-
 const Statsbackground = styled.ImageBackground`
   height: 70%;
   width: 100%;
@@ -481,7 +456,6 @@ const Statsbackground = styled.ImageBackground`
   border:3px; 
   border-color: black;
 `
-
 const Rest = styled.TouchableOpacity`
   flex-direction: row; 
   height: 60px;
@@ -494,7 +468,6 @@ const Rest = styled.TouchableOpacity`
   opacity: 0.7;
   left: 20%;
 `
-
 const HealDisease = styled.TouchableOpacity`
   position:absolute; 
   height: 60px;
@@ -505,6 +478,11 @@ const HealDisease = styled.TouchableOpacity`
   opacity: 0.7;
   left: 5%;
   top: 77%;
+`
+const CursedImage = styled.Image`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
 `
 
 export const Switch = styled.Switch.attrs(({ value }) => ({

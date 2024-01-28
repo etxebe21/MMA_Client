@@ -183,9 +183,9 @@ const Villano = () => {
                   </CenteredIconContainer>
 
                   <CenteredSicknessIconContainer>
-                      {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
-                        <CursedImage source={require('../assets/sickness.jpeg')} />
-                      )}
+                    {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                      <CursedImage source={require('../assets/sickness.jpeg')} />
+                    )}
                   </CenteredSicknessIconContainer>
 
                   <CenteredCursedIconContainer>
@@ -473,7 +473,6 @@ const DetailAvatar = styled.Image`
   border-radius: 90px;
   margin-left: 1%;
   top: -25px;
-
 `
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
