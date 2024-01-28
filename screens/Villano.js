@@ -183,10 +183,16 @@ const Villano = () => {
                   </CenteredIconContainer>
 
                   <CenteredSicknessIconContainer>
-                    {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
-                      <Image source={require('../assets/sickness.jpeg')} />
-                    )}
+                      {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                        <CursedImage source={require('../assets/sickness.jpeg')} />
+                      )}
                   </CenteredSicknessIconContainer>
+
+                  <CenteredCursedIconContainer>
+                    {(user.ethazium) && (
+                      <CursedImage source={require('../assets/ethaziumed.png')} />
+                    )}
+                  </CenteredCursedIconContainer>
 
 
                 </UserContainer>
@@ -306,7 +312,6 @@ const DisseasText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const DisseasButton = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
@@ -316,26 +321,25 @@ const DisseasButton = styled(TouchableOpacity)`
   height: ${Dimensions.get('window').height * 0.10}px;
 `;
 
-
 const CenteredIconContainer = styled.View`
   position: absolute;
-  left: ${Dimensions.get('window').width * 0.65}px;
-  top: ${Dimensions.get('window').height * 0.07}px;
-
+  left: ${Dimensions.get('window').width * 0.81}px;
+  top: ${Dimensions.get('window').height * 0.045}px;
 `
-
 const CenteredSicknessIconContainer = styled.View`
   position: absolute;
-  left: ${Dimensions.get('window').width * 0.45}px;
-  top: ${Dimensions.get('window').height * 0.07}px;
-
+  left: ${Dimensions.get('window').width * 0.68}px;
+  top: ${Dimensions.get('window').height * 0.015}px;
 `
-
+const CenteredCursedIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.68}px;
+  top: ${Dimensions.get('window').height * 0.075}px;
+`
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-
 const UserText = styled.Text`
   top: 5%; 
   color: rgba(137, 59, 255,1)
@@ -345,35 +349,29 @@ const UserText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const UserTextBackground = styled.View`
   background-color: rgba(255,255,255, 0.8);
   border-radius: 10px;
 `
-
 const AvatarBox = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-  
   border-color: transparent;
   height: 30%;
   width:100%;
 `
-
 const Image = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 30px;
 `
-
 const DetailAvatarContainer = styled.View`
   justify-content: center;
   align-items: center; 
   display: flex;
 `
-
 const MarcoFoto = styled.Image`
   position: absolute;
   top: -38%;
@@ -389,7 +387,6 @@ const NameText = styled.Text`
   letter-spacing: -0.3px;
   font-family: 'Tealand';
 `
-
 const HeaderText = styled.Text`
   margin-top: 5%;
   margin-bottom: 5%;
@@ -400,15 +397,6 @@ const HeaderText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
-const Avatar = styled.Image`
-  width: 43%;
-  height: 80px;
-  border-radius: 40px;
-  border-color: #4c2882;
-  border-width: 3px;
-`
-
 const UserLevelMarco = styled.View`
   align-self: center;
   border:3px;
@@ -433,30 +421,19 @@ const UserTextLevel = styled.Text`
   justify-content: center;
   align-items: center;
 `
-
+const Avatar = styled.Image`
+  width: 40%;
+  height: 90px;
+  border-radius: 50px;
+  border-color: #4c2882;
+  border-width: 3px;
+`
 const AvatarContainer = styled.View`
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  margin-left: -8%;
+  margin-left: -40%;
 `
-
-const Extra = styled.View`
-  flex: 1;
-  justify-content: flex-end; 
-  align-items: flex-end;
-  margin-right: 5%;
-  margin-top: 1%;
-`
-
-const CircularProgressWrapper = styled.View`
-  flex: 1;
-  justify-content: flex-end;
-  align-items: flex-end;
-  position: absolute;
-
-`
-
 const UserContainer = styled.View`
   justify-content: center;
   display: flex;
@@ -468,7 +445,6 @@ const UserContainer = styled.View`
   border: #4c2882;
   background-color: rgba(255, 255, 255, 0.5);
 `
-
 const StatusIndicator = styled.View`
   width: 17px;
   height: 17px;
@@ -478,30 +454,19 @@ const StatusIndicator = styled.View`
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
-
-const ImageTired = styled.Image`
-  width: 72.2px;
-  height: 70px;
-  border-radius: 35px; 
-  top:-4px;
-`
-
 const NameContainer = styled.View`
   justify-content: center;
   align-items: start;
   display: flex; 
-  margin-left: -10%;
-  width: 45%;
+  margin-left: -15%;
+  width: 30%;
 `
-
-
 const ModalContent = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
 `
-
 const DetailAvatar = styled.Image`
   width: 105px;
   height: 101px;
@@ -510,12 +475,10 @@ const DetailAvatar = styled.Image`
   top: -25px;
 
 `
-
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 300px;
 `
-
 const ProgressBarRow = styled.View`
   display: flex;
   flex-direction: row;
@@ -523,7 +486,6 @@ const ProgressBarRow = styled.View`
   align-items: center;
   width: 100%;
 `
-
 const ProgressBarTitle = styled.Text`
   color: red;
   font-size: 20px;
@@ -534,13 +496,11 @@ const ProgressBarTitle = styled.Text`
   margin-left: 8%;
   display: flex;
 `
-
 const ProgressBarColumn = styled.View`
   justify-content: center;
   align-items: center;
   display: flex;
 `
-
 const Statsbackground = styled.ImageBackground`
   display: flex;
   justify-content: center;
@@ -549,27 +509,11 @@ const Statsbackground = styled.ImageBackground`
   height: 70%;
   width: 100%;
 `
-
-const Rest = styled.TouchableOpacity`
-  flex-direction: row; 
-  height: 60px;
-  width: 120px;
-  justify-content: center;
-  align-items: center;
-  border: 2px;
-  border-radius: 40px;
-  background-color: gray;
-  opacity: 0.7;
-  left: 25%;
-  top: 5%;
+const CursedImage = styled.Image`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
 `
-
-const RestText = styled.Text`
-  font-size: 20px;
-  text-align: center;
-  align-self: center;
-`
-
 export const Switch = styled.Switch.attrs(({ value }) => ({
   trackColor: { false: '#767577', true: '#4c2882' },
   thumbColor: value ? '#913595' : '#f4f3f4',
