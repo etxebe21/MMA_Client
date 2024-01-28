@@ -69,6 +69,8 @@ function SocketListener(props) {
 
 	const handleRestAcolite = (data) => { setUsersGlobalState(data)};
 
+	const handleEthazium = (data) => {setUsersGlobalState(data)};
+
 
 	const handlers = {
 		stamina: handleAcoliteStamina,
@@ -82,6 +84,7 @@ function SocketListener(props) {
 		returnStat: handleStats,
 		resetArtifact: handleReset,
 		resetMaterialResponse : handleMaterialReset,
+		ethaziumUser: handleEthazium,
 		UpdatedTired: handleTired,
 		receiveUserAtributes: handleUserGlobalState,
 		restAcolite: handleRestAcolite,

@@ -272,8 +272,8 @@ const LoginModal = ({ onLogin, setLoginModalVisible }) => {
         foundedMaterials.push(foundedMaterial)
       }
     });
-    console.log("Founded Materials:");
-    console.log(foundedMaterials)
+    // console.log("Founded Materials:");
+    // console.log(foundedMaterials)
 
     // Seteamos los materiales
     if(foundedMaterials !== undefined || foundedMaterials !== null ) {

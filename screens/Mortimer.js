@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
-import { Modal, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity, Dimensions, ImageBackground } from "react-native";
+import { Modal, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity, Dimensions, ImageBackground, Text } from "react-native";
 import axios from "axios";
 import { ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,23 +9,27 @@ import { Context } from "../context/Context";
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { socket } from '../socket/socketConnect';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CreatePotions } from "./CreatePotions";
+
 
 const Mortimer = () => {
 
   const { userGlobalState, handleUserGlobalState } = useContext(Context);
   const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+  const {selectingUser, setSelectingUser} = useContext(Context);
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [potionSection, setPotionSection] = useState(false);
+
 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const storedId = AsyncStorage.getItem('userID');
 
   useEffect(() => {
-    if (usersGlobalState != null && selectedUser != null)
-    {
+    if (usersGlobalState != null && selectedUser != null) {
       usersGlobalState.forEach((element) => {
         if (element._id === selectedUser._id) {
           setSelectedUser(element);
@@ -33,7 +37,17 @@ const Mortimer = () => {
       });
     }
     else return;
-  }, [usersGlobalState,selectedUser]);
+  }, [usersGlobalState, selectedUser]);
+
+  useEffect(() => {
+    console.log("Entramos");
+    setSelectingUser(selectedUser);
+  }, [selectedUser])
+
+  useEffect(() => {
+    console.log(selectingUser);
+  }, [selectingUser])
+
 
   const handleUserPress = (user) => {
     setSelectedUser(user);
@@ -50,6 +64,10 @@ const Mortimer = () => {
     }
   };
 
+  const showPotionSection = () => {
+    setPotionSection(true);
+  }
+
   const updateRest = (data) => {
 
     setLoading(true);
@@ -59,14 +77,10 @@ const Mortimer = () => {
       tired: data.resistencia + 20,
     };
 
-
-    // if (tiredData.tired > 100) {
-    //   tiredData.tired = 100;
-    // }
     data.resistencia = tiredData.tired;
     setSelectedUser(data);
     // console.log(tiredData);
-    socket.emit('RestStat', tiredData,storedId);
+    socket.emit('RestStat', tiredData, storedId);
     ToastAndroid.showWithGravity('STAT TIRED HAS AUMENTED', ToastAndroid.SHORT, ToastAndroid.CENTER);
     setLoading(false);
 
@@ -77,18 +91,28 @@ const Mortimer = () => {
 
   return (
 
+
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../assets/wallpaper_profile.png')}
-        style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
-      >
-        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-          <HeaderText>ACOLITOS</HeaderText>
-          {usersGlobalState.map((user) => (
+
+      {potionSection && (
+        <CreatePotions/>
+      )}
+
+      {!potionSection && (
+
+        <ImageBackground
+          source={require('../assets/wallpaper_profile.png')}
+          style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}
+        >
+
+          <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
+            <HeaderText>ACOLITOS</HeaderText>
+            {usersGlobalState.map((user) => (
               <TouchableOpacity key={user.picture} onPress={() => handleUserPress(user)}>
                 <UserContainer>
 
                   <AvatarContainer>
+
                     <Avatar source={{ uri: user.picture }} />
                     <StatusIndicator isInsideTower={user.insideTower} />
                   </AvatarContainer>
@@ -101,12 +125,25 @@ const Mortimer = () => {
                     {user.resistencia < 20 && ( <Image source={require('../assets/iconTired.png')} /> )}
                   </CenteredIconContainer>
 
+                  <CenteredSicknessIconContainer>
+                    {(user.rotting_plague || user.epic_weakness || user.marrow_apocalypse) && (
+                      <CursedImage source={require('../assets/sickness.jpeg')} />
+                    )}
+                  </CenteredSicknessIconContainer>
+
+                  <CenteredCursedIconContainer>
+                    {(user.ethazium) && (
+                      <CursedImage source={require('../assets/ethaziumed.png')} />
+                    )}
+                  </CenteredCursedIconContainer>
+
+
                   <Extra>
                     <ImageTired source={require('../assets/cansado.jpeg')} />
                     <CircularProgressWrapper>
                       <AnimatedCircularProgress
-                        size={73}
-                        width={5}
+                        size={70}
+                        width={6}
                         fill={user.resistencia}
                         tintColor={getColorForResistencia(user.resistencia)}
                         backgroundColor="black"
@@ -117,11 +154,12 @@ const Mortimer = () => {
                 </UserContainer>
               </TouchableOpacity>
             ))}
-        </ScrollView>
-      </ImageBackground>
+          </ScrollView>
+        </ImageBackground>
+      )}
 
 
-      {selectedUser && (
+      {selectedUser && !potionSection && (
         <Modal visible={modalVisible}>
           <ModalContent>
             <ImageBackground source={require("../assets/wallpaper_profile.png")} style={styles.imageBackground}>
@@ -174,12 +212,18 @@ const Mortimer = () => {
 
                   <Rest onPress={() => updateRest(selectedUser)}>
                     {loading && (
-
                       <ActivityIndicator size="small" color="#3498db" animating={true} />
                     )}
-                    <RestText>REST</RestText>
+
+                    <Text style={styles.image}>Rest</Text>
                   </Rest>
                 )}
+
+                <HealDisease onPress={showPotionSection}>
+                  <PotionSection source={require('../assets/potionSec.png')} />
+                  <Text style={styles.image}>Potion Section</Text>
+                </HealDisease>
+
               </Statsbackground>
             </ImageBackground>
 
@@ -196,21 +240,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#C8A2C8',
   },
+  image: {
+    alignItems: 'center',
+    color: 'orange',
+    fontSize: 17,
+    fontFamily: 'Tealand'
+  }
 });
 
-
+const CenteredSicknessIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.27}px;
+  top: ${Dimensions.get('window').height * 0.08}px;
+`
 const CenteredIconContainer = styled.View`
   position: absolute;
   left: ${Dimensions.get('window').width * 0.65}px;
   top: ${Dimensions.get('window').height * 0.07}px;
-
 `
-
+const CenteredCursedIconContainer = styled.View`
+  position: absolute;
+  left: ${Dimensions.get('window').width * 0.27}px;
+  top: ${Dimensions.get('window').height * 0.02}px;
+`
 const View = styled.View`
   flex: 1;
   background: #C8A2C8;
 `
-
 const UserText = styled.Text`
   top: 5%; 
   color: rgba(137, 59, 255,1)
@@ -220,35 +276,34 @@ const UserText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const UserTextBackground = styled.View`
   background-color: rgba(255,255,255, 0.8);
   border-radius: 10px;
 `
-
 const AvatarBox = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-  
   border-color: transparent;
   height: 30%;
   width:100%;
 `
-
+const PotionSection = styled.Image`
+border-radius:40px;
+height:100%;
+width: 100%;
+`
 const Image = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 30px;
 `
-
 const DetailAvatarContainer = styled.View`
   justify-content: center;
   align-items: center; 
   display: flex;
 `
-
 const MarcoFoto = styled.Image`
   position: absolute;
   top: -38%;
@@ -264,7 +319,6 @@ const NameText = styled.Text`
   letter-spacing: -0.3px;
   font-family: 'Tealand';
 `
-
 const HeaderText = styled.Text`
   margin-top: 5%;
   margin-bottom: 5%;
@@ -275,7 +329,6 @@ const HeaderText = styled.Text`
   align-self: center;  
   font-family: 'Tealand';
 `
-
 const Avatar = styled.Image`
   width: 43%;
   height: 80px;
@@ -283,7 +336,6 @@ const Avatar = styled.Image`
   border-color: #4c2882;
   border-width: 3px;
 `
-
 const UserLevelMarco = styled.View`
   align-self: center;
   border:3px;
@@ -298,7 +350,6 @@ const UserLevelMarco = styled.View`
   justify-content: center;
   align-items: center;
 `
-
 const UserTextLevel = styled.Text`
   color: black;
   font-size: 20px;
@@ -308,14 +359,12 @@ const UserTextLevel = styled.Text`
   justify-content: center;
   align-items: center;
 `
-
 const AvatarContainer = styled.View`
   justify-content: center;
   flex-direction: row;
   align-items: center;
-  margin-left: -8%;
+  margin-left: -10%;
 `
-
 const Extra = styled.View`
   flex: 1;
   justify-content: flex-end; 
@@ -323,15 +372,12 @@ const Extra = styled.View`
   margin-right: 5%;
   margin-top: 1%;
 `
-
 const CircularProgressWrapper = styled.View`
   flex: 1;
   justify-content: flex-end;
   align-items: flex-end;
   position: absolute;
-
 `
-
 const UserContainer = styled.View`
   justify-content: center;
   display: flex;
@@ -343,7 +389,6 @@ const UserContainer = styled.View`
   border: #4c2882;
   background-color: rgba(255, 255, 255, 0.5);
 `
-
 const StatusIndicator = styled.View`
   width: 17px;
   height: 17px;
@@ -353,50 +398,44 @@ const StatusIndicator = styled.View`
   background-color: ${(props) => (props.isInsideTower ? '#10D24B' : 'red')};
   border: #4c2882;
 `
-
 const ImageTired = styled.Image`
-  width: 72.2px;
-  height: 70px;
-  border-radius: 35px; 
+  width: 66px;
+  height: 66px;
+  border-radius: 33px; 
   top:-4px;
 `
-
 const NameContainer = styled.View`
   justify-content: center;
   align-items: start;
   display: flex; 
-  margin-left: -10%;
-  width: 45%;
+  margin-left: 1%;
+  width: 30%;
 `
-
-
 const ModalContent = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d9a9c9;
+  width:100%;
+  height:100%;
 `
-
 const DetailAvatar = styled.Image`
   width: 105px;
   height: 101px;
   border-radius: 90px;
   margin-left: 1%;
   top: -25px;
-
 `
-
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 300px;
 `
-
 const ProgressBarRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
   width:100%;
+  top:-7%;
 `
-
 const ProgressBarTitle = styled.Text`
   color: red;
   font-size: 20px;
@@ -404,11 +443,9 @@ const ProgressBarTitle = styled.Text`
   margin-bottom: 10px;
   right:15px;
 `
-
 const ProgressBarColumn = styled.View`
   align-items: center;
 `
-
 const Statsbackground = styled.ImageBackground`
   height: 70%;
   width: 100%;
@@ -419,7 +456,6 @@ const Statsbackground = styled.ImageBackground`
   border:3px; 
   border-color: black;
 `
-
 const Rest = styled.TouchableOpacity`
   flex-direction: row; 
   height: 60px;
@@ -430,14 +466,23 @@ const Rest = styled.TouchableOpacity`
   border-radius: 40px;
   background-color: gray;
   opacity: 0.7;
-  left: 25%;
-  top: 5%;
+  left: 20%;
 `
-
-const RestText = styled.Text`
-  font-size: 20px;
-  text-align: center;
-  align-self: center;
+const HealDisease = styled.TouchableOpacity`
+  position:absolute; 
+  height: 60px;
+  width: 120px;
+  border: 2px;
+  border-radius: 40px;
+  background-color: gray;
+  opacity: 0.7;
+  left: 5%;
+  top: 77%;
+`
+const CursedImage = styled.Image`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
 `
 
 export const Switch = styled.Switch.attrs(({ value }) => ({

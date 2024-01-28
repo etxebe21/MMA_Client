@@ -7,11 +7,12 @@ import { socket } from '../socket/socketConnect';
 import { Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Inventory from "./Inventory";
+import Modals from '../components/Modals';
 
 const Profile = () => {
 
-  const { userGlobalState, handleUserGlobalState } = useContext(Context);
-  const { usersGlobalState, setUsersGlobalState } = useContext(Context);
+  const {userGlobalState, handleUserGlobalState } = useContext(Context);
+  const {usersGlobalState, setUsersGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
   const [inventoryVisible, setInventoryVisible] = useState(false)
@@ -67,7 +68,6 @@ const Profile = () => {
     }
   };
 
-
   const inventoryButton = () => {
     console.log("boton pulsado");
     setInventoryVisible(true);
@@ -115,6 +115,7 @@ const Profile = () => {
   const closeRestModal = () => {
     setModalRestVisible(false);
   };
+
   return (
 
     <View >
@@ -191,19 +192,7 @@ const Profile = () => {
 
           )}
 
-          <Modal
-            animationType="slide"
-            visible={modal}
-            onRequestClose={() => setModal(false)}
-          >
-            <View style={styles.modalContainer}>
-              <ImageBackground source={require("../assets/tiredAcolite.png")} style={styles.imageBackground}>
-                <View style={styles.modalContent}>
-                  <ResText>¡TU RESISTENCIA ES MUY BAJA!</ResText>
-                </View>
-              </ImageBackground>
-            </View>
-          </Modal>
+        
         </ImageBackground>
       )}
 

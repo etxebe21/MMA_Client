@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { View, StyleSheet, ImageBackground} from 'react-native';
+import styled from "styled-components/native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -9,23 +10,22 @@ import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Splash from './components/Splash';
 import LoginModal from './components/LoginModal';
+import { Modal } from "react-native";
 import Qr from './screens/Qr';
 import Villano from './screens/Villano';
+import Angelo from './screens/Angelo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import '@react-native-firebase/auth';
 import ScanQr from './screens/ScanQr';
 import Torreon from './screens/Torreon';
 import Mortimer from './screens/Mortimer';
-import ProfileVillano from './screens/ProfileVillano';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Geolocation from './screens/Geolocation';
 import { Context } from './context/Context';
 import GeolocationMortimer from './screens/GeoMortimer';
-import axios from 'axios';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
-
 
 const App = () => {
 
@@ -35,7 +35,7 @@ const App = () => {
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
   const [globalState, setGlobalState] = useState({ dinero: 20, fatigue: 40 });
-  const [data, setData] = useState([]);
+  const [currentModal, setCurrentModal] = useState(null);
 
   const [userGlobalState, setUserGlobalState] = useState();
   const [usersGlobalState, setUsersGlobalState] = useState(null);
@@ -44,7 +44,17 @@ const App = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [pendingTextGlobalState, setPendingTextGlobalState] = useState(null);
   const [inventorySlot, setInventorySlot] = useState([]);
+  const [modalEthaziumVisible, setEthaziumModalVisible] = useState(false);
+  const [modalRottingVisible, setRottingModalVisible] = useState(false);
+  const [modalEpicVisible, setEpicModalVisible] = useState(false);
+  const [modalMarrowVisible, setMarrowModalVisible] = useState(false);
+  const [selectingUser, setSelectingUser] = useState();
+  const [rottingUserPrev, setRottingUserPrev] = useState();
+  const [epicUserPrev, setEpicUserPrev] = useState();
+  const [ethaziumUserPrev, setEthaziumUserPrev] = useState();
+  const [marrowUserPrev, setMarrowUserPrev] = useState();
 
+  const timerIdRef = useRef(null);
 
   //GLOBAL STATES
   const handleGlobalState = (data) => {
@@ -74,19 +84,26 @@ const App = () => {
       ...data
     }));
   }
-    const handleMaterialsGlobalState = (data) => {
-      setMaterialsGlobalState(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleMaterialsGlobalState = (data) => {
+    setMaterialsGlobalState(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
-    const handleInventorySlot = (data) => {
-      setInventorySlot(globalState => ({
-        ...globalState,
-        ...data
-      }));
-    }
+  const handleUserSelected = (data) => {
+    setSelectingUser(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
+
+  const handleInventorySlot = (data) => {
+    setInventorySlot(globalState => ({
+      ...globalState,
+      ...data
+    }));
+  }
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -94,7 +111,6 @@ const App = () => {
       setRole(userGlobalState.role);
     }
   }, [userGlobalState]);
-
 
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
@@ -106,8 +122,6 @@ const App = () => {
         socket.removeAllListeners();
       };
     }
-
-
   }, [isAuthenticated]);
 
   //AXIOS INTERCEPTORS
@@ -121,8 +135,104 @@ const App = () => {
     // console.log(userGlobalState.username);
     // console.log(usersGlobalState);
     // console.log(artifactsGlobalState);
-
   }, [userGlobalState, usersGlobalState, artifactsGlobalState, materialsGlobalState])
+
+  useEffect(() => {
+    const rottingUser = userGlobalState?.rotting_plague;
+    const ethaziumUser = userGlobalState?.ethazium;
+    const epicUser = userGlobalState?.epic_weakness;
+    const marrowUser = userGlobalState?.marrow_apocalypse;
+  
+    const openAndCloseModal = (modalFunction, isOpen) => {
+      // Cerrar el modal actual si existe
+      closeAllModals();
+      // Abrir el modal correspondiente
+      modalFunction(isOpen);
+      // Cerrar el modal después de 4 segundos
+      const id = setTimeout(() => {
+        modalFunction(false);
+        closeAllModals();
+      }, 3000);
+      // Actualizar el ID del temporizador usando useRef
+      timerIdRef.current = id;
+    };
+  
+    // Verificar y abrir el modal según el estado de cada atributo del usuario
+    if (rottingUser && !rottingUserPrev) {
+      closeAllModals();
+      openAndCloseModal(openRottingModal, true);
+    } else if (ethaziumUser && !ethaziumUserPrev) {
+      closeAllModals();
+      openAndCloseModal(openEthaziumModal, true);
+    } else if (epicUser && !epicUserPrev) {
+      closeAllModals();
+      openAndCloseModal(openEpicModal, true);
+    } else if (marrowUser && !marrowUserPrev) {
+      closeAllModals();
+      openAndCloseModal(openMarrowModal, true);
+    } else {
+      // Cerrar todos los modales si ningún atributo es verdadero
+      closeAllModals();
+    }
+  
+    // Guardar el estado actual para la próxima comparación
+    setRottingUserPrev(rottingUser);
+    setEthaziumUserPrev(ethaziumUser);
+    setEpicUserPrev(epicUser);
+    setMarrowUserPrev(marrowUser);
+  
+    // Limpia el temporizador si el componente se desmonta o si hay un cambio en los estados de usuario
+    return () => clearTimeout(timerIdRef.current);
+  }, [userGlobalState, rottingUserPrev, ethaziumUserPrev, epicUserPrev, marrowUserPrev]);
+  
+
+  
+  const closeAllModals = () => {
+    closeRottingModal();
+    closeEthaziumModal();
+    closeEpicModal();
+    closeMarrowModal();
+  };
+
+const closeEthaziumModal = () => {
+  console.log('Closing Ethazium modal');
+  setEthaziumModalVisible(false);
+};
+
+const closeRottingModal = () => {
+  console.log('Closing Rotting modal');
+  setRottingModalVisible(false);
+};
+
+const closeEpicModal = () => {
+  console.log('Closing Epic modal');
+  setEpicModalVisible(false);
+};
+
+const closeMarrowModal = () => {
+  console.log('Closing Marrow modal');
+  setMarrowModalVisible(false);
+};
+  
+const openEthaziumModal = () => {
+  console.log('OPening Ethazium modal');
+  setEthaziumModalVisible(true);
+};
+
+const openRottingModal = () => {
+  console.log('OPening Rotting modal');
+  setRottingModalVisible(true);
+};
+
+const openMarrowModal = () => {
+  console.log('Opening Marrow modal');
+  setMarrowModalVisible(true);
+};
+
+const openEpicModal = () => {
+  console.log('Opening Epic modal');
+  setEpicModalVisible(true);
+};
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -131,7 +241,6 @@ const App = () => {
       const role = await AsyncStorage.getItem('userRole');
       const id = await AsyncStorage.getItem('userID');
 
-
       setRole(role);
       return { email, role, id };
     } catch (error) {
@@ -139,7 +248,6 @@ const App = () => {
       return null;
     }
   };
-
 
   // Maneja el login
   const handleLogin = async () => {
@@ -165,17 +273,15 @@ const App = () => {
 
       case 'Mortimer':
       case 'Villano':
-        iconName = role === 'MORTIMER' || role === 'VILLANO' ? 'people' : null;
+      case 'Angelo':
+        iconName = role === 'MORTIMER' || role === 'ANGELO' || role === 'VILLANO' ? 'people' : null;
         break;
       case 'Torreon':
         iconName = 'castle';
         break;
       case 'Profile': iconName = 'person';
         break;
-      case 'ProfileVillano':
-        iconName = 'person';
-        break;
-      case 'GeolocationUser':
+      case 'GeolocationUser':setRottingModalVisible
       case 'GeolocationMortimer':
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
         break;
@@ -223,19 +329,25 @@ const App = () => {
           <>
             <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Villano" component={Villano} />
-            <Tab.Screen name="ProfileVillano" component={ProfileVillano} />
           </>
         );
-      default:
+      case 'ANGELO':
+        return (
+          <>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Villano" component={Angelo} />
+          </>
+        );
+      default:            
         return null;
     }
   };
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState,inventorySlot,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState,handleInventorySlot,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState,setInventorySlot
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState, inventorySlot,selectingUser,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState, handleInventorySlot,handleUserSelected,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState, setInventorySlot,setSelectingUser,
 
     }}>
       <SafeAreaProvider>
@@ -261,14 +373,88 @@ const App = () => {
                   {renderTabScreens()}
                 </Tab.Navigator>
               </NavigationContainer>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEthaziumVisible}
+                onRequestClose={closeEthaziumModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/ethaziumAcolit.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalRottingVisible}
+                onRequestClose={closeRottingModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/ethaziumed.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY ROTTING_PLAGUE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEpicVisible}
+                onRequestClose={closeEpicModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/epicweakness.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY EPIC_WEAKNESS</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalMarrowVisible}
+                onRequestClose={closeMarrowModal}
+            >
+                <View style={styles.modalContainer}>
+                  <ImageBackground
+                    source={require('./assets/marrow.png')}
+                    style={styles.imageBackground}
+                  >
+                    <View style={styles.modalContent}>
+                      <CloseText>YOU HAVE BEEN INFECTED BY MARROW_APOCALYPSE</CloseText>
+                    </View>
+                  </ImageBackground>
+                </View>
+            </Modal>
+              {/* <Modals/> */}
+              
             </>
           )}
         </View>
       </SafeAreaProvider>
       <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
+    
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -279,7 +465,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#C8A2C8',
   },
 
+  imageBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
+const CloseText = styled.Text`
+  color: darkgreen;
+  font-size: 40px;
+  flex-direction: row;
+  bottom: 65%;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+`;
 
 export default App;

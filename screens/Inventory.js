@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal,ScrollView,ToastAndroid} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal, ScrollView, ToastAndroid } from 'react-native';
 import styled from 'styled-components/native';
 import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,26 +8,36 @@ import { Context } from "../context/Context";
 const Inventory = () => {
 
   // GLOBALES
+  const {userGlobalState, handleGlobalState} = useContext(Context);
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
 
   // LOCALES
-  const [profileInventory, setProfileInventory] = useState(materialsGlobalState);
+  const [profileInventory, setProfileInventory] = useState(userGlobalState.inventory);
   const [profileEquipment, setProfileEquipment] = useState(Array(4).fill(null));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [item, setItem] = useState();
   const [inventoryIndex, setInventoryIndex] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [descriptionIndex, setDescriptionIndex] = useState(0);
+  const [descriptionIndex, setDescriptionIndex] = useState(1);
+  const [descriptionModal, setDescriptionModal] = useState(false);
+  const [firstItem, setFirstItem] = useState();
+  const [equiped, setEquiped] = useState(false);
+  const [unequipModal, setUnequipModal] = useState(false);
+  const [positionUnequipModal, setUnequipPositionModal] = useState();
+
+
 
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
-  
+
 
   useEffect(() => {
     console.log("El Estado global Seteado")
     console.log(materialsGlobalState)
     // getMaterials();
+    console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
+    setProfileInventory(userGlobalState.inventory)
   }, [materialsGlobalState]);
 
   useEffect(() => {
@@ -37,6 +47,7 @@ const Inventory = () => {
       setIsModalVisible(true);
     }
   }, [profileEquipment]);
+
 
   const removeEquipment = () => {
 
@@ -51,18 +62,33 @@ const Inventory = () => {
     });
   };
 
+  const closeDescriptionModal = () => {
+    setDescriptionModal(false);
+    setDescriptionIndex(1);
+    setFirstItem(null);
+    setItem(null);
+  }
+
   const moveMats = (item, position) => {
-    console.log('Square presionado:', item);
     setItem(item);
     setInventoryIndex(position);
-    console.log(profileEquipment);
-  };
-
+    setFirstItem(item);
+    setEquiped(true);
+    setDescriptionIndex((prevIndex) => prevIndex + 1);
+    console.log(descriptionIndex, descriptionModal)
+    if (descriptionIndex === 2 && item === firstItem) {
+      if (firstItem) {
+        setDescriptionModal(true);
+      }
+    };
+  }
+  
   const moveMats1 = (position) => {
-    if (item !== null && position >= 0) {
+    setUnequipPositionModal(position);
+    if (item !== null && position >= 0 && equiped === true) {
       setProfileEquipment((prevProfileEquipment) => {
         const newArray = [...prevProfileEquipment];
-  
+
         if (position < newArray.length && newArray[position] !== null) {
           ToastAndroid.showWithGravity('Ya hay un objeto equipado', ToastAndroid.SHORT, ToastAndroid.CENTER);
         } else {
@@ -70,13 +96,33 @@ const Inventory = () => {
           removeEquipment();
           setCurrentIndex((prevIndex) => prevIndex + 1);
         }
-  
+
         return newArray;
       });
       setItem(null);
+      setEquiped(false);
     }
+
+    else if (item === null && equiped === false) {
+      profileEquipment.forEach((element, index) => {
+        if (index === position && element) {
+          setUnequipModal(true);
+          console.log("entramos");
+          setFirstItem(element);
+          console.log(positionUnequipModal)
+        }
+      });
+      
+    }
+
+
   };
-  
+
+  const openDescriptionModal = () => {
+    setDescriptionModal(true);
+    setUnequipModal(false);
+  }
+
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -97,37 +143,142 @@ const Inventory = () => {
             <ImageBackground source={Image_siluette} style={styles.siluette}>
 
               <EquipmentContainer>
+
+
+                {/* casco */}
                 <Helmet onPress={() => moveMats1(0)}>
                   {profileEquipment.map((item, index) => (
                     index === 0 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal === 0 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal1}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Helmet>
+
+                {/* pechera */}
                 <Breastplate onPress={() => moveMats1(1)}>
                   {profileEquipment.map((item, index) => (
                     index === 1 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+
+                  {unequipModal === true && positionUnequipModal == 1 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal2}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Breastplate>
+
+
+                {/* //GUANTES */}
                 <Gloves onPress={() => moveMats1(2)}>
                   {profileEquipment.map((item, index) => (
                     index === 2 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal == 2 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal3}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Gloves>
+
+
+                {/* Pantalones */}
                 <Trousers onPress={() => moveMats1(3)}>
                   {profileEquipment.map((item, index) => (
                     index === 3 && item != null && (
                       <Image key={index} source={{ uri: item.image }} style={styles.image} />
                     )
                   ))}
+
+                  {unequipModal === true && positionUnequipModal == 3 &&(
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                    >
+                      <View style={styles.unEQuipModal4}>
+                        <Unequip>
+                          <UnequipStyled>Unequip</UnequipStyled>
+                        </Unequip>
+                        <Description onPress={() => openDescriptionModal()}>
+                          <UnequipStyled>Description</UnequipStyled>
+                        </Description>
+
+                      </View>
+                    </Modal>
+                  )}
                 </Trousers>
+
+
+
               </EquipmentContainer>
             </ImageBackground>
           </EquipmentMainContainer>
+        )}
+
+        {descriptionModal && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={descriptionModal}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.smallModalContent}>
+                <CloseButton1 onPress={() => closeDescriptionModal()}>
+                  <Icon name="times" size={40} color="#4c2882" />
+                </CloseButton1>
+                <ShowText>
+                  <DescriptionName> {firstItem.name}</DescriptionName>
+                  <ScrollView style={{ maxHeight: 230 }}>
+                    <DescriptionText > {firstItem.description} </DescriptionText>
+                  </ScrollView>
+                </ShowText>
+              </View>
+            </View>
+          </Modal>
         )}
 
         {!isModalVisible && (
@@ -238,6 +389,16 @@ const TextStyled = styled.Text`
 `;
 
 
+const UnequipStyled = styled.Text`
+  font-size: 25px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  border-radius: 10px;
+  border:3px solid black;
+  background-color:gray;
+`;
+
 const ModalText = styled.Text`
   font-size: 35px;
   color: purple;
@@ -245,13 +406,47 @@ const ModalText = styled.Text`
   text-shadow: 3px 3px 8px white;
 `;
 
+const DescriptionText = styled.Text`
+  font-size: 25px;
+  color: purple;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  position:relative;
+`;
+
+const DescriptionName = styled.Text`
+  font-size: 25px;
+  color: blue;
+  font-family: 'Tealand';
+  text-shadow: 3px 3px 8px white;
+  top: -10%;
+  right:10%;
+`;
+
+
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 80%;
   marginTop: 10%;
   align-items:center;
 `
+const CloseButton1 = styled.TouchableOpacity`
+  position: 'absolute';            
+  marginLeft: 80%;
+  align-items:center;
+  top:-2%;
+`
+const Unequip = styled.TouchableOpacity`
+  position: 'absolute';            
+  align-items:center;
+  top:-2%;
+`
 
+const Description = styled.TouchableOpacity`
+position: 'absolute';            
+align-items:center;
+top:4%;
+`
 
 const ShowText = styled.View`
   display: flex;
@@ -261,6 +456,8 @@ const ShowText = styled.View`
   width: 100%;
   // background-color: pink;
 `;
+
+
 
 const styles = StyleSheet.create({
   image: {
@@ -286,6 +483,19 @@ const styles = StyleSheet.create({
     height: '100%'
   },
 
+  descriptionImage: {
+    width: '50%',
+    height: '50%',
+  },
+
+  descriptionBackgrounds: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   imageBackgrounds: {
     width: '100%',
     height: '100%',
@@ -295,8 +505,60 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     position: 'absolute',
-    top: 10,  // Ajusta la posición vertical del contenedor del ícono
-  }
+    top: 10,
+  },
+
+  smallModalContent: {
+    backgroundColor: 'rgba(170, 161, 170, 0.5)',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    height: '60%',
+    marginTop: 200,
+    left: 90,
+
+  },
+
+  unEQuipModal1: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 180,
+    left: 90,
+  },
+
+  unEQuipModal2: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 275,
+    left: 90,
+  },
+
+  unEQuipModal3: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 370,
+    left: 90,
+  },
+
+  unEQuipModal4: {
+    backgroundColor: 'rgba(170, 161, 170, 0)',
+    borderRadius: 10,
+    padding: 20,
+    width: '50%',
+    height: '20%',
+    marginTop: 465,
+    left: 90,
+  },
+
 });
 
 // ==============================================
