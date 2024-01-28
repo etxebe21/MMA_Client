@@ -166,6 +166,14 @@ const Graves = ({returnButton}) => {
     returnButton();
   };
 
+  const resetInventory = () => {
+   
+    userGlobalState.inventory = [];
+    console.log('INVENTARIOOOO', userGlobalState.inventory);
+    socket.emit('resetUserInventory', userGlobalState._id, userGlobalState.inventory);
+
+  };
+
   const resetSearch = async () => {
 
     const materialData = {
@@ -248,7 +256,7 @@ return (
             <Icon name="arrow-circle-left" size={50} color= '#888'/>
           </CloseButton>
 
-          <ResetButton onPress={resetSearch}>
+          <ResetButton onPress={resetInventory}>
             <Icon name="trash" size={50} color=  '#888' />
           </ResetButton>
 
