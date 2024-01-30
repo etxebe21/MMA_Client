@@ -179,9 +179,10 @@ const Graves = ({returnButton}) => {
   const resetSearch = async () => {
 
     const materialData = {
-      id: [],
-      found: [],
-      who: [],
+      id: material._id,
+      found: false,
+      who: "",
+      userImage: ""
     };
 
     materialsGlobalState.forEach((material) => {
@@ -193,8 +194,7 @@ const Graves = ({returnButton}) => {
       materialData.who.push('');
     });
 
-    socket.emit('resetMaterial', materialData.id, materialData.found, materialData.who);
-    //getMaterialsFromDatabase();
+    socket.emit('resetMaterial', materialData);
   };
 
   // const resetSearch = async () => {
@@ -258,7 +258,7 @@ return (
             <Icon name="arrow-circle-left" size={50} color= '#888'/>
           </CloseButton>
 
-          <ResetButton onPress={resetInventory}>
+          <ResetButton onPress={resetSearch}>
             <Icon name="trash" size={50} color=  '#888' />
           </ResetButton>
 
