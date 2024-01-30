@@ -166,9 +166,16 @@ const Graves = ({returnButton}) => {
     returnButton();
   };
 
+  const resetGraves = () => {
+
+    resetInventory();
+    resetMaterials();
+    ToastAndroid.showWithGravity('TUMBAS RESETEADAS', ToastAndroid.SHORT, ToastAndroid.CENTER);
+  };
+
   const resetInventory = () => {
     const inventoryData = {
-      inventory : userGlobalState.inventory,
+      inventory : [],
       id : userGlobalState._id,
     };
     userGlobalState.inventory = [];
@@ -176,13 +183,13 @@ const Graves = ({returnButton}) => {
     socket.emit('resetUserInventory',inventoryData);
   };
 
-  const resetSearch = async () => {
+  const resetMaterials = async (material) => {
 
     const materialData = {
-      id: material._id,
-      found: false,
-      who: "",
-      userImage: ""
+      id: [],    // Cambiado a un array
+      found: [], // Cambiado a un array
+      who: [],
+      // userImage: [],
     };
 
     materialsGlobalState.forEach((material) => {
@@ -193,8 +200,8 @@ const Graves = ({returnButton}) => {
       else materialData.found.push(material.found);
       materialData.who.push('');
     });
-
-    socket.emit('resetMaterial', materialData);
+    console.log(materialData);
+    socket.emit('resetMaterial', materialData.id, materialData.found, materialData.who);
   };
 
   // const resetSearch = async () => {
@@ -258,7 +265,7 @@ return (
             <Icon name="arrow-circle-left" size={50} color= '#888'/>
           </CloseButton>
 
-          <ResetButton onPress={resetSearch}>
+          <ResetButton onPress={resetGraves}>
             <Icon name="trash" size={50} color=  '#888' />
           </ResetButton>
 
