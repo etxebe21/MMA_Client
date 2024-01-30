@@ -24,6 +24,7 @@ const Inventory = () => {
   const [equiped, setEquiped] = useState(false);
   const [unequipModal, setUnequipModal] = useState(false);
   const [positionUnequipModal, setUnequipPositionModal] = useState();
+  const [inventoryVisible, setInventoryVisible] = useState(false)
 
 
 
@@ -114,8 +115,6 @@ const Inventory = () => {
       });
       
     }
-
-
   };
 
   const openDescriptionModal = () => {
@@ -123,6 +122,10 @@ const Inventory = () => {
     setUnequipModal(false);
   }
 
+  const inventoryButton = () => {
+    console.log("boton pulsado");
+    setInventoryVisible(false);
+  };
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -134,10 +137,17 @@ const Inventory = () => {
       source={Image_background}
       style={styles.background}
     >
+
       <StyledView>
         {!isModalVisible && (
 
           <EquipmentMainContainer>
+
+            <View >
+              <CloseButton onPress={() => inventoryButton()}>
+                <Icon name="times" size={60} color="#4c2882" />
+              </CloseButton>
+            </View>
 
             <TextStyled> Equipamiento </TextStyled>
             <ImageBackground source={Image_siluette} style={styles.siluette}>
@@ -342,6 +352,7 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
+  top: -7%;
 `;
 
 const StyledView = styled.View`
@@ -359,7 +370,7 @@ const EquipmentContainer = styled.View`
   justify-content: start;
   height: 90%;
   width: 100%;
-  // background-color: blue;
+  top: -5%;
 `;
 
 const EquipmentMainContainer = styled.View`
@@ -368,9 +379,8 @@ const EquipmentMainContainer = styled.View`
   justify-content: start;
   height: 80%;
   width: 100%;
-  // background-color: yellow;
+  top: -5%;
 `;
-
 
 const Square = styled.View`
   margin: 2px;
@@ -387,7 +397,6 @@ const TextStyled = styled.Text`
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
 `;
-
 
 const UnequipStyled = styled.Text`
   font-size: 25px;
@@ -423,12 +432,11 @@ const DescriptionName = styled.Text`
   right:10%;
 `;
 
-
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 80%;
-  marginTop: 10%;
   align-items:center;
+  top: 100%;
 `
 const CloseButton1 = styled.TouchableOpacity`
   position: 'absolute';            
@@ -441,13 +449,11 @@ const Unequip = styled.TouchableOpacity`
   align-items:center;
   top:-2%;
 `
-
 const Description = styled.TouchableOpacity`
 position: 'absolute';            
 align-items:center;
 top:4%;
 `
-
 const ShowText = styled.View`
   display: flex;
   align-items: center;
@@ -456,8 +462,6 @@ const ShowText = styled.View`
   width: 100%;
   // background-color: pink;
 `;
-
-
 
 const styles = StyleSheet.create({
   image: {

@@ -15,7 +15,7 @@ const Profile = () => {
   const {usersGlobalState, setUsersGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
-  const [inventoryVisible, setInventoryVisible] = useState(false)
+  const [inventoryVisible, setInventoryVisible] = useState(false);
 
   const [initialAtributes, setInitialAtributes] = useState({
     resistencia: 0,
