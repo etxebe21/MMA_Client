@@ -357,6 +357,7 @@ const closeAllModals1 = () => {
   //Renderiza los iconos del navegador
   const renderTabIcon = (route, role, color) => {
     let iconName;
+    let iconSize = 30
     switch (route.name) {
       case 'Home':
         iconName = 'home';
@@ -390,7 +391,7 @@ const closeAllModals1 = () => {
         iconName = null;
     }
 
-    return iconName && <Icon name={iconName} size={26} color={color} />;
+    return iconName && <Icon name={iconName} size={iconSize} color={color} />;
   };
 
 
@@ -454,13 +455,18 @@ const closeAllModals1 = () => {
           {!isAuthenticated && <LoginModal onLogin={handleLogin} setLoginModalVisible={setLoginModalVisible} />}
           {isAuthenticated && (
             <>
-              <Header />
+              {/* <Header /> */}
               <NavigationContainer>
-                <Tab.Navigator
+              <Tab.Navigator
                   screenOptions={({ route }) => ({
                     swipeEnabled: true,
-                    tabBarStyle: { backgroundColor: '#000000',  height: 120, borderTopWidth: 0},
-                    tabBarIndicatorStyle: { backgroundColor: "#B01AFF", },
+                    tabBarStyle: { 
+                      backgroundColor: 'transparent',
+                      height: 100, 
+                      borderTopWidth: 0,
+                      elevation: 0,
+                    },
+                    tabBarIndicatorStyle: { backgroundColor: "#B01AFF" },
                     tabBarActiveTintColor: 'rgba(146, 3, 240, 1.0)',
                     tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.55)',
                     tabBarShowLabel: false,
