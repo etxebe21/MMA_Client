@@ -26,11 +26,14 @@ import GeolocationMortimer from './screens/GeoMortimer';
 import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 const App = () => {
 
   //STATES
-  const Tab = createMaterialTopTabNavigator();
+  // const Tab = createMaterialTopTabNavigator();
+  const Tab = createBottomTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
@@ -397,40 +400,40 @@ const closeAllModals1 = () => {
       case 'ACÓLITO':
         return (
           <>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Qr" component={Qr} />
-            <Tab.Screen name="Torreon" component={Torreon} />
-            <Tab.Screen name="Profile" component={Profile} />
-            <Tab.Screen name="GeolocationUser" component={Geolocation} />
+            <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Qr" component={Qr} options={{ headerShown: false }} />
+            <Tab.Screen name="Torreon" component={Torreon} options={{ headerShown: false }} />
+            <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Tab.Screen name="GeolocationUser" component={Geolocation} options={{ headerShown: false }} />
           </>
         );
       case 'JACOB':
         return (
           <>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="ScanQr" component={ScanQr} />
+            <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="ScanQr" component={ScanQr} options={{ headerShown: false }} />
           </>
         );
       case 'MORTIMER':
         return (
           <>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Mortimer" component={Mortimer} />
-            <Tab.Screen name="GeolocationMortimer" component={GeolocationMortimer} />
+            <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Mortimer" component={Mortimer} options={{ headerShown: false }} />
+            <Tab.Screen name="GeolocationMortimer" component={GeolocationMortimer} options={{ headerShown: false }}  />
           </>
         );
       case 'VILLANO':
         return (
           <>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Villano" component={Villano} />
+            <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Villano" component={Villano} options={{ headerShown: false }} />
           </>
         );
       case 'ANGELO':
         return (
           <>
-            <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Villano" component={Angelo} />
+            <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Villano" component={Angelo} options={{ headerShown: false }} />
           </>
         );
       default:
@@ -456,7 +459,7 @@ const closeAllModals1 = () => {
                 <Tab.Navigator
                   screenOptions={({ route }) => ({
                     swipeEnabled: true,
-                    tabBarStyle: { backgroundColor: '#000000' },
+                    tabBarStyle: { backgroundColor: '#000000',  height: 120, borderTopWidth: 0},
                     tabBarIndicatorStyle: { backgroundColor: "#B01AFF", },
                     tabBarActiveTintColor: 'rgba(146, 3, 240, 1.0)',
                     tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.55)',
