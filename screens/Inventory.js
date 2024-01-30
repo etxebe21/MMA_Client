@@ -149,7 +149,6 @@ const Inventory = () => {
 
               <EquipmentContainer>
 
-
                 {/* casco */}
                 <Helmet onPress={() => moveMats1(0)}>
                   {profileEquipment.map((item, index) => (
@@ -184,7 +183,6 @@ const Inventory = () => {
                     )
                   ))}
 
-
                   {unequipModal === true && positionUnequipModal == 1 &&(
                     <Modal
                       animationType="slide"
@@ -202,7 +200,6 @@ const Inventory = () => {
                     </Modal>
                   )}
                 </Breastplate>
-
 
                 {/* //GUANTES */}
                 <Gloves onPress={() => moveMats1(2)}>
@@ -230,7 +227,6 @@ const Inventory = () => {
                   )}
                 </Gloves>
 
-
                 {/* Pantalones */}
                 <Trousers onPress={() => moveMats1(3)}>
                   {profileEquipment.map((item, index) => (
@@ -256,8 +252,6 @@ const Inventory = () => {
                     </Modal>
                   )}
                 </Trousers>
-
-
 
               </EquipmentContainer>
             </ImageBackground>

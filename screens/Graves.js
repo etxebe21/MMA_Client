@@ -167,11 +167,13 @@ const Graves = ({returnButton}) => {
   };
 
   const resetInventory = () => {
-   
+    const inventoryData = {
+      inventory : userGlobalState.inventory,
+      id : userGlobalState._id,
+    };
     userGlobalState.inventory = [];
-    console.log('INVENTARIOOOO', userGlobalState.inventory);
-    socket.emit('resetUserInventory', userGlobalState._id, userGlobalState.inventory);
-
+    console.log('INVENTARIOOOO', inventoryData);
+    socket.emit('resetUserInventory',inventoryData);
   };
 
   const resetSearch = async () => {
