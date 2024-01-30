@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal, ScrollView, ToastAndroid } from 'react-native';
 import styled from 'styled-components/native';
-import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Context } from "../context/Context";
+import Profile from './Profile';
 
 const Inventory = () => {
 
@@ -27,17 +27,15 @@ const Inventory = () => {
   const [inventoryVisible, setInventoryVisible] = useState(false)
 
 
-
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
 
-
   useEffect(() => {
     console.log("El Estado global Seteado")
-    console.log(materialsGlobalState)
+    //console.log(materialsGlobalState)
     // getMaterials();
-    console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
+    //console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
     setProfileInventory(userGlobalState.inventory)
   }, [materialsGlobalState]);
 
@@ -48,7 +46,6 @@ const Inventory = () => {
       setIsModalVisible(true);
     }
   }, [profileEquipment]);
-
 
   const removeEquipment = () => {
 
@@ -124,7 +121,7 @@ const Inventory = () => {
 
   const inventoryButton = () => {
     console.log("boton pulsado");
-    setInventoryVisible(false);
+    setInventoryVisible(true);
   };
 
   const closeModal = () => {
@@ -139,7 +136,7 @@ const Inventory = () => {
     >
 
       <StyledView>
-        {!isModalVisible && (
+        {!isModalVisible && !inventoryVisible && (
 
           <EquipmentMainContainer>
 
@@ -269,7 +266,7 @@ const Inventory = () => {
           </EquipmentMainContainer>
         )}
 
-        {descriptionModal && (
+        {descriptionModal && inventoryVisible &&(
           <Modal
             animationType="slide"
             transparent={true}
@@ -291,7 +288,7 @@ const Inventory = () => {
           </Modal>
         )}
 
-        {!isModalVisible && (
+        {!isModalVisible && !inventoryVisible &&(
 
           <CajaMateriales>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -308,7 +305,7 @@ const Inventory = () => {
           </CajaMateriales>
         )}
 
-        {isModalVisible && (
+        {isModalVisible && !inventoryVisible &&(
           <Modal
             animationType="slide"
             transparent={true}
@@ -333,6 +330,10 @@ const Inventory = () => {
             </View>
           </Modal>
         )}
+
+        {inventoryVisible && (
+        <Profile/>
+      )}
       </StyledView>
     </ImageBackground>
 

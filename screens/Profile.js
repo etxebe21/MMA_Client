@@ -7,7 +7,6 @@ import { socket } from '../socket/socketConnect';
 import { Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Inventory from "./Inventory";
-import Modals from '../components/Modals';
 
 const Profile = () => {
 
