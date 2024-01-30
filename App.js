@@ -27,6 +27,7 @@ import SocketListener from './socket/socketEvents';
 import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TouchableOpacity } from 'react-native';
 
 
 const App = () => {
@@ -357,7 +358,7 @@ const closeAllModals1 = () => {
   //Renderiza los iconos del navegador
   const renderTabIcon = (route, role, color) => {
     let iconName;
-    let iconSize = 30
+    let iconSize = 35
     switch (route.name) {
       case 'Home':
         iconName = 'home';
@@ -391,7 +392,11 @@ const closeAllModals1 = () => {
         iconName = null;
     }
 
-    return iconName && <Icon name={iconName} size={iconSize} color={color} />;
+    return iconName && (
+      <View style={{ top:'35%' }}>
+        <Icon name={iconName} size={iconSize} color={color} />
+      </View>
+    );
   };
 
 
@@ -459,16 +464,22 @@ const closeAllModals1 = () => {
               <NavigationContainer>
               <Tab.Navigator
                   screenOptions={({ route }) => ({
-                    swipeEnabled: true,
-                    tabBarStyle: { 
-                      backgroundColor: 'transparent',
-                      height: 100, 
-                      borderTopWidth: 0,
-                      elevation: 0,
+                    tabBarStyle: {
+                      backgroundColor: 'rgba(20, 20, 20, 1)',
+                      borderTopWidth: 0, 
+                      borderRadius: 20,
+                      position: 'absolute', 
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                      left: 20,
+                      right: 20,
+                      bottom: 25,
+                      height: 70, 
                     },
                     tabBarIndicatorStyle: { backgroundColor: "#B01AFF" },
-                    tabBarActiveTintColor: 'rgba(146, 3, 240, 1.0)',
-                    tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.55)',
+                    tabBarActiveTintColor: 'rgba(255, 255, 255, 1.0)',
+                    tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.7)',
                     tabBarShowLabel: false,
                     tabBarShowIcon: true,
                     tabBarIcon: ({ focused, color }) => renderTabIcon(route, role, color),
