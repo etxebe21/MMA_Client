@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/native";
 import QRCode from "react-native-qrcode-svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { request, PERMISSIONS } from "react-native-permissions";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { Alert, ActivityIndicator, ImageBackground, StyleSheet, Dimensions } from "react-native";
+import { Alert, ImageBackground, StyleSheet, Dimensions } from "react-native";
 import { Context } from "../context/Context";
 
 const PERMISSION_AUTHORIZED = 'authorized';
@@ -88,33 +86,19 @@ const Qr = () => {
 };
 
 const View = styled.View`
-  flex: 1;
-`;
-
-const Text = styled.Text`
-  bottom: -28px;
-  color: #4c2882;
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
 
 const QrView = styled.View`
   width: ${Dimensions.get('window').width * 0.5}px;
-  height: ${Dimensions.get('window').height * 0.79}px;
+  height: ${Dimensions.get('window').height * 0.25}px;
   justify-content: center;
+  align-items: center;
+  display: flex;
+  top: -5%;
   background: rgba(76, 40, 130, 0);
-`;
-
-
-const ViewText = styled.Text`
-  bottom: -18px;
-  color: #4c2882;
-  font-size: 26px;
-  font-weight: bold;
-  letter-spacing: -0.3px;
-  align-self: center;
 `;
 
 const styles = StyleSheet.create({
