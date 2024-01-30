@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal, ScrollView, ToastAndroid } from 'react-native';
 import styled from 'styled-components/native';
-import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Context } from "../context/Context";
+import Profile from './Profile';
 
 const Inventory = () => {
 
@@ -24,19 +24,18 @@ const Inventory = () => {
   const [equiped, setEquiped] = useState(false);
   const [unequipModal, setUnequipModal] = useState(false);
   const [positionUnequipModal, setUnequipPositionModal] = useState();
-
+  const [inventoryVisible, setInventoryVisible] = useState(false)
 
 
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
 
-
   useEffect(() => {
     console.log("El Estado global Seteado")
-    console.log(materialsGlobalState)
+    //console.log(materialsGlobalState)
     // getMaterials();
-    console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
+    //console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
     setProfileInventory(userGlobalState.inventory)
   }, [materialsGlobalState]);
 
@@ -47,7 +46,6 @@ const Inventory = () => {
       setIsModalVisible(true);
     }
   }, [profileEquipment]);
-
 
   const removeEquipment = () => {
 
@@ -111,11 +109,8 @@ const Inventory = () => {
           setFirstItem(element);
           console.log(positionUnequipModal)
         }
-      });
-      
+      }); 
     }
-
-
   };
 
   const openDescriptionModal = () => {
@@ -123,6 +118,9 @@ const Inventory = () => {
     setUnequipModal(false);
   }
 
+  const inventoryButton = () => {
+    setInventoryVisible(true);
+  };
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -134,10 +132,17 @@ const Inventory = () => {
       source={Image_background}
       style={styles.background}
     >
+
       <StyledView>
-        {!isModalVisible && (
+        {!isModalVisible && !inventoryVisible && (
 
           <EquipmentMainContainer>
+
+            <View >
+              <CloseButton onPress={() => inventoryButton()}>
+                <Icon name="arrow-circle-left" size={60} color="#4c2882" />
+              </CloseButton>
+            </View>
 
             <TextStyled> Equipamiento </TextStyled>
             <ImageBackground source={Image_siluette} style={styles.siluette}>
@@ -259,7 +264,7 @@ const Inventory = () => {
           </EquipmentMainContainer>
         )}
 
-        {descriptionModal && (
+        {descriptionModal && inventoryVisible &&(
           <Modal
             animationType="slide"
             transparent={true}
@@ -281,7 +286,7 @@ const Inventory = () => {
           </Modal>
         )}
 
-        {!isModalVisible && (
+        {!isModalVisible && !inventoryVisible &&(
 
           <CajaMateriales>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -298,7 +303,7 @@ const Inventory = () => {
           </CajaMateriales>
         )}
 
-        {isModalVisible && (
+        {isModalVisible && !inventoryVisible &&(
           <Modal
             animationType="slide"
             transparent={true}
@@ -323,6 +328,10 @@ const Inventory = () => {
             </View>
           </Modal>
         )}
+
+        {inventoryVisible && (
+        <Profile/>
+      )}
       </StyledView>
     </ImageBackground>
 
@@ -342,6 +351,7 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
+  top: -7%;
 `;
 
 const StyledView = styled.View`
@@ -359,7 +369,7 @@ const EquipmentContainer = styled.View`
   justify-content: start;
   height: 90%;
   width: 100%;
-  // background-color: blue;
+  top: -5%;
 `;
 
 const EquipmentMainContainer = styled.View`
@@ -368,9 +378,8 @@ const EquipmentMainContainer = styled.View`
   justify-content: start;
   height: 80%;
   width: 100%;
-  // background-color: yellow;
+  top: -5%;
 `;
-
 
 const Square = styled.View`
   margin: 2px;
@@ -387,7 +396,6 @@ const TextStyled = styled.Text`
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
 `;
-
 
 const UnequipStyled = styled.Text`
   font-size: 25px;
@@ -423,12 +431,11 @@ const DescriptionName = styled.Text`
   right:10%;
 `;
 
-
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  marginLeft: 80%;
-  marginTop: 10%;
+  marginLeft: 75%;
   align-items:center;
+  top: 100%;
 `
 const CloseButton1 = styled.TouchableOpacity`
   position: 'absolute';            
@@ -441,13 +448,11 @@ const Unequip = styled.TouchableOpacity`
   align-items:center;
   top:-2%;
 `
-
 const Description = styled.TouchableOpacity`
 position: 'absolute';            
 align-items:center;
 top:4%;
 `
-
 const ShowText = styled.View`
   display: flex;
   align-items: center;
@@ -456,8 +461,6 @@ const ShowText = styled.View`
   width: 100%;
   // background-color: pink;
 `;
-
-
 
 const styles = StyleSheet.create({
   image: {

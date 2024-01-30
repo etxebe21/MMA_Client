@@ -7,7 +7,6 @@ import { socket } from '../socket/socketConnect';
 import { Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Inventory from "./Inventory";
-import Modals from '../components/Modals';
 
 const Profile = () => {
 
@@ -15,7 +14,7 @@ const Profile = () => {
   const {usersGlobalState, setUsersGlobalState } = useContext(Context);
   const [modal, setModal] = useState(false);
   const [modalRestVisible, setModalRestVisible] = useState(false);
-  const [inventoryVisible, setInventoryVisible] = useState(false)
+  const [inventoryVisible, setInventoryVisible] = useState(false);
 
   const [initialAtributes, setInitialAtributes] = useState({
     resistencia: 0,
