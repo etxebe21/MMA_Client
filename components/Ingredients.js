@@ -224,8 +224,6 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     socket.emit('HealUser', sendData);
     ToastAndroid.showWithGravity('Pocion aplicada satisfactoriamente', ToastAndroid.SHORT, ToastAndroid.CENTER);
 
-    set
-
   }
   
   return (

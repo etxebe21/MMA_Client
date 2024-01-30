@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { View, StyleSheet, ImageBackground} from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import styled from "styled-components/native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -53,6 +53,20 @@ const App = () => {
   const [epicUserPrev, setEpicUserPrev] = useState();
   const [ethaziumUserPrev, setEthaziumUserPrev] = useState();
   const [marrowUserPrev, setMarrowUserPrev] = useState();
+
+
+  const [enableModalEthazium, setEnableModalEthazium] = useState(false);
+  const [enableEpicWeak, setEnableEpicWeak] = useState(false);
+  const [enableRottingPlague, setEnableRottingPlague] = useState(false);
+  const [enableMarrow, setEnableMarrow] = useState(false);
+
+  const [disableModalEthazium, setDisableModalEthazium] = useState(true);
+  const [disableEpicWeak, setDisableEpicWeak] = useState(true);
+  const [disableRottingPlague, setDisableRottingPlague] = useState(true);
+  const [disableMarrow, setDisableMarrow] = useState(true);
+
+
+
 
   const timerIdRef = useRef(null);
 
@@ -112,6 +126,79 @@ const App = () => {
     }
   }, [userGlobalState]);
 
+
+  //ETHAZIUM
+  useEffect(() => {
+    if (userGlobalState != undefined) {
+      if (userGlobalState.ethazium === true && disableModalEthazium === true) {
+        setDisableModalEthazium(false);
+        setTimeout(() => {
+          setEnableModalEthazium(false);
+        }, 4000);
+
+      }
+
+      //MARROW
+      else if (userGlobalState.marrow_apocalypse === true && disableMarrow === true) {
+        setEnableMarrow(true);
+        setDisableMarrow(false);
+
+        setTimeout(() => {
+          setEnableMarrow(false);
+        }, 4000);
+      }
+
+      //WEAK
+      else if (userGlobalState.epic_weakness === true && disableEpicWeak === true) {
+        setEnableEpicWeak(true);
+        setDisableEpicWeak(false);
+
+        setTimeout(() => {
+          setEnableEpicWeak(false);
+        }, 4000);
+      }
+
+      //ROTTING
+      else if (userGlobalState.rotting_plague === true && disableRottingPlague === true) {
+        setEnableRottingPlague(true);
+        setDisableRottingPlague(false);
+        console.log("entramoooooooooos");
+
+        setTimeout(() => {
+          setEnableRottingPlague(false);
+        }, 4000);
+      }
+
+      //Si no entra en ningun if significa que no hay ninguna enfermedad por tanto todo tiene que estar deshabilitado
+      else {
+        if (userGlobalState.ethazium === false) {
+          setDisableModalEthazium(true);
+        }
+
+        //MARROW
+        else if (userGlobalState.marrow_apocalypse === true && disableMarrow === true) {
+          setDisableMarrow(true);
+        }
+
+        //WEAK
+        else if (userGlobalState.epic_weakness === true && disableEpicWeak === true) {
+          setDisableEpicWeak(true);
+
+        }
+
+        //ROTTING
+        else if (userGlobalState.rotting_plague === true && disableRottingPlague === true) {
+          setDisableRottingPlague(true);
+        }
+      }
+    }
+
+
+  }, [userGlobalState]);
+
+
+
+
   //Para cargar por primera vez todos los datos necesaios
   useEffect(() => {
     getInitialData();
@@ -142,7 +229,7 @@ const App = () => {
     const ethaziumUser = userGlobalState?.ethazium;
     const epicUser = userGlobalState?.epic_weakness;
     const marrowUser = userGlobalState?.marrow_apocalypse;
-  
+
     const openAndCloseModal = (modalFunction, isOpen) => {
       // Cerrar el modal actual si existe
       closeAllModals();
@@ -156,7 +243,7 @@ const App = () => {
       // Actualizar el ID del temporizador usando useRef
       timerIdRef.current = id;
     };
-  
+
     // Verificar y abrir el modal según el estado de cada atributo del usuario
     if (rottingUser && !rottingUserPrev) {
       closeAllModals();
@@ -174,19 +261,25 @@ const App = () => {
       // Cerrar todos los modales si ningún atributo es verdadero
       closeAllModals();
     }
-  
+
     // Guardar el estado actual para la próxima comparación
     setRottingUserPrev(rottingUser);
     setEthaziumUserPrev(ethaziumUser);
     setEpicUserPrev(epicUser);
     setMarrowUserPrev(marrowUser);
-  
+
     // Limpia el temporizador si el componente se desmonta o si hay un cambio en los estados de usuario
     return () => clearTimeout(timerIdRef.current);
   }, [userGlobalState, rottingUserPrev, ethaziumUserPrev, epicUserPrev, marrowUserPrev]);
-  
 
-  
+
+const closeAllModals1 = () => {
+    closeRottingModal();
+    closeEthaziumModal();
+    closeEpicModal();
+    closeMarrowModal();
+  };
+
   const closeAllModals = () => {
     closeRottingModal();
     closeEthaziumModal();
@@ -194,45 +287,47 @@ const App = () => {
     closeMarrowModal();
   };
 
-const closeEthaziumModal = () => {
-  //console.log('Closing Ethazium modal');
-  setEthaziumModalVisible(false);
-};
+  const closeEthaziumModal = () => {
+    //console.log('Closing Ethazium modal');
+    setEthaziumModalVisible(false);
+  };
 
-const closeRottingModal = () => {
-  //console.log('Closing Rotting modal');
-  setRottingModalVisible(false);
-};
+  const closeRottingModal = () => {
+    //console.log('Closing Rotting modal');
+    setRottingModalVisible(false);
+  };
 
-const closeEpicModal = () => {
-  //console.log('Closing Epic modal');
-  setEpicModalVisible(false);
-};
+  const closeEpicModal = () => {
+    //console.log('Closing Epic modal');
+    setEpicModalVisible(false);
+  };
 
-const closeMarrowModal = () => {
-  //console.log('Closing Marrow modal');
-  setMarrowModalVisible(false);
-};
-  
-const openEthaziumModal = () => {
-  console.log('OPening Ethazium modal');
-  setEthaziumModalVisible(true);
-};
+  const closeMarrowModal = () => {
+    //console.log('Closing Marrow modal');
+    setMarrowModalVisible(false);
+  };
 
-const openRottingModal = () => {
-  console.log('OPening Rotting modal');
-  setRottingModalVisible(true);
-};
+  const openEthaziumModal = () => {
+    console.log('OPening Ethazium modal');
+    setEthaziumModalVisible(true);
+  };
 
-const openMarrowModal = () => {
-  console.log('Opening Marrow modal');
-  setMarrowModalVisible(true);
-};
+  const openRottingModal = () => {
+    console.log('OPening Rotting modal');
+    setRottingModalVisible(true);
+  };
 
-const openEpicModal = () => {
-  console.log('Opening Epic modal');
-  setEpicModalVisible(true);
-};
+  const openMarrowModal = () => {
+    console.log('Opening Marrow modal');
+    setMarrowModalVisible(true);
+  };
+
+  const openEpicModal = () => {
+    console.log('Opening Epic modal');
+    setEpicModalVisible(true);
+  };
+
+
 
   //Datos iniciales email role e id
   const getInitialData = async () => {
@@ -281,7 +376,7 @@ const openEpicModal = () => {
         break;
       case 'Profile': iconName = 'person';
         break;
-      case 'GeolocationUser':setRottingModalVisible
+      case 'GeolocationUser': setRottingModalVisible
       case 'GeolocationMortimer':
         iconName = role === 'ACÓLITO' || role === 'MORTIMER' ? 'map' : null;
         break;
@@ -338,16 +433,16 @@ const openEpicModal = () => {
             <Tab.Screen name="Villano" component={Angelo} />
           </>
         );
-      default:            
+      default:
         return null;
     }
   };
 
   return (
     <Context.Provider value={{
-      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState, inventorySlot,selectingUser,
-      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState, handleInventorySlot,handleUserSelected,
-      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState, setInventorySlot,setSelectingUser,
+      globalState, userGlobalState, usersGlobalState, artifactsGlobalState, pendingTextGlobalState, materialsGlobalState, inventorySlot, selectingUser,
+      handleGlobalState, handleUserGlobalState, handleUsersGlobalState, handleArtefactsGlobalState, handleMaterialsGlobalState, handleInventorySlot, handleUserSelected,
+      setUserGlobalState, setUsersGlobalState, setArtefactsGlobalState, setPendingTextGlobalState, setMaterialsGlobalState, setInventorySlot, setSelectingUser,
 
     }}>
       <SafeAreaProvider>
@@ -374,86 +469,84 @@ const openEpicModal = () => {
                 </Tab.Navigator>
               </NavigationContainer>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalEthaziumVisible}
-                onRequestClose={closeEthaziumModal}
-            >
-                <View style={styles.modalContainer}>
-                  <ImageBackground
-                    source={require('./assets/ethaziumAcolit.png')}
-                    style={styles.imageBackground}
-                  >
-                    <View style={styles.modalContent}>
-                      <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
-                    </View>
-                  </ImageBackground>
-                </View>
-            </Modal>
+              {enableModalEthazium && (
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                >
+                  <View style={styles.modalContainer}>
+                    <ImageBackground
+                      source={require('./assets/ethaziumAcolit.png')}
+                      style={styles.imageBackground}
+                    >
+                      <View style={styles.modalContent}>
+                        <CloseText>YOU HAVE BEEN INFECTED BY THE ETHAZIUM CURSE</CloseText>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </Modal>
+              )}
+              {enableRottingPlague && (
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                >
+                  <View style={styles.modalContainer}>
+                    <ImageBackground
+                      source={require('./assets/ethaziumed.png')}
+                      style={styles.imageBackground}
+                    >
+                      <View style={styles.modalContent}>
+                        <CloseText>YOU HAVE BEEN INFECTED BY ROTTING_PLAGUE</CloseText>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </Modal>
+              )}
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalRottingVisible}
-                onRequestClose={closeRottingModal}
-            >
-                <View style={styles.modalContainer}>
-                  <ImageBackground
-                    source={require('./assets/ethaziumed.png')}
-                    style={styles.imageBackground}
-                  >
-                    <View style={styles.modalContent}>
-                      <CloseText>YOU HAVE BEEN INFECTED BY ROTTING_PLAGUE</CloseText>
-                    </View>
-                  </ImageBackground>
-                </View>
-            </Modal>
+              {enableEpicWeak && (
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                >
+                  <View style={styles.modalContainer}>
+                    <ImageBackground
+                      source={require('./assets/epicweakness.png')}
+                      style={styles.imageBackground}
+                    >
+                      <View style={styles.modalContent}>
+                        <CloseText>YOU HAVE BEEN INFECTED BY EPIC_WEAKNESS</CloseText>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </Modal>
+              )}
+              {enableMarrow && (
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalEpicVisible}
-                onRequestClose={closeEpicModal}
-            >
-                <View style={styles.modalContainer}>
-                  <ImageBackground
-                    source={require('./assets/epicweakness.png')}
-                    style={styles.imageBackground}
-                  >
-                    <View style={styles.modalContent}>
-                      <CloseText>YOU HAVE BEEN INFECTED BY EPIC_WEAKNESS</CloseText>
-                    </View>
-                  </ImageBackground>
-                </View>
-            </Modal>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                >
+                  <View style={styles.modalContainer}>
+                    <ImageBackground
+                      source={require('./assets/marrow.png')}
+                      style={styles.imageBackground}
+                    >
+                      <View style={styles.modalContent}>
+                        <CloseText>YOU HAVE BEEN INFECTED BY MARROW_APOCALYPSE</CloseText>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </Modal>
+              )}
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalMarrowVisible}
-                onRequestClose={closeMarrowModal}
-            >
-                <View style={styles.modalContainer}>
-                  <ImageBackground
-                    source={require('./assets/marrow.png')}
-                    style={styles.imageBackground}
-                  >
-                    <View style={styles.modalContent}>
-                      <CloseText>YOU HAVE BEEN INFECTED BY MARROW_APOCALYPSE</CloseText>
-                    </View>
-                  </ImageBackground>
-                </View>
-            </Modal>
-              {/* <Modals/> */}
-              
             </>
           )}
         </View>
       </SafeAreaProvider>
       <SocketListener currentSocketEvent={currentEvent} />
     </Context.Provider>
-    
+
   );
 };
 
