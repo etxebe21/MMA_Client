@@ -195,22 +195,22 @@ const App = () => {
   };
 
 const closeEthaziumModal = () => {
-  console.log('Closing Ethazium modal');
+  //console.log('Closing Ethazium modal');
   setEthaziumModalVisible(false);
 };
 
 const closeRottingModal = () => {
-  console.log('Closing Rotting modal');
+  //console.log('Closing Rotting modal');
   setRottingModalVisible(false);
 };
 
 const closeEpicModal = () => {
-  console.log('Closing Epic modal');
+  //console.log('Closing Epic modal');
   setEpicModalVisible(false);
 };
 
 const closeMarrowModal = () => {
-  console.log('Closing Marrow modal');
+  //console.log('Closing Marrow modal');
   setMarrowModalVisible(false);
 };
   

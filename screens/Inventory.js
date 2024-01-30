@@ -109,8 +109,7 @@ const Inventory = () => {
           setFirstItem(element);
           console.log(positionUnequipModal)
         }
-      });
-      
+      }); 
     }
   };
 
@@ -120,7 +119,6 @@ const Inventory = () => {
   }
 
   const inventoryButton = () => {
-    console.log("boton pulsado");
     setInventoryVisible(true);
   };
 
@@ -142,7 +140,7 @@ const Inventory = () => {
 
             <View >
               <CloseButton onPress={() => inventoryButton()}>
-                <Icon name="times" size={60} color="#4c2882" />
+                <Icon name="arrow-circle-left" size={60} color="#4c2882" />
               </CloseButton>
             </View>
 
@@ -435,7 +433,7 @@ const DescriptionName = styled.Text`
 
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  marginLeft: 80%;
+  marginLeft: 75%;
   align-items:center;
   top: 100%;
 `
