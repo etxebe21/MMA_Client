@@ -189,7 +189,7 @@ const Graves = ({returnButton}) => {
       id: [],    // Cambiado a un array
       found: [], // Cambiado a un array
       who: [],
-      // userImage: [],
+      userImage: ['','','',''],
     };
 
     materialsGlobalState.forEach((material) => {
@@ -201,7 +201,7 @@ const Graves = ({returnButton}) => {
       materialData.who.push('');
     });
     console.log(materialData);
-    socket.emit('resetMaterial', materialData.id, materialData.found, materialData.who);
+    socket.emit('resetMaterial', materialData.id, materialData.found, materialData.who, materialData.userImage);
   };
 
   // const resetSearch = async () => {
