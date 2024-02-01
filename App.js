@@ -33,8 +33,8 @@ import { TouchableOpacity } from 'react-native';
 const App = () => {
 
   //STATES
-  // const Tab = createMaterialTopTabNavigator();
-  const Tab = createBottomTabNavigator();
+  const Tab = createMaterialTopTabNavigator();
+  // const Tab = createBottomTabNavigator();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoginModalVisible, setLoginModalVisible] = useState(true);
   const [role, setRole] = useState(null);
@@ -358,7 +358,7 @@ const closeAllModals1 = () => {
   //Renderiza los iconos del navegador
   const renderTabIcon = (route, role, color) => {
     let iconName;
-    let iconSize = 35
+    let iconSize = 30
     switch (route.name) {
       case 'Home':
         iconName = 'home';
@@ -393,7 +393,7 @@ const closeAllModals1 = () => {
     }
 
     return iconName && (
-      <View style={{ top:'35%' }}>
+      <View style={ styles.iconsStyle }>
         <Icon name={iconName} size={iconSize} color={color} />
       </View>
     );
@@ -469,15 +469,22 @@ const closeAllModals1 = () => {
                       borderTopWidth: 0, 
                       borderRadius: 20,
                       position: 'absolute', 
-                      justifyContent: 'center',
-                      alignItems: 'center',
                       display: 'flex',
+                      marginLeft: 2,
                       left: 20,
                       right: 20,
                       bottom: 25,
-                      height: 70, 
+                      height: 60, 
                     },
-                    tabBarIndicatorStyle: { backgroundColor: "#B01AFF" },
+                    tabBarIndicatorStyle: { backgroundColor: "#FFFFFF",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: '4%',
+                    width: 25,  
+                    borderRadius: 4,
+                    top: 50,
+                  },
                     tabBarActiveTintColor: 'rgba(255, 255, 255, 1.0)',
                     tabBarInactiveTintColor: 'rgba(146, 3, 240, 0.7)',
                     tabBarShowLabel: false,
@@ -585,6 +592,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  iconsStyle: {
+    height: 40, 
+    width: 40, 
+    marginLeft: -10,
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    display: 'flex',
+  }
 });
 
 const CloseText = styled.Text`
