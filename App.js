@@ -28,9 +28,12 @@ import { socket } from './socket/socketConnect';
 import axiosInit from './axios/axiosInstance';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity } from 'react-native';
-
+import { Animated } from "react-native";
+import { LogBox } from 'react-native';
 
 const App = () => {
+
+  LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
 
   //STATES
   const Tab = createMaterialTopTabNavigator();
@@ -473,7 +476,7 @@ const closeAllModals1 = () => {
                       marginLeft: 2,
                       left: 20,
                       right: 20,
-                      bottom: 25,
+                      bottom: 55,
                       height: 60, 
                     },
                     tabBarIndicatorStyle: { backgroundColor: "#FFFFFF",
