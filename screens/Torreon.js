@@ -81,13 +81,11 @@ const EnterTowerButton = styled.TouchableOpacity`
 
 const View = styled.View`
     flex: 1;
-    background: #000000;
 `
 
 const ViewPotion = styled.View`
-    backgroundcolor: #000000;
     height: 100%;
-    width:  100%
+    width:  100%;
 `
 
 const Text = styled.Text `
@@ -111,8 +109,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: null,
-        width: null
+        height: '100%',
+        width: '100%',
     },
 
     arrowIcon: {
