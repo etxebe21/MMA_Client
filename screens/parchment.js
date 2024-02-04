@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {  ImageBackground, StyleSheet } from 'react-native';
 import { Modal } from "react-native-paper";
 import styled from "styled-components/native";
@@ -13,9 +13,15 @@ const Parchment = ({ towerBoolean }) => {
   const [isPotionCreated, setIsPotionCreated] = useState(false);
   const [isEnteringTower, setIsEnteringTower] = useState(false);
 
+  useEffect(() => { 
+    setIsEnteringTower(towerBoolean)
+  }, [towerBoolean]);
+
   const cleanParchment = () => {
     setIsCleaned(true);
   };
+
+  
 
   const returnButton = () => {
     setIsCleaned(false);
@@ -30,19 +36,16 @@ const Parchment = ({ towerBoolean }) => {
 
   return (
     <View>
-      <Modal visible={towerBoolean}>
-      <>
-        {!isCleaned && (
+
+        {!isCleaned && isEnteringTower && (
           <ImageBackground source={bgImageDirty} style={styles.parchment}>
             <CleanParchmentButton onPress={() => cleanParchment()}>
               <ClearParchmentText>CLEAN PARCHMENT</ClearParchmentText>
             </CleanParchmentButton>
           </ImageBackground>
         )}
-        </>
-    
 
-        {isCleaned && !isPotionCreated && (
+        {isCleaned && !isPotionCreated && isEnteringTower && (
           <ViewPotion>
             <CreatePotionsParch  setIsPotionCreated={setIsPotionCreated} />
           </ViewPotion>
@@ -76,40 +79,12 @@ const Parchment = ({ towerBoolean }) => {
               </ClearParchmentCleanText>   
           </ImageBackground>
         )}
-        </Modal>
     </View>
   );
 };
 const ViewPotion = styled.View`
-    backgroundcolor: #000000;
-    height: 95%;
-    width:  100%
-`
-
-const ParchmentView = styled.View`
-    bottom: -50px;
-    width: 350px;
-    height: 350px;
-    align-self: center;
-    background: #4c2882;
-    border-radius: 30px; 
-`
-
-const CreatePotionButtonText = styled.Text`
-  fontSize: 25px;
-  color: #4c2882; 
-  align-self: center;
-  top: 5px;
-`
-
-const CreatePotionButton = styled.TouchableOpacity`
-  top: 12px;
-  background: #CCCCCC;
-  width: 180px;
-  height: 50px;
-  align-self: center;
-  border-radius: 30px;
-  border: #4c2882;
+  height: 100%;
+  width:  100%;
 `
 
 const ClearParchmentText = styled.Text`
@@ -139,29 +114,17 @@ const CleanParchmentButton = styled.TouchableOpacity`
   border: #4c2882;
 `
 
-const CleanParchmentButtonReturn = styled.TouchableOpacity`
-  top: 510px;
-  background: #CCCCCC;
-  width: 180px;
-  height: 80px;
-  align-self: center;
-  border-radius: 40px;
-  border: #4c2882;
-`
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
   top: 50px;
   marginLeft: 330px;
 `
 const View = styled.View`
-    flex: 1;
-
+  flex: 1;
+  height: 100%;
+  width:  100%;
 `
 
-const ImageParchment = styled.View`
-
-
-`
 const styles = StyleSheet.create({
     modalContainer: {
       flex: 1,
@@ -185,15 +148,5 @@ const styles = StyleSheet.create({
     }
 
   });
-  
-
-const Text = styled.Text `
-    bottom: 100px;
-    color: white;
-    font-size: 25px;
-    font-weight: bold;
-    letter-spacing: -0.3px;
-    align-self: center;  
-`
 
 export default Parchment;
