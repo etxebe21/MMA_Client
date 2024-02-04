@@ -42,27 +42,11 @@ const styles = StyleSheet.create({
     },
 
     potionContainer: {
-        top: '-20%',
         width: '100%', 
-        height: '120%',  
+        height: '100%',  
       },
 
 })
-
-
-
-
-const CreatePotions = () => {
-
-    return(
-        <View>
-            <ImageBackground source={require(bgImage)} style={styles.container}>             
-                <TitleText> CREATE POTIONS </TitleText>
-                <IngredientesScreen></IngredientesScreen>
-            </ImageBackground>
-        </View>
-    )
-}
 
 const CreatePotionsParch = ({setIsPotionCreated}) => {
 
@@ -79,6 +63,5 @@ const CreatePotionsParch = ({setIsPotionCreated}) => {
 
 
 export {
-    CreatePotions,
     CreatePotionsParch
 }
