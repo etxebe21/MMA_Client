@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import IngredientesScreen from "../components/Ingredients";
 import { ImageBackground, StyleSheet } from 'react-native'
 
-const bgImage = '../assets/wallpaper_potionCreation.png';
+const bgImage = '../assets/wallpaper_potionCreation_v2.jpeg';
 
 
 const CreatePotionsParch = ({setIsPotionCreated}) => {

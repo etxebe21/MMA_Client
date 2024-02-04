@@ -394,6 +394,12 @@ const Container = styled.View`
 
 const IngredientsContainer = styled.View`
   flexDirection: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  top: 10%;
+  height: 15%; 
+  // background-color: red;
 `;
 
 const PotionEffectText = styled.Text`
