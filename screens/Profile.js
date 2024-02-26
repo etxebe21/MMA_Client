@@ -68,7 +68,6 @@ const Profile = () => {
   };
 
   const inventoryButton = () => {
-    console.log("boton pulsado");
     setInventoryVisible(true);
   };
 
@@ -119,7 +118,7 @@ const Profile = () => {
 
     <View >
       {inventoryVisible && (
-        <Inventory/>
+        <Inventory setInventoryVisible={setInventoryVisible} />
       )}
       {!inventoryVisible && (
 
