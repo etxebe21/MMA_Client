@@ -131,7 +131,7 @@ const Profile = () => {
                 </RestButton>
 
                 <GoProfile onPress={inventoryButton}>
-                  <ProfileImage source={require('../assets/anime.jpg')} />
+                  <ProfileImage source={require('../assets/inventario.jpeg')} />
                 </GoProfile>
 
                 <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 100, height: 100, borderRadius: 45 }} />

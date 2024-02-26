@@ -346,6 +346,7 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
+  top: -23%;
 `;
 
 const StyledView = styled.View`
@@ -372,6 +373,7 @@ const EquipmentMainContainer = styled.View`
   justify-content: start;
   height: 80%;
   width: 100%;
+  top: -10%;
   // background-color: yellow;
 `;
 
@@ -590,7 +592,7 @@ const Helmet = styled.TouchableOpacity`
   flex: 1;
   margin: 2px;
   border: 3px solid purple;
-  height:80px;
+  height:50px;
   width:80px;
   border-radius: 15px;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
