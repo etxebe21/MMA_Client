@@ -22,9 +22,9 @@ const Torreon = () => {
     const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); setIsInTower(false)};
 
 
-    useEffect(() => { 
-        setIsInTower(true) 
-    }, []); // Lo deberia de poner segun el get del usuario que hagamos tras scaneo
+    // useEffect(() => { 
+    //     setIsInTower(true) 
+    // }, []); 
 
 
     return(

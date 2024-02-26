@@ -105,7 +105,7 @@ const Graves = ({returnButton}) => {
       socket.emit('updateMaterial', { selectedMaterial });
       
       socket.on('responseMaterial', (responseData) => {
-      console.log('Material modificadoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:', responseData);
+      console.log('////Material modificado////////:', responseData);
       setMaterialsGlobalState(responseData);
       });
       
@@ -344,12 +344,12 @@ const GravesView2 = styled.View`
 
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  bottom:-5%;
+  bottom:60%;
   marginLeft: -65%;
 `
 const ResetButton = styled.TouchableOpacity`
   position: 'absolute';            
-  bottom: 1%;
+  bottom: 65%;
   marginLeft: 60%;
 `
 const TextStyled = styled.Text`
