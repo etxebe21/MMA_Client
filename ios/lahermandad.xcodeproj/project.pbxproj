@@ -120,7 +120,6 @@
 			isa = PBXGroup;
 			children = (
 				27F247BA2AF3A23400BC4A60 /* Fonts */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				2782DF2F2ADFC13D00D9D521 /* BootSplash.storyboard */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -135,6 +134,7 @@
 		27F247BA2AF3A23400BC4A60 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				27CB0D5C2B137C6D00DE31D2 /* AlmendraSC-Regular.ttf */,
 				27CB0D5D2B137C7200DE31D2 /* Beyond Wonderland.ttf */,
 			);
@@ -704,7 +704,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -802,7 +803,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

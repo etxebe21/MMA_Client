@@ -135,7 +135,7 @@ const Profile = () => {
                   <ProfileImage source={require('../assets/anime.jpg')} />
                 </GoProfile>
 
-                <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 90, height: 90, borderRadius: 45 }} />
+                <DetailAvatar source={{ uri: userGlobalState.picture }} style={{ width: 100, height: 100, borderRadius: 45 }} />
                 <MarcoFoto source={require("../assets/marcoEpico.png")} />
                 <UserLevelMarco>
                   <UserTextLevel> {userGlobalState.level}</UserTextLevel>
@@ -284,7 +284,6 @@ const UserTextLevel = styled.Text`
 `
 const DetailAvatar = styled.Image`
   align-self: center;
-  top:-15%;
 `
 const AvatarBox = styled.View`
   border: 3px;

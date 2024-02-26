@@ -19,6 +19,18 @@ const CreatePotionsParch = ({setIsPotionCreated}) => {
     )
 }
 
+const CreatePotions = () => {
+
+    return(
+        <View>
+            <ImageBackground source={require(bgImage)} style={styles.container}>             
+                <TitleText> CREATE POTIONS </TitleText>
+                <IngredientesScreen></IngredientesScreen>
+            </ImageBackground>
+        </View>
+    )
+}
+
 const View = styled.View`
     flex: 1;
     background: #C8A2C8;
@@ -47,5 +59,6 @@ const styles = StyleSheet.create({
 
 
 export {
-    CreatePotionsParch
+    CreatePotionsParch,
+    CreatePotions
 }

@@ -116,7 +116,7 @@ const SignOutButton = styled.TouchableOpacity`
     justify-content: center;
     width: 50%;
     height: 7%;
-    margin-top: 130%;
+    margin-top: 10%;
     border-radius: 60px;
     align-self: center;
 `
