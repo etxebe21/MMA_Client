@@ -388,6 +388,7 @@ const Square = styled.View`
 `;
 
 const TextStyled = styled.Text`
+
   font-size: 25px;
   color: purple;
   font-family: 'Tealand';
