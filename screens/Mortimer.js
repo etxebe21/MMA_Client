@@ -265,7 +265,7 @@ const CenteredCursedIconContainer = styled.View`
 `
 const View = styled.View`
   flex: 1;
-  background: #C8A2C8;
+  height: 100%;
 `
 const UserText = styled.Text`
   top: 5%; 

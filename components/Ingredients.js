@@ -394,13 +394,7 @@ const Container = styled.View`
 
 const IngredientsContainer = styled.View`
   flexDirection: row;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  top: 10%;
-  height: 15%; 
-  background-color: rgba(228, 163, 242, 0.4);
-  border-radius: 50px;
+  margin-top: 50%
 `;
 
 const PotionEffectText = styled.Text`
@@ -423,12 +417,24 @@ const IngredientView = styled.View`
   top:15%;
 `;
 
-const IngredientButton = styled.TouchableOpacity`
-  marginRight: 0px;
-  // background-color: yellow; 
-  border-radius: 50px;
+const EffectsBackground = styled.ImageBackground`
+width: 100%;
+padding: 10px;
+margin-top: 10px;
+right:20px; 
 `;
 
+const IngredientButton = styled.TouchableOpacity`
+  marginRight: 0px;
+`;
+
+const ContainerBrackground = styled.View`
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  right:20px;
+  background:purple;
+`
 const IngredientImage = styled.Image`
   width: 60px;
   height: 60px;
