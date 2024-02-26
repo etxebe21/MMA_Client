@@ -169,7 +169,6 @@ const App = () => {
       else if (userGlobalState.rotting_plague === true && disableRottingPlague === true) {
         setEnableRottingPlague(true);
         setDisableRottingPlague(false);
-        console.log("entramoooooooooos");
 
         setTimeout(() => {
           setEnableRottingPlague(false);

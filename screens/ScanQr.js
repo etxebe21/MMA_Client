@@ -19,7 +19,7 @@ const ScanQr = () => {
 
   const [isScanning, setIsScanning] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [newInsideTowerState,setInsideTower] = useState()
 
   const navigation = useNavigation();
 

@@ -22,9 +22,9 @@ const Torreon = () => {
     const enteringTowerButton = () => { setIsEnteringTower(true); ocultarBoton(); setIsInTower(false)};
 
 
-    // useEffect(() => { 
-    //     setIsInTower(true) 
-    // }, []); 
+    useEffect(() => { 
+        setIsInTower(true) 
+    }, []); 
 
 
     return(
