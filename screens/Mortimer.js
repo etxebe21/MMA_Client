@@ -24,6 +24,7 @@ const Mortimer = () => {
   const [potionSection, setPotionSection] = useState(false);
 
 
+
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const storedId = AsyncStorage.getItem('userID');
@@ -95,7 +96,7 @@ const Mortimer = () => {
     <View style={styles.container}>
 
       {potionSection && (
-        <CreatePotions/>
+        <CreatePotions setPotionSection={setPotionSection}/>
       )}
 
       {!potionSection && (
@@ -265,7 +266,7 @@ const CenteredCursedIconContainer = styled.View`
 `
 const View = styled.View`
   flex: 1;
-  height: 100%;
+  background: #C8A2C8;
 `
 const UserText = styled.Text`
   top: 5%; 

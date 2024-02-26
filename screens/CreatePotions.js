@@ -45,20 +45,20 @@ const styles = StyleSheet.create({
         top: '-20%',
         width: '100%', 
         height: '120%',  
-      },
+    },
 
 })
 
 
 
 
-const CreatePotions = () => {
+const CreatePotions = ({setPotionSection}) => {
 
     return(
         <View>
-            <ImageBackground source={require(bgImage)} style={styles.container}>             
+            <ImageBackground source={require(bgImage)} style={{height: '100%'}}>             
                 <TitleText> CREATE POTIONS </TitleText>
-                <IngredientesScreen></IngredientesScreen>
+                <IngredientesScreen setPotionSection = {setPotionSection}></IngredientesScreen>
             </ImageBackground>
         </View>
     )

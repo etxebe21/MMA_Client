@@ -7,7 +7,7 @@ import { Context } from "../context/Context";
 import { socket } from '../socket/socketConnect';
 import { io } from "socket.io-client";
 
-const IngredientesScreen = ({ setIsPotionCreated }) => {
+const IngredientesScreen = ({ setIsPotionCreated,setPotionSection}) => {
   const [selectedIngredients, setSelectedIngredients] = React.useState([]);
   const [createdPotion, setCreatedPotion] = React.useState(null);
   const [ingredients, setIngredients] = useState([]);
@@ -194,6 +194,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     }
 
 
+
     if (resultPotion.healing_type === "Strength")
     {
       sendData.fuerza = selectingUser.maxStat.fuerza;
@@ -223,7 +224,7 @@ const IngredientesScreen = ({ setIsPotionCreated }) => {
     console.log(sendData);
     socket.emit('HealUser', sendData);
     ToastAndroid.showWithGravity('Pocion aplicada satisfactoriamente', ToastAndroid.SHORT, ToastAndroid.CENTER);
-
+    setPotionSection(false);
   }
   
   return (
