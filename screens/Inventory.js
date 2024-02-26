@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ImageBackground, Modal, ScrollView, ToastAndroid } from 'react-native';
 import styled from 'styled-components/native';
+import { axiosInstance } from '../axios/axiosInstance';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Context } from "../context/Context";
-import Profile from './Profile';
 
-const Inventory = () => {
+const Inventory = ({ setInventoryVisible }) => {
 
   // GLOBALES
-  const {userGlobalState, handleGlobalState} = useContext(Context);
+  const { userGlobalState, handleGlobalState } = useContext(Context);
   const { materialsGlobalState, setMaterialsGlobalState } = useContext(Context);
 
   // LOCALES
@@ -24,18 +24,17 @@ const Inventory = () => {
   const [equiped, setEquiped] = useState(false);
   const [unequipModal, setUnequipModal] = useState(false);
   const [positionUnequipModal, setUnequipPositionModal] = useState();
-  const [inventoryVisible, setInventoryVisible] = useState(false)
+
 
 
   // Images routes
   const Image_background = require('../assets/wallpaper_inventory.png');
   const Image_siluette = require('../assets/siluette.png');
 
+
   useEffect(() => {
-    console.log("El Estado global Seteado")
-    //console.log(materialsGlobalState)
+
     // getMaterials();
-    //console.log('INVENTARIOOOOOOOOOOOOOO', userGlobalState.inventory);
     setProfileInventory(userGlobalState.inventory)
   }, [materialsGlobalState]);
 
@@ -46,6 +45,7 @@ const Inventory = () => {
       setIsModalVisible(true);
     }
   }, [profileEquipment]);
+
 
   const removeEquipment = () => {
 
@@ -73,14 +73,13 @@ const Inventory = () => {
     setFirstItem(item);
     setEquiped(true);
     setDescriptionIndex((prevIndex) => prevIndex + 1);
-    console.log(descriptionIndex, descriptionModal)
     if (descriptionIndex === 2 && item === firstItem) {
       if (firstItem) {
         setDescriptionModal(true);
       }
     };
   }
-  
+
   const moveMats1 = (position) => {
     setUnequipPositionModal(position);
     if (item !== null && position >= 0 && equiped === true) {
@@ -105,12 +104,14 @@ const Inventory = () => {
       profileEquipment.forEach((element, index) => {
         if (index === position && element) {
           setUnequipModal(true);
-          console.log("entramos");
           setFirstItem(element);
           console.log(positionUnequipModal)
         }
-      }); 
+      });
+
     }
+
+
   };
 
   const openDescriptionModal = () => {
@@ -118,12 +119,13 @@ const Inventory = () => {
     setUnequipModal(false);
   }
 
-  const inventoryButton = () => {
-    setInventoryVisible(true);
-  };
 
   const closeModal = () => {
     setIsModalVisible(false);
+  }
+
+  const CloseInventoryButton = () => {
+    setInventoryVisible(false);
   }
 
   return (
@@ -132,22 +134,20 @@ const Inventory = () => {
       source={Image_background}
       style={styles.background}
     >
-
       <StyledView>
-        {!isModalVisible && !inventoryVisible && (
+        {!isModalVisible && (
 
           <EquipmentMainContainer>
 
-            <View >
-              <CloseButton onPress={() => inventoryButton()}>
-                <Icon name="arrow-circle-left" size={60} color="#4c2882" />
-              </CloseButton>
-            </View>
 
             <TextStyled> Equipamiento </TextStyled>
             <ImageBackground source={Image_siluette} style={styles.siluette}>
 
               <EquipmentContainer>
+              <CloseInventory onPress={() => CloseInventoryButton()}>
+                <Icon name="arrow-circle-left" size={60} color="#4c2882" />
+              </CloseInventory>
+
 
                 {/* casco */}
                 <Helmet onPress={() => moveMats1(0)}>
@@ -157,7 +157,7 @@ const Inventory = () => {
                     )
                   ))}
 
-                  {unequipModal === true && positionUnequipModal === 0 &&(
+                  {unequipModal === true && positionUnequipModal === 0 && (
                     <Modal
                       animationType="slide"
                       transparent={true}
@@ -183,7 +183,8 @@ const Inventory = () => {
                     )
                   ))}
 
-                  {unequipModal === true && positionUnequipModal == 1 &&(
+
+                  {unequipModal === true && positionUnequipModal == 1 && (
                     <Modal
                       animationType="slide"
                       transparent={true}
@@ -201,6 +202,7 @@ const Inventory = () => {
                   )}
                 </Breastplate>
 
+
                 {/* //GUANTES */}
                 <Gloves onPress={() => moveMats1(2)}>
                   {profileEquipment.map((item, index) => (
@@ -209,7 +211,7 @@ const Inventory = () => {
                     )
                   ))}
 
-                  {unequipModal === true && positionUnequipModal == 2 &&(
+                  {unequipModal === true && positionUnequipModal == 2 && (
                     <Modal
                       animationType="slide"
                       transparent={true}
@@ -227,6 +229,7 @@ const Inventory = () => {
                   )}
                 </Gloves>
 
+
                 {/* Pantalones */}
                 <Trousers onPress={() => moveMats1(3)}>
                   {profileEquipment.map((item, index) => (
@@ -235,7 +238,7 @@ const Inventory = () => {
                     )
                   ))}
 
-                  {unequipModal === true && positionUnequipModal == 3 &&(
+                  {unequipModal === true && positionUnequipModal == 3 && (
                     <Modal
                       animationType="slide"
                       transparent={true}
@@ -253,12 +256,14 @@ const Inventory = () => {
                   )}
                 </Trousers>
 
+
+
               </EquipmentContainer>
             </ImageBackground>
           </EquipmentMainContainer>
         )}
 
-        {descriptionModal && inventoryVisible &&(
+        {descriptionModal && (
           <Modal
             animationType="slide"
             transparent={true}
@@ -280,7 +285,7 @@ const Inventory = () => {
           </Modal>
         )}
 
-        {!isModalVisible && !inventoryVisible &&(
+        {!isModalVisible && (
 
           <CajaMateriales>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -297,7 +302,7 @@ const Inventory = () => {
           </CajaMateriales>
         )}
 
-        {isModalVisible && !inventoryVisible &&(
+        {isModalVisible && (
           <Modal
             animationType="slide"
             transparent={true}
@@ -322,10 +327,6 @@ const Inventory = () => {
             </View>
           </Modal>
         )}
-
-        {inventoryVisible && (
-        <Profile/>
-      )}
       </StyledView>
     </ImageBackground>
 
@@ -345,7 +346,6 @@ const CajaMateriales = styled.View`
   justify-content: space-around;
   width: 95%;
   height: 100px;
-  top: -7%;
 `;
 
 const StyledView = styled.View`
@@ -363,7 +363,7 @@ const EquipmentContainer = styled.View`
   justify-content: start;
   height: 90%;
   width: 100%;
-  top: -5%;
+  // background-color: blue;
 `;
 
 const EquipmentMainContainer = styled.View`
@@ -372,8 +372,9 @@ const EquipmentMainContainer = styled.View`
   justify-content: start;
   height: 80%;
   width: 100%;
-  top: -5%;
+  // background-color: yellow;
 `;
+
 
 const Square = styled.View`
   margin: 2px;
@@ -390,6 +391,7 @@ const TextStyled = styled.Text`
   font-family: 'Tealand';
   text-shadow: 3px 3px 8px white;
 `;
+
 
 const UnequipStyled = styled.Text`
   font-size: 25px;
@@ -425,13 +427,21 @@ const DescriptionName = styled.Text`
   right:10%;
 `;
 
+
 const CloseButton = styled.TouchableOpacity`
   position: 'absolute';            
-  marginLeft: 75%;
+  marginLeft: 80%;
+  marginTop: 10%;
   align-items:center;
-  top: 100%;
 `
 const CloseButton1 = styled.TouchableOpacity`
+  position: 'absolute';            
+  marginLeft: 80%;
+  align-items:center;
+  top:-2%;
+`
+
+const CloseInventory = styled.TouchableOpacity`
   position: 'absolute';            
   marginLeft: 80%;
   align-items:center;
@@ -442,11 +452,13 @@ const Unequip = styled.TouchableOpacity`
   align-items:center;
   top:-2%;
 `
+
 const Description = styled.TouchableOpacity`
 position: 'absolute';            
 align-items:center;
 top:4%;
 `
+
 const ShowText = styled.View`
   display: flex;
   align-items: center;
@@ -455,6 +467,8 @@ const ShowText = styled.View`
   width: 100%;
   // background-color: pink;
 `;
+
+
 
 const styles = StyleSheet.create({
   image: {
